@@ -1,0 +1,106 @@
+<?php
+
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Routing\Annotation\Route;
+
+use App\Entity\Project;
+
+/** @Route("/project", name="project_") */
+class ProjectController extends AbstractController
+{
+    /**
+     * @Route("/", name="index", methods="GET")
+     */
+    public function index()
+    {
+        return $this->render('project/create.html.twig');
+    }
+    
+    /**
+     * @Route("/", name="create", methods="POST")
+     */
+    public function create(ValidatorInterface $validator): Response
+    {
+        // you can fetch the EntityManager via $this->getDoctrine()
+        // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $project = new Project();
+        $project->setTitle('Keyboard');
+        $project->setDescription('Ergonomic and stylish!');
+        
+        $errors = $validator->validate($project);
+        if (count($errors) > 0) {
+            return new Response((string) $errors, 400);
+        }
+
+        // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        $entityManager->persist($project);
+
+        // actually executes the queries (i.e. the INSERT query)
+        $entityManager->flush();
+
+        return new Response('Saved new product with id '.$project->getId());
+    }
+    
+    /**
+     * @Route("/{id}", name="show", methods="GET", requirements={"id"="\d+"})
+     */
+    public function show(Project $project)
+    {
+        return $this->render('project/show.html.twig', ['project' => $project]);
+    }
+    
+    /**
+     * @Route("/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
+     */
+    public function edit(Project $project)
+    {
+        return $this->render('project/edit.html.twig', ['project' => $project]);
+    }
+    
+    /**
+     * @Route("/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
+     */
+    public function update(Project $project)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $project->setTitle('New product name!');
+        
+        $entityManager->flush();
+
+        return $this->redirectToRoute('project_show', ['id' => $product->getId()]);
+    }
+    
+    /**
+     * @Route("/remove/{id}", name="remove", methods="POST")
+     */
+    public function remove(Project $project)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $entityManager->remove($product);
+        
+        $entityManager->flush();
+        
+        return new Response('Project removed successfully');
+    }
+    
+    /**
+     * @Route("/list", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
+     * @Route("/list/page/{page}", name="list_paginated", methods="GET", requirements={"page"="\d+"})
+     */
+    public function list($page = 1)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $projects = [];
+        
+        return $this->render('project/list.html.twig', ['projects' => $projects]);
+    }
+}

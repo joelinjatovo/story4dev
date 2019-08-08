@@ -19,20 +19,19 @@
         </script>
         <!--end::Fonts -->
         
-        {% block stylesheets %}
-            <!--begin::Page Vendors Styles(used by this page) -->
-            <link href="{{ asset('css/fullcalendar.bundle.css') }}" rel="stylesheet" type="text/css"/>
-            <!--end::Page Vendors Styles -->
+        <!--begin::Page Vendors Styles(used by this page) -->
+        <link href="{{ asset('css/fullcalendar.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        <!--end::Page Vendors Styles -->
 
 
-            <!--begin::Global Theme Styles(used by all pages) -->
-            <link href="{{ asset('css/vendors.bundle.css') }}" rel="stylesheet" type="text/css"/>
-            <link href="{{ asset('css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>
-            <!--end::Global Theme Styles -->
+        <!--begin::Global Theme Styles(used by all pages) -->
+        <link href="{{ asset('css/vendors.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        <!--end::Global Theme Styles -->
 
-            <!--begin::Layout Skins(used by all pages) -->
-            <!--end::Layout Skins -->
-        {% endblock %}
+        <!--begin::Layout Skins(used by all pages) -->
+        {% block stylesheets %}{% endblock %}
+        <!--end::Layout Skins -->
 
         <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     </head>
@@ -54,12 +53,14 @@
                     {{ include('admin/inc/header.html.twig') }}
                     <!-- end:: Header -->
                     
-                    <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+                    <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
                         <!-- begin:: Subheader -->
-                        {{ include('admin/inc/subheader.html.twig') }}
+                        {% block subheader %}
+                            {{ include('admin/inc/subheader.html.twig') }}
+                        {% endblock %}
                         <!-- end:: Subheader -->
                         <!-- begin:: Content -->
-                        <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+                        <div class="kt-container kt-container--fluid  kt-grid__item kt-grid__item--fluid">
                             {% block content %}{% endblock %}
                         </div>
                         <!-- end:: Content -->
