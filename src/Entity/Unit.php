@@ -37,6 +37,7 @@ class Unit
 
     public function __construct()
     {
+        $this->created_at = new \DateTime();
         $this->indicators = new ArrayCollection();
     }
 

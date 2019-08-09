@@ -62,6 +62,7 @@ class Project
 
     public function __construct()
     {
+        $this->created_at = new \DateTime();
         $this->activities = new ArrayCollection();
         $this->iterations = new ArrayCollection();
     }

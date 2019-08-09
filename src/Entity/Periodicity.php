@@ -37,6 +37,7 @@ class Periodicity
 
     public function __construct()
     {
+        $this->created_at = new \DateTime();
         $this->projects = new ArrayCollection();
     }
 

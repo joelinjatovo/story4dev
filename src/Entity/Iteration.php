@@ -37,6 +37,7 @@ class Iteration
 
     public function __construct()
     {
+        $this->created_at = new \DateTime();
         $this->goals = new ArrayCollection();
     }
 
