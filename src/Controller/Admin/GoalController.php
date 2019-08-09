@@ -4,20 +4,19 @@ namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-use App\Entity\User;
+use App\Entity\Goal;
 
-/** @Route("/admin/user", name="admin_user_") */
-class UserController extends AbstractController
+/** @Route("/admin/goal", name="admin_goal_") */
+class GoalController extends AbstractController
 {
     /**
      * @Route("/", name="index", methods="GET")
      */
     public function index()
     {
-        return $this->render('admin/user/create.html.twig');
+        return $this->render('admin/goal/create.html.twig');
     }
     
     /**
@@ -25,68 +24,64 @@ class UserController extends AbstractController
      */
     public function create(ValidatorInterface $validator): Response
     {
-        // you can fetch the EntityManager via $this->getDoctrine()
-        // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
         $entityManager = $this->getDoctrine()->getManager();
 
-        $user = new User();
+        $goal = new Goal();
         
-        $errors = $validator->validate($user);
+        $errors = $validator->validate($goal);
         if (count($errors) > 0) {
             return new Response((string) $errors, 400);
         }
 
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($user);
+        $entityManager->persist($goal);
 
-        // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
-        return new Response('Saved new user with id '.$project->getId());
+        return new Response('Saved new goal with id '.$goal->getId());
     }
     
     /**
      * @Route("/{id}", name="show", methods="GET", requirements={"id"="\d+"})
      */
-    public function show(User $user)
+    public function show(Goal $goal)
     {
-        return $this->render('admin/user/show.html.twig', ['user' => $user]);
+        return $this->render('admin/goal/show.html.twig', ['goal' => $goal]);
     }
     
     /**
      * @Route("/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
      */
-    public function edit(User $user)
+    public function edit(Goal $goal)
     {
-        return $this->render('admin/user/edit.html.twig', ['user' => $user]);
+        return $this->render('admin/goal/edit.html.twig', ['goal' => $goal]);
     }
     
     /**
      * @Route("/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
      */
-    public function update(User $user)
+    public function update(Goal $goal)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $project->setTitle('New user name!');
+        $goal->setTitle('New goal name!');
         
         $entityManager->flush();
 
-        return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
+        return $this->redirectToRoute('admin_goal_show', ['id' => $goal->getId()]);
     }
     
     /**
      * @Route("/remove/{id}", name="remove", methods="POST")
      */
-    public function remove(User $user)
+    public function remove(Goal $goal)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $entityManager->remove($user);
+        $entityManager->remove($goal);
         
         $entityManager->flush();
         
-        return new Response('User removed successfully');
+        return new Response('goal removed successfully');
     }
     
     /**
@@ -97,8 +92,8 @@ class UserController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $users = [];
+        $goals = [];
         
-        return $this->render('admin/user/list.html.twig', ['users' => $users]);
+        return $this->render('admin/goal/list.html.twig', ['goals' => $goals]);
     }
 }

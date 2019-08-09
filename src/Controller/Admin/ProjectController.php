@@ -60,7 +60,7 @@ class ProjectController extends AbstractController
      */
     public function edit(Project $project)
     {
-        return $this->render('admin/admin/project/edit.html.twig', ['project' => $project]);
+        return $this->render('admin/project/edit.html.twig', ['project' => $project]);
     }
     
     /**
@@ -74,7 +74,7 @@ class ProjectController extends AbstractController
         
         $entityManager->flush();
 
-        return $this->redirectToRoute('project_show', ['id' => $product->getId()]);
+        return $this->redirectToRoute('admin_project_show', ['id' => $product->getId()]);
     }
     
     /**
@@ -92,8 +92,8 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/list", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
-     * @Route("/list/page/{page}", name="list_paginated", methods="GET", requirements={"page"="\d+"})
+     * @Route("s", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
+     * @Route("s/page/{page}", name="list_paginated", methods="GET", requirements={"page"="\d+"})
      */
     public function list($page = 1)
     {

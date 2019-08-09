@@ -4,20 +4,19 @@ namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-use App\Entity\User;
+use App\Entity\Indicator;
 
-/** @Route("/admin/user", name="admin_user_") */
-class UserController extends AbstractController
+/** @Route("/admin/indicator", name="admin_indicator_") */
+class IndicatorController extends AbstractController
 {
     /**
      * @Route("/", name="index", methods="GET")
      */
     public function index()
     {
-        return $this->render('admin/user/create.html.twig');
+        return $this->render('admin/indicator/create.html.twig');
     }
     
     /**
@@ -25,68 +24,64 @@ class UserController extends AbstractController
      */
     public function create(ValidatorInterface $validator): Response
     {
-        // you can fetch the EntityManager via $this->getDoctrine()
-        // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
         $entityManager = $this->getDoctrine()->getManager();
 
-        $user = new User();
+        $indicator = new Indicator();
         
-        $errors = $validator->validate($user);
+        $errors = $validator->validate($indicator);
         if (count($errors) > 0) {
             return new Response((string) $errors, 400);
         }
 
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($user);
+        $entityManager->persist($indicator);
 
-        // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
-        return new Response('Saved new user with id '.$project->getId());
+        return new Response('Saved new indicator with id '.$indicator->getId());
     }
     
     /**
      * @Route("/{id}", name="show", methods="GET", requirements={"id"="\d+"})
      */
-    public function show(User $user)
+    public function show(Indicator $indicator)
     {
-        return $this->render('admin/user/show.html.twig', ['user' => $user]);
+        return $this->render('admin/indicator/show.html.twig', ['indicator' => $indicator]);
     }
     
     /**
      * @Route("/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
      */
-    public function edit(User $user)
+    public function edit(Indicator $indicator)
     {
-        return $this->render('admin/user/edit.html.twig', ['user' => $user]);
+        return $this->render('admin/indicator/edit.html.twig', ['indicator' => $indicator]);
     }
     
     /**
      * @Route("/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
      */
-    public function update(User $user)
+    public function update(Indicator $indicator)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $project->setTitle('New user name!');
+        $indicator->setTitle('New indicator name!');
         
         $entityManager->flush();
 
-        return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
+        return $this->redirectToRoute('admin_indicator_show', ['id' => $indicator->getId()]);
     }
     
     /**
      * @Route("/remove/{id}", name="remove", methods="POST")
      */
-    public function remove(User $user)
+    public function remove(Indicator $indicator)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $entityManager->remove($user);
+        $entityManager->remove($indicator);
         
         $entityManager->flush();
         
-        return new Response('User removed successfully');
+        return new Response('indicator removed successfully');
     }
     
     /**
@@ -97,8 +92,8 @@ class UserController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $users = [];
+        $indicators = [];
         
-        return $this->render('admin/user/list.html.twig', ['users' => $users]);
+        return $this->render('admin/indicator/list.html.twig', ['indicators' => $indicators]);
     }
 }
