@@ -38,11 +38,11 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error, 'active_form' => 'signin',]);
     }
  
     /**
-     * @Route("/register", name="app_register", methods="POST")
+     * @Route("/register", name="app_register", methods="GET|POST")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator): Response
     {
@@ -78,7 +78,11 @@ class SecurityController extends AbstractController
             ]);
         }
 
-        return $this->redirectToRoute('app_login');
+        return $this->render('security/login.html.twig', [
+            'last_username' => '',
+            'error' => '',
+            'active_form' => 'signup',
+        ]);
     }
     
     /**
@@ -151,8 +155,12 @@ class SecurityController extends AbstractController
             
             return $this->redirectToRoute('app_login');
         }
- 
-        return $this->redirectToRoute('app_login');
+
+        return $this->render('security/login.html.twig', [
+            'last_username' => '',
+            'error' => '',
+            'active_form' => 'forgot',
+        ]);
     }
  
     /**
