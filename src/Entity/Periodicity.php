@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PeriodicityRepository")
- * @ORM\Table(name="perioicities")
+ * @ORM\Table(name="periodicities")
  */
 class Periodicity
 {
@@ -29,6 +29,11 @@ class Periodicity
      * @ORM\Column(type="integer")
      */
     private $delay;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     */
+    private $author;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="periodicity", orphanRemoval=true)
@@ -66,6 +71,18 @@ class Periodicity
     public function setDelay(int $delay): self
     {
         $this->delay = $delay;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $user): self
+    {
+        $this->author = $user;
 
         return $this;
     }

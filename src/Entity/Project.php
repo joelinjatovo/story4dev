@@ -46,6 +46,11 @@ class Project
     private $end_at;
     
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     */
+    private $author;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Periodicity", inversedBy="projects")
      */
     private $periodicity;
@@ -128,6 +133,18 @@ class Project
     public function setEndAt(?\DateTimeInterface $end_at): self
     {
         $this->end_at = $end_at;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $user): self
+    {
+        $this->author = $user;
 
         return $this;
     }

@@ -26,6 +26,11 @@ class Goal
     private $value;
     
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     */
+    private $author;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Indicator", inversedBy="goals")
      */
     private $indicator;
@@ -53,6 +58,18 @@ class Goal
     public function setValue(float $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $user): self
+    {
+        $this->author = $user;
 
         return $this;
     }

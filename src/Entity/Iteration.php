@@ -26,6 +26,11 @@ class Iteration
     private $title;
     
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     */
+    private $author;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="activities")
      */
     private $project;
@@ -54,6 +59,18 @@ class Iteration
     public function setTitle(?string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $user): self
+    {
+        $this->author = $user;
 
         return $this;
     }

@@ -31,6 +31,11 @@ class Activity
     private $budget;
     
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     */
+    private $author;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="activities")
      */
     private $project;
@@ -71,6 +76,18 @@ class Activity
     public function setBudget(?float $budget): self
     {
         $this->budget = $budget;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $user): self
+    {
+        $this->author = $user;
 
         return $this;
     }

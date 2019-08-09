@@ -26,6 +26,11 @@ class Indicator
     private $title;
     
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     */
+    private $author;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="indicators")
      */
     private $activity;
@@ -59,6 +64,18 @@ class Indicator
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $user): self
+    {
+        $this->author = $user;
 
         return $this;
     }
