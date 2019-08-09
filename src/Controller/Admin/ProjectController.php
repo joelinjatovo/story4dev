@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-use App\Entity\User;
+use App\Entity\Project;
 
-/** @Route("/user", name="user_") */
-class UserController extends AbstractController
+/** @Route("/admin/project", name="admin_project_") */
+class ProjectController extends AbstractController
 {
     /**
      * @Route("/", name="index", methods="GET")
      */
     public function index()
     {
-        return $this->render('user/create.html.twig');
+        return $this->render('admin/project/create.html.twig');
     }
     
     /**
@@ -29,64 +29,66 @@ class UserController extends AbstractController
         // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
         $entityManager = $this->getDoctrine()->getManager();
 
-        $user = new User();
+        $project = new Project();
+        $project->setTitle('Keyboard');
+        $project->setDescription('Ergonomic and stylish!');
         
-        $errors = $validator->validate($user);
+        $errors = $validator->validate($project);
         if (count($errors) > 0) {
             return new Response((string) $errors, 400);
         }
 
         // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($user);
+        $entityManager->persist($project);
 
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
-        return new Response('Saved new user with id '.$project->getId());
+        return new Response('Saved new product with id '.$project->getId());
     }
     
     /**
      * @Route("/{id}", name="show", methods="GET", requirements={"id"="\d+"})
      */
-    public function show(User $user)
+    public function show(Project $project)
     {
-        return $this->render('user/show.html.twig', ['user' => $user]);
+        return $this->render('admin/project/show.html.twig', ['project' => $project]);
     }
     
     /**
      * @Route("/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
      */
-    public function edit(User $user)
+    public function edit(Project $project)
     {
-        return $this->render('user/edit.html.twig', ['user' => $user]);
+        return $this->render('admin/admin/project/edit.html.twig', ['project' => $project]);
     }
     
     /**
      * @Route("/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
      */
-    public function update(User $user)
+    public function update(Project $project)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $project->setTitle('New user name!');
+        $project->setTitle('New product name!');
         
         $entityManager->flush();
 
-        return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
+        return $this->redirectToRoute('project_show', ['id' => $product->getId()]);
     }
     
     /**
      * @Route("/remove/{id}", name="remove", methods="POST")
      */
-    public function remove(User $user)
+    public function remove(Project $project)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $entityManager->remove($user);
+        $entityManager->remove($product);
         
         $entityManager->flush();
         
-        return new Response('User removed successfully');
+        return new Response('Project removed successfully');
     }
     
     /**
@@ -97,8 +99,8 @@ class UserController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $users = [];
+        $projects = [];
         
-        return $this->render('user/list.html.twig', ['users' => $users]);
+        return $this->render('admin/project/list.html.twig', ['projects' => $projects]);
     }
 }

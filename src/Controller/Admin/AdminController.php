@@ -1,6 +1,6 @@
 <?php
-// src/Controller/AdminController.php
-namespace App\Controller;
+
+namespace App\Controlle\Adminr;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
