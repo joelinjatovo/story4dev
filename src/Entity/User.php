@@ -4,12 +4,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="users")
  */
-class User implements UserInterface
+class User implements UserInterface, AdvancedUserInterface
 {
     use \App\Traits\TimestampTrait;
     
@@ -19,6 +20,11 @@ class User implements UserInterface
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="string", length=25, unique=true)
+     */
+    private $username;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -35,15 +41,33 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+    
+    /**
+     * @ORM\Column(name="full_name", type="string", length=255, nullable=true)
+     */
+    private $full_name;
+
+    /**
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive;
 
     public function __construct()
     {
+        $this->isActive = true;
         $this->created_at = new \DateTime();
     }
     
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -55,6 +79,18 @@ class User implements UserInterface
     {
         $this->email = $email;
 
+        return $this;
+    }
+    
+    public function getFullName(): ?string
+    {
+        return $this->full_name;
+    }
+    
+    public function setFullName(string $fullName): self
+    {
+        $this->full_name = $fullName;
+        
         return $this;
     }
 
@@ -100,6 +136,38 @@ class User implements UserInterface
         $this->password = $password;
 
         return $this;
+    }    
+    
+    /**
+     * @see AdvancedUserInterface
+     */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * @see AdvancedUserInterface
+     */
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    /**
+     * @see AdvancedUserInterface
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+    
+    /**
+     * @see AdvancedUserInterface
+     */
+    public function isEnabled()
+    {
+        return $this->isActive;
     }
 
     /**
