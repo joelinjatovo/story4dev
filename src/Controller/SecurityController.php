@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Form\RegistrationFormType;
 
 use App\Entity\User;
 
@@ -38,6 +41,45 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
  
+    /**
+     * @Route("/register", name="app_register", methods="POST")
+     */
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator): Response
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $user = new User();
+            $user->setUsername( $request->request->get('username') );
+            $user->setFullName( $request->request->get('fullname') );
+            $user->setEmail( $request->request->get('email') );
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $request->request->get('password')
+                )
+            );
+            
+            $errors = $validator->validate($user);
+            if ( count($errors) > 0) {
+                return $this->json([
+                    'success' => false,
+                    'errors'  => $errors,
+                    'error'   => (string) $errors
+                ]);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+            
+            return $this->json([
+                'success' => true,
+                'message' => 'Thank you. To complete your registration please check your email.'
+            ]);
+        }
+
+        return $this->redirectToRoute('app_login');
+    }
+    
     /**
      * @Route("/forgot", name="app_forgot_password", methods="GET|POST")
      */

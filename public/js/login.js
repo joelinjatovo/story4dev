@@ -62,21 +62,33 @@ var KTLoginGeneral=function(){
             $("#kt_login_signup_submit").click(function(n){
                 n.preventDefault();
                 var s=$(this),r=$(this).closest("form");
-                r.validate({rules:{fullname:{required:!0},email:{required:!0,email:!0},password:{required:!0},rpassword:{required:!0},agree:{required:!0}}}),
+                r.validate({rules:{fullname:{required:0,maxlength:100},username:{required:!0,minlength:2,maxlength:50},email:{required:!0,email:!0,maxlength:100},password:{required:!0,minlength:5},password_confirm:{required:!0,minlength:5,equalTo:'#password'},agree:{required:!0}}}),
                 r.valid()&&(
                     s.addClass("kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light").attr("disabled",!0),
-                    r.ajaxSubmit({url:"/register",success:function(n,a,l,o){
-                        setTimeout(function(){
-                            s.removeClass("kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light").attr("disabled",!1),
+                    r.ajaxSubmit({url:"/register", 
+                      error:function(d){
+                          console.error(d);
+                          s.removeClass("kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light").attr("disabled",!1);
+                          var n=t.find(".kt-login__signin form");
+                          n.clearForm(),
+                          n.validate().resetForm(),
+                          i(r,"danger", "Something was wrong.")
+                      },
+                      success:function(m,a,l,o){
+                        console.log(m);
+                        s.removeClass("kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light").attr("disabled",!1);
+                        if(m.success===true){
                             r.clearForm(),
                             r.validate().resetForm(),
                             e();
                             var n=t.find(".kt-login__signin form");
                             n.clearForm(),
                             n.validate().resetForm(),
-                            i(n,"success","Thank you. To complete your registration please check your email.")
-                        },2e3)}
-                     })
+                            i(n,"success",m.message)
+                        }else{
+                            i(r,"danger",m.error)
+                        }
+                     }})
                 )
             }),
             $("#kt_login_forgot_submit").click(function(n){

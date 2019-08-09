@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="users")
+ * @UniqueEntity("username")
+ * @UniqueEntity("email")
  */
 class User implements UserInterface, AdvancedUserInterface
 {
@@ -22,11 +25,24 @@ class User implements UserInterface, AdvancedUserInterface
     private $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "Your username must be at least {{ limit }} characters long",
+     *      maxMessage = "Your username cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(type="string", length=25, unique=true)
      */
     private $username;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Email
+     * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "Your email cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
@@ -38,11 +54,21 @@ class User implements UserInterface, AdvancedUserInterface
 
     /**
      * @var string The hashed password
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 5,
+     *      minMessage = "Your password must be at least {{ limit }} characters long",
+     * )
      * @ORM\Column(type="string")
      */
     private $password;
     
     /**
+     * @Assert\Type("string")
+     * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "Your fullname cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(name="full_name", type="string", length=255, nullable=true)
      */
     private $full_name;
