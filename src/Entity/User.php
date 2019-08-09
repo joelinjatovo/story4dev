@@ -78,8 +78,14 @@ class User implements UserInterface, AdvancedUserInterface
      */
     private $isActive;
 
+    /**
+     * @Assert\IsTrue
+     */
+    private $agree;
+
     public function __construct()
     {
+        $this->agree = true;
         $this->isActive = true;
         $this->created_at = new \DateTime();
     }
@@ -160,6 +166,18 @@ class User implements UserInterface, AdvancedUserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    } 
+    
+    public function isAgree()
+    {
+        return $this->agree;
+    }
+
+    public function setAgree(bool $agree): self
+    {
+        $this->agree = $agree;
 
         return $this;
     }    

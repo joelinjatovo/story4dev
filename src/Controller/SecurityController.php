@@ -51,6 +51,7 @@ class SecurityController extends AbstractController
             $user->setUsername( $request->request->get('username') );
             $user->setFullName( $request->request->get('fullname') );
             $user->setEmail( $request->request->get('email') );
+            $user->setAgree( (bool) $request->request->get('agree') );
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
