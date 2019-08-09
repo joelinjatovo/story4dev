@@ -93,7 +93,7 @@ class PeriodicityController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $periodicities = [];
+        $periodicities = $entityManager->getRepository(Periodicity::class)->findAll();
         
         return $this->render('admin/periodicity/list.html.twig', ['periodicities' => $periodicities]);
     }

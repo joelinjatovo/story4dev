@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\Project;
 
@@ -95,11 +96,19 @@ class ProjectController extends AbstractController
      * @Route("s", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
      * @Route("s/page/{page}", name="list_paginated", methods="GET", requirements={"page"="\d+"})
      */
-    public function list($page = 1)
+    public function list(PaginatorInterface $paginator, $page = 1)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $projects = [];
+        $projectsQuery = $entityManager->getRepository(Project::class)
+            ->createQueryBuilder('p')
+            ->getQuery();
+        
+        $projects = $paginator->paginate(
+            $projectsQuery,
+            $page,
+            1
+        );
         
         return $this->render('admin/project/list.html.twig', ['projects' => $projects]);
     }

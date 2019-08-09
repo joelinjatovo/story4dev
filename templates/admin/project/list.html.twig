@@ -7,7 +7,7 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Users</h3>
+            <h3 class="kt-subheader__title">Projects</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__group" id="kt_subheader_search">
                 <span class="kt-subheader__desc" id="kt_subheader_total">450 Total</span>
@@ -139,6 +139,27 @@
 {% endblock %}
 
 {% block content %}
+<div class="row">
+    {% for project in projects %}
+        {{ include('admin/project/list_item.html.twig', {'project': project}) }}
+    {% endfor %}
+</div>
+    
+<div class="row">
+    <div class="col-xl-12">       
+        <!--begin:: Components/Pagination/Default-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__body">
+                    <!--begin: Pagination-->
+                    <div class="navigation">
+                        {{ knp_pagination_render(projects) }}
+                    </div>
+                    <!--end: Pagination-->
+                </div>
+            </div>
+            <!--end:: Components/Pagination/Default-->        
+    </div>           
+</div>
 <div class="row">
     <div class="col-xl-6">
         <!--begin:: Portlet-->

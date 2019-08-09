@@ -97,7 +97,7 @@ class UserController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $users = [];
+        $users = $entityManager->getRepository(User::class)->findAll();
         
         return $this->render('admin/user/list.html.twig', ['users' => $users]);
     }

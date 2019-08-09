@@ -93,7 +93,7 @@ class UnitController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $units = [];
+        $units = $entityManager->getRepository(Unit::class)->findAll();
         
         return $this->render('admin/unit/list.html.twig', ['units' => $units]);
     }

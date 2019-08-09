@@ -93,7 +93,7 @@ class GoalController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $goals = [];
+        $goals = $entityManager->getRepository(Goal::class)->findAll();
         
         return $this->render('admin/goal/list.html.twig', ['goals' => $goals]);
     }

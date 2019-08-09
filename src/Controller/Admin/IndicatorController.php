@@ -93,7 +93,7 @@ class IndicatorController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $indicators = [];
+        $indicators = $entityManager->getRepository(Indicator::class)->findAll();
         
         return $this->render('admin/indicator/list.html.twig', ['indicators' => $indicators]);
     }
