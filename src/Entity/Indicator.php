@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IndicatorRepository")
+ * @ORM\Table(name="indicators")
  */
 class Indicator
 {
+    use \App\Traits\TimestampTrait;
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

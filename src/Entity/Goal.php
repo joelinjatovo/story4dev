@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GoalRepository")
+ * @ORM\Table(name="goals")
  */
 class Goal
 {
+    use \App\Traits\TimestampTrait;
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

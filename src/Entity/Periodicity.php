@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PeriodicityRepository")
+ * @ORM\Table(name="perioicities")
  */
 class Periodicity
 {
+    use \App\Traits\TimestampTrait;
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

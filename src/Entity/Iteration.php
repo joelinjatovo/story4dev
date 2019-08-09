@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IterationRepository")
+ * @ORM\Table(name="iterations")
  */
 class Iteration
 {
+    use \App\Traits\TimestampTrait;
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UnitRepository")
+ * @ORM\Table(name="units")
  */
 class Unit
 {
+    use \App\Traits\TimestampTrait;
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
