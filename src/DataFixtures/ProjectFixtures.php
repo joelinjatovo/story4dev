@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use App\Entity\Meta\MetaProject;
 use App\Entity\Project;
 
 class ProjectFixtures extends Fixture
@@ -21,6 +22,12 @@ class ProjectFixtures extends Fixture
 
             $manager->persist($project);
             
+            $meta = new MetaProject();
+            $meta->setMetaKey('meta_key');
+            $meta->setMetaValue('test_value'. $i );
+            $manager->persist($meta);
+            
+            $project->addMeta($meta);
         }
 
         $manager->flush();

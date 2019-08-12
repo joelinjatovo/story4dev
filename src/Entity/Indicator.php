@@ -3,15 +3,27 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+
+use App\Entity\Meta\MetaIndicator;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IndicatorRepository")
  * @ORM\Table(name="indicators")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
 class Indicator
 {
-    use \App\Traits\TimestampTrait;
+    
+    /**
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
+     */
+    use TimestampableEntity;
+    use SoftDeleteableEntity;
     
     /**
      * @ORM\Id()
@@ -44,11 +56,19 @@ class Indicator
      * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="indicator", orphanRemoval=true)
      */
     private $goals;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaIndicator", mappedBy="indicator", orphanRemoval=true)
+     * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     */
+    protected $metas;
 
     public function __construct()
     {
-        $this->created_at = new \DateTime();
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
         $this->goals = new ArrayCollection();
+        $this->metas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,6 +145,33 @@ class Indicator
             $this->goals->removeElement($goal);
             if ($goal->getIndicator() === $this) {
                 $goal->setIndicator(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getMetas(): Collection
+    {
+        return $this->metas;
+    }
+
+    public function addMeta(?MetaIndicator $meta): self
+    {
+        if (!$this->metas->contains($meta)) {
+            $this->metas[] = $meta;
+            $meta->setIndicator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMeta(?MetaIndicator $meta): self
+    {
+        if ($this->metas->contains($meta)) {
+            $this->metas->removeElement($meta);
+            if ($meta->getIndicator() === $this) {
+                $meta->setIndicator(null);
             }
         }
 

@@ -3,15 +3,27 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+
+use App\Entity\Meta\MetaActivity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ActivityRepository")
  * @ORM\Table(name="activities")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
 class Activity
 {
-    use \App\Traits\TimestampTrait;
+    
+    /**
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
+     */
+    use TimestampableEntity;
+    use SoftDeleteableEntity;
     
     /**
      * @ORM\Id()
@@ -44,11 +56,19 @@ class Activity
      * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="activity", orphanRemoval=true)
      */
     private $indicators;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaActivity", mappedBy="activity", orphanRemoval=true)
+     * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     */
+    protected $metas;
 
     public function __construct()
     {
-        $this->created_at = new \DateTime();
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
         $this->indicators = new ArrayCollection();
+        $this->metas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,6 +145,33 @@ class Activity
             $this->indicators->removeElement($indicator);
             if ($indicator->getActivity() === $this) {
                 $indicator->setActivity(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getMetas(): Collection
+    {
+        return $this->metas;
+    }
+
+    public function addMeta(?MetaActivity $meta): self
+    {
+        if (!$this->metas->contains($meta)) {
+            $this->metas[] = $meta;
+            $meta->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMeta(?MetaActivity $meta): self
+    {
+        if ($this->metas->contains($meta)) {
+            $this->metas->removeElement($meta);
+            if ($meta->getActivity() === $this) {
+                $meta->setActivity(null);
             }
         }
 

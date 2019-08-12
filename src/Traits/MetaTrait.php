@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait MetaTrait
 {
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Meta")
+     * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaProject")
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
      */
     protected $metas;

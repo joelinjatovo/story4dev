@@ -3,15 +3,27 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+
+use App\Entity\Meta\MetaProject;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  * @ORM\Table(name="projects")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
 class Project
 {
-    use \App\Traits\TimestampTrait;
+    
+    /**
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
+     */
+    use TimestampableEntity;
+    use SoftDeleteableEntity;
     
     /**
      * @ORM\Id()
@@ -64,12 +76,20 @@ class Project
      * @ORM\OneToMany(targetEntity="App\Entity\Iteration", mappedBy="project", orphanRemoval=true)
      */
     private $iterations;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaProject", mappedBy="project", orphanRemoval=true)
+     * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     */
+    protected $metas;
 
     public function __construct()
     {
-        $this->created_at = new \DateTime();
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
         $this->activities = new ArrayCollection();
         $this->iterations = new ArrayCollection();
+        $this->metas = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -209,6 +229,33 @@ class Project
             $this->iterations->removeElement($iteration);
             if ($iteration->getProject() === $this) {
                 $iteration->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getMetas(): Collection
+    {
+        return $this->metas;
+    }
+
+    public function addMeta(?MetaProject $meta): self
+    {
+        if (!$this->metas->contains($meta)) {
+            $this->metas[] = $meta;
+            $meta->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMeta(?MetaProject $meta): self
+    {
+        if ($this->metas->contains($meta)) {
+            $this->metas->removeElement($meta);
+            if ($meta->getProject() === $this) {
+                $meta->setProject(null);
             }
         }
 

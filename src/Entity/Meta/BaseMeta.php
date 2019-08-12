@@ -1,16 +1,32 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Meta;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\MetaRepository")
+ * Meta
+ * 
+ * @ORM\Entity
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="meta_type", type="string")
+ * @ORM\DiscriminatorMap({"activity" = "MetaActivity", "indicator" = "MetaIndicator", "project" = "MetaProject"})
+ * @ORM\MappedSuperclass
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @ORM\Table(name="metas")
  */
-class Meta
+abstract class BaseMeta
 {
-    use \App\Traits\TimestampTrait;
+    
+    /**
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
+     */
+    use TimestampableEntity;
+    use SoftDeleteableEntity;
     
     /**
      * @ORM\Id()
@@ -29,19 +45,10 @@ class Meta
      */
     private $meta_value;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $meta_type;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $object_id;
-
     public function __construct()
     {
-        $this->created_at = new \DateTime();
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
     }
 
     public function getId(): ?int
@@ -81,18 +88,6 @@ class Meta
     public function setMetaType(string $meta_type): self
     {
         $this->meta_type = $meta_type;
-
-        return $this;
-    }
-
-    public function getObjectId(): ?int
-    {
-        return $this->object_id;
-    }
-
-    public function setObjectId(int $object_id): self
-    {
-        $this->object_id = $object_id;
 
         return $this;
     }
