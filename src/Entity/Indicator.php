@@ -14,6 +14,7 @@ use App\Entity\Meta\MetaIndicator;
  * @ORM\Entity(repositoryClass="App\Repository\IndicatorRepository")
  * @ORM\Table(name="indicators")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ * @Gedmo\Loggable
  */
 class Indicator
 {
@@ -34,21 +35,25 @@ class Indicator
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Gedmo\Versioned
      */
     private $title;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @Gedmo\Versioned
      */
     private $author;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="indicators")
+     * @Gedmo\Versioned
      */
     private $activity;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Unit", inversedBy="indicators")
+     * @Gedmo\Versioned
      */
     private $unit;
 

@@ -12,6 +12,7 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
  * @ORM\Entity(repositoryClass="App\Repository\GoalRepository")
  * @ORM\Table(name="goals")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ * @Gedmo\Loggable
  */
 class Goal
 {
@@ -32,21 +33,25 @@ class Goal
 
     /**
      * @ORM\Column(type="float")
+     * @Gedmo\Versioned
      */
     private $value;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @Gedmo\Versioned
      */
     private $author;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Indicator", inversedBy="goals")
+     * @Gedmo\Versioned
      */
     private $indicator;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Iteration", inversedBy="goals")
+     * @Gedmo\Versioned
      */
     private $iteration;
 

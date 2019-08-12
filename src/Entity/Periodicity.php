@@ -12,6 +12,7 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
  * @ORM\Entity(repositoryClass="App\Repository\PeriodicityRepository")
  * @ORM\Table(name="periodicities")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ * @Gedmo\Loggable
  */
 class Periodicity
 {
@@ -32,16 +33,19 @@ class Periodicity
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Gedmo\Versioned
      */
     private $title;
 
     /**
      * @ORM\Column(type="integer")
+     * @Gedmo\Versioned
      */
     private $delay;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @Gedmo\Versioned
      */
     private $author;
 

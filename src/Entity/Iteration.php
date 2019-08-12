@@ -12,6 +12,7 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
  * @ORM\Entity(repositoryClass="App\Repository\IterationRepository")
  * @ORM\Table(name="iterations")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ * @Gedmo\Loggable
  */
 class Iteration
 {
@@ -32,16 +33,19 @@ class Iteration
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Gedmo\Versioned
      */
     private $title;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @Gedmo\Versioned
      */
     private $author;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="activities")
+     * @Gedmo\Versioned
      */
     private $project;
 

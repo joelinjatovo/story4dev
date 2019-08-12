@@ -14,6 +14,7 @@ use App\Entity\Meta\MetaActivity;
  * @ORM\Entity(repositoryClass="App\Repository\ActivityRepository")
  * @ORM\Table(name="activities")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ * @Gedmo\Loggable
  */
 class Activity
 {
@@ -34,21 +35,25 @@ class Activity
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Gedmo\Versioned
      */
     private $title;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Gedmo\Versioned
      */
     private $budget;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @Gedmo\Versioned
      */
     private $author;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="activities")
+     * @Gedmo\Versioned
      */
     private $project;
 

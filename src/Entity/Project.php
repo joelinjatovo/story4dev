@@ -14,6 +14,7 @@ use App\Entity\Meta\MetaProject;
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  * @ORM\Table(name="projects")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ * @Gedmo\Loggable
  */
 class Project
 {
@@ -34,36 +35,43 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Gedmo\Versioned
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Gedmo\Versioned
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Gedmo\Versioned
      */
     private $budget;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Versioned
      */
     private $start_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Versioned
      */
     private $end_at;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @Gedmo\Versioned
      */
     private $author;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Periodicity", inversedBy="projects")
+     * @Gedmo\Versioned
      */
     private $periodicity;
 
