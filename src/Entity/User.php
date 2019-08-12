@@ -92,6 +92,12 @@ class User implements UserInterface, AdvancedUserInterface
      * @Assert\IsTrue
      */
     private $agree;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaUser", mappedBy="user", orphanRemoval=true)
+     * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     */
+    protected $metas;
 
     public function __construct()
     {
@@ -240,5 +246,32 @@ class User implements UserInterface, AdvancedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+    
+    public function getMetas(): Collection
+    {
+        return $this->metas;
+    }
+
+    public function addMeta(?MetaUser $meta): self
+    {
+        if (!$this->metas->contains($meta)) {
+            $this->metas[] = $meta;
+            $meta->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMeta(?MetaUser $meta): self
+    {
+        if ($this->metas->contains($meta)) {
+            $this->metas->removeElement($meta);
+            if ($meta->getUser() === $this) {
+                $meta->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
