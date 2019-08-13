@@ -94,15 +94,15 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("s/page/{page}", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
+     * @Route("s/{page<\d+>?1}", name="list", methods="GET")
      */
-    public function list(PaginatorService $paginator, $page = 1)
+    public function list(PaginatorService $paginator, int $page)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
         $query = $entityManager->getRepository(Project::class)->getAll();
 
-        $projects = $paginator->paginate($query, $page);
+        $projects = $paginator->paginate($query);
         
         return $this->render('admin/project/list.html.twig', ['projects' => $projects]);
     }
