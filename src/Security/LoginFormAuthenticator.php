@@ -52,6 +52,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
+        
         $request->getSession()->set(
             Security::LAST_USERNAME,
             $credentials['email']
@@ -67,7 +68,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+        $user = $this->entityManager->getRepository(User::class)->loadUserByUsername($credentials['email']);
 
         if (!$user) {
             // fail authentication with a custom error
@@ -84,9 +85,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-         // if AJAX login
         if ( $request->isXmlHttpRequest() ) {
- 
             $array = array( 
                 'success'  => true,
                 'redirect' => $this->urlGenerator->generate('app_home')
@@ -94,25 +93,18 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             
             $response = new Response( json_encode( $array ) );
             $response->headers->set( 'Content-Type', 'application/json' );
- 
             return $response;
- 
-        // if form login
-        } else {
-            if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
-                return new RedirectResponse($targetPath);
-            }
-
-            // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
-            //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
-            // redirect to some "app_homepage" route - of wherever you want
-            return new RedirectResponse($this->urlGenerator->generate('app_home'));
         }
+        
+        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
+            return new RedirectResponse($targetPath);
+        }
+
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
     }
     
     public function onAuthenticationFailure( Request $request, AuthenticationException $exception )
     {
-        // if AJAX login
         if ( $request->isXmlHttpRequest() ) {
             
             $array = array( 'success' => false, 'message' => $exception->getMessage() ); // data to return via JSON

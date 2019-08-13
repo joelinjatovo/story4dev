@@ -44,8 +44,13 @@ var KTLoginGeneral=function(){
                     n.valid()&&(
                         e.addClass("kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light").attr("disabled",!0),
                         n.ajaxSubmit({url:"/login",
+                            error:function(d){
+                              console.error(d);
+                              i(n,"danger", "Something was wrong.")
+                            },
                             success:function(t,s,r,a){
-                                if(t.success===true){
+                                console.log(t);
+    ;                            if(t.success===true){
                                     e.removeClass("kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light").attr("disabled",!1),
                                     i(n,"success","You will be redirect in few secondes."),
                                     setTimeout(function(){
