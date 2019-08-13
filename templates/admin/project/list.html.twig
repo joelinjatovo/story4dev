@@ -151,8 +151,8 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__body">
                     <!--begin: Pagination-->
-                    <div class="navigation">
-                        {{ knp_pagination_render(projects) }}
+                    <div class="kt-pagination kt-pagination--brand">
+                        {{ include('common/pagination.html.twig', {'pagination': pagination}) }}
                     </div>
                     <!--end: Pagination-->
                 </div>
