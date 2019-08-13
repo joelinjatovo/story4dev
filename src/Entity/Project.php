@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
@@ -189,7 +190,7 @@ class Project
         return $this;
     }
     
-    public function getActivities(): Collection
+    public function getActivities(): ?Collection
     {
         return $this->activities;
     }
@@ -216,7 +217,7 @@ class Project
         return $this;
     }
     
-    public function getIterations(): Collection
+    public function getIterations(): ?Collection
     {
         return $this->iterations;
     }
@@ -243,7 +244,7 @@ class Project
         return $this;
     }
     
-    public function getMetas(): Collection
+    public function getMetas(): ?Collection
     {
         return $this->metas;
     }

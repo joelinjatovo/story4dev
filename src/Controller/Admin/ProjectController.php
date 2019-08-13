@@ -102,7 +102,7 @@ class ProjectController extends AbstractController
         
         $query = $entityManager->getRepository(Project::class)->getAll();
 
-        $projects = $paginator->paginate($query);
+        $projects = $paginator->paginate($query, 2);
         
         return $this->render('admin/project/list.html.twig', ['projects' => $projects]);
     }

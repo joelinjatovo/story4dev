@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
@@ -248,7 +250,7 @@ class User implements UserInterface, AdvancedUserInterface
         // $this->plainPassword = null;
     }
     
-    public function getMetas(): Collection
+    public function getMetas(): ?Collection
     {
         return $this->metas;
     }
