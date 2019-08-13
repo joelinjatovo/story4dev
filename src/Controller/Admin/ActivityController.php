@@ -3,10 +3,12 @@
 namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+use App\Entity\Project;
 use App\Entity\Activity;
 
 /** @Route("/admin", name="admin_activity_") */
@@ -23,20 +25,50 @@ class ActivityController extends AbstractController
     /**
      * @Route("/activity", name="create", methods="POST")
      */
-    public function create(ValidatorInterface $validator): Response
+    public function create(Request $request, ValidatorInterface $validator): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
+        
+        $project_id = $request->request->get('project');
+        $project = $entityManager->getRepository(Project::class)->find($project_id);
+
+        if (!$project) {
+            throw $this->createNotFoundException('No project found for id '.$project_id );
+        }
 
         $activity = new Activity();
+        $activity->setProject( $project );
+        $activity->setTitle( $request->request->get('title') );
+        $activity->setBudget( (float) $request->request->get('budget') );
         
         $errors = $validator->validate($activity);
         if (count($errors) > 0) {
+            if ( $request->isXmlHttpRequest() ) {
+                return $this->json([
+                    'success' => false,
+                    'title'   => 'Validation Error',
+                    'status'  => 'error',
+                    'message' => 'An error was occured. :)',
+                    'errors'  => $errors,
+                    'error'   => (string) $errors
+                ]);
+            }
+            
             return new Response((string) $errors, 400);
         }
 
         $entityManager->persist($activity);
 
         $entityManager->flush();
+        
+        if ( $request->isXmlHttpRequest() ) {
+            return $this->json([
+                'success' => true,
+                'title'   => 'Success',
+                'status'  => 'success',
+                'message' => 'Activity created successfully.'
+            ]);
+        }
 
         return new Response('Saved new activity with id '.$activity->getId());
     }

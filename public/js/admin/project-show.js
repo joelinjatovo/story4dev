@@ -32,10 +32,20 @@ var KTProjectGeneral=function(){
                       success:function(m,a,l,o){
                         console.log(m);
                         KTApp.unblock(q);
-                        $("#kt_modal_add_activity").modal("hide");
-                        swal.fire("Good job!","You clicked the button!","error");
-                        r.clearForm(),
-                        r.validate().resetForm()
+                        if(m.success===true){
+                            $("#kt_modal_add_activity").modal("hide");
+                            swal.fire(m.title, m.message,m.status);
+                            r.clearForm(),
+                            r.validate().resetForm()
+                        }else{
+                            i(r,"danger",m.message);
+                            m.errors.violations.forEach((item, index) => {
+                                var path = item.propertyPath;
+                                $('#activity-'+path).parent().append("<div id=\"activity-"+path+"-error\" class=\"error invalid-feedback\">" + item.title + "</div>");
+                                $('#activity-'+path).parent().addClass('is-invalid');
+                                $('#activity-'+path).addClass('is-invalid');
+                            });
+                        }
                       }
                     })
                 )

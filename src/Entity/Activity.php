@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use App\Entity\Meta\MetaActivity;
 
@@ -35,6 +37,11 @@ class Activity
     private $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "The title cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
      */
