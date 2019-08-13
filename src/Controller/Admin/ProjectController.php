@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\Project;
+use App\Service\PaginatorService;
 
 /** @Route("/admin/project", name="admin_project_") */
 class ProjectController extends AbstractController
@@ -93,26 +94,16 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("s", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
-     * @Route("s/page/{page}", name="list_paginated", methods="GET", requirements={"page"="\d+"})
+     * @Route("s/page/{page}", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
      */
-    public function list($page = 1)
+    public function list(PaginatorService $paginator, $page = 1)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $paginator = $entityManager->getRepository(Project::class)
-            ->getAll($page);
+        $query = $entityManager->getRepository(Project::class)->getAll();
+
+        $projects = $paginator->paginate($query, $page);
         
-        
-        $pagination = [];
-        $pagination['page']  = $paginator['page'];
-        $pagination['route'] = [
-            'name'   => 'admin_project_list_paginated',
-            'params' => []
-        ];
-        
-        $projects = $paginator['paginator']->getIterator();
-        
-        return $this->render('admin/project/list.html.twig', ['projects' => $projects, 'pagination' => $pagination]);
+        return $this->render('admin/project/list.html.twig', ['projects' => $projects]);
     }
 }

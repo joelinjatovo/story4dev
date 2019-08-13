@@ -1,35 +1,39 @@
-{% if pagination.page.count > 0 %}
+{% set _currentPage = app.request.attributes.get('_route_params')['page'] ?: 1 %}
+{% set _currentRoute = app.request.attributes.get('_route') %}
+{% set _currentParams = app.request.query.all %}
+
+{% if pagination.count > 0 %}
     <ul class="kt-pagination__links">
-        {% if pagination.page.current > 1 %}
+        {% if _currentPage > 1 %}
             <li class="kt-pagination__link--first">
-                <a href="{{ path(pagination.route.name, pagination.route.params|merge({'page': 1})) }}">
+                <a href="{{ path(_currentRoute, _currentParams|merge({'page': 1})) }}">
                     <<
                 </a>
             </li>
             <li class="kt-pagination__link--next">
-                <a href="{{ path(pagination.route.name, pagination.route.params|merge({'page': pagination.page.current-1})) }}">
+                <a href="{{ path(_currentRoute, _currentParams|merge({'page': _currentPage-1})) }}">
                     <
                 </a>
             </li>
         {% endif %}
 
         {# Affichage de toutes les pages entre p-4 et p+4 sauf si < 1 ou > nbPages #}
-        {% for p in range(max(pagination.page.current-4, 1), min(pagination.page.current+4, pagination.page.count)) %}
-            <li {% if p == pagination.page %}class="kt-pagination__link--active"{% endif %}>
-                <a href="{{ path(pagination.route.name, pagination.route.params|merge({'page': p})) }}">
+        {% for p in range(max(_currentPage-4, 1), min(_currentPage+4, pagination.count)) %}
+            <li {% if p == _currentPage %}class="kt-pagination__link--active"{% endif %}>
+                <a href="{{ path(_currentRoute, _currentParams|merge({'page': p})) }}">
                     {{ p }}
                 </a>
             </li>
         {% endfor %}
 
-        {% if pagination.page.current < pagination.page.count %}
+        {% if _currentPage < pagination.count %}
             <li class="kt-pagination__link--prev">
-                <a href="{{ path(pagination.route.name, pagination.route.params|merge({'page': pagination.page.current+1})) }}">
+                <a href="{{ path(_currentRoute, _currentParams|merge({'page': _currentPage+1})) }}">
                     >
                 </a>
             </li>
             <li class="kt-pagination__link--last">
-                <a href="{{ path(pagination.route.name, pagination.route.params|merge({'page': pagination.page.count})) }}">
+                <a href="{{ path(_currentRoute, _currentParams|merge({'page': pagination.count})) }}">
                     >>
                 </a>
             </li>

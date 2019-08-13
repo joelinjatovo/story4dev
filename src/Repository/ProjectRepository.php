@@ -20,11 +20,9 @@ class ProjectRepository extends AppRepository
         parent::__construct($registry, Project::class);
     }
     
-    public function getAll($page = 1, $limit = 5)
+    public function getAll()
     {
-        $query = $this->createQueryBuilder('p')
+        return $this->createQueryBuilder('p')
             ->getQuery();
-
-        return $this->paginate($query, $page, $limit);
     }
 }
