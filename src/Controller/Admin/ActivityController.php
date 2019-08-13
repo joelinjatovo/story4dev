@@ -67,7 +67,7 @@ class ActivityController extends AbstractController
                 'title'   => 'Success',
                 'status'  => 'success',
                 'message' => 'Activity created successfully.',
-                'html'    => $this->render('admin/project/activity.html.twig', ['activity' => $activity] )
+                'html'    => $this->renderView('admin/project/activity.html.twig', ['activity' => $activity] )
             ]);
         }
 
