@@ -51,7 +51,7 @@ class Unit
     private $author;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="activity", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $indicators;
 

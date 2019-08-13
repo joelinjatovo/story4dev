@@ -77,12 +77,12 @@ class Project
     private $periodicity;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="project", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="project", orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $activities;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Iteration", mappedBy="project", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Iteration", mappedBy="project", orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $iterations;
     

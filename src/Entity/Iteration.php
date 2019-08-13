@@ -51,7 +51,7 @@ class Iteration
     private $project;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="indicator", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="indicator", orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $goals;
 

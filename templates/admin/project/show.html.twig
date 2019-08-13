@@ -351,7 +351,7 @@
 	</div>
 	<div class="kt-portlet__body">
         <div class="kt-notification">
-            {% for activity in project.activities %}
+            {% for activity in project.activities.slice(0, 5) %}
             <a href="{{ url('admin_activity_show', { 'id' : activity.id }) }}" class="kt-notification__item">
                 <div class="kt-notification__item-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--brand">
