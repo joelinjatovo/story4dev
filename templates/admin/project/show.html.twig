@@ -350,7 +350,7 @@
 		</div>
 	</div>
 	<div class="kt-portlet__body">
-        <div class="kt-notification">
+        <div class="kt-notification" id="kt-activity-list">
             {% for activity in project.activities.slice(0, 5) %}
                 {{ include('admin/project/activity.html.twig', { 'activity' : activity } ) }}
             {% endfor %}
