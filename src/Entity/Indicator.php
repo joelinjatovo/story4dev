@@ -137,7 +137,7 @@ class Indicator
         return $this;
     }
     
-    public function getGoals(): Collection
+    public function getGoals(): ?Collection
     {
         return $this->goals;
     }

@@ -103,7 +103,7 @@ class Periodicity
         return $this;
     }
     
-    public function getProjects(): Collection
+    public function getProjects(): ?Collection
     {
         return $this->projects;
     }

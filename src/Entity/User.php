@@ -94,6 +94,41 @@ class User implements UserInterface, AdvancedUserInterface
      * @Assert\IsTrue
      */
     private $agree;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $activities;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $indicators;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Iteration", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $iterations;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $goals;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $projects;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $reports;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $results;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaUser", mappedBy="user", orphanRemoval=true)
@@ -107,6 +142,13 @@ class User implements UserInterface, AdvancedUserInterface
         $this->isActive = true;
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
+        $this->activities = new ArrayCollection();
+        $this->indicators = new ArrayCollection();
+        $this->iterations = new ArrayCollection();
+        $this->goals = new ArrayCollection();
+        $this->projects = new ArrayCollection();
+        $this->reports = new ArrayCollection();
+        $this->results = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -248,6 +290,195 @@ class User implements UserInterface, AdvancedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+    
+    public function getActivities(): ?Collection
+    {
+        return $this->activities;
+    }
+
+    public function addActivity(?Activity $activity): self
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities[] = $activity;
+            $activity->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivity(?Activity $activity): self
+    {
+        if ($this->activities->contains($activity)) {
+            $this->activities->removeElement($activity);
+            if ($activity->getAuthor() === $this) {
+                $activity->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getIndicators(): Collection
+    {
+        return $this->indicators;
+    }
+
+    public function addIndicator(?Indicator $indicator): self
+    {
+        if (!$this->indicators->contains($indicator)) {
+            $this->indicators[] = $indicator;
+            $indicator->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIndicator(?Indicator $indicator): self
+    {
+        if ($this->indicators->contains($indicator)) {
+            $this->indicators->removeElement($indicator);
+            if ($indicator->getAuthor() === $this) {
+                $indicator->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getIterations(): ?Collection
+    {
+        return $this->iterations;
+    }
+
+    public function addIteration(?Iteration $iteration): self
+    {
+        if (!$this->iterations->contains($iteration)) {
+            $this->iterations[] = $iteration;
+            $iteration->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIteration(?Iteration $iteration): self
+    {
+        if ($this->iterations->contains($iteration)) {
+            $this->iterations->removeElement($iteration);
+            if ($iteration->getAuthor() === $this) {
+                $iteration->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getGoals(): ?Collection
+    {
+        return $this->goals;
+    }
+
+    public function addGoal(?Goal $goal): self
+    {
+        if (!$this->goals->contains($goal)) {
+            $this->goals[] = $goal;
+            $goal->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGoal(?Goal $goal): self
+    {
+        if ($this->goals->contains($goal)) {
+            $this->goals->removeElement($goal);
+            if ($goal->getAuthor() === $this) {
+                $goal->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getProjects(): ?Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(?Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(?Project $project): self
+    {
+        if ($this->projects->contains($project)) {
+            $this->projects->removeElement($project);
+            if ($project->getAuthor() === $this) {
+                $project->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getReports(): ?Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(?Report $report): self
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports[] = $report;
+            $report->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(?Report $report): self
+    {
+        if ($this->reports->contains($report)) {
+            $this->reports->removeElement($report);
+            if ($report->getAuthor() === $this) {
+                $report->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getResults(): ?Collection
+    {
+        return $this->results;
+    }
+
+    public function addResult(?Result $result): self
+    {
+        if (!$this->results->contains($result)) {
+            $this->results[] = $result;
+            $result->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResult(?Result $result): self
+    {
+        if ($this->results->contains($result)) {
+            $this->results->removeElement($result);
+            if ($result->getAuthor() === $this) {
+                $result->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
     
     public function getMetas(): ?Collection
