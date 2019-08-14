@@ -11,7 +11,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Activity;
 use App\Entity\Unit;
 use App\Entity\Indicator;
+use App\Entity\Goal;
 use App\Form\IndicatorType;
+use App\Form\GoalType;
 
 /** @Route("/admin", name="admin_indicator_") */
 class IndicatorController extends AbstractController
@@ -84,7 +86,10 @@ class IndicatorController extends AbstractController
      */
     public function show(Indicator $indicator)
     {
-        return $this->render('admin/indicator/show.html.twig', ['indicator' => $indicator]);
+        $goal = new Goal();
+        $form = $this->createForm(GoalType::class, $goal);
+        
+        return $this->render('admin/indicator/show.html.twig', ['indicator' => $indicator, 'form' => $form->createView()]);
     }
     
     /**
