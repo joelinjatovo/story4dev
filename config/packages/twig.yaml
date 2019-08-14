@@ -4,3 +4,5 @@ twig:
     strict_variables: '%kernel.debug%'
     form_themes:
         - 'form/float.html.twig'
+    globals:
+        header: '@App\Service\HeaderService'

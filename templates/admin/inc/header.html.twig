@@ -129,6 +129,22 @@
                                         </div>
                                     </div>
                                 </a>
+                                
+                                {% for project in header.projects %}
+                                    <a href="#" class="kt-notification__item">
+                                        <div class="kt-notification__item-icon">
+                                            <i class="flaticon2-psd kt-font-success"></i>
+                                        </div>
+                                        <div class="kt-notification__item-details">
+                                            <div class="kt-notification__item-title">
+                                                {{ project.title }}
+                                            </div>
+                                            <div class="kt-notification__item-time">
+                                                23 hrs ago
+                                            </div>
+                                        </div>
+                                    </a>
+                                {% endfor %}
                             </div>
                         </div>
                         <div class="tab-pane" id="topbar_notifications_logs" role="tabpanel">
