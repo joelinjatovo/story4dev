@@ -9,6 +9,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\Project;
+use App\Entity\Activity;
+use App\Form\ActivityType;
 use App\Service\PaginatorService;
 
 /** @Route("/admin/project", name="admin_project_") */
@@ -54,7 +56,10 @@ class ProjectController extends AbstractController
      */
     public function show(Project $project)
     {
-        return $this->render('admin/project/show.html.twig', ['project' => $project]);
+        $activity = new Activity();
+        $form = $this->createForm(ActivityType::class, $activity);
+        
+        return $this->render('admin/project/show.html.twig', ['project' => $project, 'form' => $form->createView()]);
     }
     
     /**

@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Project;
 use App\Entity\Activity;
+use App\Form\ActivityType;
 
 /** @Route("/admin", name="admin_activity_") */
 class ActivityController extends AbstractController
@@ -27,41 +28,26 @@ class ActivityController extends AbstractController
      */
     public function create(Request $request, ValidatorInterface $validator): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $project_id = $request->request->get('project');
-        $project = $entityManager->getRepository(Project::class)->find($project_id);
-
-        if (!$project) {
-            throw $this->createNotFoundException('No project found for id '.$project_id );
-        }
-
         $activity = new Activity();
-        $activity->setProject( $project );
-        $activity->setTitle( $request->request->get('title') );
-        $activity->setBudget( (float) $request->request->get('budget') );
+        $form = $this->createForm(ActivityType::class, $activity);
         
-        $errors = $validator->validate($activity);
-        if (count($errors) > 0) {
-            if ( $request->isXmlHttpRequest() ) {
+        $form->handleRequest($request);
+        if ( $form->isSubmitted() ) {
+            if ( ! $form->isValid() ) {
                 return $this->json([
                     'success' => false,
                     'title'   => 'Validation Error',
                     'status'  => 'error',
                     'message' => 'An error was occured. :)',
-                    'errors'  => $errors,
-                    'error'   => (string) $errors
+                    'errors'  => $form->getErrors(true, false),
+                    'error'   => 'No error'
                 ]);
             }
             
-            return new Response((string) $errors, 400);
-        }
-
-        $entityManager->persist($activity);
-
-        $entityManager->flush();
-        
-        if ( $request->isXmlHttpRequest() ) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($activity);
+            $entityManager->flush();
+            
             return $this->json([
                 'success' => true,
                 'title'   => 'Success',
@@ -69,6 +55,10 @@ class ActivityController extends AbstractController
                 'message' => 'Activity created successfully.',
                 'html'    => $this->renderView('admin/project/activity.html.twig', ['activity' => $activity] )
             ]);
+            
+        }
+        
+        if ( $request->isXmlHttpRequest() ) {
         }
 
         return new Response('Saved new activity with id '.$activity->getId());

@@ -14,10 +14,10 @@ var KTProjectGeneral=function(){
             $(".btn-add-activity").click(function(n){
                 t.find(".alert").remove()
             }),
-            $("#kt_add_activity_submit").click(function(n){
+            $("#activity_submit").click(function(n){
                 t.find(".alert").remove()
             }),
-            $("#kt_add_activity_submit").click(function(n){
+            $("#activity_submit").click(function(n){
                 n.preventDefault();
                 var s=$(this),r=$(this).closest("form");
                 r.validate({rules:{title:{required:!0,maxlength:100}}}),

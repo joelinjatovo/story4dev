@@ -312,9 +312,8 @@
     
 <!--begin::Modal-->
 <div class="modal fade" id="kt_modal_add_activity" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <form method="post" class="modal-dialog modal-sm" role="document">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" >
-        <input type="hidden" name="project" value="{{ project.id }}" >
+    {{ form_start( form, { 'method' : 'POST', 'attr' : { 'class' : 'modal-dialog modal-sm', 'role' : 'document' } } ) }}
+        <input type="hidden" name="activity[project]" value="{{ project.id }}" >
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">New activity</h5>
@@ -323,20 +322,21 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="activity-title" class="form-control-label">Title:</label>
-                    <input type="text" class="form-control" id="activity-title" name="title">
+                    {{ form_label( form.title, null, { 'label_attr': { 'class': 'form-control-label' } } ) }}
+                    {{ form_widget( form.title, { 'attr' : { 'class' : 'form-control' } } ) }}
                 </div>
                 <div class="form-group">
-                    <label for="activity-budget" class="form-control-label">Budget:</label>
-                    <input type="text" class="form-control" id="activity-budget" name="budget">
+                    {{ form_label( form.budget, null, { 'label_attr': { 'class': 'form-control-label' } } ) }}
+                    {{ form_widget( form.budget, { 'attr' : { 'class' : 'form-control' } } ) }}
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="kt_add_activity_submit">Save activity</button>
+                {{ form_widget( form.submit, { 'attr' : { 'class' : 'btn btn-primary' } } ) }}
             </div>
         </div>
-    </form>
+        {{ form_row( form._token ) }}
+    {{ form_end( form, {'render_rest': false}) }}
 </div>
 <!--end::Modal-->
     
