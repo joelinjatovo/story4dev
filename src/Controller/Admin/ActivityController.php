@@ -36,12 +36,20 @@ class ActivityController extends AbstractController
         $form->handleRequest($request);
         if ( $form->isSubmitted() ) {
             if ( ! $form->isValid() ) {
+                
+                $errors = [];
+                foreach ($form->all() as $child) {
+                    if (!$child->isValid()) {
+                       $errors[$child->getName()] = (String) $form[$child->getName()]->getErrors();
+                    }
+                }
+                
                 return $this->json([
                     'success' => false,
                     'title'   => 'Validation Error',
                     'status'  => 'error',
                     'message' => 'An error was occured. :)',
-                    'errors'  => $form->getErrors(true, false)
+                    'errors'  => $errors
                 ]);
             }
             

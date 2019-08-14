@@ -11,6 +11,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Project;
 use App\Entity\Activity;
 use App\Form\ActivityType;
+use App\Form\ProjectType;
 use App\Service\PaginatorService;
 
 /** @Route("/admin/project", name="admin_project_") */
@@ -67,7 +68,9 @@ class ProjectController extends AbstractController
      */
     public function edit(Project $project)
     {
-        return $this->render('admin/project/edit.html.twig', ['project' => $project]);
+        $form = $this->createForm(ProjectType::class, $project);
+        
+        return $this->render('admin/project/edit.html.twig', ['project' => $project, 'form' => $form->createView() ]);
     }
     
     /**
@@ -75,11 +78,50 @@ class ProjectController extends AbstractController
      */
     public function update(Project $project)
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $form = $this->createForm(ProjectType::class, $project);
         
-        $project->setTitle('New product name!');
+        $form->handleRequest($request);
+        if ( $form->isSubmitted() ) {
+            if ( ! $form->isValid() ) {
+                
+                $errors = [];
+                foreach ($form->all() as $child) {
+                    if (!$child->isValid()) {
+                       $errors[$child->getName()] = (String) $form[$child->getName()]->getErrors();
+                    }
+                }
+                
+                return $this->json([
+                    'success' => false,
+                    'title'   => 'Validation Error',
+                    'status'  => 'error',
+                    'message' => 'An error was occured. :)',
+                    'errors'  => $errors
+                ]);
+            }
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($project);
+            $entityManager->flush();
+            
+            return $this->json([
+                'success' => true,
+                'title'   => 'Success',
+                'status'  => 'success',
+                'message' => 'Project created successfully.',
+            ]);
+            
+        }
         
-        $entityManager->flush();
+        if ( $request->isXmlHttpRequest() ) {
+            return $this->json([
+                'success' => false,
+                'title'   => 'Error',
+                'status'  => 'error',
+                'message' => 'Something went wrong. :)',
+                'errors'  => [],
+            ]);
+        }
 
         return $this->redirectToRoute('admin_project_show', ['id' => $product->getId()]);
     }
