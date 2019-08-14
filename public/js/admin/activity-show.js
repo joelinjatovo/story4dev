@@ -8,18 +8,21 @@ var KTIndicatorGeneral=function(){
             n.prependTo(t),
             KTUtil.animateClass(n[0],"fadeIn animated"),
             n.find("span").html(e)
+        },
+        e=function(t,i){
+            $('#indicator_'+t).parent().append("<div id=\"indicator-"+t+"-error\" class=\"error invalid-feedback\">" + i + "</div>");
+            $('#indicator_'+t).parent().addClass('is-invalid');
+            $('#indicator_'+t).addClass('is-invalid');
         };
     return{
         init:function(){
             $(".btn-add-indicator").click(function(n){
                 t.find(".alert").remove()
             }),
-            $("#kt_add_indicator_submit").click(function(n){
-                t.find(".alert").remove()
-            }),
-            $("#kt_add_indicator_submit").click(function(n){
+            $("#indicator_form").submit(function(n){
                 n.preventDefault();
-                var s=$(this),r=$(this).closest("form");
+                var r=$(this);
+                t.find(".alert").remove(),
                 r.validate({rules:{title:{required:!0,maxlength:100}}}),
                 r.valid()&&(
                     KTApp.block("#kt_modal_add_indicator .modal-content",{overlayColor:"#000000",type:"v2",state:"primary",message:"Please wait..."}),
@@ -40,12 +43,9 @@ var KTIndicatorGeneral=function(){
                             $('#kt-indicator-list').prepend(m.html);
                         }else{
                             i(r,"danger",m.message);
-                            m.errors.violations.forEach((item, index) => {
-                                var path = item.propertyPath;
-                                $('#indicator-'+path).parent().append("<div id=\"indicator-"+path+"-error\" class=\"error invalid-feedback\">" + item.title + "</div>");
-                                $('#indicator-'+path).parent().addClass('is-invalid');
-                                $('#indicator-'+path).addClass('is-invalid');
-                            });
+                            if(m.errors != undefined ){
+                                if(m.errors.title != undefined ) e('title', m.errors.title);
+                            }
                         }
                       }
                     })

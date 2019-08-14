@@ -312,7 +312,7 @@
     
 <!--begin::Modal-->
 <div class="modal fade" id="kt_modal_add_activity" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    {{ form_start( form, { 'method' : 'POST', 'attr' : { 'class' : 'modal-dialog modal-sm', 'role' : 'document' } } ) }}
+    {{ form_start( form, { 'method' : 'POST', 'attr' : { 'id' : 'activity_form', 'class' : 'modal-dialog modal-sm', 'role' : 'document' } } ) }}
         <input type="hidden" name="activity[project]" value="{{ project.id }}" >
         <div class="modal-content">
             <div class="modal-header">

@@ -10,7 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Project;
 use App\Entity\Activity;
+use App\Entity\Indicator;
 use App\Form\ActivityType;
+use App\Form\IndicatorType;
 
 /** @Route("/admin", name="admin_activity_") */
 class ActivityController extends AbstractController
@@ -39,8 +41,7 @@ class ActivityController extends AbstractController
                     'title'   => 'Validation Error',
                     'status'  => 'error',
                     'message' => 'An error was occured. :)',
-                    'errors'  => $form->getErrors(true, false),
-                    'error'   => 'No error'
+                    'errors'  => $form->getErrors(true, false)
                 ]);
             }
             
@@ -59,6 +60,13 @@ class ActivityController extends AbstractController
         }
         
         if ( $request->isXmlHttpRequest() ) {
+            return $this->json([
+                'success' => false,
+                'title'   => 'Error',
+                'status'  => 'error',
+                'message' => 'Something went wrong. :)',
+                'errors'  => [],
+            ]);
         }
 
         return new Response('Saved new activity with id '.$activity->getId());
@@ -69,7 +77,10 @@ class ActivityController extends AbstractController
      */
     public function show(Activity $activity)
     {
-        return $this->render('admin/activity/show.html.twig', ['activity' => $activity]);
+        $indicator = new Indicator();
+        $form = $this->createForm(IndicatorType::class, $indicator);
+        
+        return $this->render('admin/activity/show.html.twig', ['activity' => $activity, 'form' => $form->createView() ]);
     }
     
     /**

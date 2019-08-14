@@ -230,9 +230,8 @@
     
 <!--begin::Modal-->
 <div class="modal fade" id="kt_modal_add_indicator" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <form method="post" class="modal-dialog modal-sm" role="document">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" >
-        <input type="hidden" name="activity" value="{{ activity.id }}" >
+    {{ form_start( form, { 'method' : 'POST', 'attr' : { 'id' : 'indicator_form', 'class' : 'modal-dialog modal-sm', 'role' : 'document' } } ) }}
+        <input type="hidden" name="indicator[activity]" value="{{ activity.id }}" >
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">New indicator</h5>
@@ -241,23 +240,21 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="indicator-title" class="form-control-label">Title:</label>
-                    <input type="text" class="form-control" id="indicator-title" name="title">
+                    {{ form_label( form.title, null, { 'label_attr': { 'class': 'form-control-label' } } ) }}
+                    {{ form_widget( form.title, { 'attr' : { 'class' : 'form-control' } } ) }}
                 </div>
                 <div class="form-group">
-                    <label for="indicator-unit" class="form-control-label">Unit:</label>
-                    <select class="form-control" id="indicator-unit" name="unit">
-                        <option value="0">Select unit</option>
-                        <option value="1">Metre<option>
-                    </select>
+                    {{ form_label( form.unit, null, { 'label_attr': { 'class': 'form-control-label' } } ) }}
+                    {{ form_widget( form.unit, { 'attr' : { 'class' : 'form-control' } } ) }}
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="kt_add_indicator_submit">Save indicator</button>
+                {{ form_widget( form.submit, { 'attr' : { 'class' : 'btn btn-primary' } } ) }}
             </div>
         </div>
-    </form>
+        {{ form_row( form._token ) }}
+    {{ form_end( form, {'render_rest': false}) }}
 </div>
 <!--end::Modal-->
     

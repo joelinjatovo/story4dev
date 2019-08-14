@@ -4,11 +4,13 @@ namespace App\Form;
 
 use App\Entity\Activity;
 use App\Entity\Project;
+use App\Form\FloatType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ActivityType extends AbstractType
@@ -17,7 +19,9 @@ class ActivityType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('budget')
+            ->add('budget', FloatType::class, [
+                'required'   => false,
+            ])
             ->add('project', EntityType::class, [
                 'class' => Project::class,
                 'choice_label' => function ($project) {

@@ -50,6 +50,10 @@ class Activity
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned
+     * @Assert\Type(
+     *     type="float",
+     *     message="The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $budget;
     
@@ -101,7 +105,7 @@ class Activity
         return $this;
     }
 
-    public function getBudget(): ?float
+    public function getBudget() : ?float
     {
         return $this->budget;
     }

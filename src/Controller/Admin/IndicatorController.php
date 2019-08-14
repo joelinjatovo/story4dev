@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Activity;
 use App\Entity\Unit;
 use App\Entity\Indicator;
+use App\Form\IndicatorType;
 
 /** @Route("/admin", name="admin_indicator_") */
 class IndicatorController extends AbstractController
@@ -28,53 +29,50 @@ class IndicatorController extends AbstractController
      */
     public function create(Request $request, ValidatorInterface $validator): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $activity_id = $request->request->get('activity');
-        $activity = $entityManager->getRepository(Activity::class)->find($activity_id);
-
-        if (!$activity) {
-            throw $this->createNotFoundException('No activity found for id '.$activity_id );
-        }
-        
-        $unit_id = $request->request->get('unit');
-        $unit = $entityManager->getRepository(Unit::class)->find($unit_id);
-
-        if (!$unit) {
-            throw $this->createNotFoundException('No unit found for id '.$unit_id );
-        }
-
         $indicator = new Indicator();
-        $indicator->setActivity( $activity );
-        $indicator->setTitle( $request->request->get('title') );
+        $form = $this->createForm(IndicatorType::class, $indicator);
         
-        $errors = $validator->validate($indicator);
-        if (count($errors) > 0) {
-            if ( $request->isXmlHttpRequest() ) {
+        $form->handleRequest($request);
+        if ( $form->isSubmitted() ) {
+            if ( ! $form->isValid() ) {
+                
+                $errors = [];
+                foreach ($form->all() as $child) {
+                    if (!$child->isValid()) {
+                       $errors[$child->getName()] = (String) $form[$child->getName()]->getErrors();
+                    }
+                }
+                
                 return $this->json([
                     'success' => false,
                     'title'   => 'Validation Error',
                     'status'  => 'error',
                     'message' => 'An error was occured. :)',
-                    'errors'  => $errors,
-                    'error'   => (string) $errors
+                    'errors'  => $errors
                 ]);
             }
-
-            return new Response((string) $errors, 400);
-        }
-
-        $entityManager->persist($indicator);
-
-        $entityManager->flush();
-        
-        if ( $request->isXmlHttpRequest() ) {
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($indicator);
+            $entityManager->flush();
+            
             return $this->json([
                 'success' => true,
                 'title'   => 'Success',
                 'status'  => 'success',
                 'message' => 'Indicator created successfully.',
                 'html'    => $this->renderView('admin/activity/indicator.html.twig', ['indicator' => $indicator] )
+            ]);
+            
+        }
+        
+        if ( $request->isXmlHttpRequest() ) {
+            return $this->json([
+                'success' => false,
+                'title'   => 'Error',
+                'status'  => 'error',
+                'message' => 'Something went wrong. :)',
+                'errors'  => [],
             ]);
         }
 
