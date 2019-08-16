@@ -150,6 +150,11 @@ class User implements UserInterface, AdvancedUserInterface
     private $resetedAt;
 
     /**
+     * @ORM\Column(name="actived_at", type="datetime", nullable=true)
+     */
+    private $activedAt;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $activities;
@@ -283,6 +288,18 @@ class User implements UserInterface, AdvancedUserInterface
 
         return $this;
     }
+
+    public function getActivedAt(): ?\DateTimeInterface
+    {
+        return $this->activedAt;
+    }
+
+    public function setActivedAt(?\DateTimeInterface $activedAt): self
+    {
+        $this->activedAt = $activedAt;
+
+        return $this;
+    }
     
     public function getFullname(): ?string
     {
@@ -339,7 +356,7 @@ class User implements UserInterface, AdvancedUserInterface
 
     public function setActive(bool $active): self
     {
-        $this->isActive = isActive;
+        $this->isActive = $active;
 
         return $this;
     }
