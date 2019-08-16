@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 use App\Entity\Meta\MetaUser;
 
@@ -239,23 +240,27 @@ class User implements UserInterface, AdvancedUserInterface
         return $this->id;
     }
 
-    public function setAvatar(?string $avatar): void
+    public function setAvatar(string $avatar): self
     {
         $this->avatar = $avatar;
+        
+        return $this;
     }
 
-    public function getAvatar(): ?string
+    public function getAvatar(): string
     {
         return $this->avatar;
     }
 
-    public function setAvatarFile(?File $avatarFile = null) : void
+    public function setAvatarFile(?File $avatarFile) : self
     {
         $this->avatarFile = $avatarFile;
 
         if (null !== $avatarFile) {
             $this->updatedAt = new \DateTimeImmutable();
         }
+        
+        return $this;
     }
 
     public function getAvatarFile() : ? File
