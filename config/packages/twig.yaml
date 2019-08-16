@@ -6,3 +6,5 @@ twig:
         - '_form/float.html.twig'
     globals:
         header: '@App\Service\HeaderService'
+        default_avatar: '/images/avatar.png'
+        default_picture: '/images/picture.png'

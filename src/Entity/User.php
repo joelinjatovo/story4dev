@@ -93,7 +93,7 @@ class User implements UserInterface, AdvancedUserInterface
 
     /**
     * @Gedmo\Slug(fields={"username"})
-    * @ORM\Column(type="string", length=255, nullable=false)
+    * @ORM\Column(type="string", length=255, nullable=false, unique=true)
     */
     private $slug;
     
@@ -240,14 +240,14 @@ class User implements UserInterface, AdvancedUserInterface
         return $this->id;
     }
 
-    public function setAvatar(string $avatar): self
+    public function setAvatar(?string $avatar): self
     {
         $this->avatar = $avatar;
         
         return $this;
     }
 
-    public function getAvatar(): string
+    public function getAvatar(): ?string
     {
         return $this->avatar;
     }
@@ -438,7 +438,7 @@ class User implements UserInterface, AdvancedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -743,6 +743,33 @@ class User implements UserInterface, AdvancedUserInterface
     public function getMetas(): ?Collection
     {
         return $this->metas;
+    }
+    
+    public function getInitials(): ?string
+    {
+        $name = $this->getFullname();
+        if( empty( $name ) ) {
+            $name = $this->getUsername();
+        }
+        
+        $words = explode(" ", $name);
+        $initials = null;
+        
+        if( count( $words ) > 1){
+            foreach ($words as $w) {
+                 $initials .= $w[0];
+            }
+            
+            $initials = mb_substr( $initials, 0, 2, "UTF-8" );
+        } else {
+            if( strlen( $name ) > 2 ) {
+                $initials =  mb_substr( $name, 0, 2, "UTF-8" );
+            } else {
+                $initials = $name;
+            }
+            
+        }
+        return strtoupper( $initials ); //JB
     }
 
     public function addMeta(?MetaUser $meta): self

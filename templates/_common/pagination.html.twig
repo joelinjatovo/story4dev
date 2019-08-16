@@ -1,6 +1,6 @@
-{% set _currentPage = app.request.attributes.get('_route_params')['page'] ?: 1 %}
-{% set _currentRoute = app.request.attributes.get('_route') %}
-{% set _currentParams = app.request.query.all %}
+{% set _currentPage   = app.request.attributes.get('_route_params')['page'] ?: 1 %}
+{% set _currentRoute  = app.request.attributes.get('_route') %}
+{% set _currentParams = app.request.attributes.get('_route_params') %}
 
 {% if pagination.count > 0 %}
     <ul class="kt-pagination__links">

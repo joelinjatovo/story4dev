@@ -27,7 +27,7 @@ security:
                     - App\Security\LoginFormAuthenticator
     access_control:
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        # - { path: ^/sadmin, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/sadmin, roles: ROLE_SUPER_ADMIN }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/editor, roles: ROLE_EDITOR }
         # - { path: ^/contributor, roles: ROLE_CONTRIBUTOR }

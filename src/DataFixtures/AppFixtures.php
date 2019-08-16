@@ -37,21 +37,37 @@ class AppFixtures extends Fixture
         $admin->setActive(true);
         $admin->setStatus(User::STATUS_ACTIVE);
         $admin->setActivedAt(new \DateTime());
+        $admin->setAddress('Madagascar');
+        $admin->setFullname('Jason Muller');
         $admin->setUsername('joelinjatovo');
         $admin->setEmail('joelinjatovo@gmail.com');
         $admin->setPassword($this->passwordEncoder->encodePassword($admin, 'admin'));
-        $admin->setRoles(['ROLE_ADMIN']);
+        $admin->setRoles(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN']);
         $manager->persist($admin);
 
         $user = new User();
         $user->setActive(true);
         $user->setStatus(User::STATUS_ACTIVE);
         $user->setActivedAt(new \DateTime());
+        $user->setAddress('America');
+        $user->setFullname('Matt Pears');
         $user->setUsername('user');
         $user->setEmail('joelinjatovo@yahoo.com');
         $user->setPassword($this->passwordEncoder->encodePassword($user, 'user'));
         $user->setRoles(['ROLE_USER']);
         $manager->persist($user);
+
+        $user1 = new User();
+        $user1->setActive(true);
+        $user1->setStatus(User::STATUS_ACTIVE);
+        $user1->setActivedAt(new \DateTime());
+        $user1->setAddress('Germany');
+        $user1->setFullname('Sergei Ford');
+        $user1->setUsername('user2');
+        $user1->setEmail('serge.ford@agmail.com');
+        $user1->setPassword($this->passwordEncoder->encodePassword($user, 'user2'));
+        $user1->setRoles(['ROLE_USER']);
+        $manager->persist($user1);
         
         $periodicities = [
             'Jour'      => 1,

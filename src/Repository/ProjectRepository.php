@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Project;
 use App\Traits\PaginatorEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -23,6 +24,14 @@ class ProjectRepository extends AppRepository
     public function getAll()
     {
         return $this->createQueryBuilder('p')
+            ->getQuery();
+    }
+    
+    public function getAllByAuthor(User $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.author = :query')
+            ->setParameter('query', $user)
             ->getQuery();
     }
 }

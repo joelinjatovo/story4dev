@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Back;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\User;
 use App\Entity\Project;
@@ -15,7 +16,7 @@ use App\Form\ActivityType;
 use App\Form\ProjectType;
 use App\Service\PaginatorService;
 
-/** @Route("/admin", name="admin_project_") */
+/** @Route("/back", name="back_project_") */
 class ProjectController extends AbstractController
 {
     /**
@@ -23,7 +24,7 @@ class ProjectController extends AbstractController
      */
     public function index()
     {
-        return $this->render('admin/project/create.html.twig');
+        return $this->render('back/project/create.html.twig');
     }
     
     /**
@@ -61,7 +62,7 @@ class ProjectController extends AbstractController
         $activity = new Activity();
         $form = $this->createForm(ActivityType::class, $activity);
         
-        return $this->render('admin/project/show.html.twig', ['project' => $project, 'form' => $form->createView()]);
+        return $this->render('back/project/show.html.twig', ['project' => $project, 'form' => $form->createView()]);
     }
     
     /**
@@ -71,7 +72,7 @@ class ProjectController extends AbstractController
     {
         $form = $this->createForm(ProjectType::class, $project);
         
-        return $this->render('admin/project/edit.html-temp.twig', ['project' => $project, 'form' => $form->createView() ]);
+        return $this->render('back/project/edit.html-temp.twig', ['project' => $project, 'form' => $form->createView() ]);
     }
     
     /**
@@ -116,7 +117,7 @@ class ProjectController extends AbstractController
                 ]);
             }
 
-            return $this->redirectToRoute('admin_project_edit', ['id' => $project->getId()]);
+            return $this->redirectToRoute('back_project_edit', ['id' => $project->getId()]);
             
         }
         
@@ -130,7 +131,7 @@ class ProjectController extends AbstractController
             ]);
         }
 
-        return $this->redirectToRoute('admin_project_show', ['id' => $project->getId()]);
+        return $this->redirectToRoute('back_project_show', ['id' => $project->getId()]);
     }
     
     /**
@@ -158,6 +159,6 @@ class ProjectController extends AbstractController
 
         $projects = $paginator->paginate($query, 2);
         
-        return $this->render('admin/project/list.html.twig', ['projects' => $projects]);
+        return $this->render('back/project/list.html.twig', ['projects' => $projects]);
     }
 }

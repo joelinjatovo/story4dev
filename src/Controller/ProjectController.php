@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 use App\Entity\User;
 use App\Entity\Project;
@@ -15,69 +16,45 @@ use App\Form\ActivityType;
 use App\Form\ProjectType;
 use App\Service\PaginatorService;
 
-/** @Route("/admin", name="admin_project_") */
+/** @Route(name="project_") */
 class ProjectController extends AbstractController
 {
-    /**
-     * @Route("/project", name="index", methods="GET")
-     */
-    public function index()
-    {
-        return $this->render('admin/project/create.html.twig');
-    }
     
     /**
-     * @Route("/project", name="create", methods="POST")
+     * @Route("/{slug}/project/{id}", name="show", methods="GET", requirements={"id"="\d+"})
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function create(ValidatorInterface $validator): Response
+    public function show(User $user, Project $project)
     {
-        // you can fetch the EntityManager via $this->getDoctrine()
-        // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $project = new Project();
-        $project->setTitle('Keyboard');
-        $project->setDescription('Ergonomic and stylish!');
-        
-        $errors = $validator->validate($project);
-        if (count($errors) > 0) {
-            return new Response((string) $errors, 400);
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
         }
-
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($project);
-
-        // actually executes the queries (i.e. the INSERT query)
-        $entityManager->flush();
-
-        return new Response('Saved new product with id '.$project->getId());
-    }
-    
-    /**
-     * @Route("/project/{id}", name="show", methods="GET", requirements={"id"="\d+"})
-     */
-    public function show(Project $project)
-    {
+        
         $activity = new Activity();
         $form = $this->createForm(ActivityType::class, $activity);
         
-        return $this->render('admin/project/show.html.twig', ['project' => $project, 'form' => $form->createView()]);
+        return $this->render('project/show.html.twig', ['project' => $project, 'author' => $user, 'form' => $form->createView()]);
     }
     
     /**
-     * @Route("/project/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
+     * @Route("/{slug}/project/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function edit(Project $project)
+    public function edit(User $user, Project $project)
     {
         $form = $this->createForm(ProjectType::class, $project);
         
-        return $this->render('admin/project/edit.html-temp.twig', ['project' => $project, 'form' => $form->createView() ]);
+        return $this->render('project/edit.html-temp.twig', ['project' => $project, 'author' => $user, 'form' => $form->createView() ]);
     }
     
     /**
-     * @Route("/project/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
+     * @Route("/{slug}/project/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function update(Request $request, Project $project)
+    public function update(User $user, Request $request, Project $project)
     {
         //dump($request->request); exit;
         
@@ -130,13 +107,15 @@ class ProjectController extends AbstractController
             ]);
         }
 
-        return $this->redirectToRoute('admin_project_show', ['id' => $project->getId()]);
+        return $this->redirectToRoute('project_show', ['id' => $project->getId(), 'author' => $user]);
     }
     
     /**
-     * @Route("/project/remove/{id}", name="remove", methods="POST")
+     * @Route("/{slug}/project/remove/{id}", name="remove", methods="POST")
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function remove(Project $project)
+    public function remove(User $user, Project $project)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
@@ -148,16 +127,17 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/projects/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/{slug}/projects/{page<\d+>?1}", name="list", methods="GET")
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
      */
-    public function list(PaginatorService $paginator, int $page)
+    public function list(User $user, PaginatorService $paginator, int $page)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $query = $entityManager->getRepository(Project::class)->getAll();
+        $query = $entityManager->getRepository(Project::class)->getAllByAuthor($user);
 
         $projects = $paginator->paginate($query, 2);
         
-        return $this->render('admin/project/list.html.twig', ['projects' => $projects]);
+        return $this->render('project/list.html.twig', ['projects' => $projects, 'author' => $user]);
     }
 }
