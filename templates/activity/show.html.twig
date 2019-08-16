@@ -270,7 +270,7 @@
 	<div class="kt-portlet__body">
         <div class="kt-notification" id="kt-indicator-list">
             {% for indicator in activity.indicators.slice(0, 5) %}
-                {{ include('admin/activity/indicator.html.twig', { 'indicator' : indicator } ) }}
+                {{ include('activity/indicator.html.twig', { 'indicator' : indicator } ) }}
             {% endfor %}
             <a href="#" class="kt-notification__item">
                 <div class="kt-notification__item-icon">
