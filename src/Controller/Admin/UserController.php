@@ -9,11 +9,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\User;
 
-/** @Route("/admin/user", name="admin_user_") */
+/** @Route("/admin", name="admin_user_") */
 class UserController extends AbstractController
 {
     /**
-     * @Route("/", name="index", methods="GET")
+     * @Route("/user", name="index", methods="GET")
      */
     public function index()
     {
@@ -21,7 +21,7 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("/", name="create", methods="POST")
+     * @Route("/user", name="create", methods="POST")
      */
     public function create(ValidatorInterface $validator): Response
     {
@@ -46,7 +46,7 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("/{id}", name="show", methods="GET", requirements={"id"="\d+"})
+     * @Route("/user/{id}", name="show", methods="GET", requirements={"id"="\d+"})
      */
     public function show(User $user)
     {
@@ -54,7 +54,7 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
+     * @Route("/user/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
      */
     public function edit(User $user)
     {
@@ -62,7 +62,7 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
+     * @Route("/user/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
      */
     public function update(User $user)
     {
@@ -76,7 +76,7 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("/remove/{id}", name="remove", methods="POST")
+     * @Route("/user/remove/{id}", name="remove", methods="POST")
      */
     public function remove(User $user)
     {
@@ -90,8 +90,7 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("s", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
-     * @Route("s/page/{page}", name="list_paginated", methods="GET", requirements={"page"="\d+"})
+     * @Route("/users/{page<\d+>?1}", name="list", methods="GET")
      */
     public function list($page = 1)
     {

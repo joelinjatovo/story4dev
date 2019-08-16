@@ -12,15 +12,21 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+
+use App\Entity\Meta\MetaUser;
+use App\Entity\Token\ConfirmToken;
+use App\Entity\Token\ResetToken;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="users")
- * @UniqueEntity("username")
  * @UniqueEntity("email")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
 class User implements UserInterface, AdvancedUserInterface
 {
+    const STATUS_PING    = 'ping';
+    const STATUS_ACTIVE  = 'active';
+    const STATUS_BLOCKED = 'blocked';
     
     /**
      * Hook timestampable behavior
@@ -38,21 +44,9 @@ class User implements UserInterface, AdvancedUserInterface
 
     /**
      * @Assert\NotBlank
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 50,
-     *      minMessage = "Your username must be at least {{ limit }} characters long",
-     *      maxMessage = "Your username cannot be longer than {{ limit }} characters"
-     * )
-     * @ORM\Column(type="string", length=25, unique=true)
-     */
-    private $username;
-
-    /**
-     * @Assert\NotBlank
      * @Assert\Email
      * @Assert\Length(
-     *      max = 100,
+     *      max = 180,
      *      maxMessage = "Your email cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(type="string", length=180, unique=true)
@@ -81,9 +75,39 @@ class User implements UserInterface, AdvancedUserInterface
      *      max = 100,
      *      maxMessage = "Your fullname cannot be longer than {{ limit }} characters"
      * )
-     * @ORM\Column(name="full_name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="full_name", type="string", length=100, nullable=true)
      */
     private $full_name;
+    
+    /**
+     * @Assert\Type("string")
+     * @Assert\Length(
+     *      max = 50,
+     *      maxMessage = "Your phone number cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(name="phone", type="string", length=50, nullable=true)
+     */
+    private $phone;
+    
+    /**
+     * @Assert\Type("string")
+     * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "Your address cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(name="address", type="string", length=100, nullable=true)
+     */
+    private $address;
+    
+    /**
+     * @Assert\Type("string")
+     * @Assert\Length(
+     *      max = 10,
+     *      maxMessage = "Your status cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(name="status", type="string", length=10, nullable=true)
+     */
+    private $status;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
@@ -94,6 +118,18 @@ class User implements UserInterface, AdvancedUserInterface
      * @Assert\IsTrue
      */
     private $agree;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Token\ConfirmToken", inversedBy="user")
+     * @ORM\JoinColumn(name="confirm_token", referencedColumnName="id")
+     */
+    private $confirmToken;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Token\ConfirmToken", inversedBy="user")
+     * @ORM\JoinColumn(name="reset_token", referencedColumnName="id")
+     */
+    private $resetToken;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
@@ -140,6 +176,7 @@ class User implements UserInterface, AdvancedUserInterface
     {
         $this->agree = true;
         $this->isActive = true;
+        $this->setStatus(self::STATUS_PING);
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->activities = new ArrayCollection();
@@ -156,13 +193,6 @@ class User implements UserInterface, AdvancedUserInterface
         return $this->id;
     }
 
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
     public function getEmail(): ?string
     {
         return $this->email;
@@ -175,6 +205,30 @@ class User implements UserInterface, AdvancedUserInterface
         return $this;
     }
     
+    public function getConfirmToken(): ?ConfirmToken
+    {
+        return $this->confirmToken;
+    }
+    
+    public function setConfirmToken(?ConfirmToken $token): self
+    {
+        $this->confirmToken = $token;
+        
+        return $this;
+    }
+    
+    public function getResetToken(): ?ResetToken
+    {
+        return $this->resetToken;
+    }
+    
+    public function setResetToken(?ResetToken $token): self
+    {
+        $this->resetToken = $token;
+        
+        return $this;
+    }
+    
     public function getFullName(): ?string
     {
         return $this->full_name;
@@ -184,6 +238,66 @@ class User implements UserInterface, AdvancedUserInterface
     {
         $this->full_name = $fullName;
         
+        return $this;
+    }  
+    
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+    
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
+        
+        return $this;
+    } 
+    
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+    
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+        
+        return $this;
+    }    
+
+    public function getStatus(): string
+    {
+        return (string) $this->status;
+    }
+    
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+        
+        return $this;
+    }
+    
+    public function isActive()
+    {
+        return $this->isActive;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->isActive = isActive;
+
+        return $this;
+    }
+    
+    public function isAgree()
+    {
+        return $this->agree;
+    }
+
+    public function setAgree(bool $agree): self
+    {
+        $this->agree = $agree;
+
         return $this;
     }
 
@@ -229,19 +343,7 @@ class User implements UserInterface, AdvancedUserInterface
         $this->password = $password;
 
         return $this;
-    } 
-    
-    public function isAgree()
-    {
-        return $this->agree;
     }
-
-    public function setAgree(bool $agree): self
-    {
-        $this->agree = $agree;
-
-        return $this;
-    }    
     
     /**
      * @see AdvancedUserInterface

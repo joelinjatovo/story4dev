@@ -1,36 +1,28 @@
-{# templates/admin.html.twig #}
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Admin Application{% endblock %}</title>
-        <meta name="description" content="Latest updates and statistic charts"> 
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Security Page{% endblock %}</title>
+        <meta name="description" content="Latest updates and statistic charts"> 
 
         <!--begin::Fonts -->
-        <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
-        <script>
-            WebFont.load({
-                google: {"families":["Poppins:300,400,500,600,700","Roboto:300,400,500,600,700"]},
-                active: function() {
-                    sessionStorage.fonts = true;
-                }
-            });
-        </script>
+        <link href="{{ asset('css/fonts/poppins/poppins.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/fonts/roboto/roboto.css') }}" rel="stylesheet">
         <!--end::Fonts -->
         
         {% block stylesheets %}
-            <!--begin::Page Custom Styles(used by this page) --> 
-            <link href="{{ asset('css/login.css') }}" rel="stylesheet" type="text/css"/>
-            <!--end::Page Custom Styles -->
+        <!--begin::Page Custom Styles(used by this page) --> 
+        <link href="{{ asset('css/login.css') }}" rel="stylesheet" type="text/css"/>
+        <!--end::Page Custom Styles -->
 
-            <!--begin::Global Theme Styles(used by all pages) -->
-            <link href="{{ asset('css/vendors.bundle.css') }}" rel="stylesheet" type="text/css"/>
-            <link href="{{ asset('css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>
-            <!--end::Global Theme Styles -->
+        <!--begin::Global Theme Styles(used by all pages) -->
+        <link href="{{ asset('css/vendors.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        <!--end::Global Theme Styles -->
 
-            <!--begin::Layout Skins(used by all pages) -->
-            <!--end::Layout Skins -->
+        <!--begin::Layout Skins(used by all pages) -->
+        <!--end::Layout Skins -->
         {% endblock %}
 
         <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
@@ -93,12 +85,6 @@
                                     <div class="kt-login__desc">Enter your details to create your account:</div>
                                 </div>
                                 <form class="kt-form" method="post">
-                                    <div class="input-group">
-                                        <input class="form-control" type="text" placeholder="Fullname" name="fullname">
-                                    </div>
-                                    <div class="input-group">
-                                        <input class="form-control" type="text" placeholder="Username" name="username" autocomplete="off">
-                                    </div>
                                     <div class="input-group">
                                         <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off">
                                     </div>

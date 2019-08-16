@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Goal;
 use App\Entity\Indicator;
+use App\Entity\Iteration;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,7 +23,12 @@ class GoalType extends AbstractType
                     return $indicator->getTitle();
                 }
             ])
-            ->add('iteration')
+            ->add('iteration', EntityType::class, [
+                'class' => Iteration::class,
+                'choice_label' => function ($iteration) {
+                    return $iteration->getTitle();
+                }
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Save goal'
             ])

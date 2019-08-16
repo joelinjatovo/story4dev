@@ -86,8 +86,7 @@ class PeriodicityController extends AbstractController
     }
     
     /**
-     * @Route("/periodicities", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
-     * @Route("/periodicities/page/{page}", name="list_paginated", methods="GET", requirements={"page"="\d+"})
+     * @Route("/periodicities/{page<\d+>?1}", name="list", methods="GET")
      */
     public function list($page = 1)
     {

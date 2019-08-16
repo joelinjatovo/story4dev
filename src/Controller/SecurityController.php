@@ -1,5 +1,5 @@
 <?php
-// src/Controller/SecurityController.php
+
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Form\RegistrationFormType;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Entity\User;
 
@@ -48,8 +49,6 @@ class SecurityController extends AbstractController
     {
         if ( $request->isXmlHttpRequest() ) {
             $user = new User();
-            $user->setUsername( $request->request->get('username') );
-            $user->setFullName( $request->request->get('fullname') );
             $user->setEmail( $request->request->get('email') );
             $user->setAgree( (bool) $request->request->get('agree') );
             $user->setPassword(
@@ -68,13 +67,39 @@ class SecurityController extends AbstractController
                 ]);
             }
 
+            $token = md5(time());
+            $user->setStatus(User::STATUS_PING);
+            $user->setActive(false);
+            $user->setConfirmToken( $token );
+            $user->setConfirmetAt( new \DateTime() );
+ 
+            $url = $this->generateUrl('app_confirm_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
+
+            /*
+            $message = (new \Swift_Message('Nouveau compte - Confirmation'))
+                ->setFrom(array('joelinjatovo@gmail.com'=> 'Admin'))
+                ->setTo($user->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'security/emails/confirm.html.twig',
+                        [
+                            'user'=>$user,
+                            'url'=>$url
+                        ]
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
+            */
+            
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
             
             return $this->json([
                 'success' => true,
-                'message' => 'Thank you. To complete your registration please check your email.'
+                'message' => 'Thank you. To complete your registration please check your email.',
+                'confirm_url' => $url
             ]);
         }
 
@@ -83,6 +108,35 @@ class SecurityController extends AbstractController
             'error' => '',
             'active_form' => 'signup',
         ]);
+    }
+ 
+    /**
+     * @Route("/confirm/{token}", name="app_confirm", methods="GET")
+     */
+    public function confirm(Request $request, String $token, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $user = $entityManager->getRepository(User::class)->findOneByConfirmToken($token);
+
+        if ($user === null) {
+            $this->addFlash('danger', 'Mot de passe non reconnu');
+            return $this->redirectToRoute('app_index');
+        }
+
+        try{
+            $user->setStatus(User::STATUS_ACTIVE);
+            $user->setActive(true);
+            $user->setConfirmToken(null);
+            $entityManager->flush();
+        } catch (\Exception $e) {
+            $this->addFlash('warning', $e->getMessage());
+            return $this->redirectToRoute('app_index');
+        }
+        
+        $this->addFlash('notice', 'Mot de passe mis à jour !');
+        
+        return $this->redirectToRoute('app_login');
     }
     
     /**
@@ -95,9 +149,11 @@ class SecurityController extends AbstractController
             $email = $request->request->get('email');
  
             $entityManager = $this->getDoctrine()->getManager();
+        
             $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
  
             if ($user === null) {
+                
                 if ( $request->isXmlHttpRequest() ) {
                     return $this->json(array( 
                         'success'  => false,
@@ -106,13 +162,14 @@ class SecurityController extends AbstractController
                 }
                 
                 $this->addFlash('danger', 'Email Inconnu, recommence !');
+            
                 return $this->redirectToRoute('app_forgot_password');
             }
             
-            /*
-            $token = $this->tokenGenerator->generateToken();
+            $token = md5(time());//$this->tokenGenerator->generateToken();
             try{
-                //$user->setResetToken($token);
+                $user->setResetToken($token);
+                $user->setResetedAt(new \DateTime());
                 $entityManager->flush();
             } catch (\Exception $e) {
                 if ( $request->isXmlHttpRequest() ) {
@@ -123,11 +180,13 @@ class SecurityController extends AbstractController
                 }
                 
                 $this->addFlash('warning', $e->getMessage());
-                return $this->redirectToRoute('home');
+
+                return $this->redirectToRoute('app_index');
             }
  
             $url = $this->generateUrl('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
  
+            /*
             $message = (new \Swift_Message('Oubli de mot de passe - Réinisialisation'))
                 ->setFrom(array('joelinjatovo@gmail.com'=> 'Admin'))
                 ->setTo($user->getEmail())
@@ -147,7 +206,8 @@ class SecurityController extends AbstractController
             if ( $request->isXmlHttpRequest() ) {
                 return $this->json(array( 
                     'success'  => true,
-                    'message' => 'Cool! Password recovery instruction has been sent to your email.'
+                    'message' => 'Cool! Password recovery instruction has been sent to your email.',
+                    'reset_url' => $url
                 ));
             }
  
@@ -176,9 +236,10 @@ class SecurityController extends AbstractController
  
             if ($user === null) {
                 $this->addFlash('danger', 'Mot de passe non reconnu');
-                return $this->redirectToRoute('home');
+                return $this->redirectToRoute('app_index');
             }
  
+            $user->setStatus(User::STATUS_ACTIVE);
             $user->setResetToken(null);
             $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
             $entityManager->flush();

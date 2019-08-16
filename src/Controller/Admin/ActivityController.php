@@ -128,8 +128,7 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/activities", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
-     * @Route("/activities/page/{page}", name="list_paginated", methods="GET", requirements={"page"="\d+"})
+     * @Route("/activities/{page<\d+>?1}", name="list", methods="GET")
      */
     public function list($page = 1)
     {

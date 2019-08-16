@@ -2,11 +2,129 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Application{% endblock %}</title>
+        <meta name="description" content="Latest updates and statistic charts"> 
+
+        <!--begin::Fonts -->
+        <link href="{{ asset('css/fonts/poppins/poppins.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/fonts/roboto/roboto.css') }}" rel="stylesheet">
+        <!--end::Fonts -->
+
+        <!--begin::Global Theme Styles(used by all pages) -->
+        <link href="{{ asset('css/vendors.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        <!--end::Global Theme Styles -->
+
+        <!--begin::Layout Skins & Vendor Skins(used by this page) -->
+        {% block stylesheets %}
+        <link href="{{ asset('css/fullcalendar.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        {% endblock %}
+        <!--end::Layout Skins & Vendor Skins -->
+
+        <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    <body  class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-aside--minimize kt-page--loading"  >
+        
+        <!-- begin:: Header Mobile -->
+        {% block header_mobile %}
+            {{ include('_common/header_mobile.html.twig') }}
+        {% endblock %}
+        <!-- end:: Header Mobile -->
+        
+        <div class="kt-grid kt-grid--hor kt-grid--root">
+            <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
+                
+                <!-- begin:: Aside -->
+                {% block aside %}
+                    {{ include('_common/aside.html.twig') }}
+                {% endblock %}
+                <!-- end:: Aside -->
+                
+			    <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+                    
+                    <!-- begin:: Header -->
+                    {% block header %}
+                        {{ include('_common/header.html.twig') }}
+                    {% endblock %}
+                    <!-- end:: Header -->
+                    
+                    <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+                        <!-- begin:: Subheader -->
+                        {% block subheader %}
+                            {{ include('_common/subheader.html.twig') }}
+                        {% endblock %}
+                        <!-- end:: Subheader -->
+                        
+                        <!-- begin:: Content -->
+                        <div class="kt-container kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+                            {% block content %}{% endblock %}
+                        </div>
+                        <!-- end:: Content -->
+                        
+                        <!-- begin:: Subfooter -->
+                        {% block subfooter %}
+                            {{ include('_common/subfooter.html.twig') }}
+                        {% endblock %}
+                        <!-- end:: Subfooter -->
+                    </div>
+                    
+                    <!-- begin:: Footer -->
+                    {% block footer %}
+                        {{ include('_common/footer.html.twig') }}
+                    {% endblock %}
+                    <!-- end:: Footer -->
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- begin::Scrolltop -->
+        <div id="kt_scrolltop" class="kt-scrolltop">
+            <i class="fa fa-arrow-up"></i>
+        </div>
+        <!-- end::Scrolltop -->
+        
+        <!-- begin::Sticky Toolbar -->
+        <ul class="kt-sticky-toolbar" style="margin-top: 30px;">
+            <li class="kt-sticky-toolbar__item kt-sticky-toolbar__item--success" id="kt_demo_panel_toggle" data-toggle="kt-tooltip"  title="Check out more demos" data-placement="right">
+                <a href="#" class=""><i class="flaticon2-drop"></i></a>
+            </li>
+            <li class="kt-sticky-toolbar__item kt-sticky-toolbar__item--brand" data-toggle="kt-tooltip" title="Layout Builder" data-placement="left">
+                <a href="/metronic/preview/demo7/builder.html" ><i class="flaticon2-gear"></i></a>
+            </li>
+            <li class="kt-sticky-toolbar__item kt-sticky-toolbar__item--warning" data-toggle="kt-tooltip" title="Documentation" data-placement="left">
+                <a href="https://keenthemes.com/metronic/preview/demo7/metronic/?page=docs" target="_blank"><i class="flaticon2-telegram-logo"></i></a>
+            </li>
+            <li class="kt-sticky-toolbar__item kt-sticky-toolbar__item--danger" id="kt_sticky_toolbar_chat_toggler" data-toggle="kt-tooltip" title="Chat Example" data-placement="left">
+                <a href="#" data-toggle="modal" data-target="#kt_chat_modal"><i class="flaticon2-chat-1"></i></a>
+            </li>
+        </ul>
+        <!-- end::Sticky Toolbar -->
+        
+        <!-- begin::Demo Panel -->
+        {{ include('_common/demo.html.twig') }}
+        <!-- end::Demo Panel -->
+        
+        <!-- begin:: Chat -->
+        {{ include('_common/chat.html.twig') }}
+        <!--end:: Chat-->
+
+        <!-- begin::Global Config(global config for global JS sciprts) -->
+        <script>
+            var KTAppOptions = {"colors":{"state":{"brand":"#22b9ff","light":"#ffffff","dark":"#282a3c","primary":"#5867dd","success":"#34bfa3","info":"#36a3f7","warning":"#ffb822","danger":"#fd3995"},"base":{"label":["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape":["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};
+        </script>
+        <!-- end::Global Config -->
+
+        <!--begin::Global Theme Bundle(used by all pages) -->
+        <script src="{{ asset('js/vendors.bundle.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('js/scripts.bundle.js') }}" type="text/javascript" ></script>
+        <!--end::Global Theme Bundle -->
+
+        <!--begin::Page Scripts & Vendor Scripts(used by this page) -->
+        {% block javascripts %}
+        <script src="{{ asset('js/fullcalendar.bundle.js') }}" type="text/javascript" ></script>
+        {% endblock %}
+        <!--end::Page Scripts & Vendor Scripts -->
     </body>
 </html>

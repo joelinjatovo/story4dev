@@ -4,7 +4,9 @@ security:
             algorithm: auto
             cost: 12
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
+        ROLE_CONTRIBUTOR: ROLE_USER
+        ROLE_EDITOR:      ROLE_CONTRIBUTOR
+        ROLE_ADMIN:       ROLE_EDITOR
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
     providers:
         administrators:
@@ -27,5 +29,8 @@ security:
                     - App\Security\LoginFormAuthenticator
     access_control:
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/sadmin, roles: ROLE_SUPER_ADMIN }
         # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/editor, roles: ROLE_EDITOR }
+        # - { path: ^/contributor, roles: ROLE_CONTRIBUTOR }
         # - { path: ^/profile, roles: ROLE_USER }

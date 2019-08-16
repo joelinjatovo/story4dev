@@ -129,8 +129,7 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/indicators", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
-     * @Route("/indicators/page/{page}", name="list_paginated", methods="GET", requirements={"page"="\d+"})
+     * @Route("/indicators/{page<\d+>?1}", name="list", methods="GET")
      */
     public function list($page = 1)
     {

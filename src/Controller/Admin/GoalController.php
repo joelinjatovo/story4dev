@@ -9,11 +9,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Goal;
 
-/** @Route("/admin/goal", name="admin_goal_") */
+/** @Route("/admin", name="admin_goal_") */
 class GoalController extends AbstractController
 {
     /**
-     * @Route("/", name="index", methods="GET")
+     * @Route("/goal", name="index", methods="GET")
      */
     public function index()
     {
@@ -21,7 +21,7 @@ class GoalController extends AbstractController
     }
     
     /**
-     * @Route("/", name="create", methods="POST")
+     * @Route("/goal", name="create", methods="POST")
      */
     public function create(ValidatorInterface $validator): Response
     {
@@ -42,7 +42,7 @@ class GoalController extends AbstractController
     }
     
     /**
-     * @Route("/{id}", name="show", methods="GET", requirements={"id"="\d+"})
+     * @Route("/goal/{id}", name="show", methods="GET", requirements={"id"="\d+"})
      */
     public function show(Goal $goal)
     {
@@ -50,7 +50,7 @@ class GoalController extends AbstractController
     }
     
     /**
-     * @Route("/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
+     * @Route("/goal/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
      */
     public function edit(Goal $goal)
     {
@@ -58,7 +58,7 @@ class GoalController extends AbstractController
     }
     
     /**
-     * @Route("/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
+     * @Route("/goal/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
      */
     public function update(Goal $goal)
     {
@@ -72,7 +72,7 @@ class GoalController extends AbstractController
     }
     
     /**
-     * @Route("/remove/{id}", name="remove", methods="POST")
+     * @Route("/goal/remove/{id}", name="remove", methods="POST")
      */
     public function remove(Goal $goal)
     {
@@ -86,8 +86,7 @@ class GoalController extends AbstractController
     }
     
     /**
-     * @Route("s", name="list", defaults={"page": "1"}, methods="GET", requirements={"page"="\d+"})
-     * @Route("s/page/{page}", name="list_paginated", methods="GET", requirements={"page"="\d+"})
+     * @Route("/goals/{page<\d+>?1}", name="list", methods="GET")
      */
     public function list($page = 1)
     {

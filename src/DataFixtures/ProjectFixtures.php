@@ -6,14 +6,14 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use App\Entity\Meta\MetaProject;
+use App\Entity\Iteration;
 use App\Entity\Project;
 
 class ProjectFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        for($i=1; $i<5; $i++){
-            
+        for($i=1; $i<=5; $i++){
             $project = new Project();
             $project->setTitle( 'Project ' . $i );
             $project->setDescription( 'Description ' . $i );
@@ -28,6 +28,13 @@ class ProjectFixtures extends Fixture
             $manager->persist($meta);
             
             $project->addMeta($meta);
+            
+            for($j=1; $j<5; $j++){
+                $iteration = new Iteration();
+                $iteration->setTitle( 'Trimestre ' . $j );
+                $iteration->setProject( $project );
+                $manager->persist( $iteration );
+            }
         }
 
         $manager->flush();

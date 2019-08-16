@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
@@ -14,11 +15,11 @@ use App\Form\ActivityType;
 use App\Form\ProjectType;
 use App\Service\PaginatorService;
 
-/** @Route("/admin/project", name="admin_project_") */
+/** @Route("/admin", name="admin_project_") */
 class ProjectController extends AbstractController
 {
     /**
-     * @Route("/", name="index", methods="GET")
+     * @Route("/project", name="index", methods="GET")
      */
     public function index()
     {
@@ -26,7 +27,7 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/", name="create", methods="POST")
+     * @Route("/project", name="create", methods="POST")
      */
     public function create(ValidatorInterface $validator): Response
     {
@@ -53,7 +54,7 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/{id}", name="show", methods="GET", requirements={"id"="\d+"})
+     * @Route("/project/{id}", name="show", methods="GET", requirements={"id"="\d+"})
      */
     public function show(Project $project)
     {
@@ -64,20 +65,22 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
+     * @Route("/project/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
      */
     public function edit(Project $project)
     {
         $form = $this->createForm(ProjectType::class, $project);
         
-        return $this->render('admin/project/edit.html.twig', ['project' => $project, 'form' => $form->createView() ]);
+        return $this->render('admin/project/edit.html-temp.twig', ['project' => $project, 'form' => $form->createView() ]);
     }
     
     /**
-     * @Route("/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
+     * @Route("/project/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
      */
-    public function update(Project $project)
+    public function update(Request $request, Project $project)
     {
+        //dump($request->request); exit;
+        
         $form = $this->createForm(ProjectType::class, $project);
         
         $form->handleRequest($request);
@@ -104,12 +107,16 @@ class ProjectController extends AbstractController
             $entityManager->persist($project);
             $entityManager->flush();
             
-            return $this->json([
-                'success' => true,
-                'title'   => 'Success',
-                'status'  => 'success',
-                'message' => 'Project created successfully.',
-            ]);
+            if ( $request->isXmlHttpRequest() ) {
+                return $this->json([
+                    'success' => true,
+                    'title'   => 'Success',
+                    'status'  => 'success',
+                    'message' => 'Project updated successfully.',
+                ]);
+            }
+
+            return $this->redirectToRoute('admin_project_edit', ['id' => $project->getId()]);
             
         }
         
@@ -123,11 +130,11 @@ class ProjectController extends AbstractController
             ]);
         }
 
-        return $this->redirectToRoute('admin_project_show', ['id' => $product->getId()]);
+        return $this->redirectToRoute('admin_project_show', ['id' => $project->getId()]);
     }
     
     /**
-     * @Route("/remove/{id}", name="remove", methods="POST")
+     * @Route("/project/remove/{id}", name="remove", methods="POST")
      */
     public function remove(Project $project)
     {
@@ -141,7 +148,7 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("s/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/projects/{page<\d+>?1}", name="list", methods="GET")
      */
     public function list(PaginatorService $paginator, int $page)
     {
