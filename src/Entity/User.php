@@ -14,8 +14,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 use App\Entity\Meta\MetaUser;
-use App\Entity\Token\ConfirmToken;
-use App\Entity\Token\ResetToken;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="users")
@@ -186,6 +185,11 @@ class User implements UserInterface, AdvancedUserInterface
     private $results;
     
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Contribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $contributions;
+    
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaUser", mappedBy="user", orphanRemoval=true)
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
      */
@@ -205,6 +209,7 @@ class User implements UserInterface, AdvancedUserInterface
         $this->projects = new ArrayCollection();
         $this->reports = new ArrayCollection();
         $this->results = new ArrayCollection();
+        $this->contributions = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -627,6 +632,33 @@ class User implements UserInterface, AdvancedUserInterface
             $this->results->removeElement($result);
             if ($result->getAuthor() === $this) {
                 $result->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getContributions(): ?Collection
+    {
+        return $this->contributions;
+    }
+
+    public function addContribution(?Contribution $contribution): self
+    {
+        if (!$this->contributions->contains($contribution)) {
+            $this->contributions[] = $contribution;
+            $contribution->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContribution(?Contribution $contribution): self
+    {
+        if ($this->contributions->contains($contribution)) {
+            $this->contributions->removeElement($contribution);
+            if ($contribution->getUser() === $this) {
+                $contribution->setUser(null);
             }
         }
 

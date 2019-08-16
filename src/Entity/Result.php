@@ -22,16 +22,19 @@ class Result
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Gedmo\Versioned
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Gedmo\Versioned
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Gedmo\Versioned
      */
     private $description;
 

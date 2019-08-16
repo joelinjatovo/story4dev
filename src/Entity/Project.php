@@ -31,6 +31,7 @@ class Project
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Gedmo\Versioned
      */
     private $id;
 
@@ -85,6 +86,11 @@ class Project
      * @ORM\OneToMany(targetEntity="App\Entity\Iteration", mappedBy="project", orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $iterations;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Contribution", mappedBy="project", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $contributions;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaProject", mappedBy="project", orphanRemoval=true)
@@ -238,6 +244,33 @@ class Project
             $this->iterations->removeElement($iteration);
             if ($iteration->getProject() === $this) {
                 $iteration->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getContributions(): ?Collection
+    {
+        return $this->contributions;
+    }
+
+    public function addContribution(?Contribution $contribution): self
+    {
+        if (!$this->contributions->contains($contribution)) {
+            $this->contributions[] = $contribution;
+            $contribution->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContribution(?Contribution $contribution): self
+    {
+        if ($this->contributions->contains($contribution)) {
+            $this->contributions->removeElement($contribution);
+            if ($contribution->getUser() === $this) {
+                $contribution->setUser(null);
             }
         }
 

@@ -29,6 +29,7 @@ class Periodicity
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Gedmo\Versioned
      */
     private $id;
 

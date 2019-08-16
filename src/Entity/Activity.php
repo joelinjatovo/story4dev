@@ -33,6 +33,7 @@ class Activity
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Gedmo\Versioned
      */
     private $id;
 
@@ -54,6 +55,7 @@ class Activity
      *     type="float",
      *     message="The value {{ value }} is not a valid {{ type }}."
      * )
+     * @Gedmo\Versioned
      */
     private $budget;
     
