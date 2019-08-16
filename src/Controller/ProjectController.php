@@ -19,6 +19,40 @@ use App\Service\PaginatorService;
 /** @Route(name="project_") */
 class ProjectController extends AbstractController
 {
+    /**
+     * @Route("/project", name="index", methods="GET")
+     */
+    public function index()
+    {
+        return $this->render('project/create.html.twig');
+    }
+    
+    /**
+     * @Route("/project", name="create", methods="POST")
+     */
+    public function create(ValidatorInterface $validator): Response
+    {
+        // you can fetch the EntityManager via $this->getDoctrine()
+        // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $project = new Project();
+        $project->setTitle('Keyboard');
+        $project->setDescription('Ergonomic and stylish!');
+        
+        $errors = $validator->validate($project);
+        if (count($errors) > 0) {
+            return new Response((string) $errors, 400);
+        }
+
+        // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        $entityManager->persist($project);
+
+        // actually executes the queries (i.e. the INSERT query)
+        $entityManager->flush();
+
+        return new Response('Saved new product with id '.$project->getId());
+    }
     
     /**
      * @Route("/{slug}/project/{id}", name="show", methods="GET", requirements={"id"="\d+"})
@@ -34,7 +68,11 @@ class ProjectController extends AbstractController
         $activity = new Activity();
         $form = $this->createForm(ActivityType::class, $activity);
         
-        return $this->render('project/show.html.twig', ['project' => $project, 'author' => $user, 'form' => $form->createView()]);
+        return $this->render('project/show.html.twig', [
+            'user'    => $user, 
+            'project' => $project, 
+            'form'    => $form->createView()
+        ]);
     }
     
     /**
@@ -46,7 +84,11 @@ class ProjectController extends AbstractController
     {
         $form = $this->createForm(ProjectType::class, $project);
         
-        return $this->render('project/edit.html.twig', ['project' => $project, 'author' => $user, 'form' => $form->createView() ]);
+        return $this->render('project/edit.html.twig', [
+            'user'    => $user, 
+            'project' => $project, 
+            'form'    => $form->createView()
+        ]);
     }
     
     /**
@@ -107,7 +149,10 @@ class ProjectController extends AbstractController
             ]);
         }
 
-        return $this->redirectToRoute('project_show', ['id' => $project->getId(), 'author' => $user]);
+        return $this->redirectToRoute('project_show', [
+            'slug' => $user->getSlug(),
+            'id'   => $project->getId(), 
+        ]);
     }
     
     /**
@@ -138,6 +183,9 @@ class ProjectController extends AbstractController
 
         $projects = $paginator->paginate($query, 2);
         
-        return $this->render('project/list.html.twig', ['projects' => $projects, 'author' => $user]);
+        return $this->render('project/list.html.twig', [
+            'user'     => $user,
+            'projects' => $projects, 
+        ]);
     }
 }

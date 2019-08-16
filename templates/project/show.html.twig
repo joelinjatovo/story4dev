@@ -1,4 +1,4 @@
-{% extends 'sadmin/base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -328,7 +328,7 @@
 	<div class="kt-portlet__body">
         <div class="kt-notification" id="kt-activity-list">
             {% for activity in project.activities.slice(0, 5) %}
-                {{ include('admin/project/activity.html.twig', { 'activity' : activity } ) }}
+                {{ include('project/activity.html.twig', { 'activity' : activity } ) }}
             {% endfor %}
             <a href="#" class="kt-notification__item">
                 <div class="kt-notification__item-icon">

@@ -110,6 +110,22 @@ class User implements UserInterface, AdvancedUserInterface
     /**
      * @Assert\Type("string")
      * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "Your title cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(name="title", type="string", length=100, nullable=true)
+     */
+    private $title;
+    
+    /**
+     * @Assert\Type("string")
+     * @ORM\Column(name="presentation", type="string", nullable=true)
+     */
+    private $presentation;
+    
+    /**
+     * @Assert\Type("string")
+     * @Assert\Length(
      *      max = 50,
      *      maxMessage = "Your phone number cannot be longer than {{ limit }} characters"
      * )
@@ -141,6 +157,11 @@ class User implements UserInterface, AdvancedUserInterface
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
+
+    /**
+     * @ORM\Column(name="is_verified", type="boolean")
+     */
+    private $isVerified;
 
     /**
      * @Assert\IsTrue
@@ -272,6 +293,30 @@ class User implements UserInterface, AdvancedUserInterface
     {
         $this->username = $username;
         
+        return $this;
+    }  
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }  
+
+    public function getPresentation(): ?string
+    {
+        return $this->presentation;
+    }
+
+    public function setPresentation(string $presentation): self
+    {
+        $this->presentation = $presentation;
+
         return $this;
     }  
 
@@ -415,6 +460,18 @@ class User implements UserInterface, AdvancedUserInterface
     public function setActive(bool $active): self
     {
         $this->isActive = $active;
+
+        return $this;
+    }
+    
+    public function isVerified()
+    {
+        return $this->isVerified;
+    }
+
+    public function setVerified(bool $verified): self
+    {
+        $this->isVerified = $verified;
 
         return $this;
     }

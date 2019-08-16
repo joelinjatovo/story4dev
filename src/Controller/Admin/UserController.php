@@ -6,10 +6,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\User;
+use App\Service\PaginatorService;
 
-/** @Route("/admin", name="admin_user_") */
+/**
+ * @Route("/admin", name="admin_user_")
+ *
+ * @IsGranted("ROLE_ADMIN")
+ */
 class UserController extends AbstractController
 {
     /**
@@ -68,35 +74,25 @@ class UserController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $project->setTitle('New user name!');
+        //$user->setTitle('New user name!');
         
         $entityManager->flush();
 
-        return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
-    }
-    
-    /**
-     * @Route("/user/remove/{id}", name="remove", methods="POST")
-     */
-    public function remove(User $user)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $entityManager->remove($user);
-        
-        $entityManager->flush();
-        
-        return new Response('User removed successfully');
+        return $this->redirectToRoute('sadmin_user_show', ['id' => $user->getId()]);
     }
     
     /**
      * @Route("/users/{page<\d+>?1}", name="list", methods="GET")
      */
-    public function list($page = 1)
+    public function list(PaginatorService $paginator, $page = 1)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        
         $entityManager = $this->getDoctrine()->getManager();
         
-        $users = $entityManager->getRepository(User::class)->findAll();
+        $query = $entityManager->getRepository(User::class)->getAll();
+
+        $users = $paginator->paginate($query, 2);
         
         return $this->render('admin/user/list.html.twig', ['users' => $users]);
     }

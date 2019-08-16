@@ -26,7 +26,7 @@ var KTProjectGeneral=function(){
                 r.validate({rules:{title:{required:!0,maxlength:100}}}),
                 r.valid()&&(
                     KTApp.block("#kt_modal_add_activity .modal-content",{overlayColor:"#000000",type:"v2",state:"primary",message:"Please wait..."}),
-                    r.ajaxSubmit({url:"/admin/activity", 
+                    r.ajaxSubmit({url:"/activity", 
                       error:function(d){
                           console.error(d);
                           KTApp.unblock(q);

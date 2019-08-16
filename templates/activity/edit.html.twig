@@ -1,4 +1,4 @@
-{% extends 'admin/base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -7,41 +7,57 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Edit User</h3>
+            
+            <h3 class="kt-subheader__title">
+                                    Edit User                           
+            </h3>
+
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            
             <div class="kt-subheader__group" id="kt_subheader_search">
-                <span class="kt-subheader__desc" id="kt_subheader_total">{{ user.fullname }}</span>
-            </div>
-        </div>        
+                <span class="kt-subheader__desc" id="kt_subheader_total">
+                                            Alex Stone                                    </span>
+                
+                            </div>
+
+                    </div>        
         <div class="kt-subheader__toolbar">
-            <a href="/metronic/preview/demo7/#.html" class="btn btn-default btn-bold">Back</a>
-            <div class="btn-group">
-                <button type="button" class="btn btn-brand btn-bold">Save Changes</button>
-                <button type="button" class="btn btn-brand btn-bold dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <ul class="kt-nav">
-                        <li class="kt-nav__item">
-                            <a href="#" class="kt-nav__link">
-                                <i class="kt-nav__link-icon flaticon2-writing"></i>
-                                <span class="kt-nav__link-text">Save &amp; continue</span>
-                            </a>
-                        </li>                            
-                        <li class="kt-nav__item">
-                            <a href="#" class="kt-nav__link">
-                                <i class="kt-nav__link-icon flaticon2-medical-records"></i>
-                                <span class="kt-nav__link-text">Save &amp; add new</span>
-                            </a>
-                        </li>
-                        <li class="kt-nav__item">
-                            <a href="#" class="kt-nav__link">
-                                <i class="kt-nav__link-icon flaticon2-hourglass-1"></i>
-                                <span class="kt-nav__link-text">Save &amp; exit</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+
+                            <a href="/metronic/preview/demo7/#.html" class="btn btn-default btn-bold">
+                    
+                    Back                </a>
+            
+                                                <div class="btn-group">
+                        <button type="button" class="btn btn-brand btn-bold">
+                                                        
+                            Save Changes                        </button>
+                        <button type="button" class="btn btn-brand btn-bold dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="kt-nav">
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-writing"></i>
+                                        <span class="kt-nav__link-text">Save &amp; continue</span>
+                                    </a>
+                                </li>                            
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-medical-records"></i>
+                                        <span class="kt-nav__link-text">Save &amp; add new</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-hourglass-1"></i>
+                                        <span class="kt-nav__link-text">Save &amp; exit</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                                        
+                    </div>
     </div>
 </div>
 {% endblock %}
@@ -120,7 +136,7 @@
                                                 <div class="kt-avatar__holder" style="background-image: url(&quot;http://keenthemes.com/metronic/preview/default/custom/user/assets/media/users/300_20.jpg&quot;);"></div>
                                                 <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Change avatar">
                                                     <i class="fa fa-pen"></i>
-                                                    <input type="file" id="avatar-img" name="profile_avatar" accept=".png, .jpg, .jpeg">
+                                                    <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
                                                 </label>
                                                 <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
                                                     <i class="fa fa-times"></i>
@@ -680,30 +696,4 @@
 
 
 {% block javascripts %}
-<script type="text/javascript">
-function readURL(input) {
-    
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            $('.kt-avatar__holder').css({ 'background-image' : 'url("' + e.target.result + '")', 'background-size' : 'cover', 'background-repeat' : 'no-repeat', 'background-position' : 'center center'  });
-        }
-        
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-    
-$("#avatar-img").change(function(){
-    readURL(this);
-});
-
-function ajax_formData(image) {
-    var path = "/";
-    alert(image);
-    $.post(path, {image: image}, function (data) {
-        alert(data.message);
-    }, "json");
-}
-</script>
 {% endblock %}

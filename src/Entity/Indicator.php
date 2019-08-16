@@ -40,7 +40,7 @@ class Indicator
     /**
      * @Assert\NotBlank
      * @Assert\Length(
-     *      max = 1,
+     *      max = 100,
      *      maxMessage = "The title cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(type="string", length=255)
