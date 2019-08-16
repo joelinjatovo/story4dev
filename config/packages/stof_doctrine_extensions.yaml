@@ -5,3 +5,4 @@ stof_doctrine_extensions:
             timestampable: true
             loggable: true
             softdeleteable: true
+            sluggable:   true

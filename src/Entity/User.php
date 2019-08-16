@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 use App\Entity\Meta\MetaUser;
 
@@ -41,6 +42,16 @@ class User implements UserInterface, AdvancedUserInterface
      * @ORM\Column(type="integer")
      */
     private $id;
+    
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $avatar;
+
+    /**
+     * @Vich\UploadableField(mapping="default", fileNameProperty="avatar")
+     */
+    private $avatarFile;
 
     /**
      * @Assert\NotBlank
@@ -78,6 +89,12 @@ class User implements UserInterface, AdvancedUserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+    * @Gedmo\Slug(fields={"username"})
+    * @ORM\Column(type="string", length=255, nullable=false)
+    */
+    private $slug;
     
     /**
      * @Assert\Type("string")
@@ -221,7 +238,31 @@ class User implements UserInterface, AdvancedUserInterface
     {
         return $this->id;
     }
-    
+
+    public function setAvatar(?string $avatar): void
+    {
+        $this->avatar = $avatar;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatarFile(?File $avatarFile = null) : void
+    {
+        $this->avatarFile = $avatarFile;
+
+        if (null !== $avatarFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getAvatarFile() : ? File
+    {
+        return $this->avatarFile;
+    }
+
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -297,6 +338,18 @@ class User implements UserInterface, AdvancedUserInterface
     public function setActivedAt(?\DateTimeInterface $activedAt): self
     {
         $this->activedAt = $activedAt;
+
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug)
+    {
+        $this->slug = $slug;
 
         return $this;
     }

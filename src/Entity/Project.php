@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 use App\Entity\Meta\MetaProject;
 
@@ -34,6 +35,17 @@ class Project
      * @Gedmo\Versioned
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Gedmo\Versioned
+     */
+    private $picture;
+
+    /**
+     * @Vich\UploadableField(mapping="default", fileNameProperty="picture")
+     */
+    private $pictureFile;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -110,6 +122,30 @@ class Project
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setPicture(?string $picture): void
+    {
+        $this->picture = $picture;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPictureFile(?File $pictureFile = null) : void
+    {
+        $this->pictureFile = $pictureFile;
+
+        if (null !== $pictureFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getPictureFile() : ? File
+    {
+        return $this->pictureFile;
     }
 
     public function getTitle(): ?string

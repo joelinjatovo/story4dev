@@ -1,0 +1,13 @@
+vich_uploader:
+    db_driver: orm
+    mappings:
+        default:
+            namer: App\Upload\Namer\ConventionedFileNamer
+            directory_namer: App\Upload\Namer\ConventionedDirectoryNamer
+            uri_prefix: /uploads
+            upload_destination: '%kernel.root_dir%/../web/uploads'
+
+    #mappings:
+    #    products:
+    #        uri_prefix: /images/products
+    #        upload_destination: '%kernel.project_dir%/public/images/products'
