@@ -9,6 +9,7 @@ use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,11 +28,13 @@ class ProjectType extends AbstractType
             ->add('budget', FloatType::class, [
                 'required'   => false,
             ])
-            ->add('start_at', DateTimeType::class, [
-                'date_label'  => 'Starts On',
+            ->add('start_at', DateType::class, [
+                'widget'     => 'single_text',
+                'html5'      => false,
             ])
-            ->add('end_at', DateTimeType::class, [
-                'date_label' => 'Ends At',
+            ->add('end_at', DateType::class, [
+                'widget'     => 'single_text',
+                'html5'      => false,
             ])
             ->add('periodicity', EntityType::class, [
                 'class' => Periodicity::class,

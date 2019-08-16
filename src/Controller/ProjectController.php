@@ -46,7 +46,7 @@ class ProjectController extends AbstractController
     {
         $form = $this->createForm(ProjectType::class, $project);
         
-        return $this->render('project/edit.html-temp.twig', ['project' => $project, 'author' => $user, 'form' => $form->createView() ]);
+        return $this->render('project/edit.html.twig', ['project' => $project, 'author' => $user, 'form' => $form->createView() ]);
     }
     
     /**
