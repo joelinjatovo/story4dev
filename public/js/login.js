@@ -67,7 +67,7 @@ var KTLoginGeneral=function(){
             $("#kt_login_signup_submit").click(function(n){
                 n.preventDefault();
                 var s=$(this),r=$(this).closest("form");
-                r.validate({rules:{email:{required:!0,email:!0,maxlength:100},password:{required:!0,minlength:5},password_confirm:{required:!0,minlength:5,equalTo:'#password'},agree:{required:!0}}}),
+                r.validate({rules:{fullname:{required:!1,maxlength:100},email:{required:!0,email:!0,maxlength:100},password:{required:!0,minlength:5},password_confirm:{required:!0,minlength:5,equalTo:'#password'},agree:{required:!0}}}),
                 r.valid()&&(
                     s.addClass("kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light").attr("disabled",!0),
                     r.ajaxSubmit({url:"/register", 

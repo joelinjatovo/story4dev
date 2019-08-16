@@ -26,6 +26,15 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
         parent::__construct($registry, User::class);
     }
     
+    public function findOneByConfirmToken($token)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.confirm_token = :query')
+            ->setParameter('query', $token)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+    
     public function findOneByResetToken($token)
     {
         return $this->createQueryBuilder('u')
@@ -35,11 +44,11 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->getOneOrNullResult();
     }
     
-    public function loadUserByUsername($email)
+    public function loadUserByUsername($emailOrUsername)
     {
         return $this->createQueryBuilder('u')
-            ->where('u.email = :query')
-            ->setParameter('query', $email)
+            ->where('u.username = :query OR u.email = :query')
+            ->setParameter('query', $emailOrUsername)
             ->getQuery()
             ->getOneOrNullResult();
     }

@@ -20,6 +20,7 @@ use App\Entity\Token\ResetToken;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="users")
  * @UniqueEntity("email")
+ * @UniqueEntity("username")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
 class User implements UserInterface, AdvancedUserInterface
@@ -41,6 +42,16 @@ class User implements UserInterface, AdvancedUserInterface
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "Your username cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(type="string", length=100, unique=true)
+     */
+    private $username;
 
     /**
      * @Assert\NotBlank
@@ -75,9 +86,9 @@ class User implements UserInterface, AdvancedUserInterface
      *      max = 100,
      *      maxMessage = "Your fullname cannot be longer than {{ limit }} characters"
      * )
-     * @ORM\Column(name="full_name", type="string", length=100, nullable=true)
+     * @ORM\Column(name="fullname", type="string", length=100, nullable=true)
      */
-    private $full_name;
+    private $fullname;
     
     /**
      * @Assert\Type("string")
@@ -120,16 +131,24 @@ class User implements UserInterface, AdvancedUserInterface
     private $agree;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Token\ConfirmToken", inversedBy="user")
-     * @ORM\JoinColumn(name="confirm_token", referencedColumnName="id")
+     * @ORM\Column(name="confirm_token", type="string", nullable=true)
      */
     private $confirmToken;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Token\ConfirmToken", inversedBy="user")
-     * @ORM\JoinColumn(name="reset_token", referencedColumnName="id")
+     * @ORM\Column(name="confirmed_at", type="datetime", nullable=true)
+     */
+    private $confirmedAt;
+
+    /**
+     * @ORM\Column(name="reset_token", type="string", nullable=true)
      */
     private $resetToken;
+
+    /**
+     * @ORM\Column(name="reseted_at", type="datetime", nullable=true)
+     */
+    private $resetedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
@@ -192,6 +211,13 @@ class User implements UserInterface, AdvancedUserInterface
     {
         return $this->id;
     }
+    
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+        
+        return $this;
+    }  
 
     public function getEmail(): ?string
     {
@@ -205,38 +231,62 @@ class User implements UserInterface, AdvancedUserInterface
         return $this;
     }
     
-    public function getConfirmToken(): ?ConfirmToken
+    public function getConfirmToken(): ?string
     {
         return $this->confirmToken;
     }
     
-    public function setConfirmToken(?ConfirmToken $token): self
+    public function setConfirmToken(?string $token): self
     {
         $this->confirmToken = $token;
         
         return $this;
     }
+
+    public function getConfirmedAt(): ?\DateTimeInterface
+    {
+        return $this->confirmedAt;
+    }
+
+    public function setConfirmedAt(?\DateTimeInterface $confirmedAt): self
+    {
+        $this->confirmedAt = $confirmedAt;
+
+        return $this;
+    }
     
-    public function getResetToken(): ?ResetToken
+    public function getResetToken(): ?string
     {
         return $this->resetToken;
     }
     
-    public function setResetToken(?ResetToken $token): self
+    public function setResetToken(?string $token): self
     {
         $this->resetToken = $token;
         
         return $this;
     }
-    
-    public function getFullName(): ?string
+
+    public function getResetedAt(): ?\DateTimeInterface
     {
-        return $this->full_name;
+        return $this->resetedAt;
+    }
+
+    public function setResetedAt(?\DateTimeInterface $resetedAt): self
+    {
+        $this->resetedAt = $resetedAt;
+
+        return $this;
     }
     
-    public function setFullName(string $fullName): self
+    public function getFullname(): ?string
     {
-        $this->full_name = $fullName;
+        return $this->fullname;
+    }
+    
+    public function setFullname(string $fullname): self
+    {
+        $this->fullname = $fullname;
         
         return $this;
     }  

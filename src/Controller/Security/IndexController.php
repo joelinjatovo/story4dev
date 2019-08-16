@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Security;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Entity\User;
 
-class SecurityController extends AbstractController
+class IndexController extends AbstractController
 {
 
     /**
@@ -49,6 +49,7 @@ class SecurityController extends AbstractController
     {
         if ( $request->isXmlHttpRequest() ) {
             $user = new User();
+            $user->setFullname( $request->request->get('fullname') );
             $user->setEmail( $request->request->get('email') );
             $user->setAgree( (bool) $request->request->get('agree') );
             $user->setPassword(
@@ -68,10 +69,10 @@ class SecurityController extends AbstractController
             }
 
             $token = md5(time());
-            $user->setStatus(User::STATUS_PING);
-            $user->setActive(false);
             $user->setConfirmToken( $token );
             $user->setConfirmetAt( new \DateTime() );
+            $user->setStatus(User::STATUS_PING);
+            $user->setActive(false);
  
             $url = $this->generateUrl('app_confirm_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
 

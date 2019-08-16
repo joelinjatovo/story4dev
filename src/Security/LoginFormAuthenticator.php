@@ -88,7 +88,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         if ( $request->isXmlHttpRequest() ) {
             $array = array( 
                 'success'  => true,
-                'redirect' => $this->urlGenerator->generate('app_home')
+                'redirect' => $this->urlGenerator->generate('app_index')
             );
             
             $response = new Response( json_encode( $array ) );
@@ -100,7 +100,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('app_home'));
+        return new RedirectResponse($this->urlGenerator->generate('app_index'));
     }
     
     public function onAuthenticationFailure( Request $request, AuthenticationException $exception )
