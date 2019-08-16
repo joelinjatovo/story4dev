@@ -14,6 +14,7 @@ use App\Form\RegistrationFormType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Entity\User;
+use App\Service\TokenGenerator;
 
 class IndexController extends AbstractController
 {
@@ -45,7 +46,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/register", name="app_register", methods="GET|POST")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator): Response
+    public function register(Request $request, TokenGenerator $tokenGenerator, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator): Response
     {
         if ( $request->isXmlHttpRequest() ) {
             $user = new User();
@@ -68,7 +69,7 @@ class IndexController extends AbstractController
                 ]);
             }
 
-            $token = md5(time());
+            $token = $tokenGenerator->generateToken();
             $user->setConfirmToken( $token );
             $user->setConfirmetAt( new \DateTime() );
             $user->setStatus(User::STATUS_PING);
@@ -143,7 +144,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/forgot", name="app_forgot_password", methods="GET|POST")
      */
-    public function forgot(Request $request, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer): Response
+    public function forgot(Request $request, TokenGenerator $tokenGenerator, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer): Response
     {
         if ($request->isMethod('post')) {
  
@@ -167,7 +168,7 @@ class IndexController extends AbstractController
                 return $this->redirectToRoute('app_forgot_password');
             }
             
-            $token = md5(time());//$this->tokenGenerator->generateToken();
+            $token = $tokenGenerator->generateToken();
             try{
                 $user->setResetToken($token);
                 $user->setResetedAt(new \DateTime());
