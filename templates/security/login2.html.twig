@@ -9,6 +9,9 @@
         <link href="{{ asset('css/fonts/poppins/poppins.css') }}" rel="stylesheet">
 
         {% block stylesheets %}
+        <link href="{{ asset('css/vendors.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        
         <link href="{{ asset('css/login2.css') }}" rel="stylesheet" type="text/css"/>
         {% endblock %}
             
@@ -18,34 +21,68 @@
     <body>
         <div class="container" id="container">
             <div class="form-container sign-up-container">
-                <form action="#">
+                <form action="/register" method="post" id="sign-up-form">
                     <h1>Create Account</h1>
-                    <div class="social-container">
-                        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    <span>Enter your personal details</span>
+                    <div class="input-group">
+                        <input type="text" placeholder="Email (Required)" name="email" autocomplete="off">
                     </div>
-                    <span>or use your email for registration</span>
-                    <input type="text" placeholder="Name" />
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
+                    <div class="input-group">
+                        <input type="password" placeholder="Password (Required)" id="password" name="password">
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="Confirm Password (Required)" name="password_confirm">
+                    </div>
+                    <div class="row kt-login__extra">
+                        <div class="col kt-align-left">
+                            <label class="kt-checkbox">
+                                <input type="checkbox" name="agree">I Agree the <a href="#" class="kt-link kt-login__link kt-font-bold" style="margin:0; padding:0;">terms and conditions</a>.
+                                <span></span>
+                            </label>
+                            <span class="form-text text-muted"></span>
+                        </div>
+                    </div>
                     <button>Sign Up</button>
                 </form>
             </div>
             <div class="form-container sign-in-container">
-                <form action="#">
+                <form action="/login" method="post" id="sign-in-form">
                     <h1>Sign in</h1>
-                    <div class="social-container">
-                        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    <span>enter your email to reset your password:</span>
+                    <div class="input-group">
+                        <input value="{{ last_username }}" type="text" name="email"  placeholder="Email" autocomplete="off" />
                     </div>
-                    <span>or use your account</span>
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
-                    <a href="#">Forgot your password?</a>
+                    <div class="input-group">
+                        <input type="password" name="password" placeholder="Password" />
+                    </div>
+                    <!--
+                    <label class="kt-checkbox">
+                        <input type="checkbox" name="_remember_me"> Remember me
+                        <span></span>
+                    </label>
+                    -->
+                    <a href="#" id="forgot">Forgot your password?</a>
                     <button>Sign In</button>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" >
                 </form>
+            </div>
+            <div class="form-container forgot-container">
+                <form action="/forgot" method="post" id="forgot-form">
+                    <h1>Forgot password</h1>
+                    <span>enter your email to reset your password:</span>
+                    <input type="email" placeholder="Email" />
+                    <button>Request</button>
+                    <a href="#" id="cancelForgot">Cancel</a>
+                </form>
+            </div>
+            <div class="form-container message-container">
+                <div class="message">
+                    <h1 id="message-title">Error Message</h1>
+                    <p id="message-content">
+                        To keep connected with us please login with your personal info
+                    </p>
+                    <button class="ghost" id="btnOk">OK</button>
+                </div>
             </div>
             <div class="overlay-container">
                 <div class="overlay">
@@ -53,17 +90,36 @@
                         <h1>Welcome Back!</h1>
                         <p>To keep connected with us please login with your personal info</p>
                         <button class="ghost" id="signIn">Sign In</button>
+                        <p>or use social for registration</p>
+                        <div class="social-container">
+                            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                            <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
                     </div>
                     <div class="overlay-panel overlay-right">
                         <h1>Hello, Friend!</h1>
                         <p>Enter your personal details and start journey with us</p>
                         <button class="ghost" id="signUp">Sign Up</button>
+                        <p>or use social for registration</p>
+                        <div class="social-container">
+                            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                            <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         {% block javascripts %}
+            <script>
+                var KTAppOptions = {"waiting_message": "Please wait one minute...","colors":{"state":{"brand":"#22b9ff","light":"#ffffff","dark":"#282a3c","primary":"#5867dd","success":"#34bfa3","info":"#36a3f7","warning":"#ffb822","danger":"#fd3995"},"base":{"label":["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape":["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};
+            </script>
+        
+            <script src="{{ asset('js/vendors.bundle.js') }}" type="text/javascript" ></script>
+            <script src="{{ asset('js/scripts.bundle.js') }}" type="text/javascript" ></script>
+        
             <script src="{{ asset('js/login2.js') }}" type="text/javascript" ></script>
         {% endblock %}
     </body>
