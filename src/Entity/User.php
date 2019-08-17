@@ -243,6 +243,7 @@ class User implements UserInterface, AdvancedUserInterface
     {
         $this->agree = true;
         $this->isActive = true;
+        $this->isVerified = false;
         $this->setStatus(self::STATUS_PING);
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Security;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Entity\User;
 use App\Service\TokenGenerator;
 
-class IndexController extends AbstractController
+class SecurityController extends AbstractController
 {
 
     /**
@@ -47,27 +47,6 @@ class IndexController extends AbstractController
             'active_form' => 'signin',
         ]);
     }
-    
-    /**
-     * @Route("/login2", name="app_login2")
-     */
-    public function login2(AuthenticationUtils $authenticationUtils): Response
-    {
-        // if ($this->getUser()) {
-        //    $this->redirectToRoute('target_path');
-        // }
-
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('security/login2.html.twig', [
-            'last_username' => $lastUsername, 
-            'error' => $error, 
-            'active_form' => 'signin',
-        ]);
-    }
  
     /**
      * @Route("/register", name="app_register", methods="GET|POST")
@@ -76,7 +55,10 @@ class IndexController extends AbstractController
     {
         if ( $request->isXmlHttpRequest() ) {
             $user = new User();
-            $user->setFullname( $request->request->get('fullname') );
+            $username = $request->request->get('email') ;
+            $username = str_replace('@', '', $username);
+            $username = str_replace('.', '-', $username);
+            $user->setUsername( $username );
             $user->setEmail( $request->request->get('email') );
             $user->setAgree( (bool) $request->request->get('agree') );
             $user->setPassword(
@@ -97,11 +79,11 @@ class IndexController extends AbstractController
 
             $token = $tokenGenerator->generateToken();
             $user->setConfirmToken( $token );
-            $user->setConfirmetAt( new \DateTime() );
+            $user->setConfirmedAt( new \DateTime() );
             $user->setStatus(User::STATUS_PING);
             $user->setActive(false);
  
-            $url = $this->generateUrl('app_confirm_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
+            $url = $this->generateUrl('app_confirm', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
 
             /*
             $message = (new \Swift_Message('Nouveau compte - Confirmation'))
@@ -185,7 +167,7 @@ class IndexController extends AbstractController
                 if ( $request->isXmlHttpRequest() ) {
                     return $this->json(array( 
                         'success'  => false,
-                        'message' => 'Email Inconnu, recommence !'
+                        'error' => 'Email Inconnu, recommence !'
                     ));
                 }
                 
@@ -202,8 +184,8 @@ class IndexController extends AbstractController
             } catch (\Exception $e) {
                 if ( $request->isXmlHttpRequest() ) {
                     return $this->json(array( 
-                        'success'  => false,
-                        'message' => $e->getMessage()
+                        'success' => false,
+                        'error' => $e->getMessage()
                     ));
                 }
                 
