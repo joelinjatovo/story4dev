@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use App\Entity\User;
 use App\Entity\Project;
 use App\Entity\Activity;
+use App\Entity\Iteration;
 use App\Form\ActivityType;
 use App\Form\ProjectType;
 use App\Service\PaginatorService;
@@ -82,6 +83,10 @@ class ProjectController extends AbstractController
      */
     public function edit(User $user, Project $project)
     {
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+        
         $form = $this->createForm(ProjectType::class, $project);
         
         return $this->render('project/edit.html.twig', [
@@ -98,7 +103,9 @@ class ProjectController extends AbstractController
      */
     public function update(User $user, Request $request, Project $project)
     {
-        //dump($request->request); exit;
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
         
         $form = $this->createForm(ProjectType::class, $project);
         
@@ -124,6 +131,17 @@ class ProjectController extends AbstractController
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($project);
+            
+            $periodicity = $project->getPeriodicity();
+            $iteration_count = (int) $request->request->get( 'iteration_count' );
+            for( $i=1; $i<=$iteration_count; $i++){
+                $iteration = new Iteration();
+                $iteration->setTitle($periodicity->getTitle() . ' ' . $i);
+                $iteration->setProject($project);
+                $iteration->setAuthor($this->getUser());
+                $entityManager->persist($iteration);
+            }
+            
             $entityManager->flush();
             
             if ( $request->isXmlHttpRequest() ) {
@@ -134,8 +152,13 @@ class ProjectController extends AbstractController
                     'message' => 'Project updated successfully.',
                 ]);
             }
+        
+            $this->addFlash('success', 'Project updated succesfully.');
 
-            return $this->redirectToRoute('admin_project_edit', ['id' => $project->getId()]);
+            return $this->redirectToRoute('project_edit', [
+                'slug' => $user->getSlug(),
+                'id'   => $project->getId()
+            ]);
             
         }
         
@@ -148,6 +171,8 @@ class ProjectController extends AbstractController
                 'errors'  => [],
             ]);
         }
+        
+        $this->addFlash('error', 'Something went wrong.');
 
         return $this->redirectToRoute('project_show', [
             'slug' => $user->getSlug(),
@@ -162,6 +187,10 @@ class ProjectController extends AbstractController
      */
     public function remove(User $user, Project $project)
     {
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+        
         $entityManager = $this->getDoctrine()->getManager();
         
         $entityManager->remove($product);
