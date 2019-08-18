@@ -103,6 +103,8 @@ class ProjectController extends AbstractController
      */
     public function update(User $user, Request $request, Project $project)
     {
+        dump($request->request); die();
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -131,16 +133,6 @@ class ProjectController extends AbstractController
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($project);
-            
-            $periodicity = $project->getPeriodicity();
-            $iteration_count = (int) $request->request->get( 'iteration_count' );
-            for( $i=1; $i<=$iteration_count; $i++){
-                $iteration = new Iteration();
-                $iteration->setTitle($periodicity->getTitle() . ' ' . $i);
-                $iteration->setProject($project);
-                $iteration->setAuthor($this->getUser());
-                $entityManager->persist($iteration);
-            }
             
             $entityManager->flush();
             

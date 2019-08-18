@@ -170,13 +170,13 @@
                                 </div>
                                 
                                 <div id="kt_repeater_2">
-                                    <div class="form-group  row">
+                                    <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Contact:</label>
                                         <div data-repeater-list="" class="col-lg-6">
                                             {% for iteration in project.iterations %}
                                             <div data-repeater-item="" class="kt-margin-b-10">
                                                 <div class="input-group">
-                                                    <input type="text" value="{{ iteration.title }}"class="form-control form-control-danger" placeholder="Iteration #i">
+                                                    <input form="project" type="text" value="{{ iteration.title }}" name="_iteration_" class="form-control form-control-danger" placeholder="Iteration #i">
                                                     <div class="input-group-append">
                                                         <a href="javascript:;" data-repeater-delete class="btn btn-danger btn-icon">
                                                             <i class="la la-close"></i>
@@ -198,15 +198,6 @@
                                             </div>
                                         </div>
                                     </div> 
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label class="col-form-label col-lg-3 col-sm-12">Minimum Setup</label>
-                                    <div class="col-lg-4 col-md-9 col-sm-12">
-                                        <div class="input-group">
-                                            <input form="project" id="kt_touchspin_1" type="text" class="form-control" value="4" name="iteration_count" placeholder="Select time">
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
