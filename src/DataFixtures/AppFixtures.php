@@ -7,7 +7,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use App\Entity\User;
-use App\Entity\Contribution;
+use App\Entity\Contribution\ProjectContribution;
+use App\Entity\Contribution\ActivityContribution;
 use App\Entity\Project;
 use App\Entity\Activity;
 use App\Entity\Iteration;
@@ -17,10 +18,11 @@ use App\Entity\Result;
 use App\Entity\Report;
 use App\Entity\Periodicity;
 use App\Entity\Unit;
-use App\Entity\Meta\MetaProject;
-use App\Entity\Meta\MetaActivity;
-use App\Entity\Meta\MetaIndicator;
-use App\Entity\Meta\MetaUser;
+use App\Entity\Address;
+use App\Entity\Meta\ProjectMeta;
+use App\Entity\Meta\ActivityMeta;
+use App\Entity\Meta\IndicatorMeta;
+use App\Entity\Meta\UserMeta;
 
 class AppFixtures extends Fixture
 {
@@ -33,11 +35,26 @@ class AppFixtures extends Fixture
     
     public function load(ObjectManager $manager)
     {
+        $madagascar = new Address();
+        $madagascar->setCountry("MG");
+        $madagascar->setAddressLine1("Madagascar");
+        $manager->persist($madagascar);
+        
+        $france = new Address();
+        $france->setCountry("FR");
+        $france->setAddressLine1("France");
+        $manager->persist($france);
+        
+        $usa = new Address();
+        $usa->setCountry("US");
+        $usa->setAddressLine1("Etats-Unis");
+        $manager->persist($usa);
+        
         $admin = new User();
         $admin->setActive(true);
         $admin->setStatus(User::STATUS_ACTIVE);
         $admin->setActivedAt(new \DateTime());
-        $admin->setAddress('Madagascar');
+        $admin->setAddress($france);
         $admin->setFullname('Jason Muller');
         $admin->setUsername('joelinjatovo');
         $admin->setEmail('joelinjatovo@gmail.com');
@@ -49,7 +66,7 @@ class AppFixtures extends Fixture
         $user->setActive(true);
         $user->setStatus(User::STATUS_ACTIVE);
         $user->setActivedAt(new \DateTime());
-        $user->setAddress('America');
+        $user->setAddress($usa);
         $user->setFullname('Matt Pears');
         $user->setUsername('user');
         $user->setEmail('joelinjatovo@yahoo.com');
@@ -61,7 +78,6 @@ class AppFixtures extends Fixture
         $user1->setActive(true);
         $user1->setStatus(User::STATUS_ACTIVE);
         $user1->setActivedAt(new \DateTime());
-        $user1->setAddress('Germany');
         $user1->setFullname('Sergei Ford');
         $user1->setUsername('user2');
         $user1->setEmail('serge.ford@agmail.com');
@@ -118,7 +134,7 @@ class AppFixtures extends Fixture
 
             $manager->persist($project);
             
-            $meta = new MetaProject();
+            $meta = new ProjectMeta();
             $meta->setMetaKey('meta_key');
             $meta->setMetaValue('test_value'. $i );
             $manager->persist($meta);
@@ -133,13 +149,13 @@ class AppFixtures extends Fixture
                 $manager->persist( $iteration );
             }
 
-            $contribution = new Contribution();
+            $contribution = new ProjectContribution();
             $contribution->setUser( $admin );
             $contribution->setProject( $project );
             $contribution->setRoles(['ROLE_ADMIN']);
             $manager->persist( $contribution );
 
-            $contribution = new Contribution();
+            $contribution = new ProjectContribution();
             $contribution->setUser( $user );
             $contribution->setProject( $project );
             $contribution->setRoles(['ROLE_CONTRIBUTOR']);

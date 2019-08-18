@@ -9,7 +9,7 @@ use App\Entity\User;
 /**
  * @ORM\Entity
  */
-class MetaUser extends BaseMeta
+class UserMeta extends Base
 {
     
     /**

@@ -15,7 +15,9 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 
-use App\Entity\Meta\MetaUser;
+use App\Entity\Meta\UserMeta;
+use App\Entity\Contribution\ProjectContribution;
+use App\Entity\Contribution\ActivityContribution;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -136,16 +138,6 @@ class User implements UserInterface, AdvancedUserInterface
     /**
      * @Assert\Type("string")
      * @Assert\Length(
-     *      max = 100,
-     *      maxMessage = "Your address cannot be longer than {{ limit }} characters"
-     * )
-     * @ORM\Column(name="address", type="string", length=100, nullable=true)
-     */
-    private $address;
-    
-    /**
-     * @Assert\Type("string")
-     * @Assert\Length(
      *      max = 10,
      *      maxMessage = "Your status cannot be longer than {{ limit }} characters"
      * )
@@ -192,6 +184,12 @@ class User implements UserInterface, AdvancedUserInterface
      * @ORM\Column(name="actived_at", type="datetime", nullable=true)
      */
     private $activedAt;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Address", inversedBy="user")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true)
+     */
+    private $address;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
@@ -229,12 +227,17 @@ class User implements UserInterface, AdvancedUserInterface
     private $results;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ProjectContribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
      */
-    private $contributions;
+    private $projectContributions;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaUser", mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ActivityContribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $activityContributions;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Meta\UserMeta", mappedBy="user", orphanRemoval=true)
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
      */
     protected $metas;
@@ -254,7 +257,8 @@ class User implements UserInterface, AdvancedUserInterface
         $this->projects = new ArrayCollection();
         $this->reports = new ArrayCollection();
         $this->results = new ArrayCollection();
-        $this->contributions = new ArrayCollection();
+        $this->projectContributions = new ArrayCollection();
+        $this->activityContributions = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -410,7 +414,7 @@ class User implements UserInterface, AdvancedUserInterface
         return $this->fullname;
     }
     
-    public function setFullname(string $fullname): self
+    public function setFullname(?string $fullname): self
     {
         $this->fullname = $fullname;
         
@@ -429,24 +433,24 @@ class User implements UserInterface, AdvancedUserInterface
         return $this;
     } 
     
-    public function getAddress(): ?string
+    public function getAddress(): ?Address
     {
         return $this->address;
     }
     
-    public function setAddress(string $address): self
+    public function setAddress(?Address $address): self
     {
         $this->address = $address;
         
         return $this;
     }    
 
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return (string) $this->status;
     }
     
-    public function setStatus(string $status): self
+    public function setStatus(?string $status): self
     {
         $this->status = $status;
         
@@ -771,25 +775,52 @@ class User implements UserInterface, AdvancedUserInterface
         return $this;
     }
     
-    public function getContributions(): ?Collection
+    public function getProjectContributions(): ?Collection
     {
-        return $this->contributions;
+        return $this->projectContributions;
     }
 
-    public function addContribution(?Contribution $contribution): self
+    public function addProjectContribution(?ProjectContribution $contribution): self
     {
-        if (!$this->contributions->contains($contribution)) {
-            $this->contributions[] = $contribution;
+        if (!$this->projectContributions->contains($contribution)) {
+            $this->projectContributions[] = $contribution;
             $contribution->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeContribution(?Contribution $contribution): self
+    public function removeProjectContribution(?ProjectContribution $contribution): self
     {
-        if ($this->contributions->contains($contribution)) {
-            $this->contributions->removeElement($contribution);
+        if ($this->projectContributions->contains($contribution)) {
+            $this->projectContributions->removeElement($contribution);
+            if ($contribution->getUser() === $this) {
+                $contribution->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getActivityContributions(): ?Collection
+    {
+        return $this->activityContributions;
+    }
+
+    public function addActivityContribution(?ActivityContribution $contribution): self
+    {
+        if (!$this->activityContributions->contains($contribution)) {
+            $this->activityContributions[] = $contribution;
+            $contribution->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivityContribution(?ActivityContribution $contribution): self
+    {
+        if ($this->activityContributions->contains($contribution)) {
+            $this->activityContributions->removeElement($contribution);
             if ($contribution->getUser() === $this) {
                 $contribution->setUser(null);
             }
@@ -830,7 +861,7 @@ class User implements UserInterface, AdvancedUserInterface
         return strtoupper( $initials ); //JB
     }
 
-    public function addMeta(?MetaUser $meta): self
+    public function addMeta(?UserMeta $meta): self
     {
         if (!$this->metas->contains($meta)) {
             $this->metas[] = $meta;
@@ -840,7 +871,7 @@ class User implements UserInterface, AdvancedUserInterface
         return $this;
     }
 
-    public function removeMeta(?MetaUser $meta): self
+    public function removeMeta(?UserMeta $meta): self
     {
         if ($this->metas->contains($meta)) {
             $this->metas->removeElement($meta);

@@ -11,7 +11,8 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 
-use App\Entity\Meta\MetaProject;
+use App\Entity\Meta\ProjectMeta;
+use App\Entity\Contribution\ProjectContribution;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
@@ -102,12 +103,12 @@ class Project
     private $iterations;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contribution", mappedBy="project", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ProjectContribution", mappedBy="project", orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $contributions;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaProject", mappedBy="project", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Meta\ProjectMeta", mappedBy="project", orphanRemoval=true)
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
      */
     protected $metas;
@@ -118,6 +119,7 @@ class Project
         $this->setUpdatedAt(new \DateTime());
         $this->activities = new ArrayCollection();
         $this->iterations = new ArrayCollection();
+        $this->contributions = new ArrayCollection();
         $this->metas = new ArrayCollection();
     }
     
@@ -293,22 +295,22 @@ class Project
         return $this->contributions;
     }
 
-    public function addContribution(?Contribution $contribution): self
+    public function addContribution(?ProjectContribution $contribution): self
     {
         if (!$this->contributions->contains($contribution)) {
             $this->contributions[] = $contribution;
-            $contribution->setUser($this);
+            $contribution->setProject($this);
         }
 
         return $this;
     }
 
-    public function removeContribution(?Contribution $contribution): self
+    public function removeContribution(?ProjectContribution $contribution): self
     {
         if ($this->contributions->contains($contribution)) {
             $this->contributions->removeElement($contribution);
-            if ($contribution->getUser() === $this) {
-                $contribution->setUser(null);
+            if ($contribution->getProject() === $this) {
+                $contribution->setProject(null);
             }
         }
 
@@ -320,7 +322,7 @@ class Project
         return $this->metas;
     }
 
-    public function addMeta(?MetaProject $meta): self
+    public function addMeta(?ProjectMeta $meta): self
     {
         if (!$this->metas->contains($meta)) {
             $this->metas[] = $meta;
@@ -330,7 +332,7 @@ class Project
         return $this;
     }
 
-    public function removeMeta(?MetaProject $meta): self
+    public function removeMeta(?ProjectMeta $meta): self
     {
         if ($this->metas->contains($meta)) {
             $this->metas->removeElement($meta);

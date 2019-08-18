@@ -13,7 +13,7 @@
                 {% endif %}
                 <div class="kt-widget__content">
                     <div class="kt-widget__head">
-                        <a href="{{ url('sadmin_user_show', {'id': user.id}) }}" class="kt-widget__username">
+                        <a href="{{ url('admin_user_show', {'id': user.id}) }}" class="kt-widget__username">
                             {{ user.fullname is null ? user.username : user.fullname }}                                                  
                         </a>                         
                        

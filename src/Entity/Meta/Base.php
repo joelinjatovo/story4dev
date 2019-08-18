@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Option;
+namespace App\Entity\Meta;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -13,13 +13,14 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
  * @ORM\Entity
  * @ORM\MappedSuperclass
  * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="option_type", type="string")
- * @ORM\DiscriminatorMap({"general" = "OptionGeneral"})
+ * @ORM\DiscriminatorColumn(name="meta_type", type="string")
+ * @ORM\DiscriminatorMap({"activity" = "ActivityMeta", "indicator" = "IndicatorMeta", "project" = "ProjectMeta", "user" = "UserMeta"})
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
- * @ORM\Table(name="options")
+ * @ORM\Table(name="metas")
  */
-abstract class BaseOption
+abstract class Base
 {
+    
     /**
      * Hook timestampable behavior
      * updates createdAt, updatedAt fields
@@ -37,55 +38,56 @@ abstract class BaseOption
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $option_key;
+    private $meta_key;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $option_value;
+    private $meta_value;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $autoload;
+    public function __construct()
+    {
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getOptionKey(): ?string
+    public function getMetaKey(): ?string
     {
-        return $this->option_key;
+        return $this->meta_key;
     }
 
-    public function setOptionKey(string $option_key): self
+    public function setMetaKey(string $meta_key): self
     {
-        $this->option_key = $option_key;
+        $this->meta_key = $meta_key;
 
         return $this;
     }
 
-    public function getOptionValue(): ?string
+    public function getMetaValue(): ?string
     {
-        return $this->option_value;
+        return $this->meta_value;
     }
 
-    public function setOptionValue(string $option_value): self
+    public function setMetaValue(string $meta_value): self
     {
-        $this->option_value = $option_value;
+        $this->meta_value = $meta_value;
 
         return $this;
     }
 
-    public function getAutoload(): ?bool
+    public function getMetaType(): ?string
     {
-        return $this->autoload;
+        return $this->meta_type;
     }
 
-    public function setAutoload(bool $autoload): self
+    public function setMetaType(string $meta_type): self
     {
-        $this->autoload = $autoload;
+        $this->meta_type = $meta_type;
 
         return $this;
     }

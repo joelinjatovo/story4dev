@@ -9,7 +9,7 @@ use App\Entity\Activity;
 /**
  * @ORM\Entity
  */
-class MetaActivity extends BaseMeta
+class ActivityMeta extends Base
 {
     
     /**

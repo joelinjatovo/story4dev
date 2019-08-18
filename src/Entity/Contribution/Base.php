@@ -1,25 +1,24 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Contribution;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ContributorRepository")
- * @ORM\Table(name="contributions")
+ * 
+ * @ORM\Entity
+ * @ORM\MappedSuperclass
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="contribution_type", type="string")
+ * @ORM\DiscriminatorMap({"activity" = "ActivityContribution", "project" = "ProjectContribution"})
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ * @ORM\Table(name="contributions")
  * @Gedmo\Loggable
  */
-class Contribution
+abstract class Base
 {
     /**
      * Hook timestampable behavior
@@ -41,18 +40,6 @@ class Contribution
      * @Gedmo\Versioned
      */
     private $roles = [];
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
-     * @Gedmo\Versioned
-     */
-    private $user;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="activities")
-     * @Gedmo\Versioned
-     */
-    private $project;
 
     public function __construct()
     {
@@ -77,30 +64,6 @@ class Contribution
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getProject(): ?Project
-    {
-        return $this->project;
-    }
-
-    public function setProject(?Project $project): self
-    {
-        $this->project = $project;
 
         return $this;
     }

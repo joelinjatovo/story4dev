@@ -11,7 +11,8 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use App\Entity\Meta\MetaActivity;
+use App\Entity\Meta\ActivityMeta;
+use App\Entity\Contribution\ActivityContribution;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ActivityRepository")
@@ -77,7 +78,12 @@ class Activity
     private $indicators;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaActivity", mappedBy="activity", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ActivityContribution", mappedBy="project", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $contributions;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Meta\ActivityMeta", mappedBy="activity", orphanRemoval=true)
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
      */
     protected $metas;
@@ -87,6 +93,7 @@ class Activity
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->indicators = new ArrayCollection();
+        $this->contributions = new ArrayCollection();
         $this->metas = new ArrayCollection();
     }
 
@@ -170,12 +177,39 @@ class Activity
         return $this;
     }
     
+    public function getContributions(): ?Collection
+    {
+        return $this->contributions;
+    }
+
+    public function addContribution(?ActivityContribution $contribution): self
+    {
+        if (!$this->contributions->contains($contribution)) {
+            $this->contributions[] = $contribution;
+            $contribution->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContribution(?ActivityContribution $contribution): self
+    {
+        if ($this->contributions->contains($contribution)) {
+            $this->contributions->removeElement($contribution);
+            if ($contribution->getProject() === $this) {
+                $contribution->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+    
     public function getMetas(): Collection
     {
         return $this->metas;
     }
 
-    public function addMeta(?MetaActivity $meta): self
+    public function addMeta(?ActivityMeta $meta): self
     {
         if (!$this->metas->contains($meta)) {
             $this->metas[] = $meta;
@@ -185,7 +219,7 @@ class Activity
         return $this;
     }
 
-    public function removeMeta(?MetaActivity $meta): self
+    public function removeMeta(?ActivityMeta $meta): self
     {
         if ($this->metas->contains($meta)) {
             $this->metas->removeElement($meta);

@@ -9,7 +9,7 @@ use App\Entity\Project;
 /**
  * @ORM\Entity
  */
-class MetaProject extends BaseMeta
+class ProjectMeta extends Base
 {
     
     /**

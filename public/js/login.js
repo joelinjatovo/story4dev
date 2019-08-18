@@ -1,31 +1,3 @@
-const signUpButton = document.getElementById('signUp');
-const signInButton = document.getElementById('signIn');
-const forgotButton = document.getElementById('forgot');
-const cancelForgotButton = document.getElementById('cancelForgot');
-const okButton = document.getElementById('btnOk');
-const container = document.getElementById('container');
-
-signUpButton.addEventListener('click', () => {
-	container.classList.add("right-panel-active");
-	container.classList.remove("forgot-panel-active");
-});
-
-signInButton.addEventListener('click', () => {
-	container.classList.remove("right-panel-active");
-});
-
-forgotButton.addEventListener('click', () => {
-	container.classList.add("forgot-panel-active");
-});
-
-cancelForgotButton.addEventListener('click', () => {
-	container.classList.remove("forgot-panel-active");
-});
-
-okButton.addEventListener('click', () => {
-	container.classList.remove("has-message");
-});
-
 jQuery(document).ready(function($){
     var i=function(c,t,m){
         $(".message").removeClass('message-success').removeClass('message-danger').removeClass('message-info');
@@ -34,12 +6,33 @@ jQuery(document).ready(function($){
         $("#message-title").html(t);
         $("#message-content").html(m);
     };
+    $('#signUp').click(function(e){
+        e.preventDefault();
+	    $('#container').addClass("right-panel-active");
+	    $('#container').removeClass("forgot-panel-active");
+    });
+    $('#signIn').click(function(e){
+        e.preventDefault();
+	    $('#container').removeClass("right-panel-active");
+    });
+    $('#forgot').click(function(e){
+        e.preventDefault();
+	    $('#container').addClass("forgot-panel-active");
+    });
+    $('#cancelForgot').click(function(e){
+        e.preventDefault();
+	    $('#container').removeClass("forgot-panel-active");
+    });
+    $('#btnOk').click(function(e){
+        e.preventDefault();
+	    $('#container').removeClass("has-message");
+    });
     $('#sign-in-form').submit(function(e){
         e.preventDefault();
         var form = $(this);
         form.validate({rules:{email:{required:!0,email:!0},password:{required:!0}}});
         form.valid()&&(
-            KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppOptions}),
+            KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppMessages.waiting}),
             form.ajaxSubmit({url:"/login",
                 error:function(d){
                     console.error(d);
@@ -66,7 +59,7 @@ jQuery(document).ready(function($){
         var form = $(this);
         form.validate({rules:{email:{required:!0,email:!0,maxlength:100},password:{required:!0,minlength:5},password_confirm:{required:!0,minlength:5,equalTo:'#password'},agree:{required:!0}}});
         form.valid()&&(
-            KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppOptions}),
+            KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppMessages.waiting}),
             form.ajaxSubmit({url:"/register",
                 error:function(d){
                     console.error(d);
@@ -92,7 +85,7 @@ jQuery(document).ready(function($){
         var form = $(this);
         form.validate({rules:{email:{required:!0,email:!0,maxlength:100}}});
         form.valid()&&(
-            KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppOptions}),
+            KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppMessages.waiting}),
             form.ajaxSubmit({url:"/forgot",
                 error:function(d){
                     console.error(d);

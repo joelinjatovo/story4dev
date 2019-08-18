@@ -18,6 +18,7 @@ use App\Service\TokenGenerator;
 
 class SecurityController extends AbstractController
 {
+    private $view = 'security/login.html.twig';
 
     /**
      * @Route("/logout", name="app_logout")
@@ -41,7 +42,7 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', [
+        return $this->render($this->view, [
             'last_username' => $lastUsername, 
             'error' => $error, 
             'active_form' => 'signin',
@@ -113,7 +114,7 @@ class SecurityController extends AbstractController
             ]);
         }
 
-        return $this->render('security/login.html.twig', [
+        return $this->render($this->view, [
             'last_username' => '',
             'error' => '',
             'active_form' => 'signup',
@@ -226,7 +227,7 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('security/login.html.twig', [
+        return $this->render($this->view, [
             'last_username' => '',
             'error' => '',
             'active_form' => 'forgot',

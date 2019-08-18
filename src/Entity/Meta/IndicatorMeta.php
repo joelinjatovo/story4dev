@@ -9,7 +9,7 @@ use App\Entity\Indicator;
 /**
  * @ORM\Entity
  */
-class MetaIndicator extends BaseMeta
+class IndicatorMeta extends Base
 {
     
     /**

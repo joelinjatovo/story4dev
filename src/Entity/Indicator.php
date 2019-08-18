@@ -11,7 +11,7 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use App\Entity\Meta\MetaIndicator;
+use App\Entity\Meta\IndicatorMeta;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IndicatorRepository")
@@ -72,7 +72,7 @@ class Indicator
     private $goals;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Meta\MetaIndicator", mappedBy="indicator", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Meta\IndicatorMeta", mappedBy="indicator", orphanRemoval=true)
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
      */
     protected $metas;
@@ -170,7 +170,7 @@ class Indicator
         return $this->metas;
     }
 
-    public function addMeta(?MetaIndicator $meta): self
+    public function addMeta(?IndicatorMeta $meta): self
     {
         if (!$this->metas->contains($meta)) {
             $this->metas[] = $meta;
@@ -180,7 +180,7 @@ class Indicator
         return $this;
     }
 
-    public function removeMeta(?MetaIndicator $meta): self
+    public function removeMeta(?IndicatorMeta $meta): self
     {
         if ($this->metas->contains($meta)) {
             $this->metas->removeElement($meta);
