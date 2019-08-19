@@ -58,6 +58,13 @@
                         
                         <!-- begin:: Content -->
                         <div class="kt-container kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+                        
+                            <!-- begin:: Alert -->
+                            {% block alert %}
+                                {{ include('_common/alert.html.twig') }}
+                            {% endblock %}
+                            <!-- end:: Alert -->
+                            
                             {% block content %}{% endblock %}
                         </div>
                         <!-- end:: Content -->
