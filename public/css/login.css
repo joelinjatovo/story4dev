@@ -10,7 +10,7 @@ body {
 	flex-direction: column;
 	font-family: 'Poppins', sans-serif;
 	height: 100vh;
-	margin: -20px 0 50px;
+	margin: 0 20px;
 }
 
 h1 {
@@ -311,4 +311,58 @@ input.is-invalid {
 	margin: 0 5px;
 	height: 40px;
 	width: 40px;
+}
+
+@media (max-width: 768px) {
+    .hidden-mobile {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        min-height: 550px;
+    }
+    .sign-up-container {
+        width: 100%;
+        height: calc(100% - 70px);
+        top: 70px;
+        transform: translateX(-100%);
+    }
+    .sign-in-container {
+        width: 100%;
+        height: calc(100% - 70px);
+        top: 70px;
+    }
+    .forgot-container {
+        width: 100%;
+        height: calc(100% - 70px);
+        top: 70px;
+    }
+    .message-container {
+        width: 100%;
+        height: calc(100% - 70px);
+        top: 70px;
+    }
+    .overlay-container {
+        right: 0;
+        left: 0;
+        height: 70px;
+        width: 100%;
+    }
+    .container.right-panel-active .sign-up-container {
+        transform: translateX(0);
+    }
+    .container.right-panel-active .sign-in-container {
+        transform: translateX(100%);
+    }
+    .container.right-panel-active .forgot-container {
+        transform: translateX(100px);
+    }
+    .container.right-panel-active .message-container {
+        transform: translateX(100px);
+    }
+    .container.right-panel-active .overlay-container {
+        left: 0;
+        right: auto;
+        transform: none;
+    }
 }
