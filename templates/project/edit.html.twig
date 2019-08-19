@@ -172,18 +172,18 @@
                                 <div id="kt_repeater_2">
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Contact:</label>
-                                        <div data-repeater-list="" class="col-lg-6">
-                                            {% for iteration in project.iterations %}
-                                            <div data-repeater-item="" class="kt-margin-b-10">
-                                                <div class="input-group">
-                                                    <input form="project" type="text" value="{{ iteration.title }}" name="_iteration_" class="form-control form-control-danger" placeholder="Iteration #i">
-                                                    <div class="input-group-append">
-                                                        <a href="javascript:;" data-repeater-delete class="btn btn-danger btn-icon">
-                                                            <i class="la la-close"></i>
-                                                        </a>
+                                        <div data-repeater-list="project[iterations]" class="col-lg-6">
+                                            {% for iteration in form.iterations %}
+                                                <div data-repeater-item="" class="kt-margin-b-10">
+                                                    <div class="input-group">
+                                                        {{ form_widget( iteration.title, { 'attr' : { 'form' : 'project', 'class' : 'form-control' } } ) }}
+                                                        <div class="input-group-append">
+                                                            <a href="javascript:;" data-repeater-delete class="btn btn-danger btn-icon">
+                                                                <i class="la la-close"></i>
+                                                            </a>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div> 
+                                                </div> 
                                             {% endfor %}                                                       
                                         </div>                 
                                     </div>

@@ -93,17 +93,17 @@ class Project
     private $periodicity;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="project", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $activities;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Iteration", mappedBy="project", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Iteration", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $iterations;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ProjectContribution", mappedBy="project", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ProjectContribution", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $contributions;
     

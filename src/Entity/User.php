@@ -186,8 +186,8 @@ class User implements UserInterface, AdvancedUserInterface
     private $activedAt;
     
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Address", inversedBy="user")
-     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true)
+     * @ORM\OneToOne(targetEntity="App\Entity\Address")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $address;
 

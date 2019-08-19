@@ -54,7 +54,7 @@ class AppFixtures extends Fixture
         $admin->setActive(true);
         $admin->setStatus(User::STATUS_ACTIVE);
         $admin->setActivedAt(new \DateTime());
-        $admin->setAddress($france);
+        $admin->setAddress($madagascar);
         $admin->setFullname('Jason Muller');
         $admin->setUsername('joelinjatovo');
         $admin->setEmail('joelinjatovo@gmail.com');
@@ -78,6 +78,7 @@ class AppFixtures extends Fixture
         $user1->setActive(true);
         $user1->setStatus(User::STATUS_ACTIVE);
         $user1->setActivedAt(new \DateTime());
+        $user1->setAddress($france);
         $user1->setFullname('Sergei Ford');
         $user1->setUsername('user2');
         $user1->setEmail('serge.ford@agmail.com');

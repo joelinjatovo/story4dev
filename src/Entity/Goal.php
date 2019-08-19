@@ -52,7 +52,8 @@ class Goal
     private $indicator;
     
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Iteration", inversedBy="goals")
+     * @ORM\OneToOne(targetEntity="App\Entity\Iteration", inversedBy="goal")
+     * @ORM\JoinColumn(nullable=true)
      * @Gedmo\Versioned
      */
     private $iteration;

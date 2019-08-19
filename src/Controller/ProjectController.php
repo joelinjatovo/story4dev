@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use App\Entity\User;
 use App\Entity\Project;
@@ -103,15 +104,19 @@ class ProjectController extends AbstractController
      */
     public function update(User $user, Request $request, Project $project)
     {
-        dump($request->request); die();
-        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
+        }
+        
+        $originalIterations = new ArrayCollection();
+        foreach ($project->getIterations() as $iteration) {
+            $originalIterations->add($iteration);
         }
         
         $form = $this->createForm(ProjectType::class, $project);
         
         $form->handleRequest($request);
+        
         if ( $form->isSubmitted() ) {
             if ( ! $form->isValid() ) {
                 
@@ -132,6 +137,14 @@ class ProjectController extends AbstractController
             }
             
             $entityManager = $this->getDoctrine()->getManager();
+            
+            // remove the relationship between the tag and the Task
+            foreach ($originalIterations as $iteration) {
+                if (false === $project->getIterations()->contains($iteration)) {
+                    $entityManager->remove($iteration);
+                }
+            }
+
             $entityManager->persist($project);
             
             $entityManager->flush();

@@ -40,27 +40,27 @@ class Iteration
     private $title;
     
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="iterations")
      * @Gedmo\Versioned
      */
     private $author;
     
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="activities")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="iterations")
      * @Gedmo\Versioned
      */
     private $project;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="indicator", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToOne(targetEntity="App\Entity\Goal", inversedBy="iteration")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $goals;
+    private $goal;
 
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
-        $this->goals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -103,30 +103,15 @@ class Iteration
 
         return $this;
     }
-    
-    public function getGoals(): Collection
+
+    public function getGoal(): ?Goal
     {
-        return $this->goals;
+        return $this->goal;
     }
 
-    public function addGoal(?Goal $goal): self
+    public function setGoal(?Goal $goal): self
     {
-        if (!$this->goals->contains($goal)) {
-            $this->goals[] = $goal;
-            $goal->setIndicator($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGoal(?Goal $goal): self
-    {
-        if ($this->goals->contains($goal)) {
-            $this->goals->removeElement($goal);
-            if ($goal->getIndicator() === $this) {
-                $goal->setIndicator(null);
-            }
-        }
+        $this->goal = $goal;
 
         return $this;
     }
