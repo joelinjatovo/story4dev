@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
@@ -26,7 +25,7 @@ use App\Entity\Contribution\ActivityContribution;
  * @UniqueEntity("username")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
-class User implements UserInterface, AdvancedUserInterface
+class User implements UserInterface
 {
     const STATUS_PING    = 'ping';
     const STATUS_ACTIVE  = 'active';
@@ -569,38 +568,6 @@ class User implements UserInterface, AdvancedUserInterface
         $this->password = $password;
 
         return $this;
-    }
-    
-    /**
-     * @see AdvancedUserInterface
-     */
-    public function isAccountNonExpired()
-    {
-        return true;
-    }
-
-    /**
-     * @see AdvancedUserInterface
-     */
-    public function isAccountNonLocked()
-    {
-        return true;
-    }
-
-    /**
-     * @see AdvancedUserInterface
-     */
-    public function isCredentialsNonExpired()
-    {
-        return true;
-    }
-    
-    /**
-     * @see AdvancedUserInterface
-     */
-    public function isEnabled()
-    {
-        return $this->isActive;
     }
 
     /**
