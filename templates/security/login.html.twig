@@ -23,15 +23,21 @@
             <div class="form-container sign-up-container">
                 <form action="/register" method="post" id="sign-up-form">
                     <h1>Create Account</h1>
-                    <span>Enter your personal details</span>
-                    <div class="input-group">
-                        <input type="text" placeholder="Email (Required)" name="email" autocomplete="off">
+                    <p>Enter your personal details</p>
+                    <div class="input-group f_row">
+                        <label>Email *</label>
+                        <input type="text" class="input-field" name="email" autocomplete="off">
+                        <u></u>
                     </div>
-                    <div class="input-group">
-                        <input type="password" placeholder="Password (Required)" id="password" name="password">
+                    <div class="input-group f_row">
+                        <label>Password *</label>
+                        <input type="password" class="input-field" id="password" name="password">
+                        <u></u>
                     </div>
-                    <div class="input-group">
-                        <input type="password" placeholder="Confirm Password (Required)" name="password_confirm">
+                    <div class="input-group f_row last">
+                        <label>Confirm Password *</label>
+                        <input type="password" class="input-field" name="password_confirm">
+                        <u></u>
                     </div>
                     <div class="row kt-login__extra">
                         <div class="col kt-align-left">
@@ -48,12 +54,20 @@
             <div class="form-container sign-in-container">
                 <form action="/login" method="post" id="sign-in-form">
                     <h1>Sign in</h1>
-                    <span>enter your email to reset your password:</span>
-                    <div class="input-group">
-                        <input value="{{ last_username }}" type="text" name="email"  placeholder="Email" autocomplete="off" />
+                    <div class="social-container">
+                        <a href="#" class="social" onclick="fb_login();"><i class="fab fa-facebook-f"></i></a>
+                        <a href="{{ path('connect_google_start') }}" class="social"><i class="fab fa-google-plus-g"></i></a>
                     </div>
-                    <div class="input-group">
-                        <input type="password" name="password" placeholder="Password" />
+                    <p style="margin-top: 0;">ou use your account</p>
+                    <div class="input-group f_row {{ last_username is null ? '' : 'focus' }}">
+                        <label>Email</label>
+                        <input value="{{ last_username }}" class="input-field" type="text" name="email"  autocomplete="off" />
+                        <u></u>
+                    </div>
+                    <div class="input-group f_row last">
+                        <label>Password</label>
+                        <input type="password" class="input-field" name="password" />
+                        <u></u>
                     </div>
                     <!--
                     <label class="kt-checkbox">
@@ -68,9 +82,13 @@
             </div>
             <div class="form-container forgot-container">
                 <form action="/forgot" method="post" id="forgot-form">
-                    <h1>Forgot password</h1>
-                    <span>enter your email to reset your password:</span>
-                    <input type="email" placeholder="Email" name="email" autocomplete="off" />
+                    <h1>Reset Password</h1>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+                    <div class="input-group f_row last">
+                        <label>Email</label>
+                        <input class="input-field" type="text" name="email" autocomplete="off" />
+                        <u></u>
+                    </div>
                     <button>Request</button>
                     <a href="javascript:;" id="cancelForgot">Cancel</a>
                 </form>
@@ -94,19 +112,12 @@
                         <div class="social-container hidden-mobile">
                             <a href="javascript:;" class="social"><i class="fab fa-facebook-f"></i></a>
                             <a href="javascript:;" class="social"><i class="fab fa-google-plus-g"></i></a>
-                            <a href="javascript:;" class="social"><i class="fab fa-linkedin-in"></i></a>
                         </div>
                     </div>
                     <div class="overlay-panel overlay-right">
                         <h1 class="hidden-mobile">Hello, Friend!</h1>
                         <p class="hidden-mobile">Enter your personal details and start journey with us</p>
                         <button class="ghost" id="signUp">Sign Up</button>
-                        <p class="hidden-mobile" style="margin: 30px 0 20px;">or use social for registration</p>
-                        <div class="social-container hidden-mobile">
-                            <a href="#" class="social" onclick="fb_login();"><i class="fab fa-facebook-f"></i></a>
-                            <a href="{{ path('connect_google_start') }}" class="social"><i class="fab fa-google-plus-g"></i></a>
-                            <a href="javascript:;" class="social"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
                     </div>
                 </div>
             </div>

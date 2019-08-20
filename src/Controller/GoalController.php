@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -31,20 +32,53 @@ class GoalController extends AbstractController
     /**
      * @Route("/goal", name="create", methods="POST")
      */
-    public function create(ValidatorInterface $validator): Response
+    public function create(Request $request, ValidatorInterface $validator): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
         $goal = new Goal();
-        
-        $errors = $validator->validate($goal);
-        if (count($errors) > 0) {
-            return new Response((string) $errors, 400);
+        $form = $this->createForm(GoalType::class, $goal);
+        $form->handleRequest($request);
+        if ( $form->isSubmitted() ) {
+            if ( ! $form->isValid() ) {
+                
+                $errors = [];
+                foreach ($form->all() as $child) {
+                    if (!$child->isValid()) {
+                       $errors[$child->getName()] = (String) $form[$child->getName()]->getErrors();
+                    }
+                }
+                
+                return $this->json([
+                    'success' => false,
+                    'title'   => 'Validation Error',
+                    'status'  => 'error',
+                    'message' => 'An error was occured. :)',
+                    'errors'  => $errors
+                ]);
+            }
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($goal);
+            $entityManager->flush();
+            
+            return $this->json([
+                'success' => true,
+                'title'   => 'Success',
+                'status'  => 'success',
+                'message' => 'Goal created successfully.',
+                'html'    => $this->renderView('indicator/goal.html.twig', ['goal' => $goal] )
+            ]);
+            
         }
-
-        $entityManager->persist($goal);
-
-        $entityManager->flush();
+        
+        if ( $request->isXmlHttpRequest() ) {
+            return $this->json([
+                'success' => false,
+                'title'   => 'Error',
+                'status'  => 'error',
+                'message' => 'Something went wrong. :)',
+                'errors'  => [],
+            ]);
+        }
 
         return new Response('Saved new goal with id '.$goal->getId());
     }

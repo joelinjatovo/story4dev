@@ -85,10 +85,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        $targetPath = $this->getTargetPath($request->getSession(), $providerKey);
+        if ( ! $targetPath ) {
+            $targetPath = $this->urlGenerator->generate('account_profile');
+        }
+        
         if ( $request->isXmlHttpRequest() ) {
             $array = array( 
                 'success'  => true,
-                'redirect' => $this->urlGenerator->generate('app_index')
+                'redirect' => $targetPath
             );
             
             $response = new Response( json_encode( $array ) );
@@ -96,18 +101,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             return $response;
         }
         
-        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
-            return new RedirectResponse($targetPath);
-        }
-
-        return new RedirectResponse($this->urlGenerator->generate('app_index'));
+        return new RedirectResponse($targetPath);
     }
     
     public function onAuthenticationFailure( Request $request, AuthenticationException $exception )
     {
         if ( $request->isXmlHttpRequest() ) {
-            
-            $array = array( 'success' => false, 'message' => $exception->getMessage() ); // data to return via JSON
+            $array = array( 'success' => false, 'message' => $exception->getMessage() );
             $response = new Response( json_encode( $array ) );
             $response->headers->set( 'Content-Type', 'application/json' );
 

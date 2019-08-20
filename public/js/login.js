@@ -6,6 +6,19 @@ jQuery(document).ready(function($){
         $("#message-title").html(t);
         $("#message-content").html(m);
     };
+    
+    $('.input-field').on('blur', function () {
+        if (!this.value) {
+            $(this).parent('.f_row').removeClass('focus');
+        } else {
+            $(this).parent('.f_row').addClass('focus');
+        }
+    }).on('focus', function () {
+        $(this).parent('.f_row').addClass('focus');
+        $('.btn').removeClass('active');
+        $('.f_row').removeClass('shake');
+    });
+    
     $('#signUp').click(function(e){
         e.preventDefault();
 	    $('#container').addClass("right-panel-active");
@@ -31,6 +44,19 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var form = $(this);
         form.validate({rules:{email:{required:!0,email:!0},password:{required:!0}}});
+        if(!form.valid()){
+            var finp =  $(this).parent('form').find('input');
+            if (!finp.val() == 0) {
+                $(this).addClass('active');
+            }
+            setTimeout(function () {
+                $('.f_row').removeClass('shake');
+            }, 2000);
+
+            if($('.input-field').val() == 0) {
+                $('.input-field').parent('.f_row').addClass('shake');
+            }
+        }
         form.valid()&&(
             KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppMessages.waiting}),
             form.ajaxSubmit({url:"/login",
@@ -58,6 +84,19 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var form = $(this);
         form.validate({rules:{email:{required:!0,email:!0,maxlength:100},password:{required:!0,minlength:5},password_confirm:{required:!0,minlength:5,equalTo:'#password'},agree:{required:!0}}});
+        if(!form.valid()){
+            var finp =  $(this).parent('form').find('input');
+            if (!finp.val() == 0) {
+                $(this).addClass('active');
+            }
+            setTimeout(function () {
+                $('.f_row').removeClass('shake');
+            }, 2000);
+
+            if($('.input-field').val() == 0) {
+                $('.input-field').parent('.f_row').addClass('shake');
+            }
+        }
         form.valid()&&(
             KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppMessages.waiting}),
             form.ajaxSubmit({url:"/register",
@@ -84,6 +123,19 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var form = $(this);
         form.validate({rules:{email:{required:!0,email:!0,maxlength:100}}});
+        if(!form.valid()){
+            var finp =  $(this).parent('form').find('input');
+            if (!finp.val() == 0) {
+                $(this).addClass('active');
+            }
+            setTimeout(function () {
+                $('.f_row').removeClass('shake');
+            }, 2000);
+
+            if($('.input-field').val() == 0) {
+                $('.input-field').parent('.f_row').addClass('shake');
+            }
+        }
         form.valid()&&(
             KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppMessages.waiting}),
             form.ajaxSubmit({url:"/forgot",

@@ -4,7 +4,7 @@ namespace App\Controller\Api;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController ;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -14,7 +14,7 @@ use App\Form\ProjectType;
 /**
  * @Route("/api", name="api_")
  */
-class ProjectController extends FOSRestController
+class ProjectController extends AbstractFOSRestController 
 {
     /**
      * @Rest\Get("/projects")
