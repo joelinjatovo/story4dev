@@ -7,6 +7,8 @@
         "ext-iconv": "*",
         "doctrine/annotations": "^1.6",
         "friendsofsymfony/ckeditor-bundle": "^2.1",
+        "friendsofsymfony/rest-bundle": "^2.5",
+        "jms/serializer-bundle": "^3.4",
         "knpuniversity/oauth2-client-bundle": "^1.28",
         "league/oauth2-facebook": "^2.0",
         "league/oauth2-google": "^3.0",
