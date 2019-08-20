@@ -25,6 +25,9 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
+                    - App\Security\FacebookAuthenticator
+                    - App\Security\GoogleAuthenticator
+                entry_point: App\Security\LoginFormAuthenticator
     access_control:
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/sadmin, roles: ROLE_SUPER_ADMIN }

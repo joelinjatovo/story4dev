@@ -47,6 +47,16 @@ class User implements UserInterface, AdvancedUserInterface
     private $id;
     
     /**
+     * @ORM\Column(name="facebook_id",type="string", nullable=true)
+     */
+    protected $facebookId;
+
+    /**
+     * @ORM\Column(name="google_id", type="string", nullable=true)
+     */
+    protected $googleId;
+    
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $avatar;
@@ -264,6 +274,30 @@ class User implements UserInterface, AdvancedUserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getFacebookId()
+    {
+        return $this->facebookId;
+    }
+
+    public function setFacebookId($facebookId): self
+    {
+        $this->facebookId = $facebookId;
+        
+        return $this;
+    }
+
+    public function getGoogleId()
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId($googleId): self
+    {
+        $this->googleId = $googleId;
+        
+        return $this;
     }
 
     public function setAvatar(?string $avatar): self
