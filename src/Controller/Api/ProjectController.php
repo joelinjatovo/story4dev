@@ -21,9 +21,9 @@ class ProjectController extends FOSRestController
      */
     public function list()
     {
-        $repository = $this->getDoctrine()->getRepository(Movie::class);
-        $movies = $repository->findall();
-        return $this->handleView($this->view($movies));
+        $repository = $this->getDoctrine()->getRepository(Project::class);
+        $projects = $repository->findAll();
+        return $this->handleView($this->view($projects));
     }
     
     /**
