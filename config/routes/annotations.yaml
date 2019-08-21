@@ -1,5 +1,9 @@
-controllers:
-    resource: ../../src/Controller/
+rest_controller:
+    resource: ../../src/Controller/Api/
+    type: annotation
+    prefix: /api
+web_controller:
+    resource: ../../src/Controller/Web/
     type: annotation
     prefix:
         fr: '' # don't prefix URLs for English, the default locale

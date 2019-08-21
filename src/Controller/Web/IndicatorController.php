@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Web;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -18,24 +18,25 @@ use App\Entity\Unit;
 use App\Form\IndicatorType;
 use App\Form\GoalType;
 
-/** @Route(name="goal_") */
-class GoalController extends AbstractController
+/** @Route(name="indicator_") */
+class IndicatorController extends AbstractController
 {
     /**
-     * @Route("/goal", name="index", methods="GET")
+     * @Route("/indicator", name="index", methods="GET")
      */
     public function index()
     {
-        return $this->render('goal/create.html.twig');
+        return $this->render('indicator/create.html.twig');
     }
     
     /**
-     * @Route("/goal", name="create", methods="POST")
+     * @Route("/indicator", name="create", methods="POST")
      */
     public function create(Request $request, ValidatorInterface $validator): Response
     {
-        $goal = new Goal();
-        $form = $this->createForm(GoalType::class, $goal);
+        $indicator = new Indicator();
+        $form = $this->createForm(IndicatorType::class, $indicator);
+        
         $form->handleRequest($request);
         if ( $form->isSubmitted() ) {
             if ( ! $form->isValid() ) {
@@ -57,15 +58,15 @@ class GoalController extends AbstractController
             }
             
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($goal);
+            $entityManager->persist($indicator);
             $entityManager->flush();
             
             return $this->json([
                 'success' => true,
                 'title'   => 'Success',
                 'status'  => 'success',
-                'message' => 'Goal created successfully.',
-                'html'    => $this->renderView('indicator/goal.html.twig', ['goal' => $goal] )
+                'message' => 'Indicator created successfully.',
+                'html'    => $this->renderView('activity/indicator.html.twig', ['indicator' => $indicator] )
             ]);
             
         }
@@ -80,18 +81,17 @@ class GoalController extends AbstractController
             ]);
         }
 
-        return new Response('Saved new goal with id '.$goal->getId());
+        return new Response('Saved new indicator with id '.$indicator->getId());
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/{indicator_id}/goal/{goal_id}", name="show", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+", "goal_id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/{indicator_id}", name="show", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
-     * @Entity("goal", options={"mapping": {"goal_id": "id"}})
      */
-    public function show(User $user, Project $project, Activity $activity, Indicator $indicator, Goal $goal)
+    public function show(User $user, Project $project, Activity $activity, Indicator $indicator)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -105,28 +105,26 @@ class GoalController extends AbstractController
             throw $this->createNotFoundException('The activity does not match');
         }
         
-        if($goal->getIndicator() != $indicator ){
-            throw $this->createNotFoundException('The indicator does not match');
-        }
+        $goal = new Goal();
+        $form = $this->createForm(GoalType::class, $goal);
         
-        return $this->render('goal/show.html.twig', [
+        return $this->render('indicator/show.html.twig', [
             'user'      => $user,
             'project'   => $project,
             'activity'  => $activity, 
             'indicator' => $indicator, 
-            'goal'      => $goal,
+            'form'      => $form->createView()
         ]);
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/{indicator_id}/goal/edit/{goal_id}", name="edit", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+", "goal_id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/edit/{indicator_id}", name="edit", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
-     * @Entity("goal", options={"mapping": {"goal_id": "id"}})
      */
-    public function edit(User $user, Project $project, Activity $activity, Indicator $indicator, Goal $goal)
+    public function edit(User $user, Project $project, Activity $activity, Indicator $indicator)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -140,28 +138,22 @@ class GoalController extends AbstractController
             throw $this->createNotFoundException('The activity does not match');
         }
         
-        if($goal->getIndicator() != $indicator ){
-            throw $this->createNotFoundException('The indicator does not match');
-        }
-        
-        return $this->render('goal/edit.html.twig', [
+        return $this->render('indicator/edit.html.twig', [
             'user'      => $user,
             'project'   => $project,
             'activity'  => $activity, 
-            'indicator' => $indicator, 
-            'goal'      => $goal
+            'indicator' => $indicator
         ]);
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/{indicator_id}/goal/edit/{goal_id}", name="update", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+", "goal_id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/update/{indicator_id}", name="update", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
-     * @Entity("goal", options={"mapping": {"goal_id": "id"}})
      */
-    public function update(User $user, Project $project, Activity $activity, Indicator $indicator, Goal $goal)
+    public function update(User $user, Project $project, Activity $activity, Indicator $indicator)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -173,36 +165,30 @@ class GoalController extends AbstractController
         
         if($indicator->getActivity() != $activity ){
             throw $this->createNotFoundException('The activity does not match');
-        }
-        
-        if($goal->getIndicator() != $indicator ){
-            throw $this->createNotFoundException('The indicator does not match');
         }
         
         $entityManager = $this->getDoctrine()->getManager();
         
-        $goal->setTitle('New goal name!');
+        $indicator->setTitle('New indicator name!');
         
         $entityManager->flush();
 
-        return $this->redirectToRoute('goal_show', [
+        return $this->redirectToRoute('indicator_show', [
             'slug'         => $user->getSlug(),
             'project_id'   => $project->getId(),
             'activity_id'  => $activity->getId(),
-            'indicator_id' => $indicator->getId(),
-            'goal_id'      => $goal->getId()
+            'indicator_id' => $indicator->getId()
         ]);
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/{indicator_id}/goal/remove/{goal_id}", name="remove", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+", "goal_id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/remove/{indicator_id}", name="remove", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
-     * @Entity("goal", options={"mapping": {"goal_id": "id"}})
      */
-    public function remove(User $user, Project $project, Activity $activity, Indicator $indicator, Goal $goal)
+    public function remove(User $user, Project $project, Activity $activity, Indicator $indicator)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -216,28 +202,23 @@ class GoalController extends AbstractController
             throw $this->createNotFoundException('The activity does not match');
         }
         
-        if($goal->getIndicator() != $indicator ){
-            throw $this->createNotFoundException('The indicator does not match');
-        }
-        
         $entityManager = $this->getDoctrine()->getManager();
         
-        $entityManager->remove($goal);
+        $entityManager->remove($indicator);
         
         $entityManager->flush();
         
-        return new Response('goal removed successfully');
+        return new Response('indicator removed successfully');
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/{indicator_id}/goals/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+", "goal_id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicators/{page<\d+>?1}", name="list", methods="GET")
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
-     * @Entity("goal", options={"mapping": {"goal_id": "id"}})
      */
-    public function list(User $user, Project $project, Activity $activity, Indicator $indicator, $page = 1)
+    public function list(User $user, Project $project, Activity $activity, $page = 1)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -251,20 +232,15 @@ class GoalController extends AbstractController
             throw $this->createNotFoundException('The activity does not match');
         }
         
-        if($goal->getIndicator() != $indicator ){
-            throw $this->createNotFoundException('The indicator does not match');
-        }
-        
         $entityManager = $this->getDoctrine()->getManager();
         
-        $goals = $entityManager->getRepository(Goal::class)->findAll();
+        $indicators = $entityManager->getRepository(Indicator::class)->findAll();
         
-        return $this->render('goal/list.html.twig', [
-            'user'      => $user,
-            'project'   => $project,
-            'activity'  => $activity, 
-            'indicator' => $indicator, 
-            'goals'     => $goals
+        return $this->render('indicator/list.html.twig', [
+            'user'       => $user,
+            'project'    => $project,
+            'activity'   => $activity,
+            'indicators' => $indicators
         ]);
     }
 }

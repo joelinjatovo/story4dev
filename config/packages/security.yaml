@@ -7,13 +7,24 @@ security:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
     providers:
-        administrators:
+        chain_provider:
+            chain:
+                providers: [user_db_provider, api_key_user_provider]
+        user_db_provider:
             entity:
                 class: App\Entity\User
+        api_key_user_provider:
+            id: App\Security\Provider\ApiKeyUserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api:
+            pattern: ^/api/
+            stateless: true
+            simple_preauth:
+                authenticator: App\Security\ApiKeyAuthenticator
+            provider: api_key_user_provider
         main:
             anonymous: true
             logout:
@@ -27,11 +38,13 @@ security:
                     - App\Security\LoginFormAuthenticator
                     - App\Security\FacebookAuthenticator
                     - App\Security\GoogleAuthenticator
+                    - App\Security\TokenAuthenticator
                 entry_point: App\Security\LoginFormAuthenticator
+            provider: user_db_provider
     access_control:
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/sadmin, roles: ROLE_SUPER_ADMIN }
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/api, roles: ROLE_API }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/editor, roles: ROLE_EDITOR }
         # - { path: ^/contributor, roles: ROLE_CONTRIBUTOR }
         # - { path: ^/profile, roles: ROLE_USER }

@@ -12,7 +12,7 @@ use App\Entity\Project;
 use App\Form\ProjectType;
 
 /**
- * @Route("/api", name="api_")
+ * @Route(name="api_")
  */
 class ProjectController extends AbstractFOSRestController 
 {

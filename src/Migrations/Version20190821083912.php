@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190820161209 extends AbstractMigration
+final class Version20190821083912 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -34,6 +34,7 @@ final class Version20190820161209 extends AbstractMigration
         $this->addSql('CREATE TABLE projects (id INT AUTO_INCREMENT NOT NULL, author_id INT NOT NULL, periodicity_id INT DEFAULT NULL, picture LONGTEXT DEFAULT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, budget DOUBLE PRECISION DEFAULT NULL, start_at DATETIME DEFAULT NULL, end_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, INDEX IDX_5C93B3A4F675F31B (author_id), INDEX IDX_5C93B3A433E79D0D (periodicity_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE reports (id INT AUTO_INCREMENT NOT NULL, author_id INT DEFAULT NULL, project_id INT DEFAULT NULL, title VARCHAR(255) DEFAULT NULL, description VARCHAR(255) DEFAULT NULL, synced_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, INDEX IDX_F11FA745F675F31B (author_id), INDEX IDX_F11FA745166D1F9C (project_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE results (id INT AUTO_INCREMENT NOT NULL, author_id INT DEFAULT NULL, report_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, value DOUBLE PRECISION NOT NULL, INDEX IDX_9FA3E414F675F31B (author_id), INDEX IDX_9FA3E4144BD2A4C0 (report_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE token (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, token VARCHAR(255) NOT NULL, expires_at DATETIME NOT NULL, INDEX IDX_5F37A13BA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE units (id INT AUTO_INCREMENT NOT NULL, author_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, label VARCHAR(10) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, INDEX IDX_E9B07449F675F31B (author_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE users (id INT AUTO_INCREMENT NOT NULL, address_id INT DEFAULT NULL, facebook_id VARCHAR(255) DEFAULT NULL, google_id VARCHAR(255) DEFAULT NULL, avatar LONGTEXT DEFAULT NULL, username VARCHAR(100) NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, slug VARCHAR(255) NOT NULL, fullname VARCHAR(100) DEFAULT NULL, title VARCHAR(100) DEFAULT NULL, presentation VARCHAR(255) DEFAULT NULL, phone VARCHAR(50) DEFAULT NULL, status VARCHAR(10) DEFAULT NULL, is_active TINYINT(1) NOT NULL, is_verified TINYINT(1) NOT NULL, confirm_token VARCHAR(255) DEFAULT NULL, confirmed_at DATETIME DEFAULT NULL, reset_token VARCHAR(255) DEFAULT NULL, reseted_at DATETIME DEFAULT NULL, actived_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_1483A5E9F85E0677 (username), UNIQUE INDEX UNIQ_1483A5E9E7927C74 (email), UNIQUE INDEX UNIQ_1483A5E9989D9B62 (slug), UNIQUE INDEX UNIQ_1483A5E9F5B7AF75 (address_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE ext_translations (id INT AUTO_INCREMENT NOT NULL, locale VARCHAR(8) NOT NULL, object_class VARCHAR(255) NOT NULL, field VARCHAR(32) NOT NULL, foreign_key VARCHAR(64) NOT NULL, content LONGTEXT DEFAULT NULL, INDEX translations_lookup_idx (locale, object_class, foreign_key), UNIQUE INDEX lookup_unique_idx (locale, object_class, field, foreign_key), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC');
@@ -57,6 +58,7 @@ final class Version20190820161209 extends AbstractMigration
         $this->addSql('ALTER TABLE reports ADD CONSTRAINT FK_F11FA745166D1F9C FOREIGN KEY (project_id) REFERENCES projects (id)');
         $this->addSql('ALTER TABLE results ADD CONSTRAINT FK_9FA3E414F675F31B FOREIGN KEY (author_id) REFERENCES users (id)');
         $this->addSql('ALTER TABLE results ADD CONSTRAINT FK_9FA3E4144BD2A4C0 FOREIGN KEY (report_id) REFERENCES reports (id)');
+        $this->addSql('ALTER TABLE token ADD CONSTRAINT FK_5F37A13BA76ED395 FOREIGN KEY (user_id) REFERENCES users (id)');
         $this->addSql('ALTER TABLE units ADD CONSTRAINT FK_E9B07449F675F31B FOREIGN KEY (author_id) REFERENCES users (id)');
         $this->addSql('ALTER TABLE users ADD CONSTRAINT FK_1483A5E9F5B7AF75 FOREIGN KEY (address_id) REFERENCES address (id)');
     }
@@ -86,6 +88,7 @@ final class Version20190820161209 extends AbstractMigration
         $this->addSql('ALTER TABLE projects DROP FOREIGN KEY FK_5C93B3A4F675F31B');
         $this->addSql('ALTER TABLE reports DROP FOREIGN KEY FK_F11FA745F675F31B');
         $this->addSql('ALTER TABLE results DROP FOREIGN KEY FK_9FA3E414F675F31B');
+        $this->addSql('ALTER TABLE token DROP FOREIGN KEY FK_5F37A13BA76ED395');
         $this->addSql('ALTER TABLE units DROP FOREIGN KEY FK_E9B07449F675F31B');
         $this->addSql('DROP TABLE activities');
         $this->addSql('DROP TABLE address');
@@ -99,6 +102,7 @@ final class Version20190820161209 extends AbstractMigration
         $this->addSql('DROP TABLE projects');
         $this->addSql('DROP TABLE reports');
         $this->addSql('DROP TABLE results');
+        $this->addSql('DROP TABLE token');
         $this->addSql('DROP TABLE units');
         $this->addSql('DROP TABLE users');
         $this->addSql('DROP TABLE ext_translations');

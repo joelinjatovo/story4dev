@@ -234,6 +234,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $results;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Token", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $tokens;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ProjectContribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
@@ -770,6 +775,33 @@ class User implements UserInterface
             $this->results->removeElement($result);
             if ($result->getAuthor() === $this) {
                 $result->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getTokens(): ?Collection
+    {
+        return $this->tokens;
+    }
+
+    public function addToken(?Token $token): self
+    {
+        if (!$this->tokens->contains($token)) {
+            $this->tokens[] = $token;
+            $token->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeToken(?Token $token): self
+    {
+        if ($this->tokens->contains($token)) {
+            $this->tokens->removeElement($token);
+            if ($token->getUser() === $this) {
+                $token->setUser(null);
             }
         }
 

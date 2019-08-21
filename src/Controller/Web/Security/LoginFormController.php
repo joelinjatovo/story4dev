@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Web\Security;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Entity\User;
 use App\Service\TokenGenerator;
 
-class SecurityController extends AbstractController
+class LoginFormController extends AbstractController
 {
     private $view = 'security/login.html.twig';
 
