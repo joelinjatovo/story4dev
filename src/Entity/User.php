@@ -25,7 +25,7 @@ use App\Entity\Contribution\ActivityContribution;
  * @UniqueEntity("username")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
-class User implements UserInterface
+class User implements UserInterface, \Serializable
 {
     const STATUS_PING    = 'ping';
     const STATUS_ACTIVE  = 'active';
@@ -914,5 +914,29 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+    
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->password,
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->password,
+            // $this->salt
+        ) = unserialize($serialized);
     }
 }

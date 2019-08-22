@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TokenRepository")
+ * @ORM\Table(name="token")
  */
 class Token
 {
@@ -65,6 +66,11 @@ class Token
         $this->expiresAt = $date;
 
         return $this;
+    }
+    
+    public function isExpired(): bool
+    {
+        return $this->getExpiresAt() <= new \DateTime();
     }
     
     public function renewExpiresAt()

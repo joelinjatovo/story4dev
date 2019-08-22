@@ -25,6 +25,13 @@ class ProjectController extends AbstractFOSRestController
         $projects = $repository->findAll();
         return $this->handleView($this->view($projects));
     }
+    /**
+     * @Rest\Get("/p")
+     */
+    public function p()
+    {
+        return $this->handleView($this->view(["p"]));
+    }
     
     /**
      * @Rest\Post("/project")

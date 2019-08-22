@@ -17,10 +17,10 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
     public function createToken(Request $request, $providerKey)
     {
         // look for an apikey query parameter
-        $apiKey = $request->query->get('token');
+        //$apiKey = $request->query->get('token');
 
         // or if you want to use an "apikey" header, then do something like this:
-        //$apiKey = $request->headers->get('X-API-KEY');
+        $apiKey = $request->headers->get('X-API-KEY');
 
         if (!$apiKey) {
             throw new BadCredentialsException();

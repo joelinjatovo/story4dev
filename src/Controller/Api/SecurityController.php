@@ -13,15 +13,15 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/token", name="api_token")
+     * @Route("/token", name="api_token", methods="POST")
      */
     public function token(Request $request)
     {
-        return new JsonResponse(['token' => $request->query]);
+        //return new JsonResponse(['token' => $request->getUser()]);
         
         $user = $this->getDoctrine()
             ->getRepository(\App\Entity\User::class)
-            ->findOneBy(['email' => $request->getUser()]);
+            ->findOneBy(['username' => $request->getUser()]);
         
         if (!$user) {
             throw $this->createNotFoundException();
@@ -34,6 +34,15 @@ class SecurityController extends AbstractController
             throw new BadCredentialsException();
         }
         
+        $token = $this->get('lexik_jwt_authentication.encoder')
+            ->encode([
+                'username' => $user->getUsername(),
+                'exp' => time() + 3600 // 1 hour expiration
+            ]);
+        
+        return new JsonResponse(['token' => $token]);
+        
+        /*
         $token = new \App\Entity\Token();
         $token->setUser($user);
         
@@ -42,6 +51,7 @@ class SecurityController extends AbstractController
         $entityManager->flush();
         
         return new JsonResponse(['token' => $token->getToken()]);
+        */
 
     }
     /**

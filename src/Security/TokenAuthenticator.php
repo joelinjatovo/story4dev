@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
@@ -30,7 +31,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function supports(Request $request)
     {
-        return $request->headers->has('X-AUTH-TOKEN');
+        return $request->headers->has('Authorization') && 0 === strpos($request->headers->get('Authorization'), 'Bearer ');
     }
 
     /**
@@ -39,26 +40,36 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        return [
-            'token' => $request->headers->get('X-AUTH-TOKEN'),
-        ];
+        $authorizationHeader = $request->headers->get('Authorization');
+        
+        return substr($authorizationHeader, 7); // skip beyond "Bearer "
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        $apiToken = $credentials['token'];
-
-        if (null === $apiToken) {
-            return;
-        }
-
         // if a User object, checkCredentials() is called
         $token = $this->em->getRepository(Token::class)
-            ->findOneBy(['token' => $apiToken]);
+            ->findOneBy(['token' => $credentials]);
         
-        if($token && $token->getUser()){
-            return $token->getUser();
+        if (!$token) {
+            throw new CustomUserMessageAuthenticationException(
+                'Invalid API Token'
+            );
         }
+        
+        if ($token->isExpired()) {
+            throw new CustomUserMessageAuthenticationException(
+                'Token expired'
+            );
+        }
+        
+        if(!$token->getUser()){
+            throw new CustomUserMessageAuthenticationException(
+                'Unkown user'
+            );
+        }
+        
+        return $token->getUser();
     }
 
     public function checkCredentials($credentials, UserInterface $user)
@@ -80,9 +91,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     {
         $data = [
             'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
-
-            // or to translate this message
-            // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
         ];
 
         return new JsonResponse($data, Response::HTTP_FORBIDDEN);
@@ -94,7 +102,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function start(Request $request, AuthenticationException $authException = null)
     {
         $data = [
-            // you might translate this message
             'message' => 'Authentication Required'
         ];
 
