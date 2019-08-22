@@ -32,11 +32,11 @@ class ProjectController extends AbstractFOSRestController
         ]);
     }
     /**
-     * @Rest\Get("/p")
+     * @Rest\Post("/p")
      */
-    public function p()
+    public function p(Request $request)
     {
-        return $this->handleView($this->view(["p"]));
+        return $this->handleView($this->view($request->request));
     }
     
     /**

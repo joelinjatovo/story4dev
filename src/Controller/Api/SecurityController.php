@@ -13,7 +13,7 @@ use FOS\RestBundle\Controller\Annotations\Version;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 /**
- * @Version("v2")
+ * @Version("v1")
  */
 class SecurityController extends AbstractController
 {
