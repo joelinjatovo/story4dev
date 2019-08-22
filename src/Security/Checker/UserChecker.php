@@ -18,7 +18,7 @@ class UserChecker implements UserCheckerInterface
         }
 
         // user is deleted, show a generic Account Not Found message.
-        if ($user->isDeleted() || true) {
+        if ($user->isDeleted()) {
             throw new AccountDeletedException('This account has been deleted.');
         }
     }
