@@ -2,21 +2,22 @@
 
 namespace App\Entity;
 
+use App\Entity\Meta\UserMeta;
+use App\Entity\Contribution\ProjectContribution;
+use App\Entity\Contribution\ActivityContribution;
+
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
-
-use App\Entity\Meta\UserMeta;
-use App\Entity\Contribution\ProjectContribution;
-use App\Entity\Contribution\ActivityContribution;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -42,21 +43,25 @@ class User implements UserInterface, \Serializable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"full", "raw", "project"})
      */
     private $id;
     
     /**
      * @ORM\Column(name="facebook_id",type="string", nullable=true)
+     * @Groups({"full"})
      */
     protected $facebookId;
 
     /**
      * @ORM\Column(name="google_id", type="string", nullable=true)
+     * @Groups({"full", "raw"})
      */
     protected $googleId;
     
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"full", "raw"})
      */
     private $avatar;
 
@@ -72,6 +77,7 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your username cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(type="string", length=100, unique=true)
+     * @Groups({"full", "raw"})
      */
     private $username;
 
@@ -83,11 +89,13 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your email cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"full", "raw"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"full", "raw"})
      */
     private $roles = [];
 
@@ -103,9 +111,10 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-    * @Gedmo\Slug(fields={"username"})
-    * @ORM\Column(type="string", length=255, nullable=false, unique=true)
-    */
+     * @Gedmo\Slug(fields={"username"})
+     * @ORM\Column(type="string", length=255, nullable=false, unique=true)
+     * @Groups({"full", "raw"})
+     */
     private $slug;
     
     /**
@@ -115,6 +124,7 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your fullname cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="fullname", type="string", length=100, nullable=true)
+     * @Groups({"full", "raw"})
      */
     private $fullname;
     
@@ -125,12 +135,14 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your title cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="title", type="string", length=100, nullable=true)
+     * @Groups({"full", "raw"})
      */
     private $title;
     
     /**
      * @Assert\Type("string")
      * @ORM\Column(name="presentation", type="string", nullable=true)
+     * @Groups({"full", "raw"})
      */
     private $presentation;
     
@@ -141,6 +153,7 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your phone number cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="phone", type="string", length=50, nullable=true)
+     * @Groups({"full", "raw"})
      */
     private $phone;
     
@@ -151,16 +164,19 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your status cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="status", type="string", length=10, nullable=true)
+     * @Groups({"full"})
      */
     private $status;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
+     * @Groups({"full"})
      */
     private $isActive;
 
     /**
      * @ORM\Column(name="is_verified", type="boolean")
+     * @Groups({"full"})
      */
     private $isVerified;
 
@@ -529,6 +545,11 @@ class User implements UserInterface, \Serializable
         $this->agree = $agree;
 
         return $this;
+    }
+    
+    public function isDeleted()
+    {
+        return ! is_null( $this->deletedAt );
     }
 
     /**

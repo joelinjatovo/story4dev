@@ -10,6 +10,9 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation as Serializer;
 
 use App\Entity\Meta\ProjectMeta;
 use App\Entity\Contribution\ProjectContribution;
@@ -35,12 +38,14 @@ class Project
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
+     * @Groups({"full", "project", "raw"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Gedmo\Versioned
+     * @Groups({"full", "project", "raw"})
      */
     private $picture;
 
@@ -50,32 +55,42 @@ class Project
     private $pictureFile;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "The title cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
+     * @Groups({"full", "project", "raw"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
+     * @Groups({"full", "project", "raw"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned
+     * @Groups({"full", "project", "raw"})
      */
     private $budget;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
+     * @Groups({"full", "project", "raw"})
      */
     private $start_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
+     * @Groups({"full", "project", "raw"})
      */
     private $end_at;
     
@@ -83,12 +98,14 @@ class Project
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
      * @Gedmo\Versioned
+     * @Groups({"full", "project", "raw"})
      */
     private $author;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Periodicity", inversedBy="projects")
      * @Gedmo\Versioned
+     * @Groups({"full", "project"})
      */
     private $periodicity;
 

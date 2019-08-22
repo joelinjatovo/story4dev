@@ -13,10 +13,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\User;
 use App\Entity\Result;
 use App\Entity\Project;
+use App\Entity\Report;
 use App\Entity\Activity;
 use App\Entity\Iteration;
 use App\Form\ActivityType;
 use App\Form\ProjectType;
+use App\Form\ReportType;
 use App\Form\ResultType;
 use App\Service\PaginatorService;
 
@@ -30,7 +32,17 @@ class ReportController extends AbstractController
      */
     public function index(User $user, Project $project)
     {
-        return $this->render('report/create.html.twig');
+        $report = new Report();
+        $report->setProject($project);
+        $report->setAuthor($this->getUser());
+        
+        $form = $this->createForm(ReportType::class, $report, array('project' => $project));
+        
+        return $this->render('report/create.html.twig', [
+            'user'    => $user, 
+            'project' => $project, 
+            'form'    => $form->createView()
+        ]);
     }
     
     /**
@@ -38,27 +50,155 @@ class ReportController extends AbstractController
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function create(User $user, Project $project, ValidatorInterface $validator): Response
+    public function create(User $user, Project $project, Request $request): Response
     {
-        // you can fetch the EntityManager via $this->getDoctrine()
-        // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
-        $entityManager = $this->getDoctrine()->getManager();
-
         $report = new Report();
-        $report->setTitle('Keyboard');
-        $report->setDescription('Ergonomic and stylish!');
+        $report->setProject($project);
+        $report->setAuthor($this->getUser());
         
-        $errors = $validator->validate($report);
-        if (count($errors) > 0) {
-            return new Response((string) $errors, 400);
+        $form = $this->createForm(ReportType::class, $report, array('project' => $project));
+        
+        $form->handleRequest($request);
+        if ( $form->isSubmitted() ) {
+            if( $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                
+                // remove the relationship between the tag and the Task
+                foreach ($report->getResults() as $result) {
+                    $result->setAuthor($this->getUser());
+                    $entityManager->persist($result);
+                }
+                
+                $entityManager->persist($report);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Report Created! Knowledge is power!');
+            }else{
+                $this->addFlash('error', 'Report Not Created! Request not valide!');
+            }
         }
+        
+        return $this->redirectToRoute('report_index', [
+            'slug'       => $user->getSlug(), 
+            'project_id' => $project->getId(), 
+        ]);
+    }
+    
+    /**
+     * @Route("/{slug}/project/{project_id}/report/{report_id}", name="show", methods="GET", requirements={"project_id"="\d+","report_id"="\d+"})
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("report", options={"mapping": {"report_id": "id"}})
+     */
+    public function show(User $user, Project $project, Report $report)
+    {
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+        
+        if($report->getProject() != $project ){
+            throw $this->createNotFoundException('The project does not match');
+        }
+        
+        return $this->render('report/show.html.twig', [
+            'user'    => $user,
+            'project' => $project,
+            'report'  => $report
+        ]);
+    }
+    
+    /**
+     * @Route("/{slug}/project/{project_id}/report/edit/{id}", name="edit", methods="GET", requirements={"project_id"="\d+","id"="\d+"})
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("report", options={"mapping": {"id": "id"}})
+     */
+    public function edit(User $user, Project $project, Report $report)
+    {
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+        
+        if($report->getProject() != $project ){
+            throw $this->createNotFoundException('The project does not match');
+        }
+        
+        $form = $this->createForm(ReportType::class, $report, array('project' => $project));
+        
+        return $this->render('report/edit.html.twig', [
+            'user'    => $user, 
+            'project' => $project, 
+            'report'  => $report, 
+            'form'    => $form->createView()
+        ]);
+    }
+    
+    /**
+     * @Route("/{slug}/project/{project_id}/report/edit/{id}", name="update", methods="POST", requirements={"project_id"="\d+","id"="\d+"})
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("report", options={"mapping": {"id": "id"}})
+     */
+    public function update(User $user, Project $project, Report $report, Request $request)
+    {
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+        
+        if($report->getProject() != $project ){
+            throw $this->createNotFoundException('The project does not match');
+        }
+        
+        $originalResults = new ArrayCollection();
+        foreach ($report->getResults() as $result) {
+            $originalResults->add($result);
+        }
+        
+        $form = $this->createForm(ReportType::class, $report, array('project' => $project));
+        
+        $form->handleRequest($request);
+        
+        if ( $form->isSubmitted() ) {
+            if( $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                
+                $entityManager->persist($report);
+                $entityManager->flush();
 
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($report);
-
-        // actually executes the queries (i.e. the INSERT query)
-        $entityManager->flush();
-
-        return new Response('Saved new report with id '.$report->getId());
+                $this->addFlash('success', 'Report Updated! Knowledge is power!');
+            }else{
+                $this->addFlash('error', 'Report Not Updated! Request not valide!');
+            }
+            
+        }
+        
+        return $this->redirectToRoute('report_edit', [
+            'slug'       => $user->getSlug(), 
+            'project_id' => $project->getId(), 
+            'id'         => $report->getId(), 
+        ]);
+    }
+    
+    
+    /**
+     * @Route("/{slug}/project/{project_id}/reports/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     */
+    public function list(User $user, Project $project, $page = 1)
+    {
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $reports = $entityManager->getRepository(Report::class)->findAll();
+        
+        return $this->render('report/list.html.twig', [
+            'user'       => $user,
+            'project'    => $project,
+            'reports' => $reports
+        ]);
     }
 }

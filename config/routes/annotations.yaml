@@ -1,7 +1,7 @@
 rest_controller:
     resource: ../../src/Controller/Api/
     type: annotation
-    prefix: /api
+    prefix: /api/{version}
 web_controller:
     resource: ../../src/Controller/Web/
     type: annotation

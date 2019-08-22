@@ -7,13 +7,18 @@ use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
+use FOS\RestBundle\Controller\Annotations\Version;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
+/**
+ * @Version("v2")
+ */
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/token", name="api_token", methods="POST")
+     * @Rest\Post("/token")
      */
     public function token(Request $request)
     {

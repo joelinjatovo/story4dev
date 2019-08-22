@@ -27,7 +27,7 @@ class Result
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
      */
     private $title;
@@ -39,7 +39,7 @@ class Result
     private $description;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=false)
      * @Gedmo\Versioned
      */
     private $value;
@@ -55,6 +55,12 @@ class Result
      * @Gedmo\Versioned
      */
     private $report;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Indicator", inversedBy="goals")
+     * @Gedmo\Versioned
+     */
+    private $indicator;
 
     public function getId(): ?int
     {
@@ -90,7 +96,7 @@ class Result
         return $this->value;
     }
 
-    public function setValue(float $value): self
+    public function setValue(?float $value): self
     {
         $this->value = $value;
 
@@ -117,6 +123,18 @@ class Result
     public function setReport(?Report $report): self
     {
         $this->report = $report;
+
+        return $this;
+    }
+
+    public function getIndicator(): ?Indicator
+    {
+        return $this->indicator;
+    }
+
+    public function setIndicator(?Indicator $indicator): self
+    {
+        $this->indicator = $indicator;
 
         return $this;
     }

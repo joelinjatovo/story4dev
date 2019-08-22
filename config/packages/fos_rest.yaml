@@ -1,5 +1,6 @@
 # Read the documentation: https://symfony.com/doc/master/bundles/FOSRestBundle/index.html
 fos_rest:
+    versioning: true
 #    routing_loader:
 #        default_format: json
 #        include_format: false

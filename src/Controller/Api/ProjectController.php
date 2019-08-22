@@ -6,24 +6,29 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\AbstractFOSRestController ;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Controller\Annotations\Version;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use App\Entity\Project;
 use App\Form\ProjectType;
 
 /**
+ * @Version("v1")
  * @Route(name="api_")
  */
 class ProjectController extends AbstractFOSRestController 
 {
     /**
-     * @Rest\Get("/projects")
+     * @Rest\Get("/projects", condition="request.attributes.get('version') == 'v1'")
      */
-    public function list()
+    public function list(Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Project::class);
         $projects = $repository->findAll();
-        return $this->handleView($this->view($projects));
+        
+        return $this->json($projects, 200, [], [
+            'groups' => ['project'],
+        ]);
     }
     /**
      * @Rest\Get("/p")
@@ -34,7 +39,7 @@ class ProjectController extends AbstractFOSRestController
     }
     
     /**
-     * @Rest\Post("/project")
+     * @Rest\Post("/project", condition="request.attributes.get('version') == 'v1'")
      */
     public function create(Request $request)
     {

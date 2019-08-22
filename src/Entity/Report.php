@@ -35,6 +35,11 @@ class Report
     private $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "The title cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
      */
@@ -65,7 +70,7 @@ class Report
     private $project;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="report", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $results;
 
