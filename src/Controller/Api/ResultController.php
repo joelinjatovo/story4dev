@@ -34,7 +34,7 @@ class ResultController extends AbstractController
         
         $form->submit($data);
         
-        if (!$form->isValid()) {
+        if ($form->isSubmitted() && !$form->isValid()) {
             
             return $this->json([
                         'status' => 'error',

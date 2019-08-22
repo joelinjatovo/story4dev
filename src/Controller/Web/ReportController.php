@@ -63,7 +63,6 @@ class ReportController extends AbstractController
             if( $form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
                 
-                // remove the relationship between the tag and the Task
                 foreach ($report->getResults() as $result) {
                     $result->setAuthor($this->getUser());
                     $entityManager->persist($result);

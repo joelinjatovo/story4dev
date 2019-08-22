@@ -72,8 +72,8 @@ security:
                 entry_point: App\Security\LoginFormAuthenticator
             provider: user_db_provider
     access_control:
-        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/token$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/register$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/login$,           roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/token$,    roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/register$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api,              roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/admin,            roles: ROLE_ADMIN }

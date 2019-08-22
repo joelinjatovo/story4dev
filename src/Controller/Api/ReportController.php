@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations\Version;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
+use App\Service\FormError;
 use App\Entity\Report;
 use App\Form\ReportType;
 
@@ -23,7 +24,7 @@ class ReportController extends AbstractController
     /**
      * @Rest\Post("/report", name="create")
      */
-    public function create(Request $request)
+    public function create(Request $request, FormError $formError)
     {
         $data = json_decode($request->getContent(), true);
         
@@ -33,22 +34,30 @@ class ReportController extends AbstractController
         
         $form->submit($data);
         
-        if (!$form->isValid()) {
-            
+        if ($form->isSubmitted() && !$form->isValid() ) {
             return $this->json([
-                        'status' => 'error',
-                        'errors' => $form->getErrors(),
-                    ], JsonResponse::HTTP_BAD_REQUEST);
-            
+                'status' => 'error',
+                'errors' => $formError->getErrorMessages($form),
+            ], JsonResponse::HTTP_BAD_REQUEST);
         }
         
-        $result->setAuthor($this->getUser());
-        
         $em = $this->getDoctrine()->getManager();
+        
+        foreach ($report->getResults() as $result) {
+            $result->setAuthor($this->getUser());
+            $em->persist($result);
+        }
+        
+        $report->setAuthor($this->getUser());
+        
         $em->persist($report);
+        
         $em->flush();
         
-        return $this->json($request->request);
+        return $this->json([
+                        'status'  => 'success',
+                        'message' => "Report successfully created",
+                    ]);
     }
 
 }
