@@ -26,6 +26,8 @@ class ProjectController extends AbstractController
      */
     public function index()
     {
+        $project = new Project();
+        
         return $this->render('project/create.html.twig');
     }
     
@@ -34,13 +36,12 @@ class ProjectController extends AbstractController
      */
     public function create(ValidatorInterface $validator): Response
     {
+        $project = new Project();
+        
         // you can fetch the EntityManager via $this->getDoctrine()
         // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
         $entityManager = $this->getDoctrine()->getManager();
 
-        $project = new Project();
-        $project->setTitle('Keyboard');
-        $project->setDescription('Ergonomic and stylish!');
         
         $errors = $validator->validate($project);
         if (count($errors) > 0) {
@@ -63,6 +64,8 @@ class ProjectController extends AbstractController
      */
     public function show(User $user, Project $project)
     {
+        $this->denyAccessUnlessGranted('view', $project);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -84,6 +87,8 @@ class ProjectController extends AbstractController
      */
     public function edit(User $user, Project $project)
     {
+        $this->denyAccessUnlessGranted('edit', $project);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -104,6 +109,8 @@ class ProjectController extends AbstractController
      */
     public function update(User $user, Request $request, Project $project)
     {
+        $this->denyAccessUnlessGranted('edit', $project);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -192,6 +199,8 @@ class ProjectController extends AbstractController
      */
     public function remove(User $user, Project $project)
     {
+        $this->denyAccessUnlessGranted('remove', $project);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }

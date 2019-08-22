@@ -19,11 +19,12 @@ use App\Form\ProjectType;
 class ProjectController extends AbstractFOSRestController 
 {
     /**
-     * @Rest\Get("/projects", condition="request.attributes.get('version') == 'v1'")
+     * @Rest\Get("/projects")
      */
     public function list(Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Project::class);
+        
         $projects = $repository->findAll();
         
         return $this->json($projects, 200, [], [
