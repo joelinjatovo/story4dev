@@ -22,6 +22,12 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+    
+    app.jwt_token_authenticator:
+        autowire: true
+        autoconfigure: false
+        class: App\Security\JWTTokenAuthenticator
+        parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
 
 #sensio_framework_extra.view.listener:
     #alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener

@@ -10,7 +10,7 @@ security:
     providers:
         chain_provider:
             chain:
-                providers: [in_memory, user_db_provider]
+                providers: [in_memory, user_db_provider, api_key_user_provider]
         in_memory:
             memory:
                 users:
@@ -20,6 +20,8 @@ security:
         user_db_provider:
             entity:
                 class: App\Entity\User
+        api_key_user_provider:
+            id: App\Security\Provider\ApiKeyUserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -33,7 +35,11 @@ security:
                 check_path: /api/token
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            provider: chain_provider
+            provider: user_db_provider
+        refresh:
+            pattern:  ^/api/token/refresh
+            stateless: true
+            anonymous: true
         api_register:
             pattern:  ^/api/register
             stateless: true
@@ -45,7 +51,7 @@ security:
             provider: chain_provider
             guard:
                 authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator
+                    - app.jwt_token_authenticator
         main:
             anonymous: true
             logout:
