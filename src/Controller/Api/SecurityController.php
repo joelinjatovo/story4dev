@@ -17,8 +17,6 @@ class SecurityController extends AbstractController
      */
     public function token(Request $request)
     {
-        //return new JsonResponse(['token' => $request->getUser()]);
-        
         $user = $this->getDoctrine()
             ->getRepository(\App\Entity\User::class)
             ->findOneBy(['username' => $request->getUser()]);
@@ -41,19 +39,8 @@ class SecurityController extends AbstractController
             ]);
         
         return new JsonResponse(['token' => $token]);
-        
-        /*
-        $token = new \App\Entity\Token();
-        $token->setUser($user);
-        
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($token);
-        $entityManager->flush();
-        
-        return new JsonResponse(['token' => $token->getToken()]);
-        */
-
     }
+    
     /**
      *
      * @Route("/login/check", name="api_login_check")
