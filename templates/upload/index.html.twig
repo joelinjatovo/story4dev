@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UploadController!{% endblock %}
+
+{% block content %}
+    <form id="upload-form">
+        <label for="name">Name</label> <input id="name" type="text" name="name"><br>
+        <label for="file">File</label> <input id="file" type="file" name="file">
+        <input type="submit">
+    </form>
+    <p>Progress: <span id="progress-value"></span>%</p>
+    <p id="upload-complete"></p>
+    <p id="errors"></p>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+document.getElementById('upload-form').addEventListener('submit', onSubmit);
+
+function onSubmit(event) {
+    event.preventDefault();
+
+    var formData = new FormData();
+    formData.append("upload[file]", document.getElementById("file").files[0]);
+    formData.append("upload[name]", document.getElementById("name").value);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/u/upload");
+    //xhr.addEventListener('load', onRequestComplete, false);
+    //xhr.upload.addEventListener("load", onUploadComplete, false);
+    xhr.upload.addEventListener("progress", onUploadProgress, false);
+    xhr.send(formData);
+}
+
+function onUploadProgress(event) {
+    if (event.lengthComputable) {
+        var percentComplete = event.loaded / event.total;
+        document.getElementById('progress-value').textContent = parseFloat(percentComplete*100).toFixed(2);
+    }
+}
+</script>
+{% endblock %}
