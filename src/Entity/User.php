@@ -25,6 +25,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @UniqueEntity("email")
  * @UniqueEntity("username")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ * @Vich\Uploadable
  */
 class User implements UserInterface, \Serializable
 {

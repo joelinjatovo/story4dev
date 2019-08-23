@@ -4,10 +4,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File as SysFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FileRepository")
+ * @Vich\Uploadable
  */
 class File
 {
@@ -31,8 +34,7 @@ class File
      *     mimeTypes={"image/jpeg", "image/png", "image/gif", "application/x-gzip", "application/zip"},
      *     maxSize="1074000000"
      * )
-     *
-     * @var UploadedFile
+     * @Vich\UploadableField(mapping="default", fileNameProperty="name")
      */
     private $file;
 
@@ -70,12 +72,12 @@ class File
         return $this;
     }
 
-    public function getFile(): ?UploadedFile
+    public function getFile(): ?SysFile
     {
         return $this->file;
     }
 
-    public function setFile(?UploadedFile $file): self
+    public function setFile(?SysFile $file): self
     {
         $this->file = $file;
 

@@ -4,36 +4,33 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('avatar')
+            ->add('avatarFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => true, 
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Upload File'
+            ])
+            /*
             ->add('username')
             ->add('email')
-            ->add('roles')
             ->add('password')
-            ->add('slug')
             ->add('fullname')
             ->add('title')
             ->add('presentation')
             ->add('phone')
-            ->add('status')
-            ->add('isActive')
-            ->add('isVerified')
-            ->add('confirmToken')
-            ->add('confirmedAt')
-            ->add('resetToken')
-            ->add('resetedAt')
-            ->add('activedAt')
-            ->add('createdAt')
-            ->add('updatedAt')
-            ->add('deletedAt')
-            ->add('address')
+            */
         ;
     }
 

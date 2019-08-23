@@ -22,6 +22,7 @@ use App\Entity\Contribution\ProjectContribution;
  * @ORM\Table(name="projects")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @Gedmo\Loggable
+ * @Vich\Uploadable
  */
 class Project
 {
