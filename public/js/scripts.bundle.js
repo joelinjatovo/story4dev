@@ -1,289 +1,9874 @@
 "use strict";
-var KTApp=function(){
-    var t={},
-        e=function(t){
-            var e=t.data("skin")?"tooltip-"+t.data("skin"):"",a="auto"==t.data("width")?"tooltop-auto-width":"",
-                n=t.data("trigger")?t.data("trigger"):"hover";
-            t.data("placement")&&t.data("placement");
-            t.tooltip({trigger:n,template:'<div class="tooltip '+e+" "+a+'" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'})
-        },
-        a=function(){
-            $('[data-toggle="kt-tooltip"]').each(function(){e($(this))})
-        },
-        n=function(t){
-            var e=t.data("skin")?"popover-"+t.data("skin"):"",
-            a=t.data("trigger")?t.data("trigger"):"hover";
-            t.popover({trigger:a,template:'<div class="popover '+e+'" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>'})
-        },
-        i=function(){
-            $('[data-toggle="kt-popover"]').each(function(){n($(this))})
-        },
-        o=function(t,e){t=$(t),new KTPortlet(t[0],e)},
-        l=function(){
-            $('[data-ktportlet="true"]').each(function(){
-                var t=$(this);
-                !0!==t.data("data-ktportlet-initialized")&&(o(t,{}),t.data("data-ktportlet-initialized",!0))
-            })
-        },
-        r=function(){new Sticky('[data-sticky="true"]')};
-    return{
-        init:function(e){e&&e.colors&&(t=e.colors),KTApp.initComponents()},
-        initComponents:function(){
-            $('[data-scroll="true"]').each(function(){
-                var t=$(this);
-                KTUtil.scrollInit(this,{
-                    mobileNativeScroll:!0,
-                    handleWindowResize:!0,
-                    rememberPosition:"true"==t.data("remember-position"),
-                    height:function(){
-                        return KTUtil.isInResponsiveRange("tablet-and-mobile")&&t.data("mobile-height")?t.data("mobile-height"):t.data("height")}
-                })
-            }),
-            a(),
-            i(),
-            $("body").on("click","[data-close=alert]",function(){$(this).closest(".alert").hide()}),
-            l(),
-            $(".custom-file-input").on("change",function(){
-                var t=$(this).val();
-                $(this).next(".custom-file-label").addClass("selected").html(t)
-            }),
-            r(),
-            $("body").on("show.bs.dropdown",function(t){
-                if(0!==$(t.target).find("[data-attach='body']").length){
-                    var e=$(t.target).find(".dropdown-menu");
-                    $("body").append(e.detach()),
-                        e.css("display","block"),
-                        e.position({my:"right top",at:"right bottom",of:$(t.relatedTarget)})
+
+/**
+ * @class KApp
+ */
+
+var KTApp = function() {
+    /** @type {object} colors State colors **/
+    var colors = {};
+
+    var initTooltip = function(el) {
+        var skin = el.data('skin') ? 'tooltip-' + el.data('skin') : '';
+        var width = el.data('width') == 'auto' ? 'tooltop-auto-width' : '';
+        var triggerValue = el.data('trigger') ? el.data('trigger') : 'hover';
+        var placement = el.data('placement') ? el.data('placement') : 'left';
+
+        el.tooltip({
+            trigger: triggerValue,
+            template: '<div class="tooltip ' + skin + ' ' + width + '" role="tooltip">\
+                <div class="arrow"></div>\
+                <div class="tooltip-inner"></div>\
+            </div>'
+        });
+    }
+
+    var initTooltips = function() {
+        // init bootstrap tooltips
+        $('[data-toggle="kt-tooltip"]').each(function() {
+            initTooltip($(this));
+        });
+    }
+
+    var initPopover = function(el) {
+        var skin = el.data('skin') ? 'popover-' + el.data('skin') : '';
+        var triggerValue = el.data('trigger') ? el.data('trigger') : 'hover';
+
+        el.popover({
+            trigger: triggerValue,
+            template: '\
+            <div class="popover ' + skin + '" role="tooltip">\
+                <div class="arrow"></div>\
+                <h3 class="popover-header"></h3>\
+                <div class="popover-body"></div>\
+            </div>'
+        });
+    }
+
+    var initPopovers = function() {
+        // init bootstrap popover
+        $('[data-toggle="kt-popover"]').each(function() {
+            initPopover($(this));
+        });
+    }
+
+    var initFileInput = function() {
+        // init bootstrap popover
+        $('.custom-file-input').on('change', function() {
+            var fileName = $(this).val();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+    }
+
+    var initPortlet = function(el, options) {
+        // init portlet tools
+        var el = $(el);
+        var portlet = new KTPortlet(el[0], options);
+    }
+
+    var initPortlets = function() {
+        // init portlet tools
+        $('[data-ktportlet="true"]').each(function() {
+            var el = $(this);
+
+            if (el.data('data-ktportlet-initialized') !== true) {
+                initPortlet(el, {});
+                el.data('data-ktportlet-initialized', true);
+            }
+        });
+    }
+
+    var initScroll = function() {
+        $('[data-scroll="true"]').each(function() {
+            var el = $(this);
+            KTUtil.scrollInit(this, {
+                mobileNativeScroll: true,
+                handleWindowResize: true,
+                rememberPosition: (el.data('remember-position') == 'true' ? true : false),
+                height: function() {
+                    if (KTUtil.isInResponsiveRange('tablet-and-mobile') && el.data('mobile-height')) {
+                        return el.data('mobile-height');
+                    } else {
+                        return el.data('height');
+                    }
                 }
-            }),
-            $("body").on("hide.bs.dropdown",function(t){
-                if(0!==$(t.target).find("[data-attach='body']").length){
-                    var e=$(t.target).find(".dropdown-menu");
-                    $(t.target).append(e.detach()),e.hide()}
-            })
+            });
+        });
+    }
+
+    var initAlerts = function() {
+        // init bootstrap popover
+        $('body').on('click', '[data-close=alert]', function() {
+            $(this).closest('.alert').hide();
+        });
+    }
+
+    var initSticky = function() {
+        var sticky = new Sticky('[data-sticky="true"]');
+    }
+
+    var initAbsoluteDropdown = function(context) {
+        var dropdownMenu;
+
+        if (!context) {
+            return;
+        }
+
+        $('body').on('show.bs.dropdown', context, function(e) {
+        	dropdownMenu = $(e.target).find('.dropdown-menu');
+        	$('body').append(dropdownMenu.detach());
+        	dropdownMenu.css('display', 'block');
+        	dropdownMenu.position({
+        		'my': 'right top',
+        		'at': 'right bottom',
+        		'of': $(e.relatedTarget),
+        	});
+        }).on('hide.bs.dropdown', context, function(e) {
+        	$(e.target).append(dropdownMenu.detach());
+        	dropdownMenu.hide();
+        });
+    }
+
+    var initAbsoluteDropdowns = function() {
+        $('body').on('show.bs.dropdown', function(e) {
+            if ( $(e.target).find("[data-attach='body']").length === 0) {
+                return;
+            }
+
+            var dropdownMenu = $(e.target).find('.dropdown-menu');
+
+            $('body').append(dropdownMenu.detach());
+            dropdownMenu.css('display', 'block');
+            dropdownMenu.position({
+                'my': 'right top',
+                'at': 'right bottom',
+                'of': $(e.relatedTarget)
+            });
+        });
+
+        $('body').on('hide.bs.dropdown', function(e) {
+            if ( $(e.target).find("[data-attach='body']").length === 0) {
+                return;
+            }
+
+            var dropdownMenu = $(e.target).find('.dropdown-menu');
+
+            $(e.target).append(dropdownMenu.detach());
+            dropdownMenu.hide();
+        });
+    }
+
+    return {
+        init: function(options) {
+            if (options && options.colors) {
+                colors = options.colors;
+            }
+
+            KTApp.initComponents();
         },
-        initTooltips:function(){a()},
-        initTooltip:function(t){e(t)},
-        initPopovers:function(){i()},
-        initPopover:function(t){n(t)},
-        initPortlet:function(t,e){o(t,e)},
-        initPortlets:function(){l()},
-        initSticky:function(){r()},
-        initAbsoluteDropdown:function(t){
-            !function(t){
-                var e;
-                t&&$("body").on("show.bs.dropdown",t,function(t){
-                    e=$(t.target).find(".dropdown-menu"),
-                        $("body").append(e.detach()),
-                        e.css("display","block"),
-                        e.position({my:"right top",at:"right bottom",of:$(t.relatedTarget)})
-                }).on("hide.bs.dropdown",t,function(t){$(t.target).append(e.detach()),e.hide()})
-            }(t)
+
+        initComponents: function() {
+            initScroll();
+            initTooltips();
+            initPopovers();
+            initAlerts();
+            initPortlets();
+            initFileInput();
+            initSticky();
+            initAbsoluteDropdowns();
         },
-        block:function(t,e){var a,n=$(t),i='<div class="kt-spinner '+((e=$.extend(!0,{opacity:.05,overlayColor:"#000000",type:"",size:"",state:"brand",centerX:!0,centerY:!0,message:"",shadow:!0,width:"auto"},e)).type?"kt-spinner--"+e.type:"")+" "+(e.state?"kt-spinner--"+e.state:"")+" "+(e.size?"kt-spinner--"+e.size:"")+'"></div';if(e.message&&e.message.length>0){var o="blockui "+(!1===e.shadow?"blockui":"");a='<div class="'+o+'"><span>'+e.message+"</span><span>"+i+"</span></div>";n=document.createElement("div");KTUtil.get("body").prepend(n),KTUtil.addClass(n,o),n.innerHTML="<span>"+e.message+"</span><span>"+i+"</span>",e.width=KTUtil.actualWidth(n)+10,KTUtil.remove(n),"body"==t&&(a='<div class="'+o+'" style="margin-left:-'+e.width/2+'px;"><span>'+e.message+"</span><span>"+i+"</span></div>")}else a=i;var l={message:a,centerY:e.centerY,centerX:e.centerX,css:{top:"30%",left:"50%",border:"0",padding:"0",backgroundColor:"none",width:e.width},overlayCSS:{backgroundColor:e.overlayColor,opacity:e.opacity,cursor:"wait",zIndex:"10"},onUnblock:function(){n&&n[0]&&(KTUtil.css(n[0],"position",""),KTUtil.css(n[0],"zoom",""))}};"body"==t?(l.css.top="50%",$.blockUI(l)):(n=$(t)).block(l)},unblock:function(t){t&&"body"!=t?$(t).unblock():$.unblockUI()},
-        blockPage:function(t){return KTApp.block("body",t)},
-        unblockPage:function(){return KTApp.unblock("body")},
-        progress:function(t,e){var a="kt-spinner kt-spinner--"+(e&&e.skin?e.skin:"light")+" kt-spinner--"+(e&&e.alignment?e.alignment:"right")+" kt-spinner--"+(e&&e.size?"kt-spinner--"+e.size:"");KTApp.unprogress(t),$(t).addClass(a),$(t).data("progress-classes",a)},
-        unprogress:function(t){$(t).removeClass($(t).data("progress-classes"))},
-        getStateColor:function(e){return t.state[e]},
-        getBaseColor:function(e,a){return t.base[e][a-1]}
+
+        initTooltips: function() {
+            initTooltips();
+        },
+
+        initTooltip: function(el) {
+            initTooltip(el);
+        },
+
+        initPopovers: function() {
+            initPopovers();
+        },
+
+        initPopover: function(el) {
+            initPopover(el);
+        },
+
+        initPortlet: function(el, options) {
+            initPortlet(el, options);
+        },
+
+        initPortlets: function() {
+            initPortlets();
+        },
+
+        initSticky: function() {
+            initSticky();
+        },
+
+        initAbsoluteDropdown: function(context) {
+            initAbsoluteDropdown(context);
+        },
+
+        block: function(target, options) {
+            var el = $(target);
+
+            options = $.extend(true, {
+                opacity: 0.05,
+                overlayColor: '#000000',
+                type: '',
+                size: '',
+                state: 'brand',
+                centerX: true,
+                centerY: true,
+                message: '',
+                shadow: true,
+                width: 'auto'
+            }, options);
+
+            var html;
+            var version = options.type ? 'kt-spinner--' + options.type : '';
+            var state = options.state ? 'kt-spinner--' + options.state : '';
+            var size = options.size ? 'kt-spinner--' + options.size : '';
+            var spinner = '<div class="kt-spinner ' + version + ' ' + state + ' ' + size + '"></div';
+
+            if (options.message && options.message.length > 0) {
+                var classes = 'blockui ' + (options.shadow === false ? 'blockui' : '');
+
+                html = '<div class="' + classes + '"><span>' + options.message + '</span><span>' + spinner + '</span></div>';
+
+                var el = document.createElement('div');
+                KTUtil.get('body').prepend(el);
+                KTUtil.addClass(el, classes);
+                el.innerHTML = '<span>' + options.message + '</span><span>' + spinner + '</span>';
+                options.width = KTUtil.actualWidth(el) + 10;
+                KTUtil.remove(el);
+
+                if (target == 'body') {
+                    html = '<div class="' + classes + '" style="margin-left:-' + (options.width / 2) + 'px;"><span>' + options.message + '</span><span>' + spinner + '</span></div>';
+                }
+            } else {
+                html = spinner;
+            }
+
+            var params = {
+                message: html,
+                centerY: options.centerY,
+                centerX: options.centerX,
+                css: {
+                    top: '30%',
+                    left: '50%',
+                    border: '0',
+                    padding: '0',
+                    backgroundColor: 'none',
+                    width: options.width
+                },
+                overlayCSS: {
+                    backgroundColor: options.overlayColor,
+                    opacity: options.opacity,
+                    cursor: 'wait',
+                    zIndex: '10'
+                },
+                onUnblock: function() {
+                    if (el && el[0]) {
+                        KTUtil.css(el[0], 'position', '');
+                        KTUtil.css(el[0], 'zoom', '');
+                    }
+                }
+            };
+
+            if (target == 'body') {
+                params.css.top = '50%';
+                $.blockUI(params);
+            } else {
+                var el = $(target);
+                el.block(params);
+            }
+        },
+
+        unblock: function(target) {
+            if (target && target != 'body') {
+                $(target).unblock();
+            } else {
+                $.unblockUI();
+            }
+        },
+
+        blockPage: function(options) {
+            return KTApp.block('body', options);
+        },
+
+        unblockPage: function() {
+            return KTApp.unblock('body');
+        },
+
+        progress: function(target, options) {
+            var skin = (options && options.skin) ? options.skin : 'light';
+            var alignment = (options && options.alignment) ? options.alignment : 'right';
+            var size = (options && options.size) ? ' kt-spinner--' + options.size : '';
+            var classes = 'kt-spinner ' + 'kt-spinner--' + skin + ' kt-spinner--' + alignment + size;
+
+            KTApp.unprogress(target);
+
+            $(target).addClass(classes);
+            $(target).data('progress-classes', classes);
+        },
+
+        unprogress: function(target) {
+            $(target).removeClass($(target).data('progress-classes'));
+        },
+
+        getStateColor: function(name) {
+            return colors["state"][name];
+        },
+
+        getBaseColor: function(type, level) {
+            return colors["base"][type][level - 1];
+        }
+    };
+}();
+
+// webpack support
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = KTApp;
+}
+
+// Initialize KTApp class on document ready
+$(document).ready(function() {
+    KTApp.init(KTAppOptions);
+});
+
+"use strict";
+/**
+ * @class KTUtil  base utilize class that privides helper functions
+ */
+
+// Polyfills
+/**
+ * Element.matches() polyfill (simple version)
+ * https://developer.mozilla.org/en-US/docs/Web/API/Element/matches#Polyfill
+ */
+if (!Element.prototype.matches) {
+	Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+}
+
+/**
+ * Element.closest() polyfill
+ * https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+ */
+if (!Element.prototype.closest) {
+	if (!Element.prototype.matches) {
+		Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+	}
+	Element.prototype.closest = function (s) {
+		var el = this;
+		var ancestor = this;
+		if (!document.documentElement.contains(el)) return null;
+		do {
+			if (ancestor.matches(s)) return ancestor;
+			ancestor = ancestor.parentElement;
+		} while (ancestor !== null);
+		return null;
+	};
+}
+
+/**
+ * ChildNode.remove() polyfill
+ * https://gomakethings.com/removing-an-element-from-the-dom-the-es6-way/
+ * @author Chris Ferdinandi
+ * @license MIT
+ */
+(function (elem) {
+	for (var i = 0; i < elem.length; i++) {
+		if (!window[elem[i]] || 'remove' in window[elem[i]].prototype) continue;
+		window[elem[i]].prototype.remove = function () {
+			this.parentNode.removeChild(this);
+		};
+	}
+})(['Element', 'CharacterData', 'DocumentType']);
+
+//
+// requestAnimationFrame polyfill by Erik Möller.
+//  With fixes from Paul Irish and Tino Zijdel
+//
+//  http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+//  http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+//
+//  MIT license
+//
+(function() {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame =
+            window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() {
+                callback(currTime + timeToCall);
+            }, timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
+
+// Source: https://github.com/jserz/js_piece/blob/master/DOM/ParentNode/prepend()/prepend().md
+(function(arr) {
+    arr.forEach(function(item) {
+        if (item.hasOwnProperty('prepend')) {
+            return;
+        }
+        Object.defineProperty(item, 'prepend', {
+            configurable: true,
+            enumerable: true,
+            writable: true,
+            value: function prepend() {
+                var argArr = Array.prototype.slice.call(arguments),
+                    docFrag = document.createDocumentFragment();
+
+                argArr.forEach(function(argItem) {
+                    var isNode = argItem instanceof Node;
+                    docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
+                });
+
+                this.insertBefore(docFrag, this.firstChild);
+            }
+        });
+    });
+})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
+
+// Global variables
+window.KTUtilElementDataStore = {};
+window.KTUtilElementDataStoreID = 0;
+window.KTUtilDelegatedEventHandlers = {};
+
+var KTUtil = function() {
+    var resizeHandlers = [];
+
+    /** @type {object} breakpoints The device width breakpoints **/
+    var breakpoints = {
+        sm: 544, // Small screen / phone
+        md: 768, // Medium screen / tablet
+        lg: 1024, // Large screen / desktop
+        xl: 1200 // Extra large screen / wide desktop
+    };
+
+    /**
+     * Handle window resize event with some
+     * delay to attach event handlers upon resize complete
+     */
+    var _windowResizeHandler = function() {
+        var _runResizeHandlers = function() {
+            // reinitialize other subscribed elements
+            for (var i = 0; i < resizeHandlers.length; i++) {
+                var each = resizeHandlers[i];
+                each.call();
+            }
+        };
+
+        var timeout = false; // holder for timeout id
+        var delay = 250; // delay after event is "complete" to run callback
+
+        window.addEventListener('resize', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                _runResizeHandlers();
+            }, delay); // wait 50ms until window resize finishes.
+        });
+    };
+
+    return {
+        /**
+         * Class main initializer.
+         * @param {object} options.
+         * @returns null
+         */
+        //main function to initiate the theme
+        init: function(options) {
+            if (options && options.breakpoints) {
+                breakpoints = options.breakpoints;
+            }
+
+            _windowResizeHandler();
+        },
+
+        /**
+         * Adds window resize event handler.
+         * @param {function} callback function.
+         */
+        addResizeHandler: function(callback) {
+            resizeHandlers.push(callback);
+        },
+
+        /**
+         * Removes window resize event handler.
+         * @param {function} callback function.
+         */
+        removeResizeHandler: function(callback) {
+            for (var i = 0; i < resizeHandlers.length; i++) {
+                if (callback === resizeHandlers[i]) {
+                    delete resizeHandlers[i];
+                }
+            }
+        },
+
+        /**
+         * Trigger window resize handlers.
+         */
+        runResizeHandlers: function() {
+            _runResizeHandlers();
+        },
+
+        resize: function() {
+            if (typeof(Event) === 'function') {
+                // modern browsers
+                window.dispatchEvent(new Event('resize'));
+            } else {
+                // for IE and other old browsers
+                // causes deprecation warning on modern browsers
+                var evt = window.document.createEvent('UIEvents');
+                evt.initUIEvent('resize', true, false, window, 0);
+                window.dispatchEvent(evt);
+            }
+        },
+
+        /**
+         * Get GET parameter value from URL.
+         * @param {string} paramName Parameter name.
+         * @returns {string}
+         */
+        getURLParam: function(paramName) {
+            var searchString = window.location.search.substring(1),
+                i, val, params = searchString.split("&");
+
+            for (i = 0; i < params.length; i++) {
+                val = params[i].split("=");
+                if (val[0] == paramName) {
+                    return unescape(val[1]);
+                }
+            }
+
+            return null;
+        },
+
+        /**
+         * Checks whether current device is mobile touch.
+         * @returns {boolean}
+         */
+        isMobileDevice: function() {
+            return (this.getViewPort().width < this.getBreakpoint('lg') ? true : false);
+        },
+
+        /**
+         * Checks whether current device is desktop.
+         * @returns {boolean}
+         */
+        isDesktopDevice: function() {
+            return KTUtil.isMobileDevice() ? false : true;
+        },
+
+        /**
+         * Gets browser window viewport size. Ref:
+         * http://andylangton.co.uk/articles/javascript/get-viewport-size-javascript/
+         * @returns {object}
+         */
+        getViewPort: function() {
+            var e = window,
+                a = 'inner';
+            if (!('innerWidth' in window)) {
+                a = 'client';
+                e = document.documentElement || document.body;
+            }
+
+            return {
+                width: e[a + 'Width'],
+                height: e[a + 'Height']
+            };
+        },
+
+        /**
+         * Checks whether given device mode is currently activated.
+         * @param {string} mode Responsive mode name(e.g: desktop,
+         *     desktop-and-tablet, tablet, tablet-and-mobile, mobile)
+         * @returns {boolean}
+         */
+        isInResponsiveRange: function(mode) {
+            var breakpoint = this.getViewPort().width;
+
+            if (mode == 'general') {
+                return true;
+            } else if (mode == 'desktop' && breakpoint >= (this.getBreakpoint('lg') + 1)) {
+                return true;
+            } else if (mode == 'tablet' && (breakpoint >= (this.getBreakpoint('md') + 1) && breakpoint < this.getBreakpoint('lg'))) {
+                return true;
+            } else if (mode == 'mobile' && breakpoint <= this.getBreakpoint('md')) {
+                return true;
+            } else if (mode == 'desktop-and-tablet' && breakpoint >= (this.getBreakpoint('md') + 1)) {
+                return true;
+            } else if (mode == 'tablet-and-mobile' && breakpoint <= this.getBreakpoint('lg')) {
+                return true;
+            } else if (mode == 'minimal-desktop-and-below' && breakpoint <= this.getBreakpoint('xl')) {
+                return true;
+            }
+
+            return false;
+        },
+
+        /**
+         * Generates unique ID for give prefix.
+         * @param {string} prefix Prefix for generated ID
+         * @returns {boolean}
+         */
+        getUniqueID: function(prefix) {
+            return prefix + Math.floor(Math.random() * (new Date()).getTime());
+        },
+
+        /**
+         * Gets window width for give breakpoint mode.
+         * @param {string} mode Responsive mode name(e.g: xl, lg, md, sm)
+         * @returns {number}
+         */
+        getBreakpoint: function(mode) {
+            return breakpoints[mode];
+        },
+
+        /**
+         * Checks whether object has property matchs given key path.
+         * @param {object} obj Object contains values paired with given key path
+         * @param {string} keys Keys path seperated with dots
+         * @returns {object}
+         */
+        isset: function(obj, keys) {
+            var stone;
+
+            keys = keys || '';
+
+            if (keys.indexOf('[') !== -1) {
+                throw new Error('Unsupported object path notation.');
+            }
+
+            keys = keys.split('.');
+
+            do {
+                if (obj === undefined) {
+                    return false;
+                }
+
+                stone = keys.shift();
+
+                if (!obj.hasOwnProperty(stone)) {
+                    return false;
+                }
+
+                obj = obj[stone];
+
+            } while (keys.length);
+
+            return true;
+        },
+
+        /**
+         * Gets highest z-index of the given element parents
+         * @param {object} el jQuery element object
+         * @returns {number}
+         */
+        getHighestZindex: function(el) {
+            var elem = KTUtil.get(el),
+                position, value;
+
+            while (elem && elem !== document) {
+                // Ignore z-index if position is set to a value where z-index is ignored by the browser
+                // This makes behavior of this function consistent across browsers
+                // WebKit always returns auto if the element is positioned
+                position = KTUtil.css(elem, 'position');
+
+                if (position === "absolute" || position === "relative" || position === "fixed") {
+                    // IE returns 0 when zIndex is not specified
+                    // other browsers return a string
+                    // we ignore the case of nested elements with an explicit value of 0
+                    // <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
+                    value = parseInt(KTUtil.css(elem, 'z-index'));
+
+                    if (!isNaN(value) && value !== 0) {
+                        return value;
+                    }
+                }
+
+                elem = elem.parentNode;
+            }
+
+            return null;
+        },
+
+        /**
+         * Checks whether the element has any parent with fixed positionfreg
+         * @param {object} el jQuery element object
+         * @returns {boolean}
+         */
+        hasFixedPositionedParent: function(el) {
+            var position;
+
+            while (el && el !== document) {
+                position = KTUtil.css(el, 'position');
+
+                if (position === "fixed") {
+                    return true;
+                }
+
+                el = el.parentNode;
+            }
+
+            return false;
+        },
+
+        /**
+         * Simulates delay
+         */
+        sleep: function(milliseconds) {
+            var start = new Date().getTime();
+            for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds) {
+                    break;
+                }
+            }
+        },
+
+        /**
+         * Gets randomly generated integer value within given min and max range
+         * @param {number} min Range start value
+         * @param {number} max Range end value
+         * @returns {number}
+         */
+        getRandomInt: function(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        },
+
+        /**
+         * Checks whether Angular library is included
+         * @returns {boolean}
+         */
+        isAngularVersion: function() {
+            return window.Zone !== undefined ? true : false;
+        },
+
+        // jQuery Workarounds
+
+        // Deep extend:  $.extend(true, {}, objA, objB);
+        deepExtend: function(out) {
+            out = out || {};
+
+            for (var i = 1; i < arguments.length; i++) {
+                var obj = arguments[i];
+
+                if (!obj)
+                    continue;
+
+                for (var key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        if (typeof obj[key] === 'object')
+                            out[key] = KTUtil.deepExtend(out[key], obj[key]);
+                        else
+                            out[key] = obj[key];
+                    }
+                }
+            }
+
+            return out;
+        },
+
+        // extend:  $.extend({}, objA, objB);
+        extend: function(out) {
+            out = out || {};
+
+            for (var i = 1; i < arguments.length; i++) {
+                if (!arguments[i])
+                    continue;
+
+                for (var key in arguments[i]) {
+                    if (arguments[i].hasOwnProperty(key))
+                        out[key] = arguments[i][key];
+                }
+            }
+
+            return out;
+        },
+
+        get: function(query) {
+            var el;
+
+            if (query === document) {
+                return document;
+            }
+
+            if (!!(query && query.nodeType === 1)) {
+                return query;
+            }
+
+            if (el = document.getElementById(query)) {
+                return el;
+            } else if (el = document.getElementsByTagName(query)) {
+                return el[0];
+            } else if (el = document.getElementsByClassName(query)) {
+                return el[0];
+            } else {
+                return null;
+            }
+        },
+
+        getByID: function(query) {
+            if (!!(query && query.nodeType === 1)) {
+                return query;
+            }
+
+            return document.getElementById(query);
+        },
+
+        getByTag: function(query) {
+            var el;
+
+            if (el = document.getElementsByTagName(query)) {
+                return el[0];
+            } else {
+                return null;
+            }
+        },
+
+        getByClass: function(query) {
+            var el;
+
+            if (el = document.getElementsByClassName(query)) {
+                return el[0];
+            } else {
+                return null;
+            }
+        },
+
+        /**
+         * Checks whether the element has given classes
+         * @param {object} el jQuery element object
+         * @param {string} Classes string
+         * @returns {boolean}
+         */
+        hasClasses: function(el, classes) {
+            if (!el) {
+                return;
+            }
+
+            var classesArr = classes.split(" ");
+
+            for (var i = 0; i < classesArr.length; i++) {
+                if (KTUtil.hasClass(el, KTUtil.trim(classesArr[i])) == false) {
+                    return false;
+                }
+            }
+
+            return true;
+        },
+
+        hasClass: function(el, className) {
+            if (!el) {
+                return;
+            }
+
+            return el.classList ? el.classList.contains(className) : new RegExp('\\b' + className + '\\b').test(el.className);
+        },
+
+        addClass: function(el, className) {
+            if (!el || typeof className === 'undefined') {
+                return;
+            }
+
+            var classNames = className.split(' ');
+
+            if (el.classList) {
+                for (var i = 0; i < classNames.length; i++) {
+                    if (classNames[i] && classNames[i].length > 0) {
+                        el.classList.add(KTUtil.trim(classNames[i]));
+                    }
+                }
+            } else if (!KTUtil.hasClass(el, className)) {
+                for (var x = 0; x < classNames.length; x++) {
+                    el.className += ' ' + KTUtil.trim(classNames[x]);
+                }
+            }
+        },
+
+        removeClass: function(el, className) {
+          if (!el || typeof className === 'undefined') {
+                return;
+            }
+
+            var classNames = className.split(' ');
+
+            if (el.classList) {
+                for (var i = 0; i < classNames.length; i++) {
+                    el.classList.remove(KTUtil.trim(classNames[i]));
+                }
+            } else if (KTUtil.hasClass(el, className)) {
+                for (var x = 0; x < classNames.length; x++) {
+                    el.className = el.className.replace(new RegExp('\\b' + KTUtil.trim(classNames[x]) + '\\b', 'g'), '');
+                }
+            }
+        },
+
+        triggerCustomEvent: function(el, eventName, data) {
+            var event;
+            if (window.CustomEvent) {
+                event = new CustomEvent(eventName, {
+                    detail: data
+                });
+            } else {
+                event = document.createEvent('CustomEvent');
+                event.initCustomEvent(eventName, true, true, data);
+            }
+
+            el.dispatchEvent(event);
+        },
+
+        triggerEvent: function(node, eventName) {
+            // Make sure we use the ownerDocument from the provided node to avoid cross-window problems
+            var doc;
+            if (node.ownerDocument) {
+                doc = node.ownerDocument;
+            } else if (node.nodeType == 9) {
+                // the node may be the document itself, nodeType 9 = DOCUMENT_NODE
+                doc = node;
+            } else {
+                throw new Error("Invalid node passed to fireEvent: " + node.id);
+            }
+
+            if (node.dispatchEvent) {
+                // Gecko-style approach (now the standard) takes more work
+                var eventClass = "";
+
+                // Different events have different event classes.
+                // If this switch statement can't map an eventName to an eventClass,
+                // the event firing is going to fail.
+                switch (eventName) {
+                case "click": // Dispatching of 'click' appears to not work correctly in Safari. Use 'mousedown' or 'mouseup' instead.
+                case "mouseenter":
+                case "mouseleave":
+                case "mousedown":
+                case "mouseup":
+                    eventClass = "MouseEvents";
+                    break;
+
+                case "focus":
+                case "change":
+                case "blur":
+                case "select":
+                    eventClass = "HTMLEvents";
+                    break;
+
+                default:
+                    throw "fireEvent: Couldn't find an event class for event '" + eventName + "'.";
+                    break;
+                }
+                var event = doc.createEvent(eventClass);
+
+                var bubbles = eventName == "change" ? false : true;
+                event.initEvent(eventName, bubbles, true); // All events created as bubbling and cancelable.
+
+                event.synthetic = true; // allow detection of synthetic events
+                // The second parameter says go ahead with the default action
+                node.dispatchEvent(event, true);
+            } else if (node.fireEvent) {
+                // IE-old school style
+                var event = doc.createEventObject();
+                event.synthetic = true; // allow detection of synthetic events
+                node.fireEvent("on" + eventName, event);
+            }
+        },
+
+        index: function( elm ){
+            elm = KTUtil.get(elm);
+            var c = elm.parentNode.children, i = 0;
+            for(; i < c.length; i++ )
+                if( c[i] == elm ) return i;
+        },
+
+        trim: function(string) {
+            return string.trim();
+        },
+
+        eventTriggered: function(e) {
+            if (e.currentTarget.dataset.triggered) {
+                return true;
+            } else {
+                e.currentTarget.dataset.triggered = true;
+
+                return false;
+            }
+        },
+
+        remove: function(el) {
+            if (el && el.parentNode) {
+                el.parentNode.removeChild(el);
+            }
+        },
+
+        find: function(parent, query) {
+            parent = KTUtil.get(parent);
+            if (parent) {
+                return parent.querySelector(query);
+            }
+        },
+
+        findAll: function(parent, query) {
+            parent = KTUtil.get(parent);
+            if (parent) {
+                return parent.querySelectorAll(query);
+            }
+        },
+
+        insertAfter: function(el, referenceNode) {
+            return referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
+        },
+
+        parents: function(elem, selector) {
+            // Element.matches() polyfill
+            if (!Element.prototype.matches) {
+                Element.prototype.matches =
+                    Element.prototype.matchesSelector ||
+                    Element.prototype.mozMatchesSelector ||
+                    Element.prototype.msMatchesSelector ||
+                    Element.prototype.oMatchesSelector ||
+                    Element.prototype.webkitMatchesSelector ||
+                    function(s) {
+                        var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+                            i = matches.length;
+                        while (--i >= 0 && matches.item(i) !== this) {}
+                        return i > -1;
+                    };
+            }
+
+            // Set up a parent array
+            var parents = [];
+
+            // Push each parent element to the array
+            for ( ; elem && elem !== document; elem = elem.parentNode ) {
+                if (selector) {
+                    if (elem.matches(selector)) {
+                        parents.push(elem);
+                    }
+                    continue;
+                }
+                parents.push(elem);
+            }
+
+            // Return our parent array
+            return parents;
+        },
+
+        children: function(el, selector, log) {
+            if (!el || !el.childNodes) {
+                return;
+            }
+
+            var result = [],
+                i = 0,
+                l = el.childNodes.length;
+
+            for (var i; i < l; ++i) {
+                if (el.childNodes[i].nodeType == 1 && KTUtil.matches(el.childNodes[i], selector, log)) {
+                    result.push(el.childNodes[i]);
+                }
+            }
+
+            return result;
+        },
+
+        child: function(el, selector, log) {
+            var children = KTUtil.children(el, selector, log);
+
+            return children ? children[0] : null;
+        },
+
+        matches: function(el, selector, log) {
+            var p = Element.prototype;
+            var f = p.matches || p.webkitMatchesSelector || p.mozMatchesSelector || p.msMatchesSelector || function(s) {
+                return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
+            };
+
+            if (el && el.tagName) {
+                return f.call(el, selector);
+            } else {
+                return false;
+            }
+        },
+
+        data: function(element) {
+            element = KTUtil.get(element);
+
+            return {
+                set: function(name, data) {
+                    if (element === undefined) {
+                        return;
+                    }
+
+                    if (element.customDataTag === undefined) {
+                        window.KTUtilElementDataStoreID++;
+                        element.customDataTag = window.KTUtilElementDataStoreID;
+                    }
+
+                    if (window.KTUtilElementDataStore[element.customDataTag] === undefined) {
+                        window.KTUtilElementDataStore[element.customDataTag] = {};
+                    }
+
+                    window.KTUtilElementDataStore[element.customDataTag][name] = data;
+                },
+
+                get: function(name) {
+                    if (element === undefined) {
+                        return;
+                    }
+
+                    if (element.customDataTag === undefined) {
+                        return null;
+                    }
+
+                    return this.has(name) ? window.KTUtilElementDataStore[element.customDataTag][name] : null;
+                },
+
+                has: function(name) {
+                    if (element === undefined) {
+                        return false;
+                    }
+
+                    if (element.customDataTag === undefined) {
+                        return false;
+                    }
+
+                    return (window.KTUtilElementDataStore[element.customDataTag] && window.KTUtilElementDataStore[element.customDataTag][name]) ? true : false;
+                },
+
+                remove: function(name) {
+                    if (element && this.has(name)) {
+                        delete window.KTUtilElementDataStore[element.customDataTag][name];
+                    }
+                }
+            };
+        },
+
+        outerWidth: function(el, margin) {
+            var width;
+
+            if (margin === true) {
+                width = parseFloat(el.offsetWidth);
+                width += parseFloat(KTUtil.css(el, 'margin-left')) + parseFloat(KTUtil.css(el, 'margin-right'));
+
+                return parseFloat(width);
+            } else {
+                width = parseFloat(el.offsetWidth);
+
+                return width;
+            }
+        },
+
+        offset: function(elem) {
+            var rect, win;
+            elem = KTUtil.get(elem);
+
+            if ( !elem ) {
+                return;
+            }
+
+            // Return zeros for disconnected and hidden (display: none) elements (gh-2310)
+            // Support: IE <=11 only
+            // Running getBoundingClientRect on a
+            // disconnected node in IE throws an error
+
+            if ( !elem.getClientRects().length ) {
+                return { top: 0, left: 0 };
+            }
+
+            // Get document-relative position by adding viewport scroll to viewport-relative gBCR
+            rect = elem.getBoundingClientRect();
+            win = elem.ownerDocument.defaultView;
+
+            return {
+                top: rect.top + win.pageYOffset,
+                left: rect.left + win.pageXOffset
+            };
+        },
+
+        height: function(el) {
+            return KTUtil.css(el, 'height');
+        },
+
+        visible: function(el) {
+            return !(el.offsetWidth === 0 && el.offsetHeight === 0);
+        },
+
+        attr: function(el, name, value) {
+            el = KTUtil.get(el);
+
+            if (el == undefined) {
+                return;
+            }
+
+            if (value !== undefined) {
+                el.setAttribute(name, value);
+            } else {
+                return el.getAttribute(name);
+            }
+        },
+
+        hasAttr: function(el, name) {
+            el = KTUtil.get(el);
+
+            if (el == undefined) {
+                return;
+            }
+
+            return el.getAttribute(name) ? true : false;
+        },
+
+        removeAttr: function(el, name) {
+            el = KTUtil.get(el);
+
+            if (el == undefined) {
+                return;
+            }
+
+            el.removeAttribute(name);
+        },
+
+        animate: function(from, to, duration, update, easing, done) {
+            /**
+             * TinyAnimate.easings
+             *  Adapted from jQuery Easing
+             */
+            var easings = {};
+            var easing;
+
+            easings.linear = function(t, b, c, d) {
+                return c * t / d + b;
+            };
+
+            easing = easings.linear;
+
+            // Early bail out if called incorrectly
+            if (typeof from !== 'number' ||
+                typeof to !== 'number' ||
+                typeof duration !== 'number' ||
+                typeof update !== 'function') {
+                return;
+            }
+
+            // Create mock done() function if necessary
+            if (typeof done !== 'function') {
+                done = function() {};
+            }
+
+            // Pick implementation (requestAnimationFrame | setTimeout)
+            var rAF = window.requestAnimationFrame || function(callback) {
+                window.setTimeout(callback, 1000 / 50);
+            };
+
+            // Animation loop
+            var canceled = false;
+            var change = to - from;
+
+            function loop(timestamp) {
+                var time = (timestamp || +new Date()) - start;
+
+                if (time >= 0) {
+                    update(easing(time, from, change, duration));
+                }
+                if (time >= 0 && time >= duration) {
+                    update(to);
+                    done();
+                } else {
+                    rAF(loop);
+                }
+            }
+
+            update(from);
+
+            // Start animation loop
+            var start = window.performance && window.performance.now ? window.performance.now() : +new Date();
+
+            rAF(loop);
+        },
+
+        actualCss: function(el, prop, cache) {
+            el = KTUtil.get(el);
+            var css = '';
+
+            if (el instanceof HTMLElement === false) {
+                return;
+            }
+
+            if (!el.getAttribute('kt-hidden-' + prop) || cache === false) {
+                var value;
+
+                // the element is hidden so:
+                // making the el block so we can meassure its height but still be hidden
+                css = el.style.cssText;
+                el.style.cssText = 'position: absolute; visibility: hidden; display: block;';
+
+                if (prop == 'width') {
+                    value = el.offsetWidth;
+                } else if (prop == 'height') {
+                    value = el.offsetHeight;
+                }
+
+                el.style.cssText = css;
+
+                // store it in cache
+                el.setAttribute('kt-hidden-' + prop, value);
+
+                return parseFloat(value);
+            } else {
+                // store it in cache
+                return parseFloat(el.getAttribute('kt-hidden-' + prop));
+            }
+        },
+
+        actualHeight: function(el, cache) {
+            return KTUtil.actualCss(el, 'height', cache);
+        },
+
+        actualWidth: function(el, cache) {
+            return KTUtil.actualCss(el, 'width', cache);
+        },
+
+        getScroll: function(element, method) {
+            // The passed in `method` value should be 'Top' or 'Left'
+            method = 'scroll' + method;
+            return (element == window || element == document) ? (
+                self[(method == 'scrollTop') ? 'pageYOffset' : 'pageXOffset'] ||
+                (browserSupportsBoxModel && document.documentElement[method]) ||
+                document.body[method]
+            ) : element[method];
+        },
+
+        css: function(el, styleProp, value) {
+            el = KTUtil.get(el);
+
+            if (!el) {
+                return;
+            }
+
+            if (value !== undefined) {
+                el.style[styleProp] = value;
+            } else {
+                var defaultView = (el.ownerDocument || document).defaultView;
+                // W3C standard way:
+                if (defaultView && defaultView.getComputedStyle) {
+                    // sanitize property name to css notation
+                    // (hyphen separated words eg. font-Size)
+                    styleProp = styleProp.replace(/([A-Z])/g, "-$1").toLowerCase();
+                    return defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
+                } else if (el.currentStyle) { // IE
+                    // sanitize property name to camelCase
+                    styleProp = styleProp.replace(/\-(\w)/g, function(str, letter) {
+                        return letter.toUpperCase();
+                    });
+                    value = el.currentStyle[styleProp];
+                    // convert other units to pixels on IE
+                    if (/^\d+(em|pt|%|ex)?$/i.test(value)) {
+                        return (function(value) {
+                            var oldLeft = el.style.left,
+                                oldRsLeft = el.runtimeStyle.left;
+                            el.runtimeStyle.left = el.currentStyle.left;
+                            el.style.left = value || 0;
+                            value = el.style.pixelLeft + "px";
+                            el.style.left = oldLeft;
+                            el.runtimeStyle.left = oldRsLeft;
+                            return value;
+                        })(value);
+                    }
+                    return value;
+                }
+            }
+        },
+
+        slide: function(el, dir, speed, callback, recalcMaxHeight) {
+            if (!el || (dir == 'up' && KTUtil.visible(el) === false) || (dir == 'down' && KTUtil.visible(el) === true)) {
+                return;
+            }
+
+            speed = (speed ? speed : 600);
+            var calcHeight = KTUtil.actualHeight(el);
+            var calcPaddingTop = false;
+            var calcPaddingBottom = false;
+
+            if (KTUtil.css(el, 'padding-top') && KTUtil.data(el).has('slide-padding-top') !== true) {
+                KTUtil.data(el).set('slide-padding-top', KTUtil.css(el, 'padding-top'));
+            }
+
+            if (KTUtil.css(el, 'padding-bottom') && KTUtil.data(el).has('slide-padding-bottom') !== true) {
+                KTUtil.data(el).set('slide-padding-bottom', KTUtil.css(el, 'padding-bottom'));
+            }
+
+            if (KTUtil.data(el).has('slide-padding-top')) {
+                calcPaddingTop = parseInt(KTUtil.data(el).get('slide-padding-top'));
+            }
+
+            if (KTUtil.data(el).has('slide-padding-bottom')) {
+                calcPaddingBottom = parseInt(KTUtil.data(el).get('slide-padding-bottom'));
+            }
+
+            if (dir == 'up') { // up
+                el.style.cssText = 'display: block; overflow: hidden;';
+
+                if (calcPaddingTop) {
+                    KTUtil.animate(0, calcPaddingTop, speed, function(value) {
+                        el.style.paddingTop = (calcPaddingTop - value) + 'px';
+                    }, 'linear');
+                }
+
+                if (calcPaddingBottom) {
+                    KTUtil.animate(0, calcPaddingBottom, speed, function(value) {
+                        el.style.paddingBottom = (calcPaddingBottom - value) + 'px';
+                    }, 'linear');
+                }
+
+                KTUtil.animate(0, calcHeight, speed, function(value) {
+                    el.style.height = (calcHeight - value) + 'px';
+                }, 'linear', function() {
+                    callback();
+                    el.style.height = '';
+                    el.style.display = 'none';
+                });
+
+
+            } else if (dir == 'down') { // down
+                el.style.cssText = 'display: block; overflow: hidden;';
+
+                if (calcPaddingTop) {
+                    KTUtil.animate(0, calcPaddingTop, speed, function(value) {
+                        el.style.paddingTop = value + 'px';
+                    }, 'linear', function() {
+                        el.style.paddingTop = '';
+                    });
+                }
+
+                if (calcPaddingBottom) {
+                    KTUtil.animate(0, calcPaddingBottom, speed, function(value) {
+                        el.style.paddingBottom = value + 'px';
+                    }, 'linear', function() {
+                        el.style.paddingBottom = '';
+                    });
+                }
+
+                KTUtil.animate(0, calcHeight, speed, function(value) {
+                    el.style.height = value + 'px';
+                }, 'linear', function() {
+                    callback();
+                    el.style.height = '';
+                    el.style.display = '';
+                    el.style.overflow = '';
+                });
+            }
+        },
+
+        slideUp: function(el, speed, callback) {
+            KTUtil.slide(el, 'up', speed, callback);
+        },
+
+        slideDown: function(el, speed, callback) {
+            KTUtil.slide(el, 'down', speed, callback);
+        },
+
+        show: function(el, display) {
+            if (typeof el !== 'undefined') {
+                el.style.display = (display ? display : 'block');
+            }
+        },
+
+        hide: function(el) {
+            if (typeof el !== 'undefined') {
+                el.style.display = 'none';
+            }
+        },
+
+        addEvent: function(el, type, handler, one) {
+            el = KTUtil.get(el);
+            if (typeof el !== 'undefined') {
+                el.addEventListener(type, handler);
+            }
+        },
+
+        removeEvent: function(el, type, handler) {
+            el = KTUtil.get(el);
+            el.removeEventListener(type, handler);
+        },
+
+        on: function(element, selector, event, handler) {
+            if (!selector) {
+                return;
+            }
+
+            var eventId = KTUtil.getUniqueID('event');
+
+            window.KTUtilDelegatedEventHandlers[eventId] = function(e) {
+                var targets = element.querySelectorAll(selector);
+                var target = e.target;
+
+                while (target && target !== element) {
+                    for (var i = 0, j = targets.length; i < j; i++) {
+                        if (target === targets[i]) {
+                            handler.call(target, e);
+                        }
+                    }
+
+                    target = target.parentNode;
+                }
+            }
+
+            KTUtil.addEvent(element, event, window.KTUtilDelegatedEventHandlers[eventId]);
+
+            return eventId;
+        },
+
+        off: function(element, event, eventId) {
+            if (!element || !window.KTUtilDelegatedEventHandlers[eventId]) {
+                return;
+            }
+
+            KTUtil.removeEvent(element, event, window.KTUtilDelegatedEventHandlers[eventId]);
+
+            delete window.KTUtilDelegatedEventHandlers[eventId];
+        },
+
+        one: function onetime(el, type, callback) {
+            el = KTUtil.get(el);
+
+            el.addEventListener(type, function callee(e) {
+                // remove event
+                if (e.target && e.target.removeEventListener) {
+                    e.target.removeEventListener(e.type, callee);
+                }
+
+                // call handler
+                return callback(e);
+            });
+        },
+
+        hash: function(str) {
+            var hash = 0,
+                i, chr;
+
+            if (str.length === 0) return hash;
+            for (i = 0; i < str.length; i++) {
+                chr = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + chr;
+                hash |= 0; // Convert to 32bit integer
+            }
+
+            return hash;
+        },
+
+        animateClass: function(el, animationName, callback) {
+            var animation;
+            var animations = {
+                animation: 'animationend',
+                OAnimation: 'oAnimationEnd',
+                MozAnimation: 'mozAnimationEnd',
+                WebkitAnimation: 'webkitAnimationEnd',
+                msAnimation: 'msAnimationEnd',
+            };
+
+            for (var t in animations) {
+                if (el.style[t] !== undefined) {
+                    animation = animations[t];
+                }
+            }
+
+            KTUtil.addClass(el, 'animated ' + animationName);
+
+            KTUtil.one(el, animation, function() {
+                KTUtil.removeClass(el, 'animated ' + animationName);
+            });
+
+            if (callback) {
+                KTUtil.one(el, animation, callback);
+            }
+        },
+
+        transitionEnd: function(el, callback) {
+            var transition;
+            var transitions = {
+                transition: 'transitionend',
+                OTransition: 'oTransitionEnd',
+                MozTransition: 'mozTransitionEnd',
+                WebkitTransition: 'webkitTransitionEnd',
+                msTransition: 'msTransitionEnd'
+            };
+
+            for (var t in transitions) {
+                if (el.style[t] !== undefined) {
+                    transition = transitions[t];
+                }
+            }
+
+            KTUtil.one(el, transition, callback);
+        },
+
+        animationEnd: function(el, callback) {
+            var animation;
+            var animations = {
+                animation: 'animationend',
+                OAnimation: 'oAnimationEnd',
+                MozAnimation: 'mozAnimationEnd',
+                WebkitAnimation: 'webkitAnimationEnd',
+                msAnimation: 'msAnimationEnd'
+            };
+
+            for (var t in animations) {
+                if (el.style[t] !== undefined) {
+                    animation = animations[t];
+                }
+            }
+
+            KTUtil.one(el, animation, callback);
+        },
+
+        animateDelay: function(el, value) {
+            var vendors = ['webkit-', 'moz-', 'ms-', 'o-', ''];
+            for (var i = 0; i < vendors.length; i++) {
+                KTUtil.css(el, vendors[i] + 'animation-delay', value);
+            }
+        },
+
+        animateDuration: function(el, value) {
+            var vendors = ['webkit-', 'moz-', 'ms-', 'o-', ''];
+            for (var i = 0; i < vendors.length; i++) {
+                KTUtil.css(el, vendors[i] + 'animation-duration', value);
+            }
+        },
+
+        scrollTo: function(target, offset, duration) {
+            var duration = duration ? duration : 500;
+            var target = KTUtil.get(target);
+            var targetPos = target ? KTUtil.offset(target).top : 0;
+            var scrollPos = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+            var from, to;
+
+            if (targetPos > scrollPos) {
+                from = targetPos;
+                to = scrollPos;
+            } else {
+                from = scrollPos;
+                to = targetPos;
+            }
+
+            if (offset) {
+                to += offset;
+            }
+
+            KTUtil.animate(from, to, duration, function(value) {
+                document.documentElement.scrollTop = value;
+                document.body.parentNode.scrollTop = value;
+                document.body.scrollTop = value;
+            }); //, easing, done
+        },
+
+        scrollTop: function(offset, duration) {
+            KTUtil.scrollTo(null, offset, duration);
+        },
+
+        isArray: function(obj) {
+            return obj && Array.isArray(obj);
+        },
+
+        ready: function(callback) {
+            if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+                callback();
+            } else {
+                document.addEventListener('DOMContentLoaded', callback);
+            }
+        },
+
+        isEmpty: function(obj) {
+            for (var prop in obj) {
+                if (obj.hasOwnProperty(prop)) {
+                    return false;
+                }
+            }
+
+            return true;
+        },
+
+        numberString: function(nStr) {
+            nStr += '';
+            var x = nStr.split('.');
+            var x1 = x[0];
+            var x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        },
+
+        detectIE: function() {
+            var ua = window.navigator.userAgent;
+
+            // Test values; Uncomment to check result …
+
+            // IE 10
+            // ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
+
+            // IE 11
+            // ua = 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
+
+            // Edge 12 (Spartan)
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0';
+
+            // Edge 13
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
+
+            var msie = ua.indexOf('MSIE ');
+            if (msie > 0) {
+                // IE 10 or older => return version number
+                return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+            }
+
+            var trident = ua.indexOf('Trident/');
+            if (trident > 0) {
+                // IE 11 => return version number
+                var rv = ua.indexOf('rv:');
+                return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+            }
+
+            var edge = ua.indexOf('Edge/');
+            if (edge > 0) {
+                // Edge (IE 12+) => return version number
+                return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+            }
+
+            // other browser
+            return false;
+        },
+
+        isRTL: function() {
+            return (KTUtil.attr(KTUtil.get('html'), 'direction') == 'rtl');
+        },
+
+        //
+
+        // Scroller
+        scrollInit: function(element, options) {
+            if(!element) return;
+            // Define init function
+            function init() {
+                var ps;
+                var height;
+
+                if (options.height instanceof Function) {
+                    height = parseInt(options.height.call());
+                } else {
+                    height = parseInt(options.height);
+                }
+
+                // Destroy scroll on table and mobile modes
+                if ((options.mobileNativeScroll || options.disableForMobile) && KTUtil.isInResponsiveRange('tablet-and-mobile')) {
+                    ps = KTUtil.data(element).get('ps');
+                    if (ps) {
+                        if (options.resetHeightOnDestroy) {
+                            KTUtil.css(element, 'height', 'auto');
+                        } else {
+                            KTUtil.css(element, 'overflow', 'auto');
+                            if (height > 0) {
+                                KTUtil.css(element, 'height', height + 'px');
+                            }
+                        }
+
+                        ps.destroy();
+                        ps = KTUtil.data(element).remove('ps');
+                    } else if (height > 0){
+                        KTUtil.css(element, 'overflow', 'auto');
+                        KTUtil.css(element, 'height', height + 'px');
+                    }
+
+                    return;
+                }
+
+                if (height > 0) {
+                    KTUtil.css(element, 'height', height + 'px');
+                }
+
+                if (options.desktopNativeScroll) {
+                    KTUtil.css(element, 'overflow', 'auto');
+                    return;
+                }
+
+                // Init scroll
+                KTUtil.css(element, 'overflow', 'hidden');
+
+                ps = KTUtil.data(element).get('ps');
+                if (ps) {
+                    ps.update();
+                } else {
+                    KTUtil.addClass(element, 'kt-scroll');
+                    ps = new PerfectScrollbar(element, {
+                        wheelSpeed: 0.5,
+                        swipeEasing: true,
+                        wheelPropagation: (options.windowScroll === false ? false : true),
+                        minScrollbarLength: 40,
+                        maxScrollbarLength: 300,
+                        suppressScrollX: KTUtil.attr(element, 'data-scroll-x') != 'true' ? true : false
+                    });
+
+                    KTUtil.data(element).set('ps', ps);
+                }
+
+                // Remember scroll position in cookie
+                var uid = KTUtil.attr(element, 'id');
+
+                if (options.rememberPosition === true && Cookies && uid) {
+                    if (Cookies.get(uid)) {
+                        var pos = parseInt(Cookies.get(uid));
+
+                        if (pos > 0) {
+                            element.scrollTop = pos;
+                        }
+                    }
+
+                    element.addEventListener('ps-scroll-y', function() {
+                        Cookies.set(uid, element.scrollTop);
+                    });
+                }
+            }
+
+            // Init
+            init();
+
+            // Handle window resize
+            if (options.handleWindowResize) {
+                KTUtil.addResizeHandler(function() {
+                    init();
+                });
+            }
+        },
+
+        scrollUpdate: function(element) {
+            var ps = KTUtil.data(element).get('ps');
+            if (ps) {
+                ps.update();
+            }
+        },
+
+        scrollUpdateAll: function(parent) {
+            var scrollers = KTUtil.findAll(parent, '.ps');
+            for (var i = 0, len = scrollers.length; i < len; i++) {
+                KTUtil.scrollerUpdate(scrollers[i]);
+            }
+        },
+
+        scrollDestroy: function(element) {
+            var ps = KTUtil.data(element).get('ps');
+            if (ps) {
+                ps.destroy();
+                ps = KTUtil.data(element).remove('ps');
+            }
+        },
+
+        setHTML: function(el, html) {
+            if (KTUtil.get(el)) {
+                KTUtil.get(el).innerHTML = html;
+            }
+        },
+
+        getHTML: function(el) {
+            if (KTUtil.get(el)) {
+                return KTUtil.get(el).innerHTML;
+            }
+        }
     }
 }();
-$(document).ready(function(){KTApp.init(KTAppOptions)}),
-this.Element&&function(t){t.matches=t.matches||t.matchesSelector||t.webkitMatchesSelector||t.msMatchesSelector||function(t){for(var e=(this.parentNode||this.document).querySelectorAll(t),a=-1;e[++a]&&e[a]!=this;);return!!e[a]}}(Element.prototype),
-this.Element&&function(t){t.closest=t.closest||function(t){for(var e=this;e.matches&&!e.matches(t);)e=e.parentNode;return e.matches?e:null}}(Element.prototype),"remove"in Element.prototype||(Element.prototype.remove=function(){this.parentNode&&this.parentNode.removeChild(this)}),
-this.Element&&function(t){t.matches=t.matches||t.matchesSelector||t.webkitMatchesSelector||t.msMatchesSelector||function(t){for(var e=(this.parentNode||this.document).querySelectorAll(t),a=-1;e[++a]&&e[a]!=this;);return!!e[a]}}(Element.prototype),function(){for(var t=0,e=["webkit","moz"],a=0;a<e.length&&!window.requestAnimationFrame;++a)window.requestAnimationFrame=window[e[a]+"RequestAnimationFrame"],window.cancelAnimationFrame=window[e[a]+"CancelAnimationFrame"]||window[e[a]+"CancelRequestAnimationFrame"];window.requestAnimationFrame||(window.requestAnimationFrame=function(e){var a=(new Date).getTime(),n=Math.max(0,16-(a-t)),i=window.setTimeout(function(){e(a+n)},n);return t=a+n,i}),window.cancelAnimationFrame||(window.cancelAnimationFrame=function(t){clearTimeout(t)})}(),[Element.prototype,Document.prototype,DocumentFragment.prototype].forEach(function(t){t.hasOwnProperty("prepend")||Object.defineProperty(t,"prepend",{configurable:!0,enumerable:!0,writable:!0,value:function(){var t=Array.prototype.slice.call(arguments),e=document.createDocumentFragment();t.forEach(function(t){var a=t instanceof Node;e.appendChild(a?t:document.createTextNode(String(t)))}),this.insertBefore(e,this.firstChild)}})}),window.KTUtilElementDataStore={},window.KTUtilElementDataStoreID=0,window.KTUtilDelegatedEventHandlers={};
-var KTUtil=function(){
-    var t=[],
-        e={sm:544,md:768,lg:1024,xl:1200},
-        a=function(){
-            var e=!1;
-            window.addEventListener("resize",function(){clearTimeout(e),e=setTimeout(function(){!function(){for(var e=0;e<t.length;e++)t[e].call()}()},250)})};
-    return{
-        init:function(t){t&&t.breakpoints&&(e=t.breakpoints),a()},
-        addResizeHandler:function(e){t.push(e)},
-        removeResizeHandler:function(e){for(var a=0;a<t.length;a++)e===t[a]&&delete t[a]},
-        runResizeHandlers:function(){_runResizeHandlers()},
-        resize:function(){if("function"==typeof Event)window.dispatchEvent(new Event("resize"));else{var t=window.document.createEvent("UIEvents");t.initUIEvent("resize",!0,!1,window,0),window.dispatchEvent(t)}},
-        getURLParam:function(t){var e,a,n=window.location.search.substring(1).split("&");for(e=0;e<n.length;e++)if((a=n[e].split("="))[0]==t)return unescape(a[1]);return null},
-        isMobileDevice:function(){return this.getViewPort().width<this.getBreakpoint("lg")},
-        isDesktopDevice:function(){return!KTUtil.isMobileDevice()},
-        getViewPort:function(){var t=window,e="inner";return"innerWidth"in window||(e="client",t=document.documentElement||document.body),{width:t[e+"Width"],height:t[e+"Height"]}},
-        isInResponsiveRange:function(t){var e=this.getViewPort().width;return"general"==t||("desktop"==t&&e>=this.getBreakpoint("lg")+1||("tablet"==t&&e>=this.getBreakpoint("md")+1&&e<this.getBreakpoint("lg")||("mobile"==t&&e<=this.getBreakpoint("md")||("desktop-and-tablet"==t&&e>=this.getBreakpoint("md")+1||("tablet-and-mobile"==t&&e<=this.getBreakpoint("lg")||"minimal-desktop-and-below"==t&&e<=this.getBreakpoint("xl"))))))},
-        getUniqueID:function(t){return t+Math.floor(Math.random()*(new Date).getTime())},
-        getBreakpoint:function(t){return e[t]},
-        isset:function(t,e){var a;if(-1!==(e=e||"").indexOf("["))throw new Error("Unsupported object path notation.");e=e.split(".");do{if(void 0===t)return!1;if(a=e.shift(),!t.hasOwnProperty(a))return!1;t=t[a]}while(e.length);return!0},
-        getHighestZindex:function(t){for(var e,a,n=KTUtil.get(t);n&&n!==document;){if(("absolute"===(e=KTUtil.css(n,"position"))||"relative"===e||"fixed"===e)&&(a=parseInt(KTUtil.css(n,"z-index")),!isNaN(a)&&0!==a))return a;n=n.parentNode}return null},
-        hasFixedPositionedParent:function(t){for(;t&&t!==document;){if(position=KTUtil.css(t,"position"),"fixed"===position)return!0;t=t.parentNode}return!1},
-        sleep:function(t){for(var e=(new Date).getTime(),a=0;a<1e7&&!((new Date).getTime()-e>t);a++);},
-        getRandomInt:function(t,e){return Math.floor(Math.random()*(e-t+1))+t},
-        isAngularVersion:function(){return void 0!==window.Zone},
-        deepExtend:function(t){t=t||{};for(var e=1;e<arguments.length;e++){var a=arguments[e];if(a)for(var n in a)a.hasOwnProperty(n)&&("object"==typeof a[n]?t[n]=KTUtil.deepExtend(t[n],a[n]):t[n]=a[n])}return t},
-        extend:function(t){t=t||{};for(var e=1;e<arguments.length;e++)if(arguments[e])for(var a in arguments[e])arguments[e].hasOwnProperty(a)&&(t[a]=arguments[e][a]);return t},
-        get:function(t){var e;return t===document?document:t&&1===t.nodeType?t:(e=document.getElementById(t))?e:(e=document.getElementsByTagName(t))?e[0]:(e=document.getElementsByClassName(t))?e[0]:null},
-        getByID:function(t){return t&&1===t.nodeType?t:document.getElementById(t)},
-        getByTag:function(t){var e;return(e=document.getElementsByTagName(t))?e[0]:null},
-        getByClass:function(t){var e;return(e=document.getElementsByClassName(t))?e[0]:null},
-        hasClasses:function(t,e){if(t){for(var a=e.split(" "),n=0;n<a.length;n++)if(0==KTUtil.hasClass(t,KTUtil.trim(a[n])))return!1;return!0}},
-        hasClass:function(t,e){if(t)return t.classList?t.classList.contains(e):new RegExp("\\b"+e+"\\b").test(t.className)},
-        addClass:function(t,e){if(t&&void 0!==e){var a=e.split(" ");if(t.classList)for(var n=0;n<a.length;n++)a[n]&&a[n].length>0&&t.classList.add(KTUtil.trim(a[n]));else if(!KTUtil.hasClass(t,e))for(n=0;n<a.length;n++)t.className+=" "+KTUtil.trim(a[n])}},
-        removeClass:function(t,e){if(t&&void 0!==e){var a=e.split(" ");if(t.classList)for(var n=0;n<a.length;n++)t.classList.remove(KTUtil.trim(a[n]));else if(KTUtil.hasClass(t,e))for(n=0;n<a.length;n++)t.className=t.className.replace(new RegExp("\\b"+KTUtil.trim(a[n])+"\\b","g"),"")}},
-        triggerCustomEvent:function(t,e,a){if(window.CustomEvent)var n=new CustomEvent(e,{detail:a});else(n=document.createEvent("CustomEvent")).initCustomEvent(e,!0,!0,a);t.dispatchEvent(n)},
-        triggerEvent:function(t,e){var a;if(t.ownerDocument)a=t.ownerDocument;else{if(9!=t.nodeType)throw new Error("Invalid node passed to fireEvent: "+t.id);a=t}if(t.dispatchEvent){var n="";switch(e){case"click":case"mouseenter":case"mouseleave":case"mousedown":case"mouseup":n="MouseEvents";break;case"focus":case"change":case"blur":case"select":n="HTMLEvents";break;default:throw"fireEvent: Couldn't find an event class for event '"+e+"'."}var i="change"!=e;(o=a.createEvent(n)).initEvent(e,i,!0),o.synthetic=!0,t.dispatchEvent(o,!0)}else if(t.fireEvent){var o;(o=a.createEventObject()).synthetic=!0,t.fireEvent("on"+e,o)}},
-        index:function(t){for(var e=(t=KTUtil.get(t)).parentNode.children,a=0;a<e.length;a++)if(e[a]==t)return a},
-        trim:function(t){return t.trim()},
-        eventTriggered:function(t){return!!t.currentTarget.dataset.triggered||(t.currentTarget.dataset.triggered=!0,!1)},
-        remove:function(t){t&&t.parentNode&&t.parentNode.removeChild(t)},
-        find:function(t,e){if(t=KTUtil.get(t))return t.querySelector(e)},
-        findAll:function(t,e){if(t=KTUtil.get(t))return t.querySelectorAll(e)},
-        insertAfter:function(t,e){return e.parentNode.insertBefore(t,e.nextSibling)},
-        parents:function(t,e){Element.prototype.matches||(Element.prototype.matches=Element.prototype.matchesSelector||Element.prototype.mozMatchesSelector||Element.prototype.msMatchesSelector||Element.prototype.oMatchesSelector||Element.prototype.webkitMatchesSelector||function(t){for(var e=(this.document||this.ownerDocument).querySelectorAll(t),a=e.length;--a>=0&&e.item(a)!==this;);return a>-1});for(var a=[];t&&t!==document;t=t.parentNode)e?t.matches(e)&&a.push(t):a.push(t);return a},
-        children:function(t,e,a){if(t&&t.childNodes){for(var n=[],i=0,o=t.childNodes.length;i<o;++i)1==t.childNodes[i].nodeType&&KTUtil.matches(t.childNodes[i],e,a)&&n.push(t.childNodes[i]);return n}},
-        child:function(t,e,a){var n=KTUtil.children(t,e,a);return n?n[0]:null},
-        matches:function(t,e,a){var n=Element.prototype,i=n.matches||n.webkitMatchesSelector||n.mozMatchesSelector||n.msMatchesSelector||function(t){return-1!==[].indexOf.call(document.querySelectorAll(t),this)};return!(!t||!t.tagName)&&i.call(t,e)},
-        data:function(t){return t=KTUtil.get(t),{set:function(e,a){void 0!==t&&(void 0===t.customDataTag&&(KTUtilElementDataStoreID++,t.customDataTag=KTUtilElementDataStoreID),void 0===KTUtilElementDataStore[t.customDataTag]&&(KTUtilElementDataStore[t.customDataTag]={}),KTUtilElementDataStore[t.customDataTag][e]=a)},get:function(e){if(void 0!==t)return void 0===t.customDataTag?null:this.has(e)?KTUtilElementDataStore[t.customDataTag][e]:null},has:function(e){return void 0!==t&&(void 0!==t.customDataTag&&!(!KTUtilElementDataStore[t.customDataTag]||!KTUtilElementDataStore[t.customDataTag][e]))},remove:function(e){t&&this.has(e)&&delete KTUtilElementDataStore[t.customDataTag][e]}}},outerWidth:function(t,e){if(!0===e){var a=parseFloat(t.offsetWidth);return a+=parseFloat(KTUtil.css(t,"margin-left"))+parseFloat(KTUtil.css(t,"margin-right")),parseFloat(a)}return a=parseFloat(t.offsetWidth)},offset:function(t){var e,a;if(t=KTUtil.get(t))return t.getClientRects().length?(e=t.getBoundingClientRect(),a=t.ownerDocument.defaultView,{top:e.top+a.pageYOffset,left:e.left+a.pageXOffset}):{top:0,left:0}},
-        height:function(t){return KTUtil.css(t,"height")},
-        visible:function(t){return!(0===t.offsetWidth&&0===t.offsetHeight)},
-        attr:function(t,e,a){if(null!=(t=KTUtil.get(t)))return void 0===a?t.getAttribute(e):void t.setAttribute(e,a)},
-        hasAttr:function(t,e){if(null!=(t=KTUtil.get(t)))return!!t.getAttribute(e)},
-        removeAttr:function(t,e){null!=(t=KTUtil.get(t))&&t.removeAttribute(e)},
-        animate:function(t,e,a,n,i,o){var l={};if(l.linear=function(t,e,a,n){return a*t/n+e},i=l.linear,"number"==typeof t&&"number"==typeof e&&"number"==typeof a&&"function"==typeof n){"function"!=typeof o&&(o=function(){});var r=window.requestAnimationFrame||function(t){window.setTimeout(t,20)},s=e-t;n(t);var d=window.performance&&window.performance.now?window.performance.now():+new Date;r(function l(c){var u=(c||+new Date)-d;u>=0&&n(i(u,t,s,a)),u>=0&&u>=a?(n(e),o()):r(l)})}},actualCss:function(t,e,a){var n,i="";if((t=KTUtil.get(t))instanceof HTMLElement!=!1)return t.getAttribute("kt-hidden-"+e)&&!1!==a?parseFloat(t.getAttribute("kt-hidden-"+e)):(i=t.style.cssText,t.style.cssText="position: absolute; visibility: hidden; display: block;","width"==e?n=t.offsetWidth:"height"==e&&(n=t.offsetHeight),t.style.cssText=i,t.setAttribute("kt-hidden-"+e,n),parseFloat(n))},
-        actualHeight:function(t,e){return KTUtil.actualCss(t,"height",e)},
-        actualWidth:function(t,e){return KTUtil.actualCss(t,"width",e)},
-        getScroll:function(t,e){return e="scroll"+e,t==window||t==document?self["scrollTop"==e?"pageYOffset":"pageXOffset"]||browserSupportsBoxModel&&document.documentElement[e]||document.body[e]:t[e]},
-        css:function(t,e,a){if(t=KTUtil.get(t))if(void 0!==a)t.style[e]=a;else{var n=(t.ownerDocument||document).defaultView;if(n&&n.getComputedStyle)return e=e.replace(/([A-Z])/g,"-$1").toLowerCase(),n.getComputedStyle(t,null).getPropertyValue(e);if(t.currentStyle)return e=e.replace(/\-(\w)/g,function(t,e){return e.toUpperCase()}),a=t.currentStyle[e],/^\d+(em|pt|%|ex)?$/i.test(a)?function(e){var a=t.style.left,n=t.runtimeStyle.left;return t.runtimeStyle.left=t.currentStyle.left,t.style.left=e||0,e=t.style.pixelLeft+"px",t.style.left=a,t.runtimeStyle.left=n,e}(a):a}},
-        slide:function(t,e,a,n,i){if(!(!t||"up"==e&&!1===KTUtil.visible(t)||"down"==e&&!0===KTUtil.visible(t))){a=a||600;var o=KTUtil.actualHeight(t),l=!1,r=!1;KTUtil.css(t,"padding-top")&&!0!==KTUtil.data(t).has("slide-padding-top")&&KTUtil.data(t).set("slide-padding-top",KTUtil.css(t,"padding-top")),KTUtil.css(t,"padding-bottom")&&!0!==KTUtil.data(t).has("slide-padding-bottom")&&KTUtil.data(t).set("slide-padding-bottom",KTUtil.css(t,"padding-bottom")),KTUtil.data(t).has("slide-padding-top")&&(l=parseInt(KTUtil.data(t).get("slide-padding-top"))),KTUtil.data(t).has("slide-padding-bottom")&&(r=parseInt(KTUtil.data(t).get("slide-padding-bottom"))),"up"==e?(t.style.cssText="display: block; overflow: hidden;",l&&KTUtil.animate(0,l,a,function(e){t.style.paddingTop=l-e+"px"},"linear"),r&&KTUtil.animate(0,r,a,function(e){t.style.paddingBottom=r-e+"px"},"linear"),KTUtil.animate(0,o,a,function(e){t.style.height=o-e+"px"},"linear",function(){n(),t.style.height="",t.style.display="none"})):"down"==e&&(t.style.cssText="display: block; overflow: hidden;",l&&KTUtil.animate(0,l,a,function(e){t.style.paddingTop=e+"px"},"linear",function(){t.style.paddingTop=""}),r&&KTUtil.animate(0,r,a,function(e){t.style.paddingBottom=e+"px"},"linear",function(){t.style.paddingBottom=""}),KTUtil.animate(0,o,a,function(e){t.style.height=e+"px"},"linear",function(){n(),t.style.height="",t.style.display="",t.style.overflow=""}))}},
-        slideUp:function(t,e,a){KTUtil.slide(t,"up",e,a)},
-        slideDown:function(t,e,a){KTUtil.slide(t,"down",e,a)},
-        show:function(t,e){void 0!==t&&(t.style.display=e||"block")},
-        hide:function(t){void 0!==t&&(t.style.display="none")},
-        addEvent:function(t,e,a,n){void 0!==(t=KTUtil.get(t))&&t.addEventListener(e,a)},
-        removeEvent:function(t,e,a){(t=KTUtil.get(t)).removeEventListener(e,a)},
-        on:function(t,e,a,n){if(e){var i=KTUtil.getUniqueID("event");return KTUtilDelegatedEventHandlers[i]=function(a){for(var i=t.querySelectorAll(e),o=a.target;o&&o!==t;){for(var l=0,r=i.length;l<r;l++)o===i[l]&&n.call(o,a);o=o.parentNode}},KTUtil.addEvent(t,a,KTUtilDelegatedEventHandlers[i]),i}},
-        off:function(t,e,a){t&&KTUtilDelegatedEventHandlers[a]&&(KTUtil.removeEvent(t,e,KTUtilDelegatedEventHandlers[a]),delete KTUtilDelegatedEventHandlers[a])},
-        one:function(t,e,a){(t=KTUtil.get(t)).addEventListener(e,function t(e){return e.target&&e.target.removeEventListener&&e.target.removeEventListener(e.type,t),a(e)})},
-        hash:function(t){var e,a=0;if(0===t.length)return a;for(e=0;e<t.length;e++)a=(a<<5)-a+t.charCodeAt(e),a|=0;return a},
-        animateClass:function(t,e,a){var n,i={animation:"animationend",OAnimation:"oAnimationEnd",MozAnimation:"mozAnimationEnd",WebkitAnimation:"webkitAnimationEnd",msAnimation:"msAnimationEnd"};for(var o in i)void 0!==t.style[o]&&(n=i[o]);KTUtil.addClass(t,"animated "+e),KTUtil.one(t,n,function(){KTUtil.removeClass(t,"animated "+e)}),a&&KTUtil.one(t,n,a)},
-        transitionEnd:function(t,e){var a,n={transition:"transitionend",OTransition:"oTransitionEnd",MozTransition:"mozTransitionEnd",WebkitTransition:"webkitTransitionEnd",msTransition:"msTransitionEnd"};for(var i in n)void 0!==t.style[i]&&(a=n[i]);KTUtil.one(t,a,e)},
-        animationEnd:function(t,e){var a,n={animation:"animationend",OAnimation:"oAnimationEnd",MozAnimation:"mozAnimationEnd",WebkitAnimation:"webkitAnimationEnd",msAnimation:"msAnimationEnd"};for(var i in n)void 0!==t.style[i]&&(a=n[i]);KTUtil.one(t,a,e)},
-        animateDelay:function(t,e){for(var a=["webkit-","moz-","ms-","o-",""],n=0;n<a.length;n++)KTUtil.css(t,a[n]+"animation-delay",e)},
-        animateDuration:function(t,e){for(var a=["webkit-","moz-","ms-","o-",""],n=0;n<a.length;n++)KTUtil.css(t,a[n]+"animation-duration",e)},
-        scrollTo:function(t,e,a){a=a||500;var n,i,o=(t=KTUtil.get(t))?KTUtil.offset(t).top:0,l=window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0;o>l?(n=o,i=l):(n=l,i=o),e&&(i+=e),KTUtil.animate(n,i,a,function(t){document.documentElement.scrollTop=t,document.body.parentNode.scrollTop=t,document.body.scrollTop=t})},
-        scrollTop:function(t,e){KTUtil.scrollTo(null,t,e)},
-        isArray:function(t){return t&&Array.isArray(t)},
-        ready:function(t){(document.attachEvent?"complete"===document.readyState:"loading"!==document.readyState)?t():document.addEventListener("DOMContentLoaded",t)},
-        isEmpty:function(t){for(var e in t)if(t.hasOwnProperty(e))return!1;return!0},
-        numberString:function(t){for(var e=(t+="").split("."),a=e[0],n=e.length>1?"."+e[1]:"",i=/(\d+)(\d{3})/;i.test(a);)a=a.replace(i,"$1,$2");return a+n},
-        detectIE:function(){var t=window.navigator.userAgent,e=t.indexOf("MSIE ");if(e>0)return parseInt(t.substring(e+5,t.indexOf(".",e)),10);if(t.indexOf("Trident/")>0){var a=t.indexOf("rv:");return parseInt(t.substring(a+3,t.indexOf(".",a)),10)}var n=t.indexOf("Edge/");return n>0&&parseInt(t.substring(n+5,t.indexOf(".",n)),10)},
-        isRTL:function(){return"rtl"==KTUtil.attr(KTUtil.get("html"),"direction")},
-        scrollInit:function(t,e){function a(){var a,n;if(n=e.height instanceof Function?parseInt(e.height.call()):parseInt(e.height),(e.mobileNativeScroll||e.disableForMobile)&&KTUtil.isInResponsiveRange("tablet-and-mobile"))(a=KTUtil.data(t).get("ps"))?(e.resetHeightOnDestroy?KTUtil.css(t,"height","auto"):(KTUtil.css(t,"overflow","auto"),n>0&&KTUtil.css(t,"height",n+"px")),a.destroy(),a=KTUtil.data(t).remove("ps")):n>0&&(KTUtil.css(t,"overflow","auto"),KTUtil.css(t,"height",n+"px"));else if(n>0&&KTUtil.css(t,"height",n+"px"),e.desktopNativeScroll)KTUtil.css(t,"overflow","auto");else{KTUtil.css(t,"overflow","hidden"),(a=KTUtil.data(t).get("ps"))?a.update():(KTUtil.addClass(t,"kt-scroll"),a=new PerfectScrollbar(t,{wheelSpeed:.5,swipeEasing:!0,wheelPropagation:!1!==e.windowScroll,minScrollbarLength:40,maxScrollbarLength:300,suppressScrollX:"true"!=KTUtil.attr(t,"data-scroll-x")}),KTUtil.data(t).set("ps",a));var i=KTUtil.attr(t,"id");if(!0===e.rememberPosition&&Cookies&&i){if(Cookies.get(i)){var o=parseInt(Cookies.get(i));o>0&&(t.scrollTop=o)}t.addEventListener("ps-scroll-y",function(){Cookies.set(i,t.scrollTop)})}}}t&&(a(),e.handleWindowResize&&KTUtil.addResizeHandler(function(){a()}))},
-        scrollUpdate:function(t){var e;(e=KTUtil.data(t).get("ps"))&&e.update()},
-        scrollUpdateAll:function(t){for(var e=KTUtil.findAll(t,".ps"),a=0,n=e.length;a<n;a++)KTUtil.scrollerUpdate(e[a])},
-        scrollDestroy:function(t){var e;(e=KTUtil.data(t).get("ps"))&&(e.destroy(),e=KTUtil.data(t).remove("ps"))},
-        setHTML:function(t,e){KTUtil.get(t)&&(KTUtil.get(t).innerHTML=e)},
-        getHTML:function(t){if(KTUtil.get(t))return KTUtil.get(t).innerHTML}
+
+// webpack support
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = KTUtil;
+}
+
+// Initialize KTUtil class on document ready
+KTUtil.ready(function() {
+    KTUtil.init();
+});
+
+// CSS3 Transitions only after page load(.kt-page-loading class added to body tag and remove with JS on page load)
+window.onload = function() {
+    KTUtil.removeClass(KTUtil.get('body'), 'kt-page--loading');
+}
+
+// plugin setup
+var KTAvatar = function(elementId, options) {
+    // Main object
+    var the = this;
+    var init = false;
+
+    // Get element object
+    var element = KTUtil.get(elementId);
+    var body = KTUtil.get('body');
+
+    if (!element) {
+        return; 
     }
-}();
-KTUtil.ready(function(){KTUtil.init()}),
-window.onload=function(){KTUtil.removeClass(KTUtil.get("body"),"kt-page--loading")},
-function(t){
-    var e="KTDatatable",
-        a=KTUtil,
-        n=KTApp;
-    if(void 0===a)
-        throw new Error("Util class is required and must be included before KTDatatable");
-    t.fn.KTDatatable=function(i){
-        if(0!==t(this).length){
-            var o=this;
-            o.debug=!1,
-            o.API={record:null,value:null,params:null};
-            var l={
-                isInit:!1,cellOffset:110,iconOffset:15,stateId:"meta",ajaxParams:{},pagingObject:{},
-                init:function(e){
-                    var a,n=!1;
-                    null===e.data.source&&(l.extractTable(),n=!0),
-                        l.setupBaseDOM.call(),
-                        l.setupDOM(o.table),
-                        l.setDataSourceQuery(l.getOption("data.source.read.params.query")),
-                        t(o).on("kt-datatable--on-layout-updated",l.afterRender),
-                        o.debug&&l.stateRemove(l.stateId),
-                        t.each(l.getOption("extensions"),function(e,a){"function"==typeof t.fn.KTDatatable[e]&&new t.fn.KTDatatable[e](o,a)}),
-                        l.spinnerCallback(!0),
-                        "remote"!==e.data.type&&"local"!==e.data.type||((!1===e.data.saveState||!1===e.data.saveState.cookie&&!1===e.data.saveState.webstorage)&&l.stateRemove(l.stateId),"local"===e.data.type&&"object"==typeof e.data.source&&(o.dataSet=o.originalDataSet=l.dataMapCallback(e.data.source)),l.dataRender()),n&&(t(o.tableHead).find("tr").remove(),t(o.tableFoot).find("tr").remove()),l.setHeadTitle(),l.getOption("layout.footer")&&l.setHeadTitle(o.tableFoot),void 0!==e.layout.header&&!1===e.layout.header&&t(o.table).find("thead").remove(),void 0!==e.layout.footer&&!1===e.layout.footer&&t(o.table).find("tfoot").remove(),null!==e.data.type&&"local"!==e.data.type||(l.setupCellField.call(),l.setupTemplateCell.call(),l.setupSubDatatable.call(),l.setupSystemColumn.call(),l.redraw());var i=!1;return t(window).resize(function(){i||(a=t(this).width(),i=!0),t(this).width()!==a&&(a=t(this).width(),l.fullRender())}),t(o).height(""),t(l.getOption("search.input")).on("keyup",function(e){l.getOption("search.onEnter")&&13!==e.which||l.search(t(this).val())}),o
-                },
-                extractTable:function(){
-                    var e=[],
-                        n=t(o).find("tr:first-child th").get().map(function(a,n){var o=t(a).data("field");void 0===o&&(o=t(a).text().trim());var l={field:o,title:o};for(var r in i.columns)i.columns[r].field===o&&(l=t.extend(!0,{},i.columns[r],l));return e.push(l),o});i.columns=e;var l=[],r=[];t(o).find("tr").each(function(){t(this).find("td").length&&l.push(t(this).prop("attributes"));var e={};t(this).find("td").each(function(t,a){e[n[t]]=a.innerHTML.trim()}),a.isEmpty(e)||r.push(e)}),i.data.attr.rowProps=l,i.data.source=r},
-                layoutUpdate:function(){l.setupSubDatatable.call(),l.setupSystemColumn.call(),l.setupHover.call(),void 0===i.detail&&1===l.getDepth()&&l.lockTable.call(),l.resetScroll(),l.isLocked()||(l.redraw.call(),l.isSubtable()||!0!==l.getOption("rows.autoHide")||l.autoHide(),t(o.table).find(".kt-datatable__row").css("height","")),l.columnHide.call(),l.rowEvenOdd.call(),l.sorting.call(),l.scrollbar.call(),l.isInit||(l.dropdownFix(),t(o).trigger("kt-datatable--on-init",{table:t(o.wrap).attr("id"),options:i}),l.isInit=!0),t(o).trigger("kt-datatable--on-layout-updated",{table:t(o.wrap).attr("id")})},
-                dropdownFix:function(){var e;t("body").on("show.bs.dropdown",".kt-datatable .kt-datatable__body",function(a){e=t(a.target).find(".dropdown-menu"),t("body").append(e.detach()),e.css("display","block"),e.position({my:"right top",at:"right bottom",of:t(a.relatedTarget)}),o.closest(".modal").length&&e.css("z-index","2000")}).on("hide.bs.dropdown",".kt-datatable .kt-datatable__body",function(a){t(a.target).append(e.detach()),e.hide()})},
-                lockTable:function(){
-                    var e={
-                        lockEnabled:!1,
-                        init:function(){e.lockEnabled=l.lockEnabledColumns(),0===e.lockEnabled.left.length&&0===e.lockEnabled.right.length||e.enable()},
-                        enable:function(){t(o.table).find("thead,tbody,tfoot").each(function(){var a=this;0===t(this).find(".kt-datatable__lock").length&&t(this).ready(function(){!function(a){if(t(a).find(".kt-datatable__lock").length>0)l.log("Locked container already exist in: ",a);else if(0!==t(a).find(".kt-datatable__row").length){var n=t("<div/>").addClass("kt-datatable__lock kt-datatable__lock--left"),i=t("<div/>").addClass("kt-datatable__lock kt-datatable__lock--scroll"),r=t("<div/>").addClass("kt-datatable__lock kt-datatable__lock--right");t(a).find(".kt-datatable__row").each(function(){var e=t("<tr/>").addClass("kt-datatable__row").data("obj",t(this).data("obj")).appendTo(n),a=t("<tr/>").addClass("kt-datatable__row").data("obj",t(this).data("obj")).appendTo(i),o=t("<tr/>").addClass("kt-datatable__row").data("obj",t(this).data("obj")).appendTo(r);t(this).find(".kt-datatable__cell").each(function(){var n=t(this).data("locked");void 0!==n?(void 0===n.left&&!0!==n||t(this).appendTo(e),void 0!==n.right&&t(this).appendTo(o)):t(this).appendTo(a)}),t(this).remove()}),e.lockEnabled.left.length>0&&(t(o.wrap).addClass("kt-datatable--lock"),t(n).appendTo(a)),(e.lockEnabled.left.length>0||e.lockEnabled.right.length>0)&&t(i).appendTo(a),e.lockEnabled.right.length>0&&(t(o.wrap).addClass("kt-datatable--lock"),t(r).appendTo(a))}else l.log("No row exist in: ",a)}(a)})})}
-                    };
-                    return e.init(),e
-                },
-                fullRender:function(){t(o.tableHead).empty(),l.setHeadTitle(),l.getOption("layout.footer")&&(t(o.tableFoot).empty(),l.setHeadTitle(o.tableFoot)),l.spinnerCallback(!0),t(o.wrap).removeClass("kt-datatable--loaded"),l.insertData()},
-                lockEnabledColumns:function(){var e=t(window).width(),n=i.columns,o={left:[],right:[]};return t.each(n,function(t,n){void 0!==n.locked&&(void 0!==n.locked.left&&a.getBreakpoint(n.locked.left)<=e&&o.left.push(n.locked.left),void 0!==n.locked.right&&a.getBreakpoint(n.locked.right)<=e&&o.right.push(n.locked.right))}),o},
-                afterRender:function(e,a){t(o).ready(function(){l.isLocked()&&l.redraw(),t(o.tableBody).css("visibility",""),t(o.wrap).addClass("kt-datatable--loaded"),l.spinnerCallback(!1)})},hoverTimer:0,isScrolling:!1,
-                setupHover:function(){t(window).scroll(function(t){clearTimeout(l.hoverTimer),l.isScrolling=!0}),t(o.tableBody).find(".kt-datatable__cell").off("mouseenter","mouseleave").on("mouseenter",function(){if(l.hoverTimer=setTimeout(function(){l.isScrolling=!1},200),!l.isScrolling){var e=t(this).closest(".kt-datatable__row").addClass("kt-datatable__row--hover"),a=t(e).index()+1;t(e).closest(".kt-datatable__lock").parent().find(".kt-datatable__row:nth-child("+a+")").addClass("kt-datatable__row--hover")}}).on("mouseleave",function(){var e=t(this).closest(".kt-datatable__row").removeClass("kt-datatable__row--hover"),a=t(e).index()+1;t(e).closest(".kt-datatable__lock").parent().find(".kt-datatable__row:nth-child("+a+")").removeClass("kt-datatable__row--hover")})},
-                adjustLockContainer:function(){if(!l.isLocked())return 0;var e=t(o.tableHead).width(),a=t(o.tableHead).find(".kt-datatable__lock--left").width(),n=t(o.tableHead).find(".kt-datatable__lock--right").width();void 0===a&&(a=0),void 0===n&&(n=0);var i=Math.floor(e-a-n);return t(o.table).find(".kt-datatable__lock--scroll").css("width",i),i},
-                dragResize:function(){var e,a,n=!1,i=void 0;t(o.tableHead).find(".kt-datatable__cell").mousedown(function(o){i=t(this),n=!0,e=o.pageX,a=t(this).width(),t(i).addClass("kt-datatable__cell--resizing")}).mousemove(function(l){if(n){var r=t(i).index(),s=t(o.tableBody),d=t(i).closest(".kt-datatable__lock");if(d){var c=t(d).index();s=t(o.tableBody).find(".kt-datatable__lock").eq(c)}t(s).find(".kt-datatable__row").each(function(n,i){t(i).find(".kt-datatable__cell").eq(r).width(a+(l.pageX-e)).children().width(a+(l.pageX-e))}),t(i).children().css("width",a+(l.pageX-e))}}).mouseup(function(){t(i).removeClass("kt-datatable__cell--resizing"),n=!1}),t(document).mouseup(function(){t(i).removeClass("kt-datatable__cell--resizing"),n=!1})},
-                initHeight:function(){if(i.layout.height&&i.layout.scroll){var e=t(o.tableHead).find(".kt-datatable__row").outerHeight(),a=t(o.tableFoot).find(".kt-datatable__row").outerHeight(),n=i.layout.height;e>0&&(n-=e),a>0&&(n-=a),n-=2,t(o.tableBody).css("max-height",n),t(o.tableBody).find(".kt-datatable__lock--scroll").css("height",n)}},
-                setupBaseDOM:function(){o.initialDatatable=t(o).clone(),"TABLE"===t(o).prop("tagName")?(o.table=t(o).removeClass("kt-datatable").addClass("kt-datatable__table"),0===t(o.table).parents(".kt-datatable").length&&(o.table.wrap(t("<div/>").addClass("kt-datatable").addClass("kt-datatable--"+i.layout.theme)),o.wrap=t(o.table).parent())):(o.wrap=t(o).addClass("kt-datatable").addClass("kt-datatable--"+i.layout.theme),o.table=t("<table/>").addClass("kt-datatable__table").appendTo(o)),void 0!==i.layout.class&&t(o.wrap).addClass(i.layout.class),t(o.table).removeClass("kt-datatable--destroyed").css("display","block"),void 0===t(o).attr("id")&&(l.setOption("data.saveState",!1),t(o.table).attr("id",a.getUniqueID("kt-datatable--"))),l.getOption("layout.minHeight")&&t(o.table).css("min-height",l.getOption("layout.minHeight")),l.getOption("layout.height")&&t(o.table).css("max-height",l.getOption("layout.height")),null===i.data.type&&t(o.table).css("width","").css("display",""),o.tableHead=t(o.table).find("thead"),0===t(o.tableHead).length&&(o.tableHead=t("<thead/>").prependTo(o.table)),o.tableBody=t(o.table).find("tbody"),0===t(o.tableBody).length&&(o.tableBody=t("<tbody/>").appendTo(o.table)),void 0!==i.layout.footer&&i.layout.footer&&(o.tableFoot=t(o.table).find("tfoot"),0===t(o.tableFoot).length&&(o.tableFoot=t("<tfoot/>").appendTo(o.table)))},
-                setupCellField:function(e){void 0===e&&(e=t(o.table).children());var a=i.columns;t.each(e,function(e,n){t(n).find(".kt-datatable__row").each(function(e,n){t(n).find(".kt-datatable__cell").each(function(e,n){void 0!==a[e]&&t(n).data(a[e])})})})},
-                setupTemplateCell:function(e){void 0===e&&(e=o.tableBody);var a=i.columns;t(e).find(".kt-datatable__row").each(function(e,n){var i=t(n).data("obj");if(void 0!==i){var r=l.getOption("rows.callback");"function"==typeof r&&r(t(n),i,e);var s=l.getOption("rows.beforeTemplate");"function"==typeof s&&s(t(n),i,e),void 0===i&&(i={},t(n).find(".kt-datatable__cell").each(function(e,n){var o=t.grep(a,function(e,a){return t(n).data("field")===e.field})[0];void 0!==o&&(i[o.field]=t(n).text())})),t(n).find(".kt-datatable__cell").each(function(n,r){var s=t.grep(a,function(e,a){return t(r).data("field")===e.field})[0];if(void 0!==s&&void 0!==s.template){var d="";"string"==typeof s.template&&(d=l.dataPlaceholder(s.template,i)),"function"==typeof s.template&&(d=s.template(i,e,o)),"undefined"!=typeof DOMPurify&&(d=DOMPurify.sanitize(d));var c=document.createElement("span");c.innerHTML=d,t(r).html(c),void 0!==s.overflow&&(t(c).css("overflow",s.overflow),t(c).css("position","relative"))}});var d=l.getOption("rows.afterTemplate");"function"==typeof d&&d(t(n),i,e)}})},setupSystemColumn:function(){if(o.dataSet=o.dataSet||[],0!==o.dataSet.length){var e=i.columns;t(o.tableBody).find(".kt-datatable__row").each(function(a,n){t(n).find(".kt-datatable__cell").each(function(a,n){var i=t.grep(e,function(e,a){return t(n).data("field")===e.field})[0];if(void 0!==i){var o=t(n).text();if(void 0!==i.selector&&!1!==i.selector){if(t(n).find('.kt-checkbox [type="checkbox"]').length>0)return;t(n).addClass("kt-datatable__cell--check");var r=t("<label/>").addClass("kt-checkbox kt-checkbox--single").append(t("<input/>").attr("type","checkbox").attr("value",o).on("click",function(){t(this).is(":checked")?l.setActive(this):l.setInactive(this)})).append("&nbsp;<span></span>");void 0!==i.selector.class&&t(r).addClass(i.selector.class),t(n).children().html(r)}if(void 0!==i.subtable&&i.subtable){if(t(n).find(".kt-datatable__toggle-subtable").length>0)return;t(n).children().html(t("<a/>").addClass("kt-datatable__toggle-subtable").attr("href","#").attr("data-value",o).append(t("<i/>").addClass(l.getOption("layout.icons.rowDetail.collapse"))))}}})});
-                var a=function(a){var n=t.grep(e,function(t,e){return void 0!==t.selector&&!1!==t.selector})[0];if(void 0!==n&&void 0!==n.selector&&!1!==n.selector){var i=t(a).find('[data-field="'+n.field+'"]');if(t(i).find('.kt-checkbox [type="checkbox"]').length>0)return;t(i).addClass("kt-datatable__cell--check");var o=t("<label/>").addClass("kt-checkbox kt-checkbox--single kt-checkbox--all").append(t("<input/>").attr("type","checkbox").on("click",function(){t(this).is(":checked")?l.setActiveAll(!0):l.setActiveAll(!1)})).append("&nbsp;<span></span>");void 0!==n.selector.class&&t(o).addClass(n.selector.class),t(i).children().html(o)}};i.layout.header&&a(t(o.tableHead).find(".kt-datatable__row").first()),i.layout.footer&&a(t(o.tableFoot).find(".kt-datatable__row").first())}},maxWidthList:{},
-                adjustCellsWidth:function(){var e=t(o.tableBody).innerWidth()-l.iconOffset,a=t(o.tableBody).find(".kt-datatable__row:first-child").find(".kt-datatable__cell").not(".kt-datatable__toggle-detail").not(":hidden").length;if(a>0){e-=l.iconOffset*a;var n=Math.floor(e/a);n<=l.cellOffset&&(n=l.cellOffset),t(o.table).find(".kt-datatable__row").find(".kt-datatable__cell").not(".kt-datatable__toggle-detail").not(":hidden").each(function(e,a){var i=n,r=t(a).data("width");if(void 0!==r)if("auto"===r){var s=t(a).data("field");if(l.maxWidthList[s])i=l.maxWidthList[s];else{var d=t(o.table).find('.kt-datatable__cell[data-field="'+s+'"]');i=l.maxWidthList[s]=Math.max.apply(null,t(d).map(function(){return t(this).outerWidth()}).get())}}else i=r;t(a).children().css("width",Math.ceil(i))})}return o},
-                adjustCellsHeight:function(){t.each(t(o.table).children(),function(e,a){for(var n=t(a).find(".kt-datatable__row").first().parent().find(".kt-datatable__row").length,i=1;i<=n;i++){var o=t(a).find(".kt-datatable__row:nth-child("+i+")");if(t(o).length>0){var l=Math.max.apply(null,t(o).map(function(){return t(this).outerHeight()}).get());t(o).css("height",Math.ceil(l))}}})},
-                setupDOM:function(e){t(e).find("> thead").addClass("kt-datatable__head"),t(e).find("> tbody").addClass("kt-datatable__body"),t(e).find("> tfoot").addClass("kt-datatable__foot"),t(e).find("tr").addClass("kt-datatable__row"),t(e).find("tr > th, tr > td").addClass("kt-datatable__cell"),t(e).find("tr > th, tr > td").each(function(e,a){0===t(a).find("span").length&&t(a).wrapInner(t("<span/>").css("width",l.cellOffset))})},
-                scrollbar:function(){
-                    var e={
-                        scrollable:null,tableLocked:null,initPosition:null,
-                        init:function(){var n=a.getViewPort().width;if(i.layout.scroll){t(o.wrap).addClass("kt-datatable--scroll");var r=t(o.tableBody).find(".kt-datatable__lock--scroll");t(r).find(".kt-datatable__row").length>0&&t(r).length>0?(e.scrollHead=t(o.tableHead).find("> .kt-datatable__lock--scroll > .kt-datatable__row"),e.scrollFoot=t(o.tableFoot).find("> .kt-datatable__lock--scroll > .kt-datatable__row"),e.tableLocked=t(o.tableBody).find(".kt-datatable__lock:not(.kt-datatable__lock--scroll)"),l.getOption("layout.customScrollbar")&&10!=a.detectIE()&&n>a.getBreakpoint("lg")?e.initCustomScrollbar(r[0]):e.initDefaultScrollbar(r)):t(o.tableBody).find(".kt-datatable__row").length>0&&(e.scrollHead=t(o.tableHead).find("> .kt-datatable__row"),e.scrollFoot=t(o.tableFoot).find("> .kt-datatable__row"),l.getOption("layout.customScrollbar")&&10!=a.detectIE()&&n>a.getBreakpoint("lg")?e.initCustomScrollbar(o.tableBody):e.initDefaultScrollbar(o.tableBody))}},
-                        initDefaultScrollbar:function(a){e.initPosition=t(a).scrollLeft(),t(a).css("overflow-y","auto").off().on("scroll",e.onScrolling),!0!==l.getOption("rows.autoHide")&&t(a).css("overflow-x","auto")},
-                        onScrolling:function(n){var i=t(this).scrollLeft(),o=t(this).scrollTop();a.isRTL()&&(i-=e.initPosition),t(e.scrollHead).css("left",-i),t(e.scrollFoot).css("left",-i),t(e.tableLocked).each(function(e,a){l.isLocked()&&(o-=1),t(a).css("top",-o)})},
-                        initCustomScrollbar:function(a){e.scrollable=a,l.initScrollbar(a),e.initPosition=t(a).scrollLeft(),t(a).off().on("scroll",e.onScrolling)}
-                    };
-                    return e.init(),e
-                },
-                initScrollbar:function(e,n){if(e&&e.nodeName)if(t(o.tableBody).css("overflow",""),a.hasClass(e,"ps"))t(e).data("ps").update();else{var i=new PerfectScrollbar(e,Object.assign({},{wheelSpeed:.5,swipeEasing:!0,minScrollbarLength:40,maxScrollbarLength:300,suppressScrollX:l.getOption("rows.autoHide")&&!l.isLocked()},n));t(e).data("ps",i),t(window).resize(function(){i.update()})}},
-                setHeadTitle:function(e){void 0===e&&(e=o.tableHead),e=t(e)[0];var n=i.columns,r=e.getElementsByTagName("tr")[0],s=e.getElementsByTagName("td");void 0===r&&(r=document.createElement("tr"),e.appendChild(r)),t.each(n,function(e,n){var i=s[e];if(void 0===i&&(i=document.createElement("th"),r.appendChild(i)),void 0!==n.title&&(i.innerHTML=n.title,i.setAttribute("data-field",n.field),a.addClass(i,n.class),void 0!==n.autoHide&&(!0!==n.autoHide?i.setAttribute("data-autohide-disabled",n.autoHide):i.setAttribute("data-autohide-enabled",n.autoHide)),t(i).data(n)),void 0!==n.attr&&t.each(n.attr,function(t,e){i.setAttribute(t,e)}),void 0!==n.textAlign){var l=void 0!==o.textAlign[n.textAlign]?o.textAlign[n.textAlign]:"";a.addClass(i,l)}}),l.setupDOM(e)},
-                dataRender:function(e){t(o.table).siblings(".kt-datatable__pager").removeClass("kt-datatable--paging-loaded");var a=function(){o.dataSet=o.dataSet||[],l.localDataUpdate();var e=l.getDataSourceParam("pagination");0===e.perpage&&(e.perpage=i.data.pageSize||10),e.total=o.dataSet.length;var a=Math.max(e.perpage*(e.page-1),0),n=Math.min(a+e.perpage,e.total);return o.dataSet=t(o.dataSet).slice(a,n),e},n=function(e){var n=function(e,a){t(e.pager).hasClass("kt-datatable--paging-loaded")||(t(e.pager).remove(),e.init(a)),t(e.pager).off().on("kt-datatable--on-goto-page",function(n){t(e.pager).remove(),e.init(a)});var n=Math.max(a.perpage*(a.page-1),0),i=Math.min(n+a.perpage,a.total);l.localDataUpdate(),o.dataSet=t(o.dataSet).slice(n,i),l.insertData()};if(t(o.wrap).removeClass("kt-datatable--error"),i.pagination)if(i.data.serverPaging&&"local"!==i.data.type){var r=l.getObject("meta",e||null);l.pagingObject=null!==r?l.paging(r):l.paging(a(),n)}else l.pagingObject=l.paging(a(),n);else l.localDataUpdate();l.insertData()};"local"===i.data.type||!1===i.data.serverSorting&&"sort"===e||!1===i.data.serverFiltering&&"search"===e?setTimeout(function(){n(),l.setAutoColumns()}):l.getData().done(n)},
-                insertData:function(){o.dataSet=o.dataSet||[];var e=l.getDataSourceParam(),n=e.pagination,r=(Math.max(n.page,1)-1)*n.perpage,s=Math.min(n.page,n.pages)*n.perpage,d={};void 0!==i.data.attr.rowProps&&i.data.attr.rowProps.length&&(d=i.data.attr.rowProps.slice(r,s));var c=document.createElement("tbody");c.style.visibility="hidden";var u=i.columns.length;if(t.each(o.dataSet,function(n,r){var s=document.createElement("tr");s.setAttribute("data-row",n),t(s).data("obj",r),void 0!==d[n]&&t.each(d[n],function(){s.setAttribute(this.name,this.value)});for(var p=0;p<u;p+=1){var f=i.columns[p],g=[];if(l.getObject("sort.field",e)===f.field&&g.push("kt-datatable__cell--sorted"),void 0!==f.textAlign){var h=void 0!==o.textAlign[f.textAlign]?o.textAlign[f.textAlign]:"";g.push(h)}void 0!==f.class&&g.push(f.class);var v=document.createElement("td");a.addClass(v,g.join(" ")),v.setAttribute("data-field",f.field),void 0!==f.autoHide&&(!0!==f.autoHide?v.setAttribute("data-autohide-disabled",f.autoHide):v.setAttribute("data-autohide-enabled",f.autoHide)),v.innerHTML=l.getObject(f.field,r),s.appendChild(v)}c.appendChild(s)}),0===o.dataSet.length){var p=document.createElement("span");a.addClass(p,"kt-datatable--error"),p.innerHTML=l.getOption("translate.records.noRecords"),c.appendChild(p),t(o.wrap).addClass("kt-datatable--error kt-datatable--loaded"),l.spinnerCallback(!1)}t(o.tableBody).replaceWith(c),o.tableBody=c,l.setupDOM(o.table),l.setupCellField([o.tableBody]),l.setupTemplateCell(o.tableBody),l.layoutUpdate()},
-                updateTableComponents:function(){o.tableHead=t(o.table).children("thead"),o.tableBody=t(o.table).children("tbody"),o.tableFoot=t(o.table).children("tfoot")},
-                getData:function(){var e={dataType:"json",method:"POST",data:{},timeout:l.getOption("data.source.read.timeout")||3e4};if("local"===i.data.type&&(e.url=i.data.source),"remote"===i.data.type){var a=l.getDataSourceParam();l.getOption("data.serverPaging")||delete a.pagination,l.getOption("data.serverSorting")||delete a.sort,e.data=t.extend({},e.data,l.getOption("data.source.read.params"),a),"string"!=typeof(e=t.extend({},e,l.getOption("data.source.read"))).url&&(e.url=l.getOption("data.source.read")),"string"!=typeof e.url&&(e.url=l.getOption("data.source"))}return t.ajax(e).done(function(e,a,n){o.lastResponse=e,o.dataSet=o.originalDataSet=l.dataMapCallback(e),l.setAutoColumns(),t(o).trigger("kt-datatable--on-ajax-done",[o.dataSet])}).fail(function(e,a,n){t(o).trigger("kt-datatable--on-ajax-fail",[e]),t(o.tableBody).html(t("<span/>").addClass("kt-datatable--error").html(l.getOption("translate.records.noRecords"))),t(o.wrap).addClass("kt-datatable--error kt-datatable--loaded"),l.spinnerCallback(!1)}).always(function(){})},
-        paging:function(e,n){
-            var i={
-                meta:null,
-                pager:null,
-                paginateEvent:null,
-                pagerLayout:{pagination:null,info:null},
-                callback:null,
-                init:function(e){
-                    i.meta=e,
-                    i.meta.page=parseInt(i.meta.page),
-                    i.meta.pages=parseInt(i.meta.pages),
-                    i.meta.perpage=parseInt(i.meta.perpage),
-                    i.meta.total=parseInt(i.meta.total),
-                    i.meta.pages=Math.max(Math.ceil(i.meta.total/i.meta.perpage),1),
-                    i.meta.page>i.meta.pages&&(i.meta.page=i.meta.pages),
-                    i.paginateEvent=l.getTablePrefix("paging"),
-                    i.pager=t(o.table).siblings(".kt-datatable__pager"),
-                    t(i.pager).hasClass("kt-datatable--paging-loaded")||(t(i.pager).remove(),0!==i.meta.pages&&(l.setDataSourceParam("pagination",{page:i.meta.page,pages:i.meta.pages,perpage:i.meta.perpage,total:i.meta.total}),i.callback=i.serverCallback,"function"==typeof n&&(i.callback=n),i.addPaginateEvent(),i.populate(),i.meta.page=Math.max(i.meta.page||1,i.meta.page),t(o).trigger(i.paginateEvent,i.meta),i.pagingBreakpoint.call(),t(window).resize(i.pagingBreakpoint)))},serverCallback:function(t,e){l.dataRender()},populate:function(){var e=l.getOption("layout.icons.pagination"),a=l.getOption("translate.toolbar.pagination.items.default");i.pager=t("<div/>").addClass("kt-datatable__pager kt-datatable--paging-loaded");var n=t("<ul/>").addClass("kt-datatable__pager-nav");i.pagerLayout.pagination=n,t("<li/>").append(t("<a/>").attr("title",a.first).addClass("kt-datatable__pager-link kt-datatable__pager-link--first").append(t("<i/>").addClass(e.first)).on("click",i.gotoMorePage).attr("data-page",1)).appendTo(n),t("<li/>").append(t("<a/>").attr("title",a.prev).addClass("kt-datatable__pager-link kt-datatable__pager-link--prev").append(t("<i/>").addClass(e.prev)).on("click",i.gotoMorePage)).appendTo(n),t("<li/>").append(t("<a/>").attr("title",a.more).addClass("kt-datatable__pager-link kt-datatable__pager-link--more-prev").html(t("<i/>").addClass(e.more)).on("click",i.gotoMorePage)).appendTo(n),t("<li/>").append(t("<input/>").attr("type","text").addClass("kt-pager-input form-control").attr("title",a.input).on("keyup",function(){t(this).attr("data-page",Math.abs(t(this).val()))}).on("keypress",function(t){13===t.which&&i.gotoMorePage(t)})).appendTo(n);var r=l.getOption("toolbar.items.pagination.pages.desktop.pagesNumber"),s=Math.ceil(i.meta.page/r)*r,d=s-r;s>i.meta.pages&&(s=i.meta.pages);for(var c=d;c<s;c++){var u=c+1;t("<li/>").append(t("<a/>").addClass("kt-datatable__pager-link kt-datatable__pager-link-number").text(u).attr("data-page",u).attr("title",u).on("click",i.gotoPage)).appendTo(n)}t("<li/>").append(t("<a/>").attr("title",a.more).addClass("kt-datatable__pager-link kt-datatable__pager-link--more-next").html(t("<i/>").addClass(e.more)).on("click",i.gotoMorePage)).appendTo(n),t("<li/>").append(t("<a/>").attr("title",a.next).addClass("kt-datatable__pager-link kt-datatable__pager-link--next").append(t("<i/>").addClass(e.next)).on("click",i.gotoMorePage)).appendTo(n),t("<li/>").append(t("<a/>").attr("title",a.last).addClass("kt-datatable__pager-link kt-datatable__pager-link--last").append(t("<i/>").addClass(e.last)).on("click",i.gotoMorePage).attr("data-page",i.meta.pages)).appendTo(n),l.getOption("toolbar.items.info")&&(i.pagerLayout.info=t("<div/>").addClass("kt-datatable__pager-info").append(t("<span/>").addClass("kt-datatable__pager-detail"))),t.each(l.getOption("toolbar.layout"),function(e,a){t(i.pagerLayout[a]).appendTo(i.pager)});var p=t("<select/>").addClass("selectpicker kt-datatable__pager-size").attr("title",l.getOption("translate.toolbar.pagination.items.default.select")).attr("data-width","60px").val(i.meta.perpage).on("change",i.updatePerpage).prependTo(i.pagerLayout.info),f=l.getOption("toolbar.items.pagination.pageSizeSelect");0==f.length&&(f=[10,20,30,50,100]),t.each(f,function(e,a){var n=a;-1===a&&(n=l.getOption("translate.toolbar.pagination.items.default.all")),t("<option/>").attr("value",a).html(n).appendTo(p)}),t(o).ready(function(){t(".selectpicker").selectpicker().on("hide.bs.select",function(){t(this).closest(".bootstrap-select").removeClass("dropup")}).siblings(".dropdown-toggle").attr("title",l.getOption("translate.toolbar.pagination.items.default.select"))}),i.paste()},
-                paste:function(){t.each(t.unique(l.getOption("toolbar.placement")),function(e,a){"bottom"===a&&t(i.pager).clone(!0).insertAfter(o.table),"top"===a&&t(i.pager).clone(!0).addClass("kt-datatable__pager--top").insertBefore(o.table)})},
-                gotoMorePage:function(e){if(e.preventDefault(),"disabled"===t(this).attr("disabled"))return!1;var a=t(this).attr("data-page");return void 0===a&&(a=t(e.target).attr("data-page")),i.openPage(parseInt(a)),!1},
-                gotoPage:function(e){e.preventDefault(),t(this).hasClass("kt-datatable__pager-link--active")||i.openPage(parseInt(t(this).data("page")))},
-                openPage:function(e){i.meta.page=parseInt(e),t(o).trigger(i.paginateEvent,i.meta),i.callback(i,i.meta),t(i.pager).trigger("kt-datatable--on-goto-page",i.meta)},
-                updatePerpage:function(e){e.preventDefault(),i.pager=t(o.table).siblings(".kt-datatable__pager").removeClass("kt-datatable--paging-loaded"),e.originalEvent&&(i.meta.perpage=parseInt(t(this).val())),t(i.pager).find("select.kt-datatable__pager-size").val(i.meta.perpage).attr("data-selected",i.meta.perpage),l.setDataSourceParam("pagination",{page:i.meta.page,pages:i.meta.pages,perpage:i.meta.perpage,total:i.meta.total}),t(i.pager).trigger("kt-datatable--on-update-perpage",i.meta),t(o).trigger(i.paginateEvent,i.meta),i.callback(i,i.meta),i.updateInfo.call()},
-                addPaginateEvent:function(e){t(o).off(i.paginateEvent).on(i.paginateEvent,function(e,a){l.spinnerCallback(!0),i.pager=t(o.table).siblings(".kt-datatable__pager");var n=t(i.pager).find(".kt-datatable__pager-nav");t(n).find(".kt-datatable__pager-link--active").removeClass("kt-datatable__pager-link--active"),t(n).find('.kt-datatable__pager-link-number[data-page="'+a.page+'"]').addClass("kt-datatable__pager-link--active"),t(n).find(".kt-datatable__pager-link--prev").attr("data-page",Math.max(a.page-1,1)),t(n).find(".kt-datatable__pager-link--next").attr("data-page",Math.min(a.page+1,a.pages)),t(i.pager).each(function(){t(this).find('.kt-pager-input[type="text"]').prop("value",a.page)}),t(i.pager).find(".kt-datatable__pager-nav").show(),a.pages<=1&&t(i.pager).find(".kt-datatable__pager-nav").hide(),l.setDataSourceParam("pagination",{page:i.meta.page,pages:i.meta.pages,perpage:i.meta.perpage,total:i.meta.total}),t(i.pager).find("select.kt-datatable__pager-size").val(a.perpage).attr("data-selected",a.perpage),t(o.table).find('.kt-checkbox > [type="checkbox"]').prop("checked",!1),t(o.table).find(".kt-datatable__row--active").removeClass("kt-datatable__row--active"),i.updateInfo.call(),i.pagingBreakpoint.call()})},
-                updateInfo:function(){var e=Math.max(i.meta.perpage*(i.meta.page-1)+1,1),a=Math.min(e+i.meta.perpage-1,i.meta.total);t(i.pager).find(".kt-datatable__pager-info").find(".kt-datatable__pager-detail").html(l.dataPlaceholder(l.getOption("translate.toolbar.pagination.items.info"),{start:e,end:-1===i.meta.perpage?i.meta.total:a,pageSize:-1===i.meta.perpage||i.meta.perpage>=i.meta.total?i.meta.total:i.meta.perpage,total:i.meta.total}))},
-                pagingBreakpoint:function(){var e=t(o.table).siblings(".kt-datatable__pager").find(".kt-datatable__pager-nav");if(0!==t(e).length){var n=l.getCurrentPage(),r=t(e).find(".kt-pager-input").closest("li");t(e).find("li").show(),t.each(l.getOption("toolbar.items.pagination.pages"),function(o,s){if(a.isInResponsiveRange(o)){switch(o){case"desktop":case"tablet":Math.ceil(n/s.pagesNumber),s.pagesNumber,s.pagesNumber;t(r).hide(),i.meta=l.getDataSourceParam("pagination"),i.paginationUpdate();break;case"mobile":t(r).show(),t(e).find(".kt-datatable__pager-link--more-prev").closest("li").hide(),t(e).find(".kt-datatable__pager-link--more-next").closest("li").hide(),t(e).find(".kt-datatable__pager-link-number").closest("li").hide()}return!1}})}},
-                paginationUpdate:function(){var e=t(o.table).siblings(".kt-datatable__pager").find(".kt-datatable__pager-nav"),a=t(e).find(".kt-datatable__pager-link--more-prev"),n=t(e).find(".kt-datatable__pager-link--more-next"),r=t(e).find(".kt-datatable__pager-link--first"),s=t(e).find(".kt-datatable__pager-link--prev"),d=t(e).find(".kt-datatable__pager-link--next"),c=t(e).find(".kt-datatable__pager-link--last"),u=t(e).find(".kt-datatable__pager-link-number"),p=Math.max(t(u).first().data("page")-1,1);t(a).each(function(e,a){t(a).attr("data-page",p)}),1===p?t(a).parent().hide():t(a).parent().show();var f=Math.min(t(u).last().data("page")+1,i.meta.pages);t(n).each(function(e,a){t(n).attr("data-page",f).show()}),f===i.meta.pages&&f===t(u).last().data("page")?t(n).parent().hide():t(n).parent().show(),1===i.meta.page?(t(r).attr("disabled",!0).addClass("kt-datatable__pager-link--disabled"),t(s).attr("disabled",!0).addClass("kt-datatable__pager-link--disabled")):(t(r).removeAttr("disabled").removeClass("kt-datatable__pager-link--disabled"),t(s).removeAttr("disabled").removeClass("kt-datatable__pager-link--disabled")),i.meta.page===i.meta.pages?(t(d).attr("disabled",!0).addClass("kt-datatable__pager-link--disabled"),t(c).attr("disabled",!0).addClass("kt-datatable__pager-link--disabled")):(t(d).removeAttr("disabled").removeClass("kt-datatable__pager-link--disabled"),t(c).removeAttr("disabled").removeClass("kt-datatable__pager-link--disabled"));var g=l.getOption("toolbar.items.pagination.navigation");g.first||t(r).remove(),g.prev||t(s).remove(),g.next||t(d).remove(),g.last||t(c).remove(),g.more||(t(a).remove(),t(n).remove())}};return i.init(e),i},
-                columnHide:function(){var e=a.getViewPort().width;t.each(i.columns,function(n,i){if(void 0!==i.responsive||void 0!==i.visible){var r=i.field,s=t.grep(t(o.table).find(".kt-datatable__cell"),function(e,a){return r===t(e).data("field")});setTimeout(function(){!1===l.getObject("visible",i)?t(s).hide():(a.getBreakpoint(l.getObject("responsive.hidden",i))>=e?t(s).hide():t(s).show(),a.getBreakpoint(l.getObject("responsive.visible",i))<=e?t(s).show():t(s).hide())})}})},
-                setupSubDatatable:function(){var e=l.getOption("detail.content");if("function"==typeof e&&!(t(o.table).find(".kt-datatable__subtable").length>0)){t(o.wrap).addClass("kt-datatable--subtable"),i.columns[0].subtable=!0;var a=function(a){a.preventDefault();var n=t(this).closest(".kt-datatable__row"),r=t(n).next(".kt-datatable__row-subtable");0===t(r).length&&(r=t("<tr/>").addClass("kt-datatable__row-subtable kt-datatable__row-loading").hide().append(t("<td/>").addClass("kt-datatable__subtable").attr("colspan",l.getTotalColumns())),t(n).after(r),t(n).hasClass("kt-datatable__row--even")&&t(r).addClass("kt-datatable__row-subtable--even")),t(r).toggle();var s=t(r).find(".kt-datatable__subtable"),d=t(this).closest("[data-field]:first-child").find(".kt-datatable__toggle-subtable").data("value"),c=t(this).find("i").removeAttr("class");t(n).hasClass("kt-datatable__row--subtable-expanded")?(t(c).addClass(l.getOption("layout.icons.rowDetail.collapse")),t(n).removeClass("kt-datatable__row--subtable-expanded"),t(o).trigger("kt-datatable--on-collapse-subtable",[n])):(t(c).addClass(l.getOption("layout.icons.rowDetail.expand")),t(n).addClass("kt-datatable__row--subtable-expanded"),t(o).trigger("kt-datatable--on-expand-subtable",[n])),0===t(s).find(".kt-datatable").length&&(t.map(o.dataSet,function(t,e){return d===t[i.columns[0].field]&&(a.data=t,!0)}),a.detailCell=s,a.parentRow=n,a.subTable=s,e(a),t(s).children(".kt-datatable").on("kt-datatable--on-init",function(e){t(r).removeClass("kt-datatable__row-loading")}),"local"===l.getOption("data.type")&&t(r).removeClass("kt-datatable__row-loading"))},n=i.columns;t(o.tableBody).find(".kt-datatable__row").each(function(e,i){t(i).find(".kt-datatable__cell").each(function(e,i){var o=t.grep(n,function(e,a){return t(i).data("field")===e.field})[0];if(void 0!==o){var r=t(i).text();if(void 0!==o.subtable&&o.subtable){if(t(i).find(".kt-datatable__toggle-subtable").length>0)return;t(i).html(t("<a/>").addClass("kt-datatable__toggle-subtable").attr("href","#").attr("data-value",r).attr("title",l.getOption("detail.title")).on("click",a).append(t("<i/>").css("width",t(i).data("width")).addClass(l.getOption("layout.icons.rowDetail.collapse"))))}}})})}},
-                dataMapCallback:function(t){var e=t;return"function"==typeof l.getOption("data.source.read.map")?l.getOption("data.source.read.map")(t):(void 0!==t&&void 0!==t.data&&(e=t.data),e)},isSpinning:!1,spinnerCallback:function(t,e){void 0===e&&(e=o);var a=l.getOption("layout.spinner");void 0!==a&&a&&(t?l.isSpinning||(void 0!==a.message&&!0===a.message&&(a.message=l.getOption("translate.records.processing")),l.isSpinning=!0,void 0!==n&&n.block(e,a)):(l.isSpinning=!1,void 0!==n&&n.unblock(e)))},sortCallback:function(e,a,n){var i=n.type||"string",o=n.format||"",l=n.field;return t(e).sort(function(t,e){var n=t[l],r=e[l];switch(i){case"date":if("undefined"==typeof moment)throw new Error("Moment.js is required.");var s=moment(n,o).diff(moment(r,o));return"asc"===a?s>0?1:s<0?-1:0:s<0?1:s>0?-1:0;case"number":return isNaN(parseFloat(n))&&null!=n&&(n=Number(n.replace(/[^0-9\.-]+/g,""))),isNaN(parseFloat(r))&&null!=r&&(r=Number(r.replace(/[^0-9\.-]+/g,""))),n=parseFloat(n),r=parseFloat(r),"asc"===a?n>r?1:n<r?-1:0:n<r?1:n>r?-1:0;case"string":default:return"asc"===a?n>r?1:n<r?-1:0:n<r?1:n>r?-1:0}})},log:function(t,e){void 0===e&&(e=""),o.debug&&console.log(t,e)},autoHide:function(){var e=!1,a=t(o.table).find("[data-autohide-enabled]");a.length&&(e=!0,a.hide());var n=function(e){e.preventDefault();var a=t(this).closest(".kt-datatable__row"),n=t(a).next();if(t(n).hasClass("kt-datatable__row-detail"))t(this).find("i").removeClass(l.getOption("layout.icons.rowDetail.expand")).addClass(l.getOption("layout.icons.rowDetail.collapse")),t(n).remove();else{t(this).find("i").removeClass(l.getOption("layout.icons.rowDetail.collapse")).addClass(l.getOption("layout.icons.rowDetail.expand"));var o=t(a).find(".kt-datatable__cell:hidden").clone().show();n=t("<tr/>").addClass("kt-datatable__row-detail").insertAfter(a);var r=t("<td/>").addClass("kt-datatable__detail").attr("colspan",l.getTotalColumns()).appendTo(n),s=t("<table/>");t(o).each(function(){var e=t(this).data("field"),a=t.grep(i.columns,function(t,a){return e===t.field})[0];t(s).append(t('<tr class="kt-datatable__row"></tr>').append(t('<td class="kt-datatable__cell"></td>').append(t("<span/>").append(a.title))).append(this))}),t(r).append(s)}};setTimeout(function(){t(o.table).find(".kt-datatable__cell").show(),t(o.tableBody).each(function(){for(var a=0;t(this)[0].offsetWidth<t(this)[0].scrollWidth&&a<i.columns.length;)t(o.table).find(".kt-datatable__row").each(function(a){var n=t(this).find(".kt-datatable__cell:not(:hidden):not([data-autohide-disabled])").last();t(n).hide(),e=!0}),a++}),e&&t(o.tableBody).find(".kt-datatable__row").each(function(){0===t(this).find(".kt-datatable__toggle-detail").length&&t(this).prepend(t("<td/>").addClass("kt-datatable__cell kt-datatable__toggle-detail").append(t("<a/>").addClass("kt-datatable__toggle-detail").attr("href","").on("click",n).append('<i class="'+l.getOption("layout.icons.rowDetail.collapse")+'"></i>'))),0===t(o.tableHead).find(".kt-datatable__toggle-detail").length?(t(o.tableHead).find(".kt-datatable__row").first().prepend('<th class="kt-datatable__cell kt-datatable__toggle-detail"><span></span></th>'),t(o.tableFoot).find(".kt-datatable__row").first().prepend('<th class="kt-datatable__cell kt-datatable__toggle-detail"><span></span></th>')):t(o.tableHead).find(".kt-datatable__toggle-detail").find("span")})}),l.adjustCellsWidth.call()},setAutoColumns:function(){l.getOption("data.autoColumns")&&(t.each(o.dataSet[0],function(e,a){0===t.grep(i.columns,function(t,a){return e===t.field}).length&&i.columns.push({field:e,title:e})}),t(o.tableHead).find(".kt-datatable__row").remove(),l.setHeadTitle(),l.getOption("layout.footer")&&(t(o.tableFoot).find(".kt-datatable__row").remove(),l.setHeadTitle(o.tableFoot)))},isLocked:function(){var t=l.lockEnabledColumns();return t.left.length>0||t.right.length>0},isSubtable:function(){return a.hasClass(o.wrap[0],"kt-datatable--subtable")||!1},getExtraSpace:function(e){return parseInt(t(e).css("paddingRight"))+parseInt(t(e).css("paddingLeft"))+(parseInt(t(e).css("marginRight"))+parseInt(t(e).css("marginLeft")))+Math.ceil(t(e).css("border-right-width").replace("px",""))},dataPlaceholder:function(e,a){var n=e;return t.each(a,function(t,e){n=n.replace("{{"+t+"}}",e)}),n},getTableId:function(e){void 0===e&&(e="");var a=t(o).attr("id");return void 0===a&&(a=t(o).attr("class").split(" ")[0]),a+e},getTablePrefix:function(t){return void 0!==t&&(t="-"+t),l.getTableId()+"-"+l.getDepth()+t},getDepth:function(){var e=0,a=o.table;do{a=t(a).parents(".kt-datatable__table"),e++}while(t(a).length>0);return e},stateKeep:function(t,e){t=l.getTablePrefix(t),!1!==l.getOption("data.saveState")&&(l.getOption("data.saveState.webstorage")&&localStorage&&localStorage.setItem(t,JSON.stringify(e)),l.getOption("data.saveState.cookie")&&Cookies.set(t,JSON.stringify(e)))},stateGet:function(t,e){if(t=l.getTablePrefix(t),!1!==l.getOption("data.saveState")){var a=null;return null!=(a=l.getOption("data.saveState.webstorage")&&localStorage?localStorage.getItem(t):Cookies.get(t))?JSON.parse(a):void 0}},stateUpdate:function(e,a){var n=l.stateGet(e);null==n&&(n={}),l.stateKeep(e,t.extend({},n,a))},stateRemove:function(t){t=l.getTablePrefix(t),localStorage&&localStorage.removeItem(t),Cookies.remove(t)},getTotalColumns:function(e){return void 0===e&&(e=o.tableBody),t(e).find(".kt-datatable__row").first().find(".kt-datatable__cell").length},getOneRow:function(e,a,n){void 0===n&&(n=!0);var i=t(e).find(".kt-datatable__row:not(.kt-datatable__row-detail):nth-child("+a+")");return n&&(i=i.find(".kt-datatable__cell")),i},sortColumn:function(e,a,n){void 0===a&&(a="asc"),void 0===n&&(n=!1);var i=t(e).index(),l=t(o.tableBody).find(".kt-datatable__row"),r=t(e).closest(".kt-datatable__lock").index();-1!==r&&(l=t(o.tableBody).find(".kt-datatable__lock:nth-child("+(r+1)+")").find(".kt-datatable__row"));var s=t(l).parent();t(l).sort(function(e,o){var l=t(e).find("td:nth-child("+i+")").text(),r=t(o).find("td:nth-child("+i+")").text();return n&&(l=parseInt(l),r=parseInt(r)),"asc"===a?l>r?1:l<r?-1:0:l<r?1:l>r?-1:0}).appendTo(s)},sorting:function(){var e={init:function(){i.sortable&&(t(o.tableHead).find(".kt-datatable__cell:not(.kt-datatable__cell--check)").addClass("kt-datatable__cell--sort").off("click").on("click",e.sortClick),e.setIcon())},setIcon:function(){var e=l.getDataSourceParam("sort");if(!t.isEmptyObject(e)){var a=l.getColumnByField(e.field);if(void 0===a||void 0===a.sortable||!1!==a.sortable){var n=t(o.tableHead).find('.kt-datatable__cell[data-field="'+e.field+'"]').attr("data-sort",e.sort),i=t(n).find("span"),r=t(i).find("i"),s=l.getOption("layout.icons.sort");t(r).length>0?t(r).removeAttr("class").addClass(s[e.sort]):t(i).append(t("<i/>").addClass(s[e.sort])),t(n).addClass("kt-datatable__cell--sorted")}}},sortClick:function(n){var r=l.getDataSourceParam("sort"),s=t(this).data("field"),d=l.getColumnByField(s);if((void 0===d.sortable||!1!==d.sortable)&&(t(o.tableHead).find("th").removeClass("kt-datatable__cell--sorted"),a.addClass(this,"kt-datatable__cell--sorted"),t(o.tableHead).find(".kt-datatable__cell > span > i").remove(),i.sortable)){l.spinnerCallback(!0);var c="desc";l.getObject("field",r)===s&&(c=l.getObject("sort",r)),r={field:s,sort:c=void 0===c||"desc"===c?"asc":"desc"},l.setDataSourceParam("sort",r),e.setIcon(),setTimeout(function(){l.dataRender("sort"),t(o).trigger("kt-datatable--on-sort",r)},300)}}};e.init()},localDataUpdate:function(){var e=l.getDataSourceParam();void 0===o.originalDataSet&&(o.originalDataSet=o.dataSet);var a=l.getObject("sort.field",e),n=l.getObject("sort.sort",e),i=l.getColumnByField(a);if(void 0!==i&&!0!==l.getOption("data.serverSorting")?"function"==typeof i.sortCallback?o.dataSet=i.sortCallback(o.originalDataSet,n,i):o.dataSet=l.sortCallback(o.originalDataSet,n,i):o.dataSet=o.originalDataSet,"object"==typeof e.query&&!l.getOption("data.serverFiltering")){e.query=e.query||{};var r=function(t){for(var e in t)if(t.hasOwnProperty(e))if("string"==typeof t[e]){if(t[e].toLowerCase()==s||-1!==t[e].toLowerCase().indexOf(s))return!0}else if("number"==typeof t[e]){if(t[e]===s)return!0}else if("object"==typeof t[e]&&r(t[e]))return!0;return!1},s=t(l.getOption("search.input")).val();void 0!==s&&""!==s&&(s=s.toLowerCase(),o.dataSet=t.grep(o.dataSet,r),delete e.query[l.getGeneralSearchKey()]),t.each(e.query,function(t,a){""===a&&delete e.query[t]}),o.dataSet=l.filterArray(o.dataSet,e.query),o.dataSet=o.dataSet.filter(function(){return!0})}return o.dataSet},filterArray:function(e,a,n){if("object"!=typeof e)return[];if(void 0===n&&(n="AND"),"object"!=typeof a)return e;if(n=n.toUpperCase(),-1===t.inArray(n,["AND","OR","NOT"]))return[];var i=Object.keys(a).length,o=[];return t.each(e,function(e,r){var s=r,d=0;t.each(a,function(t,e){e=e instanceof Array?e:[e];var a=l.getObject(t,s);if(void 0!==a&&a){var n=a.toString().toLowerCase();e.forEach(function(t,e){t.toString().toLowerCase()!=n&&-1===n.indexOf(t.toString().toLowerCase())||d++})}}),("AND"==n&&d==i||"OR"==n&&d>0||"NOT"==n&&0==d)&&(o[e]=r)}),e=o},resetScroll:function(){void 0===i.detail&&1===l.getDepth()&&(t(o.table).find(".kt-datatable__row").css("left",0),t(o.table).find(".kt-datatable__lock").css("top",0),t(o.tableBody).scrollTop(0))},getColumnByField:function(e){var a;if(void 0!==e)return t.each(i.columns,function(t,n){if(e===n.field)return a=n,!1}),a},getDefaultSortColumn:function(){var e;return t.each(i.columns,function(a,n){if(void 0!==n.sortable&&-1!==t.inArray(n.sortable,["asc","desc"]))return e={sort:n.sortable,field:n.field},!1}),e},getHiddenDimensions:function(e,a){var n={position:"absolute",visibility:"hidden",display:"block"},i={width:0,height:0,innerWidth:0,innerHeight:0,outerWidth:0,outerHeight:0},o=t(e).parents().addBack().not(":visible");a="boolean"==typeof a&&a;var l=[];return o.each(function(){var t={};for(var e in n)t[e]=this.style[e],this.style[e]=n[e];l.push(t)}),i.width=t(e).width(),i.outerWidth=t(e).outerWidth(a),i.innerWidth=t(e).innerWidth(),i.height=t(e).height(),i.innerHeight=t(e).innerHeight(),i.outerHeight=t(e).outerHeight(a),o.each(function(t){var e=l[t];for(var a in n)this.style[a]=e[a]}),i},getGeneralSearchKey:function(){var e=t(l.getOption("search.input"));return t(e).prop("name")||t(e).prop("id")},getObject:function(t,e){return t.split(".").reduce(function(t,e){return null!==t&&void 0!==t[e]?t[e]:null},e)},extendObj:function(t,e,a){var n=e.split("."),i=0;return function t(e){var o=n[i++];void 0!==e[o]&&null!==e[o]?"object"!=typeof e[o]&&"function"!=typeof e[o]&&(e[o]={}):e[o]={},i===n.length?e[o]=a:t(e[o])}(t),t},rowEvenOdd:function(){t(o.tableBody).find(".kt-datatable__row").removeClass("kt-datatable__row--even"),t(o.wrap).hasClass("kt-datatable--subtable")?t(o.tableBody).find(".kt-datatable__row:not(.kt-datatable__row-detail):even").addClass("kt-datatable__row--even"):t(o.tableBody).find(".kt-datatable__row:nth-child(even)").addClass("kt-datatable__row--even")},timer:0,redraw:function(){return l.adjustCellsWidth.call(),l.isLocked()&&(l.scrollbar(),l.resetScroll(),l.adjustCellsHeight.call()),l.adjustLockContainer.call(),l.initHeight.call(),o},load:function(){return l.reload(),o},reload:function(){return function(t,e){clearTimeout(l.timer),l.timer=setTimeout(t,e)}(function(){i.data.serverFiltering||l.localDataUpdate(),l.dataRender(),t(o).trigger("kt-datatable--on-reloaded")},l.getOption("search.delay")),o},getRecord:function(e){return void 0===o.tableBody&&(o.tableBody=t(o.table).children("tbody")),t(o.tableBody).find(".kt-datatable__cell:first-child").each(function(a,n){if(e==t(n).text()){var i=t(n).closest(".kt-datatable__row").index()+1;return o.API.record=o.API.value=l.getOneRow(o.tableBody,i),o}}),o},getColumn:function(e){return l.setSelectedRecords(),o.API.value=t(o.API.record).find('[data-field="'+e+'"]'),o},destroy:function(){t(o).parent().find(".kt-datatable__pager").remove();var e=t(o.initialDatatable).addClass("kt-datatable--destroyed").show();return t(o).replaceWith(e),t(o=e).trigger("kt-datatable--on-destroy"),l.isInit=!1,e=null},sort:function(e,a){a=void 0===a?"asc":a,l.spinnerCallback(!0);var n={field:e,sort:a};return l.setDataSourceParam("sort",n),setTimeout(function(){l.dataRender("sort"),t(o).trigger("kt-datatable--on-sort",n),t(o.tableHead).find(".kt-datatable__cell > span > i").remove()},300),o},getValue:function(){return t(o.API.value).text()},setActive:function(e){"string"==typeof e&&(e=t(o.tableBody).find('.kt-checkbox--single > [type="checkbox"][value="'+e+'"]')),t(e).prop("checked",!0);var a=[];t(e).each(function(e,n){var i=t(n).closest("tr").addClass("kt-datatable__row--active"),o=t(i).index()+1;t(i).closest("tbody").find("tr:nth-child("+o+")").not(".kt-datatable__row-subtable").addClass("kt-datatable__row--active");var l=t(n).attr("value");void 0!==l&&a.push(l)}),t(o).trigger("kt-datatable--on-check",[a])},setInactive:function(e){"string"==typeof e&&(e=t(o.tableBody).find('.kt-checkbox--single > [type="checkbox"][value="'+e+'"]')),t(e).prop("checked",!1);var a=[];t(e).each(function(e,n){var i=t(n).closest("tr").removeClass("kt-datatable__row--active"),o=t(i).index()+1;t(i).closest("tbody").find("tr:nth-child("+o+")").not(".kt-datatable__row-subtable").removeClass("kt-datatable__row--active");var l=t(n).attr("value");void 0!==l&&a.push(l)}),t(o).trigger("kt-datatable--on-uncheck",[a])},setActiveAll:function(e){var a=t(o.table).find("> tbody, > thead").find("tr").not(".kt-datatable__row-subtable").find('.kt-datatable__cell--check [type="checkbox"]');e?l.setActive(a):l.setInactive(a)},setSelectedRecords:function(){return o.API.record=t(o.tableBody).find(".kt-datatable__row--active"),o},getSelectedRecords:function(){return l.setSelectedRecords(),o.API.record=o.rows(".kt-datatable__row--active").nodes(),o.API.record},getOption:function(t){return l.getObject(t,i)},setOption:function(t,e){i=l.extendObj(i,t,e)},search:function(e,a){void 0!==a&&(a=t.makeArray(a)),n=function(){var n=l.getDataSourceQuery();if(void 0===a&&void 0!==e){var o=l.getGeneralSearchKey();n[o]=e}"object"==typeof a&&(t.each(a,function(t,a){n[a]=e}),t.each(n,function(e,a){(""===a||t.isEmptyObject(a))&&delete n[e]})),l.setDataSourceQuery(n),i.data.serverFiltering||l.localDataUpdate(),l.dataRender("search")},o=l.getOption("search.delay"),clearTimeout(l.timer),l.timer=setTimeout(n,o);var n,o},setDataSourceParam:function(e,a){o.API.params=t.extend({},{pagination:{page:1,perpage:l.getOption("data.pageSize")},sort:l.getDefaultSortColumn(),query:{}},o.API.params,l.stateGet(l.stateId)),o.API.params=l.extendObj(o.API.params,e,a),l.stateKeep(l.stateId,o.API.params)},getDataSourceParam:function(e){return o.API.params=t.extend({},{pagination:{page:1,perpage:l.getOption("data.pageSize")},sort:l.getDefaultSortColumn(),query:{}},o.API.params,l.stateGet(l.stateId)),"string"==typeof e?l.getObject(e,o.API.params):o.API.params},getDataSourceQuery:function(){return l.getDataSourceParam("query")||{}},setDataSourceQuery:function(t){l.setDataSourceParam("query",t)},getCurrentPage:function(){return t(o.table).siblings(".kt-datatable__pager").last().find(".kt-datatable__pager-nav").find(".kt-datatable__pager-link.kt-datatable__pager-link--active").data("page")||1},getPageSize:function(){return t(o.table).siblings(".kt-datatable__pager").last().find("select.kt-datatable__pager-size").val()||10},getTotalRows:function(){return o.API.params.pagination.total},getDataSet:function(){return o.originalDataSet},nodeTr:[],nodeTd:[],nodeCols:[],recentNode:[],table:function(){if(void 0!==o.table)return o.table},row:function(e){return l.rows(e),l.nodeTr=l.recentNode=t(l.nodeTr).first(),o},rows:function(e){return l.isLocked()?l.nodeTr=l.recentNode=t(o.tableBody).find(e).filter(".kt-datatable__lock--scroll > .kt-datatable__row"):l.nodeTr=l.recentNode=t(o.tableBody).find(e).filter(".kt-datatable__row"),o},column:function(e){return l.nodeCols=l.recentNode=t(o.tableBody).find(".kt-datatable__cell:nth-child("+(e+1)+")"),o},columns:function(e){var a=o.table;l.nodeTr===l.recentNode&&(a=l.nodeTr);var n=t(a).find('.kt-datatable__cell[data-field="'+e+'"]');return n.length>0?l.nodeCols=l.recentNode=n:l.nodeCols=l.recentNode=t(a).find(e).filter(".kt-datatable__cell"),o},cell:function(e){return l.cells(e),l.nodeTd=l.recentNode=t(l.nodeTd).first(),o},cells:function(e){var a=t(o.tableBody).find(".kt-datatable__cell");return void 0!==e&&(a=t(a).filter(e)),l.nodeTd=l.recentNode=a,o},remove:function(){return t(l.nodeTr.length)&&l.nodeTr===l.recentNode&&t(l.nodeTr).remove(),l.layoutUpdate(),o},visible:function(e){if(t(l.recentNode.length)){var a=l.lockEnabledColumns();if(l.recentNode===l.nodeCols){var n=l.recentNode.index();if(l.isLocked()){var o=t(l.recentNode).closest(".kt-datatable__lock--scroll").length;o?n+=a.left.length+1:t(l.recentNode).closest(".kt-datatable__lock--right").length&&(n+=a.left.length+o+1)}}e?(l.recentNode===l.nodeCols&&delete i.columns[n].visible,t(l.recentNode).show()):(l.recentNode===l.nodeCols&&l.setOption("columns."+n+".visible",!1),t(l.recentNode).hide()),l.columnHide(),l.redraw()}},nodes:function(){return l.recentNode},dataset:function(){return o},gotoPage:function(t){void 0!==l.pagingObject&&(l.isInit=!0,l.pagingObject.openPage(t))}};if(t.each(l,function(t,e){o[t]=e}),void 0!==i)if("string"==typeof i){var r=i;void 0!==(o=t(this).data(e))&&(i=o.options,l[r].apply(this,Array.prototype.slice.call(arguments,1)))}else o.data(e)||t(this).hasClass("kt-datatable--loaded")||(o.dataSet=null,o.textAlign={left:"kt-datatable__cell--left",center:"kt-datatable__cell--center",right:"kt-datatable__cell--right"},i=t.extend(!0,{},t.fn.KTDatatable.defaults,i),o.options=i,l.init.apply(this,[i]),t(o.wrap).data(e,o));else void 0===(o=t(this).data(e))&&t.error("KTDatatable not initialized"),i=o.options;return o}console.warn("No KTDatatable element exist.")},t.fn.KTDatatable.defaults={data:{type:"local",source:null,pageSize:10,saveState:{cookie:!1,webstorage:!0},serverPaging:!1,serverFiltering:!1,serverSorting:!1,autoColumns:!1,attr:{rowProps:[]}},layout:{theme:"default",class:"kt-datatable--brand",scroll:!1,height:null,minHeight:500,footer:!1,header:!0,customScrollbar:!0,spinner:{overlayColor:"#000000",opacity:0,type:"loader",state:"brand",message:!0},icons:{sort:{asc:"flaticon2-arrow-up",desc:"flaticon2-arrow-down"},pagination:{next:"flaticon2-next",prev:"flaticon2-back",first:"flaticon2-fast-back",last:"flaticon2-fast-next",more:"flaticon-more-1"},rowDetail:{expand:"fa fa-caret-down",collapse:"fa fa-caret-right"}}},sortable:!0,resizable:!1,filterable:!1,pagination:!0,editable:!1,columns:[],search:{onEnter:!1,input:null,delay:400},rows:{callback:function(){},beforeTemplate:function(){},afterTemplate:function(){},autoHide:!0},toolbar:{layout:["pagination","info"],placement:["bottom"],items:{pagination:{type:"default",pages:{desktop:{layout:"default",pagesNumber:5},tablet:{layout:"default",pagesNumber:3},mobile:{layout:"compact"}},navigation:{prev:!0,next:!0,first:!0,last:!0,more:!1},pageSizeSelect:[]},info:!0}},translate:{records:{processing:"Please wait...",noRecords:"No records found"},toolbar:{pagination:{items:{default:{first:"First",prev:"Previous",next:"Next",last:"Last",more:"More pages",input:"Page number",select:"Select page size",all:"all"},info:"Showing {{start}} - {{end}} of {{total}}"}}}},extensions:{}}}(jQuery),function(t){t.fn.KTDatatable=t.fn.KTDatatable||{},t.fn.KTDatatable.checkbox=function(e,a){var n={selectedAllRows:!1,selectedRows:[],unselectedRows:[],init:function(){n.selectorEnabled()&&(e.setDataSourceParam(a.vars.selectedAllRows,!1),e.stateRemove("checkbox"),a.vars.requestIds&&e.setDataSourceParam(a.vars.requestIds,!0),t(e).on("kt-datatable--on-reloaded",function(){e.stateRemove("checkbox"),e.setDataSourceParam(a.vars.selectedAllRows,!1),n.selectedAllRows=!1,n.selectedRows=[],n.unselectedRows=[]}),n.selectedAllRows=e.getDataSourceParam(a.vars.selectedAllRows),t(e).on("kt-datatable--on-layout-updated",function(a,i){i.table==t(e.wrap).attr("id")&&e.ready(function(){n.initVars(),n.initEvent(),n.initSelect()})}),t(e).on("kt-datatable--on-check",function(a,i){i.forEach(function(t){n.selectedRows.push(t),n.unselectedRows=n.remove(n.unselectedRows,t)});var o={};o.selectedRows=t.unique(n.selectedRows),o.unselectedRows=t.unique(n.unselectedRows),e.stateKeep("checkbox",o)}),t(e).on("kt-datatable--on-uncheck",function(a,i){i.forEach(function(t){n.unselectedRows.push(t),n.selectedRows=n.remove(n.selectedRows,t)});var o={};o.selectedRows=t.unique(n.selectedRows),o.unselectedRows=t.unique(n.unselectedRows),e.stateKeep("checkbox",o)}))},initEvent:function(){t(e.tableHead).find('.kt-checkbox--all > [type="checkbox"]').click(function(i){if(n.selectedRows=n.unselectedRows=[],e.stateRemove("checkbox"),t(this).is(":checked")?n.selectedAllRows=!0:n.selectedAllRows=!1,!a.vars.requestIds){t(this).is(":checked")&&(n.selectedRows=t.makeArray(t(e.tableBody).find('.kt-checkbox--single > [type="checkbox"]').map(function(e,a){return t(a).val()})));var o={};o.selectedRows=t.unique(n.selectedRows),e.stateKeep("checkbox",o)}e.setDataSourceParam(a.vars.selectedAllRows,n.selectedAllRows),t(e).trigger("kt-datatable--on-click-checkbox",[t(this)])}),t(e.tableBody).find('.kt-checkbox--single > [type="checkbox"]').click(function(i){var o=t(this).val();t(this).is(":checked")?(n.selectedRows.push(o),n.unselectedRows=n.remove(n.unselectedRows,o)):(n.unselectedRows.push(o),n.selectedRows=n.remove(n.selectedRows,o)),!a.vars.requestIds&&n.selectedRows.length<1&&t(e.tableHead).find('.kt-checkbox--all > [type="checkbox"]').prop("checked",!1);var l={};l.selectedRows=t.unique(n.selectedRows),l.unselectedRows=t.unique(n.unselectedRows),e.stateKeep("checkbox",l),t(e).trigger("kt-datatable--on-click-checkbox",[t(this)])})},initSelect:function(){n.selectedAllRows&&a.vars.requestIds?(e.hasClass("kt-datatable--error")||t(e.tableHead).find('.kt-checkbox--all > [type="checkbox"]').prop("checked",!0),e.setActiveAll(!0),n.unselectedRows.forEach(function(t){e.setInactive(t)})):(n.selectedRows.forEach(function(t){e.setActive(t)}),!e.hasClass("kt-datatable--error")&&t(e.tableBody).find('.kt-checkbox--single > [type="checkbox"]').not(":checked").length<1&&t(e.tableHead).find('.kt-checkbox--all > [type="checkbox"]').prop("checked",!0))},selectorEnabled:function(){return t.grep(e.options.columns,function(t,e){return t.selector||!1})[0]},initVars:function(){var t=e.stateGet("checkbox");void 0!==t&&(n.selectedRows=t.selectedRows||[],n.unselectedRows=t.unselectedRows||[])},getSelectedId:function(t){if(n.initVars(),n.selectedAllRows&&a.vars.requestIds){void 0===t&&(t=a.vars.rowIds);var i=e.getObject(t,e.lastResponse)||[];return i.length>0&&n.unselectedRows.forEach(function(t){i=n.remove(i,parseInt(t))}),i}return n.selectedRows},remove:function(t,e){return t.filter(function(t){return t!==e})}};return e.checkbox=function(){return n},"object"==typeof a&&(a=t.extend(!0,{},t.fn.KTDatatable.checkbox.default,a),n.init.apply(this,[a])),e},t.fn.KTDatatable.checkbox.default={vars:{selectedAllRows:"selectedAllRows",requestIds:"requestIds",rowIds:"meta.rowIds"}}}(jQuery);var defaults={layout:{icons:{pagination:{next:"flaticon2-next",prev:"flaticon2-back",first:"flaticon2-fast-back",last:"flaticon2-fast-next",more:"flaticon-more-1"},rowDetail:{expand:"fa fa-caret-down",collapse:"fa fa-caret-right"}}}};KTUtil.isRTL()&&(defaults={layout:{icons:{pagination:{next:"flaticon2-back",prev:"flaticon2-next",first:"flaticon2-fast-next",last:"flaticon2-fast-back"},rowDetail:{collapse:"fa fa-caret-down",expand:"fa fa-caret-right"}}}}),$.extend(!0,$.fn.KTDatatable.defaults,defaults);var KTAvatar=function(t,e){var a=this,n=KTUtil.get(t);KTUtil.get("body");if(n){var i={},o={construct:function(t){return KTUtil.data(n).has("avatar")?a=KTUtil.data(n).get("avatar"):(o.init(t),o.build(),KTUtil.data(n).set("avatar",a)),a},init:function(t){a.element=n,a.events=[],a.input=KTUtil.find(n,'input[type="file"]'),a.holder=KTUtil.find(n,".kt-avatar__holder"),a.cancel=KTUtil.find(n,".kt-avatar__cancel"),a.src=KTUtil.css(a.holder,"backgroundImage"),a.options=KTUtil.deepExtend({},i,t)},build:function(){KTUtil.addEvent(a.input,"change",function(t){if(t.preventDefault(),a.input&&a.input.files&&a.input.files[0]){var e=new FileReader;e.onload=function(t){KTUtil.css(a.holder,"background-image","url("+t.target.result+")")},e.readAsDataURL(a.input.files[0]),KTUtil.addClass(a.element,"kt-avatar--changed")}}),KTUtil.addEvent(a.cancel,"click",function(t){t.preventDefault(),KTUtil.removeClass(a.element,"kt-avatar--changed"),KTUtil.css(a.holder,"background-image",a.src),a.input.value=""})},eventTrigger:function(t){for(var e=0;e<a.events.length;e++){var n=a.events[e];n.name==t&&(1==n.one?0==n.fired&&(a.events[e].fired=!0,n.handler.call(this,a)):n.handler.call(this,a))}},addEvent:function(t,e,n){return a.events.push({name:t,handler:e,one:n,fired:!1}),a}};return a.setDefaults=function(t){i=t},a.on=function(t,e){return o.addEvent(t,e)},a.one=function(t,e){return o.addEvent(t,e,!0)},o.construct.apply(a,[e]),a}},KTDialog=function(t){var e,a=this,n=KTUtil.get("body"),i={placement:"top center",type:"loader",width:100,state:"default",message:"Loading..."},o={construct:function(t){return o.init(t),a},init:function(t){a.events=[],a.options=KTUtil.deepExtend({},i,t),a.state=!1},show:function(){return o.eventTrigger("show"),e=document.createElement("DIV"),KTUtil.setHTML(e,a.options.message),KTUtil.addClass(e,"kt-dialog kt-dialog--shown"),KTUtil.addClass(e,"kt-dialog--"+a.options.state),KTUtil.addClass(e,"kt-dialog--"+a.options.type),"top center"==a.options.placement&&KTUtil.addClass(e,"kt-dialog--top-center"),n.appendChild(e),a.state="shown",o.eventTrigger("shown"),a},hide:function(){return e&&(o.eventTrigger("hide"),e.remove(),a.state="hidden",o.eventTrigger("hidden")),a},eventTrigger:function(t){for(var e=0;e<a.events.length;e++){var n=a.events[e];n.name==t&&(1==n.one?0==n.fired&&(a.events[e].fired=!0,n.handler.call(this,a)):n.handler.call(this,a))}},addEvent:function(t,e,n){return a.events.push({name:t,handler:e,one:n,fired:!1}),a}};return a.setDefaults=function(t){i=t},a.shown=function(){return"shown"==a.state},a.hidden=function(){return"hidden"==a.state},a.show=function(){return o.show()},a.hide=function(){return o.hide()},a.on=function(t,e){return o.addEvent(t,e)},a.one=function(t,e){return o.addEvent(t,e,!0)},o.construct.apply(a,[t]),a},KTHeader=function(t,e){var a=this,n=KTUtil.get(t),i=KTUtil.get("body");if(void 0!==n){var o={classic:!1,offset:{mobile:150,desktop:200},minimize:{mobile:!1,desktop:!1}},l={construct:function(t){return KTUtil.data(n).has("header")?a=KTUtil.data(n).get("header"):(l.init(t),l.build(),KTUtil.data(n).set("header",a)),a},init:function(t){a.events=[],a.options=KTUtil.deepExtend({},o,t)},build:function(){var t=0,e=!0;KTUtil.getViewPort().height;!1===a.options.minimize.mobile&&!1===a.options.minimize.desktop||window.addEventListener("scroll",function(){var n,o,r,s=0;KTUtil.isInResponsiveRange("desktop")?(s=a.options.offset.desktop,n=a.options.minimize.desktop.on,o=a.options.minimize.desktop.off):KTUtil.isInResponsiveRange("tablet-and-mobile")&&(s=a.options.offset.mobile,n=a.options.minimize.mobile.on,o=a.options.minimize.mobile.off),r=window.pageYOffset,KTUtil.isInResponsiveRange("tablet-and-mobile")&&a.options.classic&&a.options.classic.mobile||KTUtil.isInResponsiveRange("desktop")&&a.options.classic&&a.options.classic.desktop?r>s?(KTUtil.addClass(i,n),KTUtil.removeClass(i,o),e&&(l.eventTrigger("minimizeOn",a),e=!1)):(KTUtil.addClass(i,o),KTUtil.removeClass(i,n),0==e&&(l.eventTrigger("minimizeOff",a),e=!0)):(r>s&&t<r?(KTUtil.addClass(i,n),KTUtil.removeClass(i,o),e&&(l.eventTrigger("minimizeOn",a),e=!1)):(KTUtil.addClass(i,o),KTUtil.removeClass(i,n),0==e&&(l.eventTrigger("minimizeOff",a),e=!0)),t=r)})},eventTrigger:function(t,e){for(var n=0;n<a.events.length;n++){var i=a.events[n];i.name==t&&(1==i.one?0==i.fired&&(a.events[n].fired=!0,i.handler.call(this,a,e)):i.handler.call(this,a,e))}},addEvent:function(t,e,n){a.events.push({name:t,handler:e,one:n,fired:!1})}};return a.setDefaults=function(t){o=t},a.on=function(t,e){return l.addEvent(t,e)},l.construct.apply(a,[e]),!0,a}},KTMenu=function(t,e){var a=this,n=!1,i=KTUtil.get(t),o=KTUtil.get("body");if(i){var l={scroll:{rememberPosition:!1},accordion:{slideSpeed:200,autoScroll:!1,autoScrollSpeed:1200,expandAll:!0},dropdown:{timeout:500}},r={construct:function(t){return KTUtil.data(i).has("menu")?a=KTUtil.data(i).get("menu"):(r.init(t),r.reset(),r.build(),KTUtil.data(i).set("menu",a)),a},init:function(t){a.events=[],a.eventHandlers={},a.options=KTUtil.deepExtend({},l,t),a.pauseDropdownHoverTime=0,a.uid=KTUtil.getUniqueID()},update:function(t){a.options=KTUtil.deepExtend({},l,t),a.pauseDropdownHoverTime=0,r.reset(),a.eventHandlers={},r.build(),KTUtil.data(i).set("menu",a)},reload:function(){r.reset(),r.build(),r.resetSubmenuProps()},build:function(){a.eventHandlers.event_1=KTUtil.on(i,".kt-menu__toggle","click",r.handleSubmenuAccordion),("dropdown"===r.getSubmenuMode()||r.isConditionalSubmenuDropdown())&&(a.eventHandlers.event_2=KTUtil.on(i,'[data-ktmenu-submenu-toggle="hover"]',"mouseover",r.handleSubmenuDrodownHoverEnter),a.eventHandlers.event_3=KTUtil.on(i,'[data-ktmenu-submenu-toggle="hover"]',"mouseout",r.handleSubmenuDrodownHoverExit),a.eventHandlers.event_4=KTUtil.on(i,'[data-ktmenu-submenu-toggle="click"] > .kt-menu__toggle, [data-ktmenu-submenu-toggle="click"] > .kt-menu__link .kt-menu__toggle',"click",r.handleSubmenuDropdownClick),a.eventHandlers.event_5=KTUtil.on(i,'[data-ktmenu-submenu-toggle="tab"] > .kt-menu__toggle, [data-ktmenu-submenu-toggle="tab"] > .kt-menu__link .kt-menu__toggle',"click",r.handleSubmenuDropdownTabClick)),a.eventHandlers.event_6=KTUtil.on(i,".kt-menu__item > .kt-menu__link:not(.kt-menu__toggle):not(.kt-menu__link--toggle-skip)","click",r.handleLinkClick),a.options.scroll&&a.options.scroll.height&&r.scrollInit()},reset:function(){KTUtil.off(i,"click",a.eventHandlers.event_1),KTUtil.off(i,"mouseover",a.eventHandlers.event_2),KTUtil.off(i,"mouseout",a.eventHandlers.event_3),KTUtil.off(i,"click",a.eventHandlers.event_4),KTUtil.off(i,"click",a.eventHandlers.event_5),KTUtil.off(i,"click",a.eventHandlers.event_6)},scrollInit:function(){a.options.scroll&&a.options.scroll.height?(KTUtil.scrollDestroy(i),KTUtil.scrollInit(i,{mobileNativeScroll:!0,windowScroll:!1,resetHeightOnDestroy:!0,handleWindowResize:!0,height:a.options.scroll.height,rememberPosition:a.options.scroll.rememberPosition})):KTUtil.scrollDestroy(i)},scrollUpdate:function(){a.options.scroll&&a.options.scroll.height&&KTUtil.scrollUpdate(i)},scrollTop:function(){a.options.scroll&&a.options.scroll.height&&KTUtil.scrollTop(i)},getSubmenuMode:function(t){return KTUtil.isInResponsiveRange("desktop")?t&&KTUtil.hasAttr(t,"data-ktmenu-submenu-toggle")&&"hover"==KTUtil.attr(t,"data-ktmenu-submenu-toggle")?"dropdown":KTUtil.isset(a.options.submenu,"desktop.state.body")?KTUtil.hasClasses(o,a.options.submenu.desktop.state.body)?a.options.submenu.desktop.state.mode:a.options.submenu.desktop.default:KTUtil.isset(a.options.submenu,"desktop")?a.options.submenu.desktop:void 0:KTUtil.isInResponsiveRange("tablet")&&KTUtil.isset(a.options.submenu,"tablet")?a.options.submenu.tablet:!(!KTUtil.isInResponsiveRange("mobile")||!KTUtil.isset(a.options.submenu,"mobile"))&&a.options.submenu.mobile},isConditionalSubmenuDropdown:function(){return!(!KTUtil.isInResponsiveRange("desktop")||!KTUtil.isset(a.options.submenu,"desktop.state.body"))},resetSubmenuProps:function(t){var e=KTUtil.findAll(i,".kt-menu__submenu");if(e)for(var a=0,n=e.length;a<n;a++)KTUtil.css(e[0],"display",""),KTUtil.css(e[0],"overflow","")},handleSubmenuDrodownHoverEnter:function(t){if("accordion"!==r.getSubmenuMode(this)&&!1!==a.resumeDropdownHover()){"1"==this.getAttribute("data-hover")&&(this.removeAttribute("data-hover"),clearTimeout(this.getAttribute("data-timeout")),this.removeAttribute("data-timeout")),r.showSubmenuDropdown(this)}},handleSubmenuDrodownHoverExit:function(t){if(!1!==a.resumeDropdownHover()&&"accordion"!==r.getSubmenuMode(this)){var e=this,n=a.options.dropdown.timeout,i=setTimeout(function(){"1"==e.getAttribute("data-hover")&&r.hideSubmenuDropdown(e,!0)},n);e.setAttribute("data-hover","1"),e.setAttribute("data-timeout",i)}},handleSubmenuDropdownClick:function(t){if("accordion"!==r.getSubmenuMode(this)){var e=this.closest(".kt-menu__item");"accordion"!=e.getAttribute("data-ktmenu-submenu-mode")&&(!1===KTUtil.hasClass(e,"kt-menu__item--hover")?(KTUtil.addClass(e,"kt-menu__item--open-dropdown"),r.showSubmenuDropdown(e)):(KTUtil.removeClass(e,"kt-menu__item--open-dropdown"),r.hideSubmenuDropdown(e,!0)),t.preventDefault())}},handleSubmenuDropdownTabClick:function(t){if("accordion"!==r.getSubmenuMode(this)){var e=this.closest(".kt-menu__item");"accordion"!=e.getAttribute("data-ktmenu-submenu-mode")&&(0==KTUtil.hasClass(e,"kt-menu__item--hover")&&(KTUtil.addClass(e,"kt-menu__item--open-dropdown"),r.showSubmenuDropdown(e)),t.preventDefault())}},handleLinkClick:function(t){var e=this.closest(".kt-menu__item.kt-menu__item--submenu");!1!==r.eventTrigger("linkClick",this,t)&&e&&"dropdown"===r.getSubmenuMode(e)&&r.hideSubmenuDropdowns()},handleSubmenuDropdownClose:function(t,e){if("accordion"!==r.getSubmenuMode(e)){var a=i.querySelectorAll(".kt-menu__item.kt-menu__item--submenu.kt-menu__item--hover:not(.kt-menu__item--tabs)");if(a.length>0&&!1===KTUtil.hasClass(e,"kt-menu__toggle")&&0===e.querySelectorAll(".kt-menu__toggle").length)for(var n=0,o=a.length;n<o;n++)r.hideSubmenuDropdown(a[0],!0)}},handleSubmenuAccordion:function(t,e){var n,i=e||this;if("dropdown"===r.getSubmenuMode(e)&&(n=i.closest(".kt-menu__item"))&&"accordion"!=n.getAttribute("data-ktmenu-submenu-mode"))t.preventDefault();else{var o=i.closest(".kt-menu__item"),l=KTUtil.child(o,".kt-menu__submenu, .kt-menu__inner");if(!KTUtil.hasClass(i.closest(".kt-menu__item"),"kt-menu__item--open-always")&&o&&l){t.preventDefault();var s=a.options.accordion.slideSpeed;if(!1===KTUtil.hasClass(o,"kt-menu__item--open")){if(!1===a.options.accordion.expandAll){var d=i.closest(".kt-menu__nav, .kt-menu__subnav"),c=KTUtil.children(d,".kt-menu__item.kt-menu__item--open.kt-menu__item--submenu:not(.kt-menu__item--here):not(.kt-menu__item--open-always)");if(d&&c)for(var u=0,p=c.length;u<p;u++){var f=c[0],g=KTUtil.child(f,".kt-menu__submenu");g&&KTUtil.slideUp(g,s,function(){r.scrollUpdate(),KTUtil.removeClass(f,"kt-menu__item--open")})}}KTUtil.slideDown(l,s,function(){r.scrollToItem(i),r.scrollUpdate(),r.eventTrigger("submenuToggle",l,t)}),KTUtil.addClass(o,"kt-menu__item--open")}else KTUtil.slideUp(l,s,function(){r.scrollToItem(i),r.eventTrigger("submenuToggle",l,t)}),KTUtil.removeClass(o,"kt-menu__item--open")}}},scrollToItem:function(t){KTUtil.isInResponsiveRange("desktop")&&a.options.accordion.autoScroll&&"1"!==i.getAttribute("data-ktmenu-scroll")&&KTUtil.scrollTo(t,a.options.accordion.autoScrollSpeed)},hideSubmenuDropdown:function(t,e){e&&(KTUtil.removeClass(t,"kt-menu__item--hover"),KTUtil.removeClass(t,"kt-menu__item--active-tab")),t.removeAttribute("data-hover"),t.getAttribute("data-ktmenu-dropdown-toggle-class")&&KTUtil.removeClass(o,t.getAttribute("data-ktmenu-dropdown-toggle-class"));var a=t.getAttribute("data-timeout");t.removeAttribute("data-timeout"),clearTimeout(a)},hideSubmenuDropdowns:function(){var t;if(t=i.querySelectorAll('.kt-menu__item--submenu.kt-menu__item--hover:not(.kt-menu__item--tabs):not([data-ktmenu-submenu-toggle="tab"])'))for(var e=0,a=t.length;e<a;e++)r.hideSubmenuDropdown(t[e],!0)},showSubmenuDropdown:function(t){var e=i.querySelectorAll(".kt-menu__item--submenu.kt-menu__item--hover, .kt-menu__item--submenu.kt-menu__item--active-tab");if(e)for(var a=0,n=e.length;a<n;a++){var l=e[a];t!==l&&!1===l.contains(t)&&!1===t.contains(l)&&r.hideSubmenuDropdown(l,!0)}KTUtil.addClass(t,"kt-menu__item--hover"),t.getAttribute("data-ktmenu-dropdown-toggle-class")&&KTUtil.addClass(o,t.getAttribute("data-ktmenu-dropdown-toggle-class"))},createSubmenuDropdownClickDropoff:function(t){var e,a=(e=KTUtil.child(t,".kt-menu__submenu")?KTUtil.css(e,"z-index"):0)-1,n=document.createElement('<div class="kt-menu__dropoff" style="background: transparent; position: fixed; top: 0; bottom: 0; left: 0; right: 0; z-index: '+a+'"></div>');o.appendChild(n),KTUtil.addEvent(n,"click",function(e){e.stopPropagation(),e.preventDefault(),KTUtil.remove(this),r.hideSubmenuDropdown(t,!0)})},pauseDropdownHover:function(t){var e=new Date;a.pauseDropdownHoverTime=e.getTime()+t},resumeDropdownHover:function(){return(new Date).getTime()>a.pauseDropdownHoverTime},resetActiveItem:function(t){for(var e,n,o=0,l=(e=i.querySelectorAll(".kt-menu__item--active")).length;o<l;o++){var r=e[0];KTUtil.removeClass(r,"kt-menu__item--active"),KTUtil.hide(KTUtil.child(r,".kt-menu__submenu"));for(var s=0,d=(n=KTUtil.parents(r,".kt-menu__item--submenu")||[]).length;s<d;s++){var c=n[o];KTUtil.removeClass(c,"kt-menu__item--open"),KTUtil.hide(KTUtil.child(c,".kt-menu__submenu"))}}if(!1===a.options.accordion.expandAll&&(e=i.querySelectorAll(".kt-menu__item--open")))for(o=0,l=e.length;o<l;o++)KTUtil.removeClass(n[0],"kt-menu__item--open")},setActiveItem:function(t){r.resetActiveItem();for(var e=KTUtil.parents(t,".kt-menu__item--submenu")||[],a=0,n=e.length;a<n;a++)KTUtil.addClass(KTUtil.get(e[a]),"kt-menu__item--open");KTUtil.addClass(KTUtil.get(t),"kt-menu__item--active")},getBreadcrumbs:function(t){var e,a=[],n=KTUtil.child(t,".kt-menu__link");a.push({text:e=KTUtil.child(n,".kt-menu__link-text")?e.innerHTML:"",title:n.getAttribute("title"),href:n.getAttribute("href")});for(var i=KTUtil.parents(t,".kt-menu__item--submenu"),o=0,l=i.length;o<l;o++){var r=KTUtil.child(i[o],".kt-menu__link");a.push({text:e=KTUtil.child(r,".kt-menu__link-text")?e.innerHTML:"",title:r.getAttribute("title"),href:r.getAttribute("href")})}return a.reverse()},getPageTitle:function(t){var e;return KTUtil.child(t,".kt-menu__link-text")?e.innerHTML:""},eventTrigger:function(t,e,n){for(var i=0;i<a.events.length;i++){var o=a.events[i];if(o.name==t){if(1!=o.one)return o.handler.call(this,e,n);if(0==o.fired)return a.events[i].fired=!0,o.handler.call(this,e,n)}}},addEvent:function(t,e,n){a.events.push({name:t,handler:e,one:n,fired:!1})},removeEvent:function(t){a.events[t]&&delete a.events[t]}};return a.setDefaults=function(t){l=t},a.scrollUpdate=function(){return r.scrollUpdate()},a.scrollReInit=function(){return r.scrollInit()},a.scrollTop=function(){return r.scrollTop()},a.setActiveItem=function(t){return r.setActiveItem(t)},a.reload=function(){return r.reload()},a.update=function(t){return r.update(t)},a.getBreadcrumbs=function(t){return r.getBreadcrumbs(t)},a.getPageTitle=function(t){return r.getPageTitle(t)},a.getSubmenuMode=function(t){return r.getSubmenuMode(t)},a.hideDropdown=function(t){r.hideSubmenuDropdown(t,!0)},a.hideDropdowns=function(){r.hideSubmenuDropdowns()},a.pauseDropdownHover=function(t){r.pauseDropdownHover(t)},a.resumeDropdownHover=function(){return r.resumeDropdownHover()},a.on=function(t,e){return r.addEvent(t,e)},a.off=function(t){return r.removeEvent(t)},a.one=function(t,e){return r.addEvent(t,e,!0)},r.construct.apply(a,[e]),KTUtil.addResizeHandler(function(){n&&a.reload()}),n=!0,a}};document.addEventListener("click",function(t){var e;if(e=KTUtil.get("body").querySelectorAll('.kt-menu__nav .kt-menu__item.kt-menu__item--submenu.kt-menu__item--hover:not(.kt-menu__item--tabs)[data-ktmenu-submenu-toggle="click"]'))for(var a=0,n=e.length;a<n;a++){var i=e[a].closest(".kt-menu__nav").parentNode;if(i){var o=KTUtil.data(i).get("menu");if(!o)break;if(!o||"dropdown"!==o.getSubmenuMode())break;t.target!==i&&!1===i.contains(t.target)&&o.hideDropdowns()}}});var KTOffcanvas=function(t,e){var a=this,n=KTUtil.get(t),i=KTUtil.get("body");if(n){var o={},l={construct:function(t){return KTUtil.data(n).has("offcanvas")?a=KTUtil.data(n).get("offcanvas"):(l.init(t),l.build(),KTUtil.data(n).set("offcanvas",a)),a},init:function(t){a.events=[],a.options=KTUtil.deepExtend({},o,t),a.overlay,a.classBase=a.options.baseClass,a.classShown=a.classBase+"--on",a.classOverlay=a.classBase+"-overlay",a.state=KTUtil.hasClass(n,a.classShown)?"shown":"hidden"},build:function(){if(a.options.toggleBy)if("string"==typeof a.options.toggleBy)KTUtil.addEvent(a.options.toggleBy,"click",function(t){t.preventDefault(),l.toggle()});else if(a.options.toggleBy&&a.options.toggleBy[0])if(a.options.toggleBy[0].target)for(var t in a.options.toggleBy)KTUtil.addEvent(a.options.toggleBy[t].target,"click",function(t){t.preventDefault(),l.toggle()});else for(var t in a.options.toggleBy)KTUtil.addEvent(a.options.toggleBy[t],"click",function(t){t.preventDefault(),l.toggle()});else a.options.toggleBy&&a.options.toggleBy.target&&KTUtil.addEvent(a.options.toggleBy.target,"click",function(t){t.preventDefault(),l.toggle()});var e=KTUtil.get(a.options.closeBy);e&&KTUtil.addEvent(e,"click",function(t){t.preventDefault(),l.hide()}),KTUtil.addResizeHandler(function(){(parseInt(KTUtil.css(n,"left"))>=0||parseInt(KTUtil.css(n,"right")>=0)||"fixed"!=KTUtil.css(n,"position"))&&KTUtil.css(n,"opacity","1")})},isShown:function(t){return"shown"==a.state},toggle:function(){l.eventTrigger("toggle"),"shown"==a.state?l.hide(this):l.show(this)},show:function(t){"shown"!=a.state&&(l.eventTrigger("beforeShow"),l.togglerClass(t,"show"),KTUtil.addClass(i,a.classShown),KTUtil.addClass(n,a.classShown),KTUtil.css(n,"opacity","1"),a.state="shown",a.options.overlay&&(a.overlay=KTUtil.insertAfter(document.createElement("DIV"),n),KTUtil.addClass(a.overlay,a.classOverlay),KTUtil.addEvent(a.overlay,"click",function(e){e.stopPropagation(),e.preventDefault(),l.hide(t)})),l.eventTrigger("afterShow"))},hide:function(t){"hidden"!=a.state&&(l.eventTrigger("beforeHide"),l.togglerClass(t,"hide"),KTUtil.removeClass(i,a.classShown),KTUtil.removeClass(n,a.classShown),a.state="hidden",a.options.overlay&&a.overlay&&KTUtil.remove(a.overlay),KTUtil.transitionEnd(n,function(){KTUtil.css(n,"opacity","0")}),l.eventTrigger("afterHide"))},togglerClass:function(t,e){var n,i=KTUtil.attr(t,"id");if(a.options.toggleBy&&a.options.toggleBy[0]&&a.options.toggleBy[0].target)for(var o in a.options.toggleBy)a.options.toggleBy[o].target===i&&(n=a.options.toggleBy[o]);else a.options.toggleBy&&a.options.toggleBy.target&&(n=a.options.toggleBy);if(n){var l=KTUtil.get(n.target);"show"===e&&KTUtil.addClass(l,n.state),"hide"===e&&KTUtil.removeClass(l,n.state)}},eventTrigger:function(t,e){for(var n=0;n<a.events.length;n++){var i=a.events[n];i.name==t&&(1==i.one?0==i.fired&&(a.events[n].fired=!0,i.handler.call(this,a,e)):i.handler.call(this,a,e))}},addEvent:function(t,e,n){a.events.push({name:t,handler:e,one:n,fired:!1})}};return a.setDefaults=function(t){o=t},a.isShown=function(){return l.isShown()},a.hide=function(){return l.hide()},a.show=function(){return l.show()},a.on=function(t,e){return l.addEvent(t,e)},a.one=function(t,e){return l.addEvent(t,e,!0)},l.construct.apply(a,[e]),!0,a}},KTPortlet=function(t,e){var a=this,n=KTUtil.get(t),i=KTUtil.get("body");if(n){var o={bodyToggleSpeed:400,tooltips:!0,tools:{toggle:{collapse:"Collapse",expand:"Expand"},reload:"Reload",remove:"Remove",fullscreen:{on:"Fullscreen",off:"Exit Fullscreen"}},sticky:{offset:300,zIndex:101}},l={construct:function(t){return KTUtil.data(n).has("portlet")?a=KTUtil.data(n).get("portlet"):(l.init(t),l.build(),KTUtil.data(n).set("portlet",a)),a},init:function(t){a.element=n,a.events=[],a.options=KTUtil.deepExtend({},o,t),a.head=KTUtil.child(n,".kt-portlet__head"),a.foot=KTUtil.child(n,".kt-portlet__foot"),KTUtil.child(n,".kt-portlet__body")?a.body=KTUtil.child(n,".kt-portlet__body"):KTUtil.child(n,".kt-form")&&(a.body=KTUtil.child(n,".kt-form"))},build:function(){var t=KTUtil.find(a.head,"[data-ktportlet-tool=remove]");t&&KTUtil.addEvent(t,"click",function(t){t.preventDefault(),l.remove()});var e=KTUtil.find(a.head,"[data-ktportlet-tool=reload]");e&&KTUtil.addEvent(e,"click",function(t){t.preventDefault(),l.reload()});var n=KTUtil.find(a.head,"[data-ktportlet-tool=toggle]");n&&KTUtil.addEvent(n,"click",function(t){t.preventDefault(),l.toggle()});var i=KTUtil.find(a.head,"[data-ktportlet-tool=fullscreen]");i&&KTUtil.addEvent(i,"click",function(t){t.preventDefault(),l.fullscreen()}),l.setupTooltips()},initSticky:function(){a.options.sticky.offset;a.head&&window.addEventListener("scroll",l.onScrollSticky)},onScrollSticky:function(t){var e=a.options.sticky.offset;if(!isNaN(e)){var o=document.documentElement.scrollTop;o>=e&&!1===KTUtil.hasClass(i,"kt-portlet--sticky")?(l.eventTrigger("stickyOn"),KTUtil.addClass(i,"kt-portlet--sticky"),KTUtil.addClass(n,"kt-portlet--sticky"),l.updateSticky()):1.5*o<=e&&KTUtil.hasClass(i,"kt-portlet--sticky")&&(l.eventTrigger("stickyOff"),KTUtil.removeClass(i,"kt-portlet--sticky"),KTUtil.removeClass(n,"kt-portlet--sticky"),l.resetSticky())}},updateSticky:function(){var t,e,n;a.head&&(KTUtil.hasClass(i,"kt-portlet--sticky")&&(t=a.options.sticky.position.top instanceof Function?parseInt(a.options.sticky.position.top.call(this,a)):parseInt(a.options.sticky.position.top),e=a.options.sticky.position.left instanceof Function?parseInt(a.options.sticky.position.left.call(this,a)):parseInt(a.options.sticky.position.left),n=a.options.sticky.position.right instanceof Function?parseInt(a.options.sticky.position.right.call(this,a)):parseInt(a.options.sticky.position.right),KTUtil.css(a.head,"z-index",a.options.sticky.zIndex),KTUtil.css(a.head,"top",t+"px"),KTUtil.css(a.head,"left",e+"px"),KTUtil.css(a.head,"right",n+"px")))},resetSticky:function(){a.head&&!1===KTUtil.hasClass(i,"kt-portlet--sticky")&&(KTUtil.css(a.head,"z-index",""),KTUtil.css(a.head,"top",""),KTUtil.css(a.head,"left",""),KTUtil.css(a.head,"right",""))},remove:function(){!1!==l.eventTrigger("beforeRemove")&&(KTUtil.hasClass(i,"kt-portlet--fullscreen")&&KTUtil.hasClass(n,"kt-portlet--fullscreen")&&l.fullscreen("off"),l.removeTooltips(),KTUtil.remove(n),l.eventTrigger("afterRemove"))},setContent:function(t){t&&(a.body.innerHTML=t)},getBody:function(){return a.body},getSelf:function(){return n},setupTooltips:function(){if(a.options.tooltips){var t=KTUtil.hasClass(n,"kt-portlet--collapse")||KTUtil.hasClass(n,"kt-portlet--collapsed"),e=KTUtil.hasClass(i,"kt-portlet--fullscreen")&&KTUtil.hasClass(n,"kt-portlet--fullscreen"),o=KTUtil.find(a.head,"[data-ktportlet-tool=remove]");if(o){var l=e?"bottom":"top",r=new Tooltip(o,{title:a.options.tools.remove,placement:l,offset:e?"0,10px,0,0":"0,5px",trigger:"hover",template:'<div class="tooltip tooltip-portlet tooltip bs-tooltip-'+l+'" role="tooltip">                            <div class="tooltip-arrow arrow"></div>                            <div class="tooltip-inner"></div>                        </div>'});KTUtil.data(o).set("tooltip",r)}var s=KTUtil.find(a.head,"[data-ktportlet-tool=reload]");if(s){l=e?"bottom":"top",r=new Tooltip(s,{title:a.options.tools.reload,placement:l,offset:e?"0,10px,0,0":"0,5px",trigger:"hover",template:'<div class="tooltip tooltip-portlet tooltip bs-tooltip-'+l+'" role="tooltip">                            <div class="tooltip-arrow arrow"></div>                            <div class="tooltip-inner"></div>                        </div>'});KTUtil.data(s).set("tooltip",r)}var d=KTUtil.find(a.head,"[data-ktportlet-tool=toggle]");if(d){l=e?"bottom":"top",r=new Tooltip(d,{title:t?a.options.tools.toggle.expand:a.options.tools.toggle.collapse,placement:l,offset:e?"0,10px,0,0":"0,5px",trigger:"hover",template:'<div class="tooltip tooltip-portlet tooltip bs-tooltip-'+l+'" role="tooltip">                            <div class="tooltip-arrow arrow"></div>                            <div class="tooltip-inner"></div>                        </div>'});KTUtil.data(d).set("tooltip",r)}var c=KTUtil.find(a.head,"[data-ktportlet-tool=fullscreen]");if(c){l=e?"bottom":"top",r=new Tooltip(c,{title:e?a.options.tools.fullscreen.off:a.options.tools.fullscreen.on,placement:l,offset:e?"0,10px,0,0":"0,5px",trigger:"hover",template:'<div class="tooltip tooltip-portlet tooltip bs-tooltip-'+l+'" role="tooltip">                            <div class="tooltip-arrow arrow"></div>                            <div class="tooltip-inner"></div>                        </div>'});KTUtil.data(c).set("tooltip",r)}}},removeTooltips:function(){if(a.options.tooltips){var t=KTUtil.find(a.head,"[data-ktportlet-tool=remove]");t&&KTUtil.data(t).has("tooltip")&&KTUtil.data(t).get("tooltip").dispose();var e=KTUtil.find(a.head,"[data-ktportlet-tool=reload]");e&&KTUtil.data(e).has("tooltip")&&KTUtil.data(e).get("tooltip").dispose();var n=KTUtil.find(a.head,"[data-ktportlet-tool=toggle]");n&&KTUtil.data(n).has("tooltip")&&KTUtil.data(n).get("tooltip").dispose();var i=KTUtil.find(a.head,"[data-ktportlet-tool=fullscreen]");i&&KTUtil.data(i).has("tooltip")&&KTUtil.data(i).get("tooltip").dispose()}},reload:function(){l.eventTrigger("reload")},toggle:function(){KTUtil.hasClass(n,"kt-portlet--collapse")||KTUtil.hasClass(n,"kt-portlet--collapsed")?l.expand():l.collapse()},collapse:function(){if(!1!==l.eventTrigger("beforeCollapse")){KTUtil.slideUp(a.body,a.options.bodyToggleSpeed,function(){l.eventTrigger("afterCollapse")}),KTUtil.addClass(n,"kt-portlet--collapse");var t=KTUtil.find(a.head,"[data-ktportlet-tool=toggle]");t&&KTUtil.data(t).has("tooltip")&&KTUtil.data(t).get("tooltip").updateTitleContent(a.options.tools.toggle.expand)}},expand:function(){if(!1!==l.eventTrigger("beforeExpand")){KTUtil.slideDown(a.body,a.options.bodyToggleSpeed,function(){l.eventTrigger("afterExpand")}),KTUtil.removeClass(n,"kt-portlet--collapse"),KTUtil.removeClass(n,"kt-portlet--collapsed");var t=KTUtil.find(a.head,"[data-ktportlet-tool=toggle]");t&&KTUtil.data(t).has("tooltip")&&KTUtil.data(t).get("tooltip").updateTitleContent(a.options.tools.toggle.collapse)}},fullscreen:function(t){if("off"===t||KTUtil.hasClass(i,"kt-portlet--fullscreen")&&KTUtil.hasClass(n,"kt-portlet--fullscreen"))l.eventTrigger("beforeFullscreenOff"),KTUtil.removeClass(i,"kt-portlet--fullscreen"),KTUtil.removeClass(n,"kt-portlet--fullscreen"),l.removeTooltips(),l.setupTooltips(),a.foot&&(KTUtil.css(a.body,"margin-bottom",""),KTUtil.css(a.foot,"margin-top","")),l.eventTrigger("afterFullscreenOff");else{if(l.eventTrigger("beforeFullscreenOn"),KTUtil.addClass(n,"kt-portlet--fullscreen"),KTUtil.addClass(i,"kt-portlet--fullscreen"),l.removeTooltips(),l.setupTooltips(),a.foot){var e=parseInt(KTUtil.css(a.foot,"height")),o=parseInt(KTUtil.css(a.foot,"height"))+parseInt(KTUtil.css(a.head,"height"));KTUtil.css(a.body,"margin-bottom",e+"px"),KTUtil.css(a.foot,"margin-top","-"+o+"px")}l.eventTrigger("afterFullscreenOn")}},eventTrigger:function(t){for(var e=0;e<a.events.length;e++){var n=a.events[e];n.name==t&&(1==n.one?0==n.fired&&(a.events[e].fired=!0,n.handler.call(this,a)):n.handler.call(this,a))}},addEvent:function(t,e,n){return a.events.push({name:t,handler:e,one:n,fired:!1}),a}};return a.setDefaults=function(t){o=t},a.remove=function(){return l.remove(html)},a.initSticky=function(){return l.initSticky()},a.updateSticky=function(){return l.updateSticky()},a.resetSticky=function(){return l.resetSticky()},a.destroySticky=function(){l.resetSticky(),window.removeEventListener("scroll",l.onScrollSticky)},a.reload=function(){return l.reload()},a.setContent=function(t){return l.setContent(t)},a.toggle=function(){return l.toggle()},a.collapse=function(){return l.collapse()},a.expand=function(){return l.expand()},a.fullscreen=function(){return l.fullscreen("on")},a.unFullscreen=function(){return l.fullscreen("off")},a.getBody=function(){return l.getBody()},a.getSelf=function(){return l.getSelf()},a.on=function(t,e){return l.addEvent(t,e)},a.one=function(t,e){return l.addEvent(t,e,!0)},l.construct.apply(a,[e]),a}},KTScrolltop=function(t,e){var a=this,n=KTUtil.get(t),i=KTUtil.get("body");if(n){var o={offset:300,speed:600,toggleClass:"kt-scrolltop--on"},l={construct:function(t){return KTUtil.data(n).has("scrolltop")?a=KTUtil.data(n).get("scrolltop"):(l.init(t),l.build(),KTUtil.data(n).set("scrolltop",a)),a},init:function(t){a.events=[],a.options=KTUtil.deepExtend({},o,t)},build:function(){navigator.userAgent.match(/iPhone|iPad|iPod/i)?(window.addEventListener("touchend",function(){l.handle()}),window.addEventListener("touchcancel",function(){l.handle()}),window.addEventListener("touchleave",function(){l.handle()})):window.addEventListener("scroll",function(){l.handle()}),KTUtil.addEvent(n,"click",l.scroll)},handle:function(){window.pageYOffset>a.options.offset?KTUtil.addClass(i,a.options.toggleClass):KTUtil.removeClass(i,a.options.toggleClass)},scroll:function(t){t.preventDefault(),KTUtil.scrollTop(0,a.options.speed)},eventTrigger:function(t,e){for(var n=0;n<a.events.length;n++){var i=a.events[n];i.name==t&&(1==i.one?0==i.fired&&(a.events[n].fired=!0,i.handler.call(this,a,e)):i.handler.call(this,a,e))}},addEvent:function(t,e,n){a.events.push({name:t,handler:e,one:n,fired:!1})}};return a.setDefaults=function(t){o=t},a.on=function(t,e){return l.addEvent(t,e)},a.one=function(t,e){return l.addEvent(t,e,!0)},l.construct.apply(a,[e]),!0,a}},KTToggle=function(t,e){var a=this,n=KTUtil.get(t);KTUtil.get("body");if(n){var i={togglerState:"",targetState:""},o={construct:function(t){return KTUtil.data(n).has("toggle")?a=KTUtil.data(n).get("toggle"):(o.init(t),o.build(),KTUtil.data(n).set("toggle",a)),a},init:function(t){a.element=n,a.events=[],a.options=KTUtil.deepExtend({},i,t),a.target=KTUtil.get(a.options.target),a.targetState=a.options.targetState,a.togglerState=a.options.togglerState,a.state=KTUtil.hasClasses(a.target,a.targetState)?"on":"off"},build:function(){KTUtil.addEvent(n,"mouseup",o.toggle)},toggle:function(t){return o.eventTrigger("beforeToggle"),"off"==a.state?o.toggleOn():o.toggleOff(),o.eventTrigger("afterToggle"),t.preventDefault(),a},toggleOn:function(){return o.eventTrigger("beforeOn"),KTUtil.addClass(a.target,a.targetState),a.togglerState&&KTUtil.addClass(n,a.togglerState),a.state="on",o.eventTrigger("afterOn"),o.eventTrigger("toggle"),a},toggleOff:function(){return o.eventTrigger("beforeOff"),KTUtil.removeClass(a.target,a.targetState),a.togglerState&&KTUtil.removeClass(n,a.togglerState),a.state="off",o.eventTrigger("afterOff"),o.eventTrigger("toggle"),a},eventTrigger:function(t){for(var e=0;e<a.events.length;e++){var n=a.events[e];n.name==t&&(1==n.one?0==n.fired&&(a.events[e].fired=!0,n.handler.call(this,a)):n.handler.call(this,a))}},addEvent:function(t,e,n){return a.events.push({name:t,handler:e,one:n,fired:!1}),a}};return a.setDefaults=function(t){i=t},a.getState=function(){return a.state},a.toggle=function(){return o.toggle()},a.toggleOn=function(){return o.toggleOn()},a.toggleOff=function(){return o.toggleOff()},a.on=function(t,e){return o.addEvent(t,e)},a.one=function(t,e){return o.addEvent(t,e,!0)},o.construct.apply(a,[e]),a}},KTWizard=function(t,e){var a=this,n=KTUtil.get(t);KTUtil.get("body");if(n){var i={startStep:1,manualStepForward:!1},o={construct:function(t){return KTUtil.data(n).has("wizard")?a=KTUtil.data(n).get("wizard"):(o.init(t),o.build(),KTUtil.data(n).set("wizard",a)),a},init:function(t){a.element=n,a.events=[],a.options=KTUtil.deepExtend({},i,t),a.steps=KTUtil.findAll(n,'[data-ktwizard-type="step"]'),a.btnSubmit=KTUtil.find(n,'[data-ktwizard-type="action-submit"]'),a.btnNext=KTUtil.find(n,'[data-ktwizard-type="action-next"]'),a.btnPrev=KTUtil.find(n,'[data-ktwizard-type="action-prev"]'),a.btnLast=KTUtil.find(n,'[data-ktwizard-type="action-last"]'),a.btnFirst=KTUtil.find(n,'[data-ktwizard-type="action-first"]'),a.events=[],a.currentStep=1,a.stopped=!1,a.totalSteps=a.steps.length,a.options.startStep>1&&o.goTo(a.options.startStep),o.updateUI()},build:function(){KTUtil.addEvent(a.btnNext,"click",function(t){t.preventDefault(),o.goNext()}),KTUtil.addEvent(a.btnPrev,"click",function(t){t.preventDefault(),o.goPrev()}),KTUtil.addEvent(a.btnFirst,"click",function(t){t.preventDefault(),o.goFirst()}),KTUtil.addEvent(a.btnLast,"click",function(t){t.preventDefault(),o.goLast()}),KTUtil.on(n,'a[data-ktwizard-type="step"]',"click",function(){var t=KTUtil.index(this)+1;t!==a.currentStep&&o.goTo(t)})},goTo:function(t){if(!(t===a.currentStep||t>a.totalSteps||t<0)){var e;if(e=(t=t?parseInt(t):o.getNextStep())>a.currentStep?o.eventTrigger("beforeNext"):o.eventTrigger("beforePrev"),!0!==a.stopped)return!1!==e&&(o.eventTrigger("beforeChange"),a.currentStep=t,o.updateUI(),o.eventTrigger("change")),t>a.startStep?o.eventTrigger("afterNext"):o.eventTrigger("afterPrev"),a;a.stopped=!1}},stop:function(){a.stopped=!0},start:function(){a.stopped=!1},isLastStep:function(){return a.currentStep===a.totalSteps},isFirstStep:function(){return 1===a.currentStep},isBetweenStep:function(){return!1===o.isLastStep()&&!1===o.isFirstStep()},goNext:function(){return o.goTo(o.getNextStep())},goPrev:function(){return o.goTo(o.getPrevStep())},goLast:function(){return o.goTo(a.totalSteps)},goFirst:function(){return o.goTo(1)},updateUI:function(){var t="",e=a.currentStep-1;t=o.isLastStep()?"last":o.isFirstStep()?"first":"between",KTUtil.attr(a.element,"data-ktwizard-state",t);var n=KTUtil.findAll(a.element,'[data-ktwizard-type="step"]');if(n&&n.length>0)for(var i=0,l=n.length;i<l;i++)i==e?KTUtil.attr(n[i],"data-ktwizard-state","current"):i<e?KTUtil.attr(n[i],"data-ktwizard-state","done"):KTUtil.attr(n[i],"data-ktwizard-state","pending");var r=KTUtil.findAll(a.element,'[data-ktwizard-type="step-info"]');if(r&&r.length>0)for(i=0,l=r.length;i<l;i++)i==e?KTUtil.attr(r[i],"data-ktwizard-state","current"):KTUtil.removeAttr(r[i],"data-ktwizard-state");var s=KTUtil.findAll(a.element,'[data-ktwizard-type="step-content"]');if(s&&s.length>0)for(i=0,l=s.length;i<l;i++)i==e?KTUtil.attr(s[i],"data-ktwizard-state","current"):KTUtil.removeAttr(s[i],"data-ktwizard-state")},getNextStep:function(){return a.totalSteps>=a.currentStep+1?a.currentStep+1:a.totalSteps},getPrevStep:function(){return a.currentStep-1>=1?a.currentStep-1:1},eventTrigger:function(t){for(var e=0;e<a.events.length;e++){var n=a.events[e];n.name==t&&(1==n.one?0==n.fired&&(a.events[e].fired=!0,n.handler.call(this,a)):n.handler.call(this,a))}},addEvent:function(t,e,n){return a.events.push({name:t,handler:e,one:n,fired:!1}),a}};return a.setDefaults=function(t){i=t},a.goNext=function(){return o.goNext()},a.goPrev=function(){return o.goPrev()},a.goLast=function(){return o.goLast()},a.stop=function(){return o.stop()},a.start=function(){return o.start()},a.goFirst=function(){return o.goFirst()},a.goTo=function(t){return o.goTo(t)},a.getStep=function(){return a.currentStep},a.isLastStep=function(){return o.isLastStep()},a.isFirstStep=function(){return o.isFirstStep()},a.on=function(t,e){return o.addEvent(t,e)},a.one=function(t,e){return o.addEvent(t,e,!0)},o.construct.apply(a,[e]),a}},KTChat=function(){var t=function(t){var e=KTUtil.find(t,".kt-scroll");if(e){KTUtil.scrollInit(e,{windowScroll:!1,mobileNativeScroll:!0,desktopNativeScroll:!1,resetHeightOnDestroy:!0,handleWindowResize:!0,rememberPosition:!0,height:function(){var a;if(KTUtil.isInResponsiveRange("tablet-and-mobile"))return KTUtil.hasAttr(e,"data-mobile-height")?parseInt(KTUtil.attr(e,"data-mobile-height")):300;if(KTUtil.isInResponsiveRange("desktop")&&KTUtil.hasAttr(e,"data-height"))return parseInt(KTUtil.attr(e,"data-height"));var n=KTUtil.find(t,".kt-chat"),i=KTUtil.find(t,".kt-portlet > .kt-portlet__head"),o=KTUtil.find(t,".kt-portlet > .kt-portlet__body"),l=KTUtil.find(t,".kt-portlet > .kt-portlet__foot");return a=KTUtil.isInResponsiveRange("desktop")?KTLayout.getContentHeight():KTUtil.getViewPort().height,n&&(a=(a=a-parseInt(KTUtil.css(n,"margin-top"))-parseInt(KTUtil.css(n,"margin-bottom")))-parseInt(KTUtil.css(n,"padding-top"))-parseInt(KTUtil.css(n,"padding-bottom"))),i&&(a=(a-=parseInt(KTUtil.css(i,"height")))-parseInt(KTUtil.css(i,"margin-top"))-parseInt(KTUtil.css(i,"margin-bottom"))),o&&(a=(a=a-parseInt(KTUtil.css(o,"margin-top"))-parseInt(KTUtil.css(o,"margin-bottom")))-parseInt(KTUtil.css(o,"padding-top"))-parseInt(KTUtil.css(o,"padding-bottom"))),l&&(a=(a-=parseInt(KTUtil.css(l,"height")))-parseInt(KTUtil.css(l,"margin-top"))-parseInt(KTUtil.css(l,"margin-bottom"))),a-=5}});var a=function(){var e=KTUtil.find(t,".kt-scroll"),a=KTUtil.find(t,".kt-chat__messages"),n=KTUtil.find(t,".kt-chat__input textarea");if(0!==n.value.length){var i=document.createElement("DIV");KTUtil.addClass(i,"kt-chat__message kt-chat__message--brand kt-chat__message--right");var o,l='<div class="kt-chat__user"><span class="kt-chat__datetime">Just now</span><a href="#" class="kt-chat__username">Jason Muller</span></a><span class="kt-userpic kt-userpic--circle kt-userpic--sm"><img src="./assets/media/users/100_12.jpg" alt="image"></span></div><div class="kt-chat__text kt-bg-light-brand">'+n.value;KTUtil.setHTML(i,l),a.appendChild(i),n.value="",e.scrollTop=parseInt(KTUtil.css(a,"height")),(o=KTUtil.data(e).get("ps"))&&o.update(),setTimeout(function(){var t=document.createElement("DIV");KTUtil.addClass(t,"kt-chat__message kt-chat__message--success");var i;KTUtil.setHTML(t,'<div class="kt-chat__user"><span class="kt-userpic kt-userpic--circle kt-userpic--sm"><img src="./assets/media/users/100_13.jpg" alt="image"></span><a href="#" class="kt-chat__username">Max Born</span></a><span class="kt-chat__datetime">Just now</span></div><div class="kt-chat__text kt-bg-light-success">Right before vacation season we have the next Big Deal for you. <br>Book the car of your dreams and save up to <b>25%*</b> worldwide.'),a.appendChild(t),n.value="",e.scrollTop=parseInt(KTUtil.css(a,"height")),(i=KTUtil.data(e).get("ps"))&&i.update()},2e3)}};KTUtil.on(t,".kt-chat__input textarea","keydown",function(t){if(13==t.keyCode)return a(),t.preventDefault(),!1}),KTUtil.on(t,".kt-chat__input .kt-chat__reply","click",function(t){a()})}};return{init:function(){t(KTUtil.getByID("kt_chat_modal")),setTimeout(function(){},1e3)},setup:function(e){t(e)}}}();KTUtil.ready(function(){KTChat.init()});var KTDemoPanel=function(){var t,e=KTUtil.getByID("kt_demo_panel");return{init:function(){!function(){t=new KTOffcanvas(e,{overlay:!0,baseClass:"kt-demo-panel",closeBy:"kt_demo_panel_close",toggleBy:"kt_demo_panel_toggle"});var a=KTUtil.find(e,".kt-demo-panel__head"),n=KTUtil.find(e,".kt-demo-panel__body");KTUtil.scrollInit(n,{disableForMobile:!0,resetHeightOnDestroy:!0,handleWindowResize:!0,height:function(){var t=parseInt(KTUtil.getViewPort().height);return a&&(t-=parseInt(KTUtil.actualHeight(a)),t-=parseInt(KTUtil.css(a,"marginBottom"))),t-=parseInt(KTUtil.css(e,"paddingTop")),t-=parseInt(KTUtil.css(e,"paddingBottom"))}}),void 0!==t&&0===t.length&&t.on("hide",function(){var t=new Date((new Date).getTime()+36e5);Cookies.set("kt_demo_panel_shown",1,{expires:t})})}(),"keenthemes.com"!=encodeURI(window.location.hostname)&&"www.keenthemes.com"!=encodeURI(window.location.hostname)||setTimeout(function(){if(!Cookies.get("kt_demo_panel_shown")){var e=new Date((new Date).getTime()+9e5);Cookies.set("kt_demo_panel_shown",1,{expires:e}),t.show()}},4e3)}}}();$(document).ready(function(){KTDemoPanel.init()});var KTOffcanvasPanel=function(){var t=KTUtil.get("kt_offcanvas_toolbar_notifications"),e=KTUtil.get("kt_offcanvas_toolbar_quick_actions"),a=KTUtil.get("kt_offcanvas_toolbar_profile"),n=KTUtil.get("kt_offcanvas_toolbar_search");return{init:function(){!function(){var e=KTUtil.find(t,".kt-offcanvas-panel__head"),a=KTUtil.find(t,".kt-offcanvas-panel__body");new KTOffcanvas(t,{overlay:!0,baseClass:"kt-offcanvas-panel",closeBy:"kt_offcanvas_toolbar_notifications_close",toggleBy:"kt_offcanvas_toolbar_notifications_toggler_btn"});KTUtil.scrollInit(a,{mobileNativeScroll:!0,resetHeightOnDestroy:!0,handleWindowResize:!0,height:function(){var a=parseInt(KTUtil.getViewPort().height);return e&&(a-=parseInt(KTUtil.actualHeight(e)),a-=parseInt(KTUtil.css(e,"marginBottom"))),a-=parseInt(KTUtil.css(t,"paddingTop")),a-=parseInt(KTUtil.css(t,"paddingBottom"))}})}(),function(){var t=KTUtil.find(e,".kt-offcanvas-panel__head"),a=KTUtil.find(e,".kt-offcanvas-panel__body");new KTOffcanvas(e,{overlay:!0,baseClass:"kt-offcanvas-panel",closeBy:"kt_offcanvas_toolbar_quick_actions_close",toggleBy:"kt_offcanvas_toolbar_quick_actions_toggler_btn"});KTUtil.scrollInit(a,{mobileNativeScroll:!0,resetHeightOnDestroy:!0,handleWindowResize:!0,height:function(){var a=parseInt(KTUtil.getViewPort().height);return t&&(a-=parseInt(KTUtil.actualHeight(t)),a-=parseInt(KTUtil.css(t,"marginBottom"))),a-=parseInt(KTUtil.css(e,"paddingTop")),a-=parseInt(KTUtil.css(e,"paddingBottom"))}})}(),function(){var t=KTUtil.find(a,".kt-offcanvas-panel__head"),e=KTUtil.find(a,".kt-offcanvas-panel__body");new KTOffcanvas(a,{overlay:!0,baseClass:"kt-offcanvas-panel",closeBy:"kt_offcanvas_toolbar_profile_close",toggleBy:"kt_offcanvas_toolbar_profile_toggler_btn"});KTUtil.scrollInit(e,{mobileNativeScroll:!0,resetHeightOnDestroy:!0,handleWindowResize:!0,height:function(){var e=parseInt(KTUtil.getViewPort().height);return t&&(e-=parseInt(KTUtil.actualHeight(t)),e-=parseInt(KTUtil.css(t,"marginBottom"))),e-=parseInt(KTUtil.css(a,"paddingTop")),e-=parseInt(KTUtil.css(a,"paddingBottom"))}})}(),function(){var t=KTUtil.find(n,".kt-offcanvas-panel__head"),e=KTUtil.find(n,".kt-offcanvas-panel__body");new KTOffcanvas(n,{overlay:!0,baseClass:"kt-offcanvas-panel",closeBy:"kt_offcanvas_toolbar_search_close",toggleBy:"kt_offcanvas_toolbar_search_toggler_btn"});KTUtil.scrollInit(e,{mobileNativeScroll:!0,resetHeightOnDestroy:!0,handleWindowResize:!0,height:function(){var e=parseInt(KTUtil.getViewPort().height);return t&&(e-=parseInt(KTUtil.actualHeight(t)),e-=parseInt(KTUtil.css(t,"marginBottom"))),e-=parseInt(KTUtil.css(n,"paddingTop")),e-=parseInt(KTUtil.css(n,"paddingBottom"))}})}()}}}();$(document).ready(function(){KTOffcanvasPanel.init()});var KTQuickPanel=function(){var t=KTUtil.get("kt_quick_panel"),e=KTUtil.get("kt_quick_panel_tab_notifications"),a=KTUtil.get("kt_quick_panel_tab_logs"),n=KTUtil.get("kt_quick_panel_tab_settings"),i=function(){var e=KTUtil.find(t,".kt-quick-panel__nav");KTUtil.find(t,".kt-quick-panel__content");return parseInt(KTUtil.getViewPort().height)-parseInt(KTUtil.actualHeight(e))-2*parseInt(KTUtil.css(e,"padding-top"))-10};return{init:function(){new KTOffcanvas(t,{overlay:!0,baseClass:"kt-quick-panel",closeBy:"kt_quick_panel_close_btn",toggleBy:"kt_quick_panel_toggler_btn"}),KTUtil.scrollInit(e,{mobileNativeScroll:!0,resetHeightOnDestroy:!0,handleWindowResize:!0,height:function(){return i()}}),KTUtil.scrollInit(a,{mobileNativeScroll:!0,resetHeightOnDestroy:!0,handleWindowResize:!0,height:function(){return i()}}),KTUtil.scrollInit(n,{mobileNativeScroll:!0,resetHeightOnDestroy:!0,handleWindowResize:!0,height:function(){return i()}}),$(t).find('a[data-toggle="tab"]').on("shown.bs.tab",function(t){KTUtil.scrollUpdate(e),KTUtil.scrollUpdate(a),KTUtil.scrollUpdate(n)})}}}();$(document).ready(function(){KTQuickPanel.init()});var KTQuickSearch=function(){var t,e,a,n,i,o,l,r,s="",d=!1,c=!1,u=!1,p="kt-spinner kt-spinner--input kt-spinner--sm kt-spinner--brand kt-spinner--right",f="kt-quick-search--has-result",g=function(){u=!1,KTUtil.removeClass(r,p),n&&(a.value.length<2?KTUtil.hide(n):KTUtil.show(n,"flex"))},h=function(){l&&!KTUtil.hasClass(o,"show")&&($(l).dropdown("toggle"),$(l).dropdown("update"))},v=function(){l&&KTUtil.hasClass(o,"show")&&$(l).dropdown("toggle")},m=function(){if(d&&s===a.value)return g(),KTUtil.addClass(t,f),h(),void KTUtil.scrollUpdate(i);s=a.value,KTUtil.removeClass(t,f),u=!0,KTUtil.addClass(r,p),n&&KTUtil.hide(n),setTimeout(function(){$.ajax({url:"https://keenthemes.com/metronic/themes/themes/metronic/dist/preview/inc/api/quick_search.php",data:{query:s},dataType:"html",success:function(e){d=!0,g(),KTUtil.addClass(t,f),KTUtil.setHTML(i,e),h(),KTUtil.scrollUpdate(i)},error:function(e){d=!1,g(),KTUtil.addClass(t,f),KTUtil.setHTML(i,'<span class="kt-quick-search__message">Connection error. Pleae try again later.</div>'),h(),KTUtil.scrollUpdate(i)}})},1e3)},b=function(e){a.value="",s="",d=!1,KTUtil.hide(n),KTUtil.removeClass(t,f),v()},k=function(){if(a.value.length<2)return g(),void v();1!=u&&(c&&clearTimeout(c),c=setTimeout(function(){m()},200))};return{init:function(s){t=s,e=KTUtil.find(t,".kt-quick-search__form"),a=KTUtil.find(t,".kt-quick-search__input"),n=KTUtil.find(t,".kt-quick-search__close"),i=KTUtil.find(t,".kt-quick-search__wrapper"),o=KTUtil.find(t,".dropdown-menu"),l=KTUtil.find(t,'[data-toggle="dropdown"]'),r=KTUtil.find(t,".input-group"),KTUtil.addEvent(a,"keyup",k),KTUtil.addEvent(a,"focus",k),e.onkeypress=function(t){13==(t.charCode||t.keyCode||0)&&t.preventDefault()},KTUtil.addEvent(n,"click",b);var d=KTUtil.getByID("kt_quick_search_toggle");d&&$(d).on("shown.bs.dropdown",function(){a.focus()})}}},KTQuickSearchMobile=KTQuickSearch;$(document).ready(function(){KTUtil.get("kt_quick_search_default")&&KTQuickSearch().init(KTUtil.get("kt_quick_search_default")),KTUtil.get("kt_quick_search_inline")&&KTQuickSearchMobile().init(KTUtil.get("kt_quick_search_inline"))});var KTLayout=function(){var t,e,a,n,i,o,l,r=function(){return new KTPortlet("kt_page_portlet",{sticky:{offset:parseInt(KTUtil.css(KTUtil.get("kt_header"),"height"))+200,zIndex:90,position:{top:function(){var e=0;return KTUtil.isInResponsiveRange("desktop")?(KTUtil.hasClass(t,"kt-header--fixed")&&(e+=55),KTUtil.hasClass(t,"kt-subheader--fixed")&&KTUtil.get("kt_subheader")&&(e+=parseInt(KTUtil.css(KTUtil.get("kt_subheader"),"height")))):KTUtil.hasClass(t,"kt-header-mobile--fixed")&&(e+=parseInt(KTUtil.css(KTUtil.get("kt_header_mobile"),"height"))),e},left:function(t){var e=t.getSelf();return KTUtil.offset(e).left},right:function(t){var e=t.getSelf(),a=parseInt(KTUtil.css(e,"width"));return parseInt(KTUtil.css(KTUtil.get("body"),"width"))-a-KTUtil.offset(e).left}}}})};return{init:function(){t=KTUtil.get("body"),this.initHeader(),this.initAside(),this.initPageStickyPortlet(),$("#kt_aside_menu, #kt_header_menu").on("click",'.kt-menu__link[href="#"]',function(){location.hostname.match("keenthemes.com")?swal.fire("You have clicked on a dummy link!","To browse the theme features please refer to the header menu.","warning"):swal.fire("You have clicked on a dummy link!","This demo shows only its unique layout features. <b>Keen's</b> all available features can be re-used in this and any other demos by refering to <b>the default demo</b>.","warning")})},initHeader:function(){var t,n,i;n=KTUtil.get("kt_header"),i={offset:{},minimize:{desktop:{on:"kt-header--minimize"},mobile:{on:"kt-header--minimize"}}},(t=KTUtil.attr(n,"data-ktheader-minimize-offset"))&&(i.offset.desktop=t),(t=KTUtil.attr(n,"data-ktheader-minimize-mobile-offset"))&&(i.offset.mobile=t),new KTHeader("kt_header",i),a=new KTOffcanvas("kt_header_menu_wrapper",{overlay:!0,baseClass:"kt-header-menu-wrapper",closeBy:"kt_header_menu_mobile_close_btn",toggleBy:{target:"kt_header_mobile_toggler",state:"kt-header-mobile__toolbar-toggler--active"}}),e=new KTMenu("kt_header_menu",{submenu:{desktop:"dropdown",tablet:"accordion",mobile:"accordion"},accordion:{slideSpeed:200,expandAll:!1}}),o=new KTToggle("kt_header_mobile_topbar_toggler",{target:"body",targetState:"kt-header__topbar--mobile-on",togglerState:"kt-header-mobile__toolbar-topbar-toggler--active"}),new KTScrolltop("kt_scrolltop",{offset:300,speed:600})},initAside:function(){var a,r;a=KTUtil.get("kt_aside"),KTUtil.get("kt_aside_brand"),r=KTUtil.hasClass(a,"kt-aside--offcanvas-default")?"kt-aside--offcanvas-default":"kt-aside",i=new KTOffcanvas("kt_aside",{baseClass:r,overlay:!0,closeBy:"kt_aside_close_btn",toggleBy:{target:"kt_aside_mobile_toggler",state:"kt-header-mobile__toolbar-toggler--active"}}),function(){var t=KTUtil.get("kt_aside"),e=KTUtil.get("kt_aside_menu"),a="1"===KTUtil.attr(e,"data-ktmenu-dropdown")?"dropdown":"accordion";if(n=new KTMenu("kt_aside_menu",{scroll:void 0,submenu:{desktop:a,tablet:"accordion",mobile:"accordion"},accordion:{autoScroll:!1,expandAll:!1}}),KTUtil.isInResponsiveRange("desktop"))for(var i=KTUtil.findAll(t,".kt-menu__item--submenu-fullheight .kt-menu__submenu > .kt-menu__wrapper"),o=0,l=i.length;o<l;o++){var r=i[o];KTUtil.scrollInit(r,{mobileNativeScroll:!0,resetHeightOnDestroy:!0,handleWindowResize:!0,rememberPosition:!0,height:function(){return KTUtil.getViewPort().height}}),n.on("submenuToggle",function(t,e){e&&r&&r.contains(e)&&KTUtil.scrollUpdate(r)})}}(),KTUtil.get("kt_aside_toggler")&&((o=new KTToggle("kt_aside_toggler",{target:"body",targetState:"kt-aside--minimize",togglerState:"kt-aside__brand-aside-toggler--active"})).on("toggle",function(a){KTUtil.addClass(t,"kt-aside--minimizing"),KTUtil.get("kt_page_portlet")&&l.updateSticky(),KTUtil.transitionEnd(t,function(){KTUtil.removeClass(t,"kt-aside--minimizing")}),e.pauseDropdownHover(800),n.pauseDropdownHover(800),Cookies.set("kt_aside_toggle_state",a.getState())}),o.on("beforeToggle",function(t){var e=KTUtil.get("body");!1===KTUtil.hasClass(e,"kt-aside--minimize")&&KTUtil.hasClass(e,"kt-aside--minimize-hover")&&KTUtil.removeClass(e,"kt-aside--minimize-hover")})),this.onAsideToggle(function(t){l&&l.updateSticky();var e=$(".kt-datatable");e&&e.each(function(){$(this).KTDatatable("redraw")})})},initPageStickyPortlet:function(){KTUtil.get("kt_page_portlet")&&((l=r()).initSticky(),KTUtil.addResizeHandler(function(){l.updateSticky()}),r())},getAsideMenu:function(){return n},onAsideToggle:function(t){void 0!==o.element&&o.on("toggle",t)},getAsideToggler:function(){return o},closeMobileAsideMenuOffcanvas:function(){KTUtil.isMobileDevice()&&i.hide()},closeMobileHeaderMenuOffcanvas:function(){KTUtil.isMobileDevice()&&a.hide()},getContentHeight:function(){return t=KTUtil.getViewPort().height,KTUtil.getByID("kt_header")&&(t-=KTUtil.actualHeight("kt_header")),KTUtil.getByID("kt_subheader")&&(t-=KTUtil.actualHeight("kt_subheader")),KTUtil.getByID("kt_footer")&&(t-=parseInt(KTUtil.css("kt_footer","height"))),KTUtil.getByID("kt_content")&&(t=t-parseInt(KTUtil.css("kt_content","padding-top"))-parseInt(KTUtil.css("kt_content","padding-bottom"))),t;var t}
+
+    // Default options
+    var defaultOptions = {
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Construct
+         */
+
+        construct: function(options) {
+            if (KTUtil.data(element).has('avatar')) {
+                the = KTUtil.data(element).get('avatar');
+            } else {
+                // reset menu
+                Plugin.init(options);
+
+                // build menu
+                Plugin.build();
+
+                KTUtil.data(element).set('avatar', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Init avatar
+         */
+        init: function(options) {
+            the.element = element;
+            the.events = [];
+
+            the.input = KTUtil.find(element, 'input[type="file"]');
+            the.holder = KTUtil.find(element, '.kt-avatar__holder');
+            the.cancel = KTUtil.find(element, '.kt-avatar__cancel');
+            the.src = KTUtil.css(the.holder, 'backgroundImage');
+
+            // merge default and user defined options
+            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+        },
+
+        /**
+         * Build Form Wizard
+         */
+        build: function() {
+            // Handle avatar change
+            KTUtil.addEvent(the.input, 'change', function(e) {
+                e.preventDefault();
+
+	            if (the.input && the.input.files && the.input.files[0]) {
+	                var reader = new FileReader();
+	                reader.onload = function(e) {
+	                    KTUtil.css(the.holder, 'background-image', 'url('+e.target.result +')');
+	                }
+	                reader.readAsDataURL(the.input.files[0]);
+
+	                KTUtil.addClass(the.element, 'kt-avatar--changed');
+	            }
+            });
+
+            // Handle avatar cancel
+            KTUtil.addEvent(the.cancel, 'click', function(e) {
+                e.preventDefault();
+
+	            KTUtil.removeClass(the.element, 'kt-avatar--changed');
+	            KTUtil.css(the.holder, 'background-image', the.src);
+	            the.input.value = "";
+            });
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name) {
+            //KTUtil.triggerCustomEvent(name);
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            return event.handler.call(this, the);
+                        }
+                    } else {
+                        return event.handler.call(this, the);
+                    }
                 }
-        }();
-$(document).ready(function(){KTLayout.init()});
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+
+            return the;
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+    
+    /**
+     * Attach event
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Attach event that will be fired once
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    // Construct plugin
+    Plugin.construct.apply(the, [options]);
+
+    return the;
+};
+
+// webpack support
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = KTAvatar;
+}
+"use strict";
+
+// plugin setup
+var KTDialog = function(options) {
+    // Main object
+    var the = this;
+
+    // Get element object
+    var element;
+    var body = KTUtil.get('body');  
+
+    // Default options
+    var defaultOptions = {
+        'placement' : 'top center',
+        'type'  : 'loader',
+        'width' : 100,
+        'state' : 'default',
+        'message' : 'Loading...' 
+    };    
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Construct
+         */
+
+        construct: function(options) {
+            Plugin.init(options);
+
+            return the;
+        },
+
+        /**
+         * Handles subtoggle click toggle
+         */
+        init: function(options) {
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+
+            the.state = false;
+        },
+
+        /**
+         * Show dialog
+         */
+        show: function() {
+            Plugin.eventTrigger('show');
+
+            element = document.createElement("DIV");
+            KTUtil.setHTML(element, the.options.message);
+            
+            KTUtil.addClass(element, 'kt-dialog kt-dialog--shown');
+            KTUtil.addClass(element, 'kt-dialog--' + the.options.state);
+            KTUtil.addClass(element, 'kt-dialog--' + the.options.type); 
+
+            if (the.options.placement == 'top center') {
+                KTUtil.addClass(element, 'kt-dialog--top-center');
+            }
+
+            body.appendChild(element);
+
+            the.state = 'shown';
+
+            Plugin.eventTrigger('shown');
+
+            return the;
+        },
+
+        /**
+         * Hide dialog
+         */
+        hide: function() {
+            if (element) {
+                Plugin.eventTrigger('hide');
+
+                element.remove();
+                the.state = 'hidden';
+
+                Plugin.eventTrigger('hidden');
+            }
+
+            return the;
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name) {
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;                            
+                            return event.handler.call(this, the);
+                        }
+                    } else {
+                        return event.handler.call(this, the);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+
+            return the;
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Check shown state 
+     */
+    the.shown = function() {
+        return the.state == 'shown';
+    };
+
+    /**
+     * Check hidden state 
+     */
+    the.hidden = function() {
+        return the.state == 'hidden';
+    };
+
+    /**
+     * Show dialog 
+     */
+    the.show = function() {
+        return Plugin.show();
+    };
+
+    /**
+     * Hide dialog
+     */
+    the.hide = function() {
+        return Plugin.hide();
+    };
+
+    /**
+     * Attach event
+     * @returns {KTToggle}
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Attach event that will be fired once
+     * @returns {KTToggle}
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    // Construct plugin
+    Plugin.construct.apply(the, [options]);
+
+    return the;
+};
+
+// webpack support
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = KTDialog;
+}
+"use strict";
+var KTHeader = function(elementId, options) {
+    // Main object
+    var the = this;
+    var init = false;
+
+    // Get element object
+    var element = KTUtil.get(elementId);
+    var body = KTUtil.get('body');
+
+    if (element === undefined) {
+        return;
+    }
+
+    // Default options
+    var defaultOptions = {
+        classic: false,
+        offset: {
+            mobile: 150,
+            desktop: 200
+        },
+        minimize: {
+            mobile: false,
+            desktop: false
+        }
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Run plugin
+         * @returns {KTHeader}
+         */
+        construct: function(options) {
+            if (KTUtil.data(element).has('header')) {
+                the = KTUtil.data(element).get('header');
+            } else {
+                // reset header
+                Plugin.init(options);
+
+                // build header
+                Plugin.build();
+
+                KTUtil.data(element).set('header', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Handles subheader click toggle
+         * @returns {KTHeader}
+         */
+        init: function(options) {
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+        },
+
+        /**
+         * Reset header
+         * @returns {KTHeader}
+         */
+        build: function() {
+            var lastScrollTop = 0;
+            var eventTriggerState = true;
+            var viewportHeight = KTUtil.getViewPort().height;
+
+            if (the.options.minimize.mobile === false && the.options.minimize.desktop === false) {
+                return;
+            }
+
+            window.addEventListener('scroll', function() {
+                var offset = 0, on, off, st;
+
+                if (KTUtil.isInResponsiveRange('desktop')) {
+                    offset = the.options.offset.desktop;
+                    on = the.options.minimize.desktop.on;
+                    off = the.options.minimize.desktop.off;
+                } else if (KTUtil.isInResponsiveRange('tablet-and-mobile')) {
+                    offset = the.options.offset.mobile;
+                    on = the.options.minimize.mobile.on;
+                    off = the.options.minimize.mobile.off;
+                }
+
+                st = window.pageYOffset;
+
+                if (
+                    (KTUtil.isInResponsiveRange('tablet-and-mobile') && the.options.classic && the.options.classic.mobile) ||
+                    (KTUtil.isInResponsiveRange('desktop') && the.options.classic && the.options.classic.desktop)
+
+                ) {
+                    if (st > offset) { // down scroll mode
+                        KTUtil.addClass(body, on);
+                        KTUtil.removeClass(body, off);
+                        
+                        if (eventTriggerState) {
+                            Plugin.eventTrigger('minimizeOn', the);
+                            eventTriggerState = false;
+                        }
+                    } else { // back scroll mode
+                        KTUtil.addClass(body, off);
+                        KTUtil.removeClass(body, on);
+
+                        if (eventTriggerState == false) {
+                            Plugin.eventTrigger('minimizeOff', the);
+                            eventTriggerState = true; 
+                        }
+                    }
+                } else {
+                    if (st > offset && lastScrollTop < st) { // down scroll mode
+                        KTUtil.addClass(body, on);
+                        KTUtil.removeClass(body, off);
+
+                        if (eventTriggerState) {
+                            Plugin.eventTrigger('minimizeOn', the);
+                            eventTriggerState = false;
+                        }
+                    } else { // back scroll mode
+                        KTUtil.addClass(body, off);
+                        KTUtil.removeClass(body, on);
+
+                        if (eventTriggerState == false) {
+                            Plugin.eventTrigger('minimizeOff', the);
+                            eventTriggerState = true;
+                        }
+                    }
+
+                    lastScrollTop = st;
+                }
+            });
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name, args) {
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            return event.handler.call(this, the, args);
+                        }
+                    } else {
+                        return event.handler.call(this, the, args);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Register event
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    ///////////////////////////////
+    // ** Plugin Construction ** //
+    ///////////////////////////////
+
+    // Run plugin
+    Plugin.construct.apply(the, [options]);
+
+    // Init done
+    init = true;
+
+    // Return plugin instance
+    return the;
+};
+
+// webpack support
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = KTHeader;
+}
+"use strict";
+var KTMenu = function(elementId, options) {
+    // Main object
+    var the = this;
+    var init = false;
+
+    // Get element object
+    var element = KTUtil.get(elementId);
+    var body = KTUtil.get('body');
+
+    if (!element) {
+        return;
+    }
+
+    // Default options
+    var defaultOptions = {
+        // scrollable area with Perfect Scroll
+        scroll: {
+            rememberPosition: false
+        },
+
+        // accordion submenu mode
+        accordion: {
+            slideSpeed: 200, // accordion toggle slide speed in milliseconds
+            autoScroll: false, // enable auto scrolling(focus) to the clicked menu item
+            autoScrollSpeed: 1200,
+            expandAll: true // allow having multiple expanded accordions in the menu
+        },
+
+        // dropdown submenu mode
+        dropdown: {
+            timeout: 500 // timeout in milliseconds to show and hide the hoverable submenu dropdown
+        }
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Run plugin
+         * @returns {KTMenu}
+         */
+        construct: function(options) {
+            if (KTUtil.data(element).has('menu')) {
+                the = KTUtil.data(element).get('menu');
+            } else {
+                // reset menu
+                Plugin.init(options);
+
+                // reset menu
+                Plugin.reset();
+
+                // build menu
+                Plugin.build();
+
+                KTUtil.data(element).set('menu', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Handles submenu click toggle
+         * @returns {KTMenu}
+         */
+        init: function(options) {
+            the.events = [];
+
+            the.eventHandlers = {};
+
+            // merge default and user defined options
+            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+
+            // pause menu
+            the.pauseDropdownHoverTime = 0;
+
+            the.uid = KTUtil.getUniqueID();
+        },
+
+        update: function(options) {
+            // merge default and user defined options
+            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+
+            // pause menu
+            the.pauseDropdownHoverTime = 0;
+
+             // reset menu
+            Plugin.reset();
+
+            the.eventHandlers = {};
+
+            // build menu
+            Plugin.build();
+
+            KTUtil.data(element).set('menu', the);
+        },
+
+        reload: function() {
+             // reset menu
+            Plugin.reset();
+
+            // build menu
+            Plugin.build();
+
+            // reset submenu props
+            Plugin.resetSubmenuProps();
+        },
+
+        /**
+         * Reset menu
+         * @returns {KTMenu}
+         */
+        build: function() {
+            // General accordion submenu toggle
+            the.eventHandlers['event_1'] = KTUtil.on( element, '.kt-menu__toggle', 'click', Plugin.handleSubmenuAccordion);
+
+            // Dropdown mode(hoverable)
+            if (Plugin.getSubmenuMode() === 'dropdown' || Plugin.isConditionalSubmenuDropdown()) {
+                // dropdown submenu - hover toggle
+                the.eventHandlers['event_2'] = KTUtil.on( element, '[data-ktmenu-submenu-toggle="hover"]', 'mouseover', Plugin.handleSubmenuDrodownHoverEnter);
+                the.eventHandlers['event_3'] = KTUtil.on( element, '[data-ktmenu-submenu-toggle="hover"]', 'mouseout', Plugin.handleSubmenuDrodownHoverExit);
+
+                // dropdown submenu - click toggle
+                the.eventHandlers['event_4'] = KTUtil.on( element, '[data-ktmenu-submenu-toggle="click"] > .kt-menu__toggle, [data-ktmenu-submenu-toggle="click"] > .kt-menu__link .kt-menu__toggle', 'click', Plugin.handleSubmenuDropdownClick);
+                the.eventHandlers['event_5'] = KTUtil.on( element, '[data-ktmenu-submenu-toggle="tab"] > .kt-menu__toggle, [data-ktmenu-submenu-toggle="tab"] > .kt-menu__link .kt-menu__toggle', 'click', Plugin.handleSubmenuDropdownTabClick);
+            }
+
+            // handle link click
+            the.eventHandlers['event_6'] = KTUtil.on(element, '.kt-menu__item > .kt-menu__link:not(.kt-menu__toggle):not(.kt-menu__link--toggle-skip)', 'click', Plugin.handleLinkClick);
+
+            // Init scrollable menu
+            if (the.options.scroll && the.options.scroll.height) {
+                Plugin.scrollInit();
+            }
+        },
+
+        /**
+         * Reset menu
+         * @returns {KTMenu}
+         */
+        reset: function() {
+            KTUtil.off( element, 'click', the.eventHandlers['event_1']);
+
+            // dropdown submenu - hover toggle
+            KTUtil.off( element, 'mouseover', the.eventHandlers['event_2']);
+            KTUtil.off( element, 'mouseout', the.eventHandlers['event_3']);
+
+            // dropdown submenu - click toggle
+            KTUtil.off( element, 'click', the.eventHandlers['event_4']);
+            KTUtil.off( element, 'click', the.eventHandlers['event_5']);
+
+            // handle link click
+            KTUtil.off(element, 'click', the.eventHandlers['event_6']);
+        },
+
+        /**
+         * Init scroll menu
+         *
+        */
+        scrollInit: function() {
+            if ( the.options.scroll && the.options.scroll.height ) {
+                KTUtil.scrollDestroy(element);
+                KTUtil.scrollInit(element, {mobileNativeScroll: true, windowScroll: false, resetHeightOnDestroy: true, handleWindowResize: true, height: the.options.scroll.height, rememberPosition: the.options.scroll.rememberPosition});
+            } else {
+                KTUtil.scrollDestroy(element);
+            }
+        },
+
+        /**
+         * Update scroll menu
+        */
+        scrollUpdate: function() {
+            if ( the.options.scroll && the.options.scroll.height ) {
+                KTUtil.scrollUpdate(element);
+            }
+        },
+
+        /**
+         * Scroll top
+        */
+        scrollTop: function() {
+            if ( the.options.scroll && the.options.scroll.height ) {
+                KTUtil.scrollTop(element);
+            }
+        },
+
+        /**
+         * Get submenu mode for current breakpoint and menu state
+         * @returns {KTMenu}
+         */
+        getSubmenuMode: function(el) {
+            if ( KTUtil.isInResponsiveRange('desktop') ) {
+                if (el && KTUtil.hasAttr(el, 'data-ktmenu-submenu-toggle') && KTUtil.attr(el, 'data-ktmenu-submenu-toggle') == 'hover') {
+                    return 'dropdown';
+                }
+
+                if ( KTUtil.isset(the.options.submenu, 'desktop.state.body') ) {
+                    if ( KTUtil.hasClasses(body, the.options.submenu.desktop.state.body) ) {
+                        return the.options.submenu.desktop.state.mode;
+                    } else {
+                        return the.options.submenu.desktop.default;
+                    }
+                } else if ( KTUtil.isset(the.options.submenu, 'desktop') ) {
+                    return the.options.submenu.desktop;
+                }
+            } else if ( KTUtil.isInResponsiveRange('tablet') && KTUtil.isset(the.options.submenu, 'tablet') ) {
+                return the.options.submenu.tablet;
+            } else if ( KTUtil.isInResponsiveRange('mobile') && KTUtil.isset(the.options.submenu, 'mobile') ) {
+                return the.options.submenu.mobile;
+            } else {
+                return false;
+            }
+        },
+
+        /**
+         * Get submenu mode for current breakpoint and menu state
+         * @returns {KTMenu}
+         */
+        isConditionalSubmenuDropdown: function() {
+            if ( KTUtil.isInResponsiveRange('desktop') && KTUtil.isset(the.options.submenu, 'desktop.state.body') ) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+
+
+        /**
+         * Reset submenu attributes
+         * @returns {KTMenu}
+         */
+        resetSubmenuProps: function(e) {
+            var submenus = KTUtil.findAll(element, '.kt-menu__submenu');
+            if ( submenus ) {
+                for (var i = 0, len = submenus.length; i < len; i++) {
+                    KTUtil.css(submenus[0], 'display', '');
+                    KTUtil.css(submenus[0], 'overflow', '');
+                }
+            }
+        },
+
+        /**
+         * Handles submenu hover toggle
+         * @returns {KTMenu}
+         */
+        handleSubmenuDrodownHoverEnter: function(e) {
+            if ( Plugin.getSubmenuMode(this) === 'accordion' ) {
+                return;
+            }
+
+            if ( the.resumeDropdownHover() === false ) {
+                return;
+            }
+
+            var item = this;
+
+            if ( item.getAttribute('data-hover') == '1' ) {
+                item.removeAttribute('data-hover');
+                clearTimeout( item.getAttribute('data-timeout') );
+                item.removeAttribute('data-timeout');
+                //Plugin.hideSubmenuDropdown(item, false);
+            }
+
+            // console.log('test!');
+
+            Plugin.showSubmenuDropdown(item);
+        },
+
+        /**
+         * Handles submenu hover toggle
+         * @returns {KTMenu}
+         */
+        handleSubmenuDrodownHoverExit: function(e) {
+            if ( the.resumeDropdownHover() === false ) {
+                return;
+            }
+
+            if ( Plugin.getSubmenuMode(this) === 'accordion' ) {
+                return;
+            }
+
+            var item = this;
+            var time = the.options.dropdown.timeout;
+
+            var timeout = setTimeout(function() {
+                if ( item.getAttribute('data-hover') == '1' ) {
+                    Plugin.hideSubmenuDropdown(item, true);
+                }
+            }, time);
+
+            item.setAttribute('data-hover', '1');
+            item.setAttribute('data-timeout', timeout);
+        },
+
+        /**
+         * Handles submenu click toggle
+         * @returns {KTMenu}
+         */
+        handleSubmenuDropdownClick: function(e) {
+            if ( Plugin.getSubmenuMode(this) === 'accordion' ) {
+                return;
+            }
+
+            var item = this.closest('.kt-menu__item');
+
+            if ( item.getAttribute('data-ktmenu-submenu-mode') == 'accordion' ) {
+                return;
+            }
+
+            if ( KTUtil.hasClass(item, 'kt-menu__item--hover') === false ) {
+                KTUtil.addClass(item, 'kt-menu__item--open-dropdown');
+                Plugin.showSubmenuDropdown(item);
+            } else {
+                KTUtil.removeClass(item, 'kt-menu__item--open-dropdown' );
+                Plugin.hideSubmenuDropdown(item, true);
+            }
+
+            e.preventDefault();
+        },
+
+        /**
+         * Handles tab click toggle
+         * @returns {KTMenu}
+         */
+        handleSubmenuDropdownTabClick: function(e) {
+            if (Plugin.getSubmenuMode(this) === 'accordion') {
+                return;
+            }
+
+            var item = this.closest('.kt-menu__item');
+
+            if (item.getAttribute('data-ktmenu-submenu-mode') == 'accordion') {
+                return;
+            }
+
+            if (KTUtil.hasClass(item, 'kt-menu__item--hover') == false) {
+                KTUtil.addClass(item, 'kt-menu__item--open-dropdown');
+                Plugin.showSubmenuDropdown(item);
+            }
+
+            e.preventDefault();
+        },
+
+        /**
+         * Handles link click
+         * @returns {KTMenu}
+         */
+        handleLinkClick: function(e) {
+            var submenu = this.closest('.kt-menu__item.kt-menu__item--submenu'); //
+
+            var result = Plugin.eventTrigger('linkClick', this, e);
+            if (result === false) {
+                return;
+            }
+
+            if ( submenu && Plugin.getSubmenuMode(submenu) === 'dropdown' ) {
+                Plugin.hideSubmenuDropdowns();
+            }
+        },
+
+        /**
+         * Handles submenu dropdown close on link click
+         * @returns {KTMenu}
+         */
+        handleSubmenuDropdownClose: function(e, el) {
+            // exit if its not submenu dropdown mode
+            if (Plugin.getSubmenuMode(el) === 'accordion') {
+                return;
+            }
+
+            var shown = element.querySelectorAll('.kt-menu__item.kt-menu__item--submenu.kt-menu__item--hover:not(.kt-menu__item--tabs)');
+
+            // check if currently clicked link's parent item ha
+            if (shown.length > 0 && KTUtil.hasClass(el, 'kt-menu__toggle') === false && el.querySelectorAll('.kt-menu__toggle').length === 0) {
+                // close opened dropdown menus
+                for (var i = 0, len = shown.length; i < len; i++) {
+                    Plugin.hideSubmenuDropdown(shown[0], true);
+                }
+            }
+        },
+
+        /**
+         * helper functions
+         * @returns {KTMenu}
+         */
+        handleSubmenuAccordion: function(e, el) {
+            var query;
+            var item = el ? el : this;
+
+            if ( Plugin.getSubmenuMode(el) === 'dropdown' && (query = item.closest('.kt-menu__item') ) ) {
+                if (query.getAttribute('data-ktmenu-submenu-mode') != 'accordion' ) {
+                    e.preventDefault();
+                    return;
+                }
+            }
+
+            var li = item.closest('.kt-menu__item');
+            var submenu = KTUtil.child(li, '.kt-menu__submenu, .kt-menu__inner');
+
+            if (KTUtil.hasClass(item.closest('.kt-menu__item'), 'kt-menu__item--open-always')) {
+                return;
+            }
+
+            if ( li && submenu ) {
+                e.preventDefault();
+                var speed = the.options.accordion.slideSpeed;
+                var hasClosables = false;
+
+                if ( KTUtil.hasClass(li, 'kt-menu__item--open') === false ) {
+                    // hide other accordions
+                    if ( the.options.accordion.expandAll === false ) {
+                        var subnav = item.closest('.kt-menu__nav, .kt-menu__subnav');
+                        var closables = KTUtil.children(subnav, '.kt-menu__item.kt-menu__item--open.kt-menu__item--submenu:not(.kt-menu__item--here):not(.kt-menu__item--open-always)');
+
+                        if ( subnav && closables ) {
+                            for (var i = 0, len = closables.length; i < len; i++) {
+                                var el_ = closables[0];
+                                var submenu_ = KTUtil.child(el_, '.kt-menu__submenu');
+                                if ( submenu_ ) {
+                                    KTUtil.slideUp(submenu_, speed, function() {
+                                        Plugin.scrollUpdate();
+                                        KTUtil.removeClass(el_, 'kt-menu__item--open');
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    KTUtil.slideDown(submenu, speed, function() {
+                        Plugin.scrollToItem(item);
+                        Plugin.scrollUpdate();
+
+                        Plugin.eventTrigger('submenuToggle', submenu, e);
+                    });
+
+                    KTUtil.addClass(li, 'kt-menu__item--open');
+
+                } else {
+                    KTUtil.slideUp(submenu, speed, function() {
+                        Plugin.scrollToItem(item);
+                        Plugin.eventTrigger('submenuToggle', submenu, e);
+                    });
+
+                    KTUtil.removeClass(li, 'kt-menu__item--open');
+                }
+            }
+        },
+
+        /**
+         * scroll to item function
+         * @returns {KTMenu}
+         */
+        scrollToItem: function(item) {
+            // handle auto scroll for accordion submenus
+            if ( KTUtil.isInResponsiveRange('desktop') && the.options.accordion.autoScroll && element.getAttribute('data-ktmenu-scroll') !== '1' ) {
+                KTUtil.scrollTo(item, the.options.accordion.autoScrollSpeed);
+            }
+        },
+
+        /**
+         * Hide submenu dropdown
+         * @returns {KTMenu}
+         */
+        hideSubmenuDropdown: function(item, classAlso) {
+            // remove submenu activation class
+            if ( classAlso ) {
+                KTUtil.removeClass(item, 'kt-menu__item--hover');
+                KTUtil.removeClass(item, 'kt-menu__item--active-tab');
+            }
+
+            // clear timeout
+            item.removeAttribute('data-hover');
+
+            if ( item.getAttribute('data-ktmenu-dropdown-toggle-class') ) {
+                KTUtil.removeClass(body, item.getAttribute('data-ktmenu-dropdown-toggle-class'));
+            }
+
+            var timeout = item.getAttribute('data-timeout');
+            item.removeAttribute('data-timeout');
+            clearTimeout(timeout);
+        },
+
+        /**
+         * Hide submenu dropdowns
+         * @returns {KTMenu}
+         */
+        hideSubmenuDropdowns: function() {
+            var items;
+            if ( items = element.querySelectorAll('.kt-menu__item--submenu.kt-menu__item--hover:not(.kt-menu__item--tabs):not([data-ktmenu-submenu-toggle="tab"])') ) {
+                for (var j = 0, cnt = items.length; j < cnt; j++) {
+                    Plugin.hideSubmenuDropdown(items[j], true);
+                }
+            }
+        },
+
+        /**
+         * helper functions
+         * @returns {KTMenu}
+         */
+        showSubmenuDropdown: function(item) {
+            // close active submenus
+            var list = element.querySelectorAll('.kt-menu__item--submenu.kt-menu__item--hover, .kt-menu__item--submenu.kt-menu__item--active-tab');
+
+            if ( list ) {
+                for (var i = 0, len = list.length; i < len; i++) {
+                    var el = list[i];
+                    if ( item !== el && el.contains(item) === false && item.contains(el) === false ) {
+                        Plugin.hideSubmenuDropdown(el, true);
+                    }
+                }
+            }
+
+            // add submenu activation class
+            KTUtil.addClass(item, 'kt-menu__item--hover');
+
+            if ( item.getAttribute('data-ktmenu-dropdown-toggle-class') ) {
+                KTUtil.addClass(body, item.getAttribute('data-ktmenu-dropdown-toggle-class'));
+            }
+        },
+
+        /**
+         * Handles submenu slide toggle
+         * @returns {KTMenu}
+         */
+        createSubmenuDropdownClickDropoff: function(el) {
+            var query;
+            var zIndex = (query = KTUtil.child(el, '.kt-menu__submenu') ? KTUtil.css(query, 'z-index') : 0) - 1;
+
+            var dropoff = document.createElement('<div class="kt-menu__dropoff" style="background: transparent; position: fixed; top: 0; bottom: 0; left: 0; right: 0; z-index: ' + zIndex + '"></div>');
+
+            body.appendChild(dropoff);
+
+            KTUtil.addEvent(dropoff, 'click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                KTUtil.remove(this);
+                Plugin.hideSubmenuDropdown(el, true);
+            });
+        },
+
+        /**
+         * Handles submenu hover toggle
+         * @returns {KTMenu}
+         */
+        pauseDropdownHover: function(time) {
+            var date = new Date();
+
+            the.pauseDropdownHoverTime = date.getTime() + time;
+        },
+
+        /**
+         * Handles submenu hover toggle
+         * @returns {KTMenu}
+         */
+        resumeDropdownHover: function() {
+            var date = new Date();
+
+            return (date.getTime() > the.pauseDropdownHoverTime ? true : false);
+        },
+
+        /**
+         * Reset menu's current active item
+         * @returns {KTMenu}
+         */
+        resetActiveItem: function(item) {
+            var list;
+            var parents;
+
+            list = element.querySelectorAll('.kt-menu__item--active');
+
+            for (var i = 0, len = list.length; i < len; i++) {
+                var el = list[0];
+                KTUtil.removeClass(el, 'kt-menu__item--active');
+                KTUtil.hide( KTUtil.child(el, '.kt-menu__submenu') );
+                parents = KTUtil.parents(el, '.kt-menu__item--submenu') || [];
+
+                for (var i_ = 0, len_ = parents.length; i_ < len_; i_++) {
+                    var el_ = parents[i];
+                    KTUtil.removeClass(el_, 'kt-menu__item--open');
+                    KTUtil.hide( KTUtil.child(el_, '.kt-menu__submenu') );
+                }
+            }
+
+            // close open submenus
+            if ( the.options.accordion.expandAll === false ) {
+                if ( list = element.querySelectorAll('.kt-menu__item--open') ) {
+                    for (var i = 0, len = list.length; i < len; i++) {
+                        KTUtil.removeClass(parents[0], 'kt-menu__item--open');
+                    }
+                }
+            }
+        },
+
+        /**
+         * Sets menu's active item
+         * @returns {KTMenu}
+         */
+        setActiveItem: function(item) {
+            // reset current active item
+            Plugin.resetActiveItem();
+
+            var parents = KTUtil.parents(item, '.kt-menu__item--submenu') || [];
+            for (var i = 0, len = parents.length; i < len; i++) {
+                KTUtil.addClass(KTUtil.get(parents[i]), 'kt-menu__item--open');
+            }
+
+            KTUtil.addClass(KTUtil.get(item), 'kt-menu__item--active');
+        },
+
+        /**
+         * Returns page breadcrumbs for the menu's active item
+         * @returns {KTMenu}
+         */
+        getBreadcrumbs: function(item) {
+            var query;
+            var breadcrumbs = [];
+            var link = KTUtil.child(item, '.kt-menu__link');
+
+            breadcrumbs.push({
+                text: (query = KTUtil.child(link, '.kt-menu__link-text') ? query.innerHTML : ''),
+                title: link.getAttribute('title'),
+                href: link.getAttribute('href')
+            });
+
+            var parents = KTUtil.parents(item, '.kt-menu__item--submenu');
+            for (var i = 0, len = parents.length; i < len; i++) {
+                var submenuLink = KTUtil.child(parents[i], '.kt-menu__link');
+
+                breadcrumbs.push({
+                    text: (query = KTUtil.child(submenuLink, '.kt-menu__link-text') ? query.innerHTML : ''),
+                    title: submenuLink.getAttribute('title'),
+                    href: submenuLink.getAttribute('href')
+                });
+            }
+
+            return  breadcrumbs.reverse();
+        },
+
+        /**
+         * Returns page title for the menu's active item
+         * @returns {KTMenu}
+         */
+        getPageTitle: function(item) {
+            var query;
+
+            return (query = KTUtil.child(item, '.kt-menu__link-text') ? query.innerHTML : '');
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name, target, e) {
+            for (var i = 0; i < the.events.length; i++ ) {
+                var event = the.events[i];
+                if ( event.name == name ) {
+                    if ( event.one == true ) {
+                        if ( event.fired == false ) {
+                            the.events[i].fired = true;
+                            return event.handler.call(this, target, e);
+                        }
+                    } else {
+                        return event.handler.call(this, target, e);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+        },
+
+        removeEvent: function(name) {
+            if (the.events[name]) {
+                delete the.events[name];
+            }
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Update scroll
+     */
+    the.scrollUpdate = function() {
+        return Plugin.scrollUpdate();
+    };
+
+    /**
+     * Re-init scroll
+     */
+    the.scrollReInit = function() {
+        return Plugin.scrollInit();
+    };
+
+    /**
+     * Scroll top
+     */
+    the.scrollTop = function() {
+        return Plugin.scrollTop();
+    };
+
+    /**
+     * Set active menu item
+     */
+    the.setActiveItem = function(item) {
+        return Plugin.setActiveItem(item);
+    };
+
+    the.reload = function() {
+        return Plugin.reload();
+    };
+
+    the.update = function(options) {
+        return Plugin.update(options);
+    };
+
+    /**
+     * Set breadcrumb for menu item
+     */
+    the.getBreadcrumbs = function(item) {
+        return Plugin.getBreadcrumbs(item);
+    };
+
+    /**
+     * Set page title for menu item
+     */
+    the.getPageTitle = function(item) {
+        return Plugin.getPageTitle(item);
+    };
+
+    /**
+     * Get submenu mode
+     */
+    the.getSubmenuMode = function(el) {
+        return Plugin.getSubmenuMode(el);
+    };
+
+    /**
+     * Hide dropdown
+     * @returns {Object}
+     */
+    the.hideDropdown = function(item) {
+        Plugin.hideSubmenuDropdown(item, true);
+    };
+
+    /**
+     * Hide dropdowns
+     * @returns {Object}
+     */
+    the.hideDropdowns = function() {
+        Plugin.hideSubmenuDropdowns();
+    };
+
+    /**
+     * Disable menu for given time
+     * @returns {Object}
+     */
+    the.pauseDropdownHover = function(time) {
+        Plugin.pauseDropdownHover(time);
+    };
+
+    /**
+     * Disable menu for given time
+     * @returns {Object}
+     */
+    the.resumeDropdownHover = function() {
+        return Plugin.resumeDropdownHover();
+    };
+
+    /**
+     * Register event
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    the.off = function(name) {
+        return Plugin.removeEvent(name);
+    };
+
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    ///////////////////////////////
+    // ** Plugin Construction ** //
+    ///////////////////////////////
+
+    // Run plugin
+    Plugin.construct.apply(the, [options]);
+
+    // Handle plugin on window resize
+    KTUtil.addResizeHandler(function() {
+        if (init) {
+            the.reload();
+        }
+    });
+
+    // Init done
+    init = true;
+
+    // Return plugin instance
+    return the;
+};
+
+// webpack support
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = KTMenu;
+}
+
+// Plugin global lazy initialization
+document.addEventListener("click", function (e) {
+    var body = KTUtil.get('body');
+    var query;
+    if ( query = body.querySelectorAll('.kt-menu__nav .kt-menu__item.kt-menu__item--submenu.kt-menu__item--hover:not(.kt-menu__item--tabs)[data-ktmenu-submenu-toggle="click"]') ) {
+        for (var i = 0, len = query.length; i < len; i++) {
+            var element = query[i].closest('.kt-menu__nav').parentNode;
+
+            if ( element ) {
+                var the = KTUtil.data(element).get('menu');
+
+                if ( !the ) {
+                    break;
+                }
+
+                if ( !the || the.getSubmenuMode() !== 'dropdown' ) {
+                    break;
+                }
+
+                if ( e.target !== element && element.contains(e.target) === false ) {
+                    the.hideDropdowns();
+                }
+            }
+        }
+    }
+});
+
+"use strict";
+var KTOffcanvas = function(elementId, options) {
+    // Main object
+    var the = this;
+    var init = false;
+
+    // Get element object
+    var element = KTUtil.get(elementId);
+    var body = KTUtil.get('body');
+
+    if (!element) {
+        return;
+    }
+
+    // Default options
+    var defaultOptions = {};
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        construct: function(options) {
+            if (KTUtil.data(element).has('offcanvas')) {
+                the = KTUtil.data(element).get('offcanvas');
+            } else {
+                // reset offcanvas
+                Plugin.init(options);
+                
+                // build offcanvas
+                Plugin.build();
+
+                KTUtil.data(element).set('offcanvas', the);
+            }
+
+            return the;
+        },
+
+        init: function(options) {
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+            the.overlay;
+
+            the.classBase = the.options.baseClass;
+            the.classShown = the.classBase + '--on';
+            the.classOverlay = the.classBase + '-overlay';
+
+            the.state = KTUtil.hasClass(element, the.classShown) ? 'shown' : 'hidden';
+        },
+
+        build: function() {
+            // offcanvas toggle
+            if (the.options.toggleBy) {
+                if (typeof the.options.toggleBy === 'string') { 
+                    KTUtil.addEvent( the.options.toggleBy, 'click', function(e) {
+                        e.preventDefault();
+                        Plugin.toggle();
+                    }); 
+                } else if (the.options.toggleBy && the.options.toggleBy[0]) {
+                    if (the.options.toggleBy[0].target) {
+                        for (var i in the.options.toggleBy) { 
+                            KTUtil.addEvent( the.options.toggleBy[i].target, 'click', function(e) {
+                                e.preventDefault();
+                                Plugin.toggle();
+                            }); 
+                        }
+                    } else {
+                        for (var i in the.options.toggleBy) { 
+                            KTUtil.addEvent( the.options.toggleBy[i], 'click', function(e) {
+                                e.preventDefault();
+                                Plugin.toggle();
+                            }); 
+                        }
+                    }
+                    
+                } else if (the.options.toggleBy && the.options.toggleBy.target) {
+                    KTUtil.addEvent( the.options.toggleBy.target, 'click', function(e) {
+                        e.preventDefault();
+                        Plugin.toggle();
+                    }); 
+                } 
+            }
+
+            // offcanvas close
+            var closeBy = KTUtil.get(the.options.closeBy);
+            if (closeBy) {
+                KTUtil.addEvent(closeBy, 'click', function(e) {
+                    e.preventDefault();
+                    Plugin.hide();
+                });
+            }
+
+            // Window resize
+            KTUtil.addResizeHandler(function() {
+                if (parseInt(KTUtil.css(element, 'left')) >= 0 || parseInt(KTUtil.css(element, 'right') >= 0) || KTUtil.css(element, 'position') != 'fixed') {
+                    KTUtil.css(element, 'opacity', '1');
+                }
+            });
+        },
+
+        isShown: function(target) {
+            return (the.state == 'shown' ? true : false);
+        },
+
+        toggle: function() {;
+            Plugin.eventTrigger('toggle'); 
+
+            if (the.state == 'shown') {
+                Plugin.hide(this);
+            } else {
+                Plugin.show(this);
+            }
+        },
+
+        show: function(target) {
+            if (the.state == 'shown') {
+                return;
+            }
+
+            Plugin.eventTrigger('beforeShow');
+
+            Plugin.togglerClass(target, 'show');
+
+            // Offcanvas panel
+            KTUtil.addClass(body, the.classShown);
+            KTUtil.addClass(element, the.classShown);
+            KTUtil.css(element, 'opacity', '1');
+
+            the.state = 'shown';
+
+            if (the.options.overlay) {
+                the.overlay = KTUtil.insertAfter(document.createElement('DIV') , element );
+                KTUtil.addClass(the.overlay, the.classOverlay);
+                KTUtil.addEvent(the.overlay, 'click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    Plugin.hide(target);       
+                });
+            }
+
+            Plugin.eventTrigger('afterShow');
+        },
+
+        hide: function(target) {
+            if (the.state == 'hidden') {
+                return;
+            }
+
+            Plugin.eventTrigger('beforeHide');
+
+            Plugin.togglerClass(target, 'hide');
+
+            KTUtil.removeClass(body, the.classShown);
+            KTUtil.removeClass(element, the.classShown);
+
+            the.state = 'hidden';
+
+            if (the.options.overlay && the.overlay) {
+                KTUtil.remove(the.overlay);
+            }
+
+            KTUtil.transitionEnd(element, function() {
+                KTUtil.css(element, 'opacity', '0');
+            });
+
+            Plugin.eventTrigger('afterHide');
+        },
+
+        togglerClass: function(target, mode) {
+            // Toggler
+            var id = KTUtil.attr(target, 'id');
+            var toggleBy;
+
+            if (the.options.toggleBy && the.options.toggleBy[0] && the.options.toggleBy[0].target) {
+                for (var i in the.options.toggleBy) {
+                    if (the.options.toggleBy[i].target === id) {
+                        toggleBy = the.options.toggleBy[i];
+                    }        
+                }
+            } else if (the.options.toggleBy && the.options.toggleBy.target) {
+                toggleBy = the.options.toggleBy;
+            }
+
+            if (toggleBy) {                
+                var el = KTUtil.get(toggleBy.target);
+                
+                if (mode === 'show') {
+                    KTUtil.addClass(el, toggleBy.state);
+                }
+
+                if (mode === 'hide') {
+                    KTUtil.removeClass(el, toggleBy.state);
+                }
+            }
+        },
+
+        eventTrigger: function(name, args) {
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            return event.handler.call(this, the, args);
+                        }
+                    } else {
+                        return event.handler.call(this, the, args);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    the.isShown = function() {
+        return Plugin.isShown();
+    };
+
+    the.hide = function() {
+        return Plugin.hide();
+    };
+
+    the.show = function() {
+        return Plugin.show();
+    };
+
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    ///////////////////////////////
+    // ** Plugin Construction ** //
+    ///////////////////////////////
+
+    // Run plugin
+    Plugin.construct.apply(the, [options]);
+
+    // Init done
+    init = true;
+
+    // Return plugin instance
+    return the;
+};
+
+// webpack support
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = KTOffcanvas;
+}
+"use strict";
+// plugin setup
+var KTPortlet = function(elementId, options) {
+    // Main object
+    var the = this;
+    var init = false;
+
+    // Get element object
+    var element = KTUtil.get(elementId);
+    var body = KTUtil.get('body');
+
+    if (!element) {
+        return;
+    }
+
+    // Default options
+    var defaultOptions = {
+        bodyToggleSpeed: 400,
+        tooltips: true,
+        tools: {
+            toggle: {
+                collapse: 'Collapse',
+                expand: 'Expand'
+            },
+            reload: 'Reload',
+            remove: 'Remove',
+            fullscreen: {
+                on: 'Fullscreen',
+                off: 'Exit Fullscreen'
+            }
+        },
+        sticky: {
+            offset: 300,
+            zIndex: 101
+        }
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Construct
+         */
+
+        construct: function(options) {
+            if (KTUtil.data(element).has('portlet')) {
+                the = KTUtil.data(element).get('portlet');
+            } else {
+                // reset menu
+                Plugin.init(options);
+
+                // build menu
+                Plugin.build();
+
+                KTUtil.data(element).set('portlet', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Init portlet
+         */
+        init: function(options) {
+            the.element = element;
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+            the.head = KTUtil.child(element, '.kt-portlet__head');
+            the.foot = KTUtil.child(element, '.kt-portlet__foot');
+
+            if (KTUtil.child(element, '.kt-portlet__body')) {
+                the.body = KTUtil.child(element, '.kt-portlet__body');
+            } else if (KTUtil.child(element, '.kt-form')) {
+                the.body = KTUtil.child(element, '.kt-form');
+            }
+        },
+
+        /**
+         * Build Form Wizard
+         */
+        build: function() {
+            // Remove
+            var remove = KTUtil.find(the.head, '[data-ktportlet-tool=remove]');
+            if (remove) {
+                KTUtil.addEvent(remove, 'click', function(e) {
+                    e.preventDefault();
+                    Plugin.remove();
+                });
+            }
+
+            // Reload
+            var reload = KTUtil.find(the.head, '[data-ktportlet-tool=reload]');
+            if (reload) {
+                KTUtil.addEvent(reload, 'click', function(e) {
+                    e.preventDefault();
+                    Plugin.reload();
+                });
+            }
+
+            // Toggle
+            var toggle = KTUtil.find(the.head, '[data-ktportlet-tool=toggle]');
+            if (toggle) {
+                KTUtil.addEvent(toggle, 'click', function(e) {
+                    e.preventDefault();
+                    Plugin.toggle();
+                });
+            }
+
+            //== Fullscreen
+            var fullscreen = KTUtil.find(the.head, '[data-ktportlet-tool=fullscreen]');
+            if (fullscreen) {
+                KTUtil.addEvent(fullscreen, 'click', function(e) {
+                    e.preventDefault();
+                    Plugin.fullscreen();
+                });
+            }
+
+            Plugin.setupTooltips();
+        },
+
+        /**
+         * Enable stickt mode
+         */
+        initSticky: function() {
+            var lastScrollTop = 0;
+            var offset = the.options.sticky.offset;
+
+            if (!the.head) {
+                return;
+            }
+
+	        window.addEventListener('scroll', Plugin.onScrollSticky);
+        },
+
+	    /**
+	     * Window scroll handle event for sticky portlet
+	     */
+	    onScrollSticky: function(e) {
+		    var offset = the.options.sticky.offset;
+		    if(isNaN(offset)) return;
+
+		    var st = document.documentElement.scrollTop;
+
+		    if (st >= offset && KTUtil.hasClass(body, 'kt-portlet--sticky') === false) {
+			    Plugin.eventTrigger('stickyOn');
+
+			    KTUtil.addClass(body, 'kt-portlet--sticky');
+			    KTUtil.addClass(element, 'kt-portlet--sticky');
+
+			    Plugin.updateSticky();
+
+		    } else if ((st*1.5) <= offset && KTUtil.hasClass(body, 'kt-portlet--sticky')) {
+			    // back scroll mode
+			    Plugin.eventTrigger('stickyOff');
+
+			    KTUtil.removeClass(body, 'kt-portlet--sticky');
+			    KTUtil.removeClass(element, 'kt-portlet--sticky');
+
+			    Plugin.resetSticky();
+		    }
+	    },
+
+        updateSticky: function() {
+            if (!the.head) {
+                return;
+            }
+
+            var top;
+
+            if (KTUtil.hasClass(body, 'kt-portlet--sticky')) {
+                if (the.options.sticky.position.top instanceof Function) {
+                    top = parseInt(the.options.sticky.position.top.call(this, the));
+                } else {
+                    top = parseInt(the.options.sticky.position.top);
+                }
+
+                var left;
+                if (the.options.sticky.position.left instanceof Function) {
+                    left = parseInt(the.options.sticky.position.left.call(this, the));
+                } else {
+                    left = parseInt(the.options.sticky.position.left);
+                }
+
+                var right;
+                if (the.options.sticky.position.right instanceof Function) {
+                    right = parseInt(the.options.sticky.position.right.call(this, the));
+                } else {
+                    right = parseInt(the.options.sticky.position.right);
+                }
+
+                KTUtil.css(the.head, 'z-index', the.options.sticky.zIndex);
+                KTUtil.css(the.head, 'top', top + 'px');
+                KTUtil.css(the.head, 'left', left + 'px');
+                KTUtil.css(the.head, 'right', right + 'px');
+            }
+        },
+
+        resetSticky: function() {
+            if (!the.head) {
+                return;
+            }
+
+            if (KTUtil.hasClass(body, 'kt-portlet--sticky') === false) {
+                KTUtil.css(the.head, 'z-index', '');
+                KTUtil.css(the.head, 'top', '');
+                KTUtil.css(the.head, 'left', '');
+                KTUtil.css(the.head, 'right', '');
+            }
+        },
+
+        /**
+         * Remove portlet
+         */
+        remove: function() {
+            if (Plugin.eventTrigger('beforeRemove') === false) {
+                return;
+            }
+
+            if (KTUtil.hasClass(body, 'kt-portlet--fullscreen') && KTUtil.hasClass(element, 'kt-portlet--fullscreen')) {
+                Plugin.fullscreen('off');
+            }
+
+            Plugin.removeTooltips();
+
+            KTUtil.remove(element);
+
+            Plugin.eventTrigger('afterRemove');
+        },
+
+        /**
+         * Set content
+         */
+        setContent: function(html) {
+            if (html) {
+                the.body.innerHTML = html;
+            }
+        },
+
+        /**
+         * Get body
+         */
+        getBody: function() {
+            return the.body;
+        },
+
+        /**
+         * Get self
+         */
+        getSelf: function() {
+            return element;
+        },
+
+        /**
+         * Setup tooltips
+         */
+        setupTooltips: function() {
+            if (the.options.tooltips) {
+                var collapsed = KTUtil.hasClass(element, 'kt-portlet--collapse') || KTUtil.hasClass(element, 'kt-portlet--collapsed');
+                var fullscreenOn = KTUtil.hasClass(body, 'kt-portlet--fullscreen') && KTUtil.hasClass(element, 'kt-portlet--fullscreen');
+
+                //== Remove
+                var remove = KTUtil.find(the.head, '[data-ktportlet-tool=remove]');
+                if (remove) {
+                    var placement = (fullscreenOn ? 'bottom' : 'top');
+                    var tip = new Tooltip(remove, {
+                        title: the.options.tools.remove,
+                        placement: placement,
+                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
+                        trigger: 'hover',
+                        template: '<div class="tooltip tooltip-portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
+                            <div class="tooltip-arrow arrow"></div>\
+                            <div class="tooltip-inner"></div>\
+                        </div>'
+                    });
+
+                    KTUtil.data(remove).set('tooltip', tip);
+                }
+
+                //== Reload
+                var reload = KTUtil.find(the.head, '[data-ktportlet-tool=reload]');
+                if (reload) {
+                    var placement = (fullscreenOn ? 'bottom' : 'top');
+                    var tip = new Tooltip(reload, {
+                        title: the.options.tools.reload,
+                        placement: placement,
+                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
+                        trigger: 'hover',
+                        template: '<div class="tooltip tooltip-portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
+                            <div class="tooltip-arrow arrow"></div>\
+                            <div class="tooltip-inner"></div>\
+                        </div>'
+                    });
+
+                    KTUtil.data(reload).set('tooltip', tip);
+                }
+
+                //== Toggle
+                var toggle = KTUtil.find(the.head, '[data-ktportlet-tool=toggle]');
+                if (toggle) {
+                    var placement = (fullscreenOn ? 'bottom' : 'top');
+                    var tip = new Tooltip(toggle, {
+                        title: (collapsed ? the.options.tools.toggle.expand : the.options.tools.toggle.collapse),
+                        placement: placement,
+                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
+                        trigger: 'hover',
+                        template: '<div class="tooltip tooltip-portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
+                            <div class="tooltip-arrow arrow"></div>\
+                            <div class="tooltip-inner"></div>\
+                        </div>'
+                    });
+
+                    KTUtil.data(toggle).set('tooltip', tip);
+                }
+
+                //== Fullscreen
+                var fullscreen = KTUtil.find(the.head, '[data-ktportlet-tool=fullscreen]');
+                if (fullscreen) {
+                    var placement = (fullscreenOn ? 'bottom' : 'top');
+                    var tip = new Tooltip(fullscreen, {
+                        title: (fullscreenOn ? the.options.tools.fullscreen.off : the.options.tools.fullscreen.on),
+                        placement: placement,
+                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
+                        trigger: 'hover',
+                        template: '<div class="tooltip tooltip-portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
+                            <div class="tooltip-arrow arrow"></div>\
+                            <div class="tooltip-inner"></div>\
+                        </div>'
+                    });
+
+                    KTUtil.data(fullscreen).set('tooltip', tip);
+                }
+            }
+        },
+
+        /**
+         * Setup tooltips
+         */
+        removeTooltips: function() {
+            if (the.options.tooltips) {
+                //== Remove
+                var remove = KTUtil.find(the.head, '[data-ktportlet-tool=remove]');
+                if (remove && KTUtil.data(remove).has('tooltip')) {
+                    KTUtil.data(remove).get('tooltip').dispose();
+                }
+
+                //== Reload
+                var reload = KTUtil.find(the.head, '[data-ktportlet-tool=reload]');
+                if (reload && KTUtil.data(reload).has('tooltip')) {
+                    KTUtil.data(reload).get('tooltip').dispose();
+                }
+
+                //== Toggle
+                var toggle = KTUtil.find(the.head, '[data-ktportlet-tool=toggle]');
+                if (toggle && KTUtil.data(toggle).has('tooltip')) {
+                    KTUtil.data(toggle).get('tooltip').dispose();
+                }
+
+                //== Fullscreen
+                var fullscreen = KTUtil.find(the.head, '[data-ktportlet-tool=fullscreen]');
+                if (fullscreen && KTUtil.data(fullscreen).has('tooltip')) {
+                    KTUtil.data(fullscreen).get('tooltip').dispose();
+                }
+            }
+        },
+
+        /**
+         * Reload
+         */
+        reload: function() {
+            Plugin.eventTrigger('reload');
+        },
+
+        /**
+         * Toggle
+         */
+        toggle: function() {
+            if (KTUtil.hasClass(element, 'kt-portlet--collapse') || KTUtil.hasClass(element, 'kt-portlet--collapsed')) {
+                Plugin.expand();
+            } else {
+                Plugin.collapse();
+            }
+        },
+
+        /**
+         * Collapse
+         */
+        collapse: function() {
+            if (Plugin.eventTrigger('beforeCollapse') === false) {
+                return;
+            }
+
+            KTUtil.slideUp(the.body, the.options.bodyToggleSpeed, function() {
+                Plugin.eventTrigger('afterCollapse');
+            });
+
+            KTUtil.addClass(element, 'kt-portlet--collapse');
+
+            var toggle = KTUtil.find(the.head, '[data-ktportlet-tool=toggle]');
+            if (toggle && KTUtil.data(toggle).has('tooltip')) {
+                KTUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.expand);
+            }
+        },
+
+        /**
+         * Expand
+         */
+        expand: function() {
+            if (Plugin.eventTrigger('beforeExpand') === false) {
+                return;
+            }
+
+            KTUtil.slideDown(the.body, the.options.bodyToggleSpeed, function() {
+                Plugin.eventTrigger('afterExpand');
+            });
+
+            KTUtil.removeClass(element, 'kt-portlet--collapse');
+            KTUtil.removeClass(element, 'kt-portlet--collapsed');
+
+            var toggle = KTUtil.find(the.head, '[data-ktportlet-tool=toggle]');
+            if (toggle && KTUtil.data(toggle).has('tooltip')) {
+                KTUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.collapse);
+            }
+        },
+
+        /**
+         * fullscreen
+         */
+        fullscreen: function(mode) {
+            var d = {};
+            var speed = 300;
+
+            if (mode === 'off' || (KTUtil.hasClass(body, 'kt-portlet--fullscreen') && KTUtil.hasClass(element, 'kt-portlet--fullscreen'))) {
+                Plugin.eventTrigger('beforeFullscreenOff');
+
+                KTUtil.removeClass(body, 'kt-portlet--fullscreen');
+                KTUtil.removeClass(element, 'kt-portlet--fullscreen');
+
+                Plugin.removeTooltips();
+                Plugin.setupTooltips();
+
+                if (the.foot) {
+                    KTUtil.css(the.body, 'margin-bottom', '');
+                    KTUtil.css(the.foot, 'margin-top', '');
+                }
+
+                Plugin.eventTrigger('afterFullscreenOff');
+            } else {
+                Plugin.eventTrigger('beforeFullscreenOn');
+
+                KTUtil.addClass(element, 'kt-portlet--fullscreen');
+                KTUtil.addClass(body, 'kt-portlet--fullscreen');
+
+                Plugin.removeTooltips();
+                Plugin.setupTooltips();
+
+
+                if (the.foot) {
+                    var height1 = parseInt(KTUtil.css(the.foot, 'height'));
+                    var height2 = parseInt(KTUtil.css(the.foot, 'height')) + parseInt(KTUtil.css(the.head, 'height'));
+                    KTUtil.css(the.body, 'margin-bottom', height1 + 'px');
+                    KTUtil.css(the.foot, 'margin-top', '-' + height2 + 'px');
+                }
+
+                Plugin.eventTrigger('afterFullscreenOn');
+            }
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name) {
+            //KTUtil.triggerCustomEvent(name);
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            return event.handler.call(this, the);
+                        }
+                    } else {
+                        return event.handler.call(this, the);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+
+            return the;
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Remove portlet
+     * @returns {KTPortlet}
+     */
+    the.remove = function() {
+        return Plugin.remove(html);
+    };
+
+    /**
+     * Remove portlet
+     * @returns {KTPortlet}
+     */
+    the.initSticky = function() {
+        return Plugin.initSticky();
+    };
+
+    /**
+     * Remove portlet
+     * @returns {KTPortlet}
+     */
+    the.updateSticky = function() {
+        return Plugin.updateSticky();
+    };
+
+    /**
+     * Remove portlet
+     * @returns {KTPortlet}
+     */
+    the.resetSticky = function() {
+        return Plugin.resetSticky();
+    };
+
+	/**
+	 * Destroy sticky portlet
+	 */
+	the.destroySticky = function() {
+		Plugin.resetSticky();
+		window.removeEventListener('scroll', Plugin.onScrollSticky);
+	};
+
+    /**
+     * Reload portlet
+     * @returns {KTPortlet}
+     */
+    the.reload = function() {
+        return Plugin.reload();
+    };
+
+    /**
+     * Set portlet content
+     * @returns {KTPortlet}
+     */
+    the.setContent = function(html) {
+        return Plugin.setContent(html);
+    };
+
+    /**
+     * Toggle portlet
+     * @returns {KTPortlet}
+     */
+    the.toggle = function() {
+        return Plugin.toggle();
+    };
+
+    /**
+     * Collapse portlet
+     * @returns {KTPortlet}
+     */
+    the.collapse = function() {
+        return Plugin.collapse();
+    };
+
+    /**
+     * Expand portlet
+     * @returns {KTPortlet}
+     */
+    the.expand = function() {
+        return Plugin.expand();
+    };
+
+    /**
+     * Fullscreen portlet
+     * @returns {MPortlet}
+     */
+    the.fullscreen = function() {
+        return Plugin.fullscreen('on');
+    };
+
+    /**
+     * Fullscreen portlet
+     * @returns {MPortlet}
+     */
+    the.unFullscreen = function() {
+        return Plugin.fullscreen('off');
+    };
+
+    /**
+     * Get portletbody
+     * @returns {jQuery}
+     */
+    the.getBody = function() {
+        return Plugin.getBody();
+    };
+
+    /**
+     * Get portletbody
+     * @returns {jQuery}
+     */
+    the.getSelf = function() {
+        return Plugin.getSelf();
+    };
+
+    /**
+     * Attach event
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Attach event that will be fired once
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    // Construct plugin
+    Plugin.construct.apply(the, [options]);
+
+    return the;
+};
+
+// webpack support
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = KTPortlet;
+}
+"use strict";
+var KTScrolltop = function(elementId, options) {
+    // Main object
+    var the = this;
+    var init = false;
+
+    // Get element object
+    var element = KTUtil.get(elementId);
+    var body = KTUtil.get('body');
+
+    if (!element) {
+        return;
+    }
+
+    // Default options
+    var defaultOptions = {
+        offset: 300,
+        speed: 600,
+        toggleClass: 'kt-scrolltop--on'
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Run plugin
+         * @returns {mscrolltop}
+         */
+        construct: function(options) {
+            if (KTUtil.data(element).has('scrolltop')) {
+                the = KTUtil.data(element).get('scrolltop');
+            } else {
+                // reset scrolltop
+                Plugin.init(options);
+
+                // build scrolltop
+                Plugin.build();
+
+                KTUtil.data(element).set('scrolltop', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Handles subscrolltop click toggle
+         * @returns {mscrolltop}
+         */
+        init: function(options) {
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+        },
+
+        build: function() {
+            // handle window scroll
+            if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+                window.addEventListener('touchend', function() {
+                    Plugin.handle();
+                });
+
+                window.addEventListener('touchcancel', function() {
+                    Plugin.handle();
+                });
+
+                window.addEventListener('touchleave', function() {
+                    Plugin.handle();
+                });
+            } else {
+                window.addEventListener('scroll', function() { 
+                    Plugin.handle();
+                });
+            }
+
+            // handle button click 
+            KTUtil.addEvent(element, 'click', Plugin.scroll);
+        },
+
+        /**
+         * Handles scrolltop click scrollTop
+         */
+        handle: function() {
+            var pos = window.pageYOffset; // current vertical position
+            if (pos > the.options.offset) {
+                KTUtil.addClass(body, the.options.toggleClass);
+            } else {
+                KTUtil.removeClass(body, the.options.toggleClass);
+            }
+        },
+
+        /**
+         * Handles scrolltop click scrollTop
+         */
+        scroll: function(e) {
+            e.preventDefault();
+
+            KTUtil.scrollTop(0, the.options.speed);
+        },
+
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name, args) {
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            return event.handler.call(this, the, args);
+                        }
+                    } else {
+                       return event.handler.call(this, the, args);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Get subscrolltop mode
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Set scrolltop content
+     * @returns {mscrolltop}
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    ///////////////////////////////
+    // ** Plugin Construction ** //
+    ///////////////////////////////
+
+    // Run plugin
+    Plugin.construct.apply(the, [options]);
+
+    // Init done
+    init = true;
+
+    // Return plugin instance
+    return the;
+};
+
+// webpack support
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = KTScrolltop;
+}
+"use strict";
+
+// plugin setup
+var KTToggle = function(elementId, options) {
+    // Main object
+    var the = this;
+    var init = false;
+
+    // Get element object
+    var element = KTUtil.get(elementId);
+    var body = KTUtil.get('body');  
+
+    if (!element) {
+        return;
+    }
+
+    // Default options
+    var defaultOptions = {
+        togglerState: '',
+        targetState: ''
+    };    
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Construct
+         */
+
+        construct: function(options) {
+            if (KTUtil.data(element).has('toggle')) {
+                the = KTUtil.data(element).get('toggle');
+            } else {
+                // reset menu
+                Plugin.init(options);
+
+                // build menu
+                Plugin.build();
+
+                KTUtil.data(element).set('toggle', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Handles subtoggle click toggle
+         */
+        init: function(options) {
+            the.element = element;
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+
+            the.target = KTUtil.get(the.options.target);
+            the.targetState = the.options.targetState;
+            the.togglerState = the.options.togglerState;
+
+            the.state = KTUtil.hasClasses(the.target, the.targetState) ? 'on' : 'off';
+        },
+
+        /**
+         * Setup toggle
+         */
+        build: function() {
+            KTUtil.addEvent(element, 'mouseup', Plugin.toggle);
+        },
+        
+        /**
+         * Handles offcanvas click toggle
+         */
+        toggle: function(e) {
+            Plugin.eventTrigger('beforeToggle');
+
+            if (the.state == 'off') {
+                Plugin.toggleOn();
+            } else {
+                Plugin.toggleOff();
+            }
+
+            Plugin.eventTrigger('afterToggle');
+
+            e.preventDefault();
+
+            return the;
+        },
+
+        /**
+         * Handles toggle click toggle
+         */
+        toggleOn: function() {
+            Plugin.eventTrigger('beforeOn');
+
+            KTUtil.addClass(the.target, the.targetState);
+
+            if (the.togglerState) {
+                KTUtil.addClass(element, the.togglerState);
+            }
+
+            the.state = 'on';
+
+            Plugin.eventTrigger('afterOn');
+
+            Plugin.eventTrigger('toggle');
+
+            return the;
+        },
+
+        /**
+         * Handles toggle click toggle
+         */
+        toggleOff: function() {
+            Plugin.eventTrigger('beforeOff');
+
+            KTUtil.removeClass(the.target, the.targetState);
+
+            if (the.togglerState) {
+                KTUtil.removeClass(element, the.togglerState);
+            }
+
+            the.state = 'off';
+
+            Plugin.eventTrigger('afterOff');
+
+            Plugin.eventTrigger('toggle');
+
+            return the;
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name) {
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;                            
+                            return event.handler.call(this, the);
+                        }
+                    } else {
+                        return event.handler.call(this, the);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+
+            return the;
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Get toggle state 
+     */
+    the.getState = function() {
+        return the.state;
+    };
+
+    /**
+     * Toggle 
+     */
+    the.toggle = function() {
+        return Plugin.toggle();
+    };
+
+    /**
+     * Toggle on 
+     */
+    the.toggleOn = function() {
+        return Plugin.toggleOn();
+    };
+
+    /**
+     * Toggle off 
+     */
+    the.toggleOff = function() {
+        return Plugin.toggleOff();
+    };
+
+    /**
+     * Attach event
+     * @returns {KTToggle}
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Attach event that will be fired once
+     * @returns {KTToggle}
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    // Construct plugin
+    Plugin.construct.apply(the, [options]);
+
+    return the;
+};
+
+// webpack support
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = KTToggle;
+}
+// plugin setup
+var KTWizard = function(elementId, options) {
+    // Main object
+    var the = this;
+    var init = false;
+
+    // Get element object
+    var element = KTUtil.get(elementId);
+    var body = KTUtil.get('body');
+
+    if (!element) {
+        return; 
+    }
+
+    // Default options
+    var defaultOptions = {
+        startStep: 1
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Construct
+         */
+
+        construct: function(options) {
+            if (KTUtil.data(element).has('wizard')) {
+                the = KTUtil.data(element).get('wizard');
+            } else {
+                // reset menu
+                Plugin.init(options);
+
+                // build menu
+                Plugin.build();
+
+                KTUtil.data(element).set('wizard', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Init wizard
+         */
+        init: function(options) {
+            the.element = element;
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+
+            // Elements
+            the.steps = KTUtil.findAll(element, '[data-ktwizard-type="step"]');
+
+            the.btnSubmit = KTUtil.find(element, '[data-ktwizard-type="action-submit"]');
+            the.btnNext = KTUtil.find(element, '[data-ktwizard-type="action-next"]');
+            the.btnPrev = KTUtil.find(element, '[data-ktwizard-type="action-prev"]');
+            the.btnLast = KTUtil.find(element, '[data-ktwizard-type="action-last"]');
+            the.btnFirst = KTUtil.find(element, '[data-ktwizard-type="action-first"]');
+
+            // Variables
+            the.events = [];
+            the.currentStep = 1;
+            the.stopped = false;
+            the.totalSteps = the.steps.length;
+
+            // Init current step
+            if (the.options.startStep > 1) {
+                Plugin.goTo(the.options.startStep);
+            }
+
+            // Init UI
+            Plugin.updateUI();
+        },
+
+        /**
+         * Build Form Wizard
+         */
+        build: function() {
+            // Next button event handler
+            KTUtil.addEvent(the.btnNext, 'click', function(e) {
+                e.preventDefault();
+                Plugin.goTo(Plugin.getNextStep(), true);
+            });
+
+            // Prev button event handler
+            KTUtil.addEvent(the.btnPrev, 'click', function(e) {
+                e.preventDefault();
+                Plugin.goTo(Plugin.getPrevStep(), true);
+            });
+
+            // First button event handler
+            KTUtil.addEvent(the.btnFirst, 'click', function(e) {
+                e.preventDefault();
+                Plugin.goTo(Plugin.getFirstStep(), true);
+            });
+
+            // Last button event handler
+            KTUtil.addEvent(the.btnLast, 'click', function(e) {
+                e.preventDefault();
+                Plugin.goTo(Plugin.getLastStep(), true);
+            });
+
+            KTUtil.on(element, 'a[data-ktwizard-type="step"]', 'click', function() {
+                var index = KTUtil.index(this) + 1;
+                if (index !== the.currentStep) {
+                    Plugin.goTo(index, true);
+                }                
+            });
+        },
+
+        /**
+         * Handles wizard click wizard
+         */
+        goTo: function(number, eventHandle) {
+            // Skip if this step is already shown
+            if (number === the.currentStep || number > the.totalSteps || number < 0) {
+                return;
+            }
+
+            // Validate step number
+            if (number) {
+                number = parseInt(number);
+            } else {
+                number = Plugin.getNextStep();
+            }
+
+            // Before next and prev events
+            var callback;
+
+            if (eventHandle === true) {
+                if (number > the.currentStep) {
+                    callback = Plugin.eventTrigger('beforeNext');
+                } else {
+                    callback = Plugin.eventTrigger('beforePrev');
+                }
+            }
+            
+            // Skip if stopped
+            if (the.stopped === true) {
+                the.stopped = false;
+                return;
+            }
+
+            // Continue if no exit
+            if (callback !== false) {
+                // Before change
+                if (eventHandle === true) {
+                    Plugin.eventTrigger('beforeChange');
+                }
+
+                // Set current step 
+                the.currentStep = number;
+
+                Plugin.updateUI();
+
+                // Trigger change event
+                if (eventHandle === true) {
+                    Plugin.eventTrigger('change');
+                }
+            }
+
+            // After next and prev events
+            if (eventHandle === true) {
+                if (number > the.startStep) {
+                    Plugin.eventTrigger('afterNext');
+                } else {
+                    Plugin.eventTrigger('afterPrev');
+                }
+            }
+
+            return the;
+        },
+
+        /**
+         * Cancel
+         */
+        stop: function() {
+            the.stopped = true;
+        },
+
+        /**
+         * Resume
+         */
+        start: function() {
+            the.stopped = false;
+        },
+
+        /**
+         * Check last step
+         */
+        isLastStep: function() {
+            return the.currentStep === the.totalSteps;
+        },
+
+        /**
+         * Check first step
+         */
+        isFirstStep: function() {
+            return the.currentStep === 1;
+        },
+
+        /**
+         * Check between step
+         */
+        isBetweenStep: function() {
+            return Plugin.isLastStep() === false && Plugin.isFirstStep() === false;
+        },
+
+        /**
+         * Go to the first step
+         */
+        updateUI: function() {
+            var stepType = '';
+            var index = the.currentStep - 1;
+
+            if (Plugin.isLastStep()) {
+                stepType = 'last';
+            } else if (Plugin.isFirstStep()) {
+                stepType = 'first';
+            } else {
+                stepType = 'between';
+            }
+
+            KTUtil.attr(the.element, 'data-ktwizard-state', stepType);
+
+            // Steps
+            var steps = KTUtil.findAll(the.element, '[data-ktwizard-type="step"]');
+
+            if (steps && steps.length > 0) {
+                for (var i = 0, len = steps.length; i < len; i++) {
+                    if (i == index) {
+                        KTUtil.attr(steps[i], 'data-ktwizard-state', 'current');
+                    } else {
+                        if (i < index) {
+                            KTUtil.attr(steps[i], 'data-ktwizard-state', 'done');
+                        } else {
+                            KTUtil.attr(steps[i], 'data-ktwizard-state', 'pending');
+                        }
+                    }
+                }
+            }
+
+            // Steps Info
+            var stepsInfo = KTUtil.findAll(the.element, '[data-ktwizard-type="step-info"]');
+            if (stepsInfo &&stepsInfo.length > 0) {
+                for (var i = 0, len = stepsInfo.length; i < len; i++) {
+                    if (i == index) {
+                        KTUtil.attr(stepsInfo[i], 'data-ktwizard-state', 'current');
+                    } else {
+                        KTUtil.removeAttr(stepsInfo[i], 'data-ktwizard-state');
+                    }
+                }
+            }  
+
+            // Steps Content
+            var stepsContent = KTUtil.findAll(the.element, '[data-ktwizard-type="step-content"]');
+            if (stepsContent&& stepsContent.length > 0) {
+                for (var i = 0, len = stepsContent.length; i < len; i++) {
+                    if (i == index) {
+                        KTUtil.attr(stepsContent[i], 'data-ktwizard-state', 'current');
+                    } else {
+                        KTUtil.removeAttr(stepsContent[i], 'data-ktwizard-state');
+                    }
+                }
+            }            
+        },
+
+        /**
+         * Get next step
+         */
+        getNextStep: function() {
+            if (the.totalSteps >= (the.currentStep + 1)) {
+                return the.currentStep + 1;
+            } else {
+                return the.totalSteps;
+            }
+        },
+
+        /**
+         * Get prev step
+         */
+        getPrevStep: function() {
+            if ((the.currentStep - 1) >= 1) {
+                return the.currentStep - 1;
+            } else {
+                return 1;
+            }
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name, nested) {
+            //KTUtil.triggerCustomEvent(name);
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            return event.handler.call(this, the);
+                        }
+                    } else {
+                        return event.handler.call(this, the);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+
+            return the;
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Go to the next step 
+     */
+    the.goNext = function(eventHandle) {
+        return Plugin.goTo(Plugin.getNextStep(), eventHandle);
+    };
+
+    /**
+     * Go to the prev step 
+     */
+    the.goPrev = function(eventHandle) {
+        return Plugin.goTo(Plugin.getPrevStep(),eventHandle);
+    };
+
+    /**
+     * Go to the last step 
+     */
+    the.goLast = function(eventHandle) {
+        return Plugin.goTo(Plugin.getLastStep(), eventHandle);
+    };
+
+    /**
+     * Go to the first step 
+     */
+    the.goFirst = function(eventHandle) {
+        return Plugin.goTo(Plugin.getFirstStep(), eventHandle);
+    };
+
+    /**
+     * Go to a step
+     */
+    the.goTo = function(number, eventHandle) {
+        return Plugin.goTo(number, eventHandle);
+    };
+
+    /**
+     * Cancel step 
+     */
+    the.stop = function() {
+        return Plugin.stop();
+    };
+
+    /**
+     * Resume step 
+     */
+    the.start = function() {
+        return Plugin.start();
+    };
+
+    /**
+     * Get current step number 
+     */
+    the.getStep = function() {
+        return the.currentStep;
+    };
+
+    /**
+     * Check last step 
+     */
+    the.isLastStep = function() {
+        return Plugin.isLastStep();
+    };
+
+    /**
+     * Check first step 
+     */
+    the.isFirstStep = function() {
+        return Plugin.isFirstStep();
+    };
+    
+    /**
+     * Attach event
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Attach event that will be fired once
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    // Construct plugin
+    Plugin.construct.apply(the, [options]);
+
+    return the;
+};
+
+// webpack support
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = KTWizard;
+}
+'use strict';
+(function($) {
+
+	var pluginName = 'KTDatatable';
+	var pfx = 'kt-';
+	var util = KTUtil;
+	var app = KTApp;
+
+	if (typeof util === 'undefined') throw new Error('Util class is required and must be included before ' + pluginName);
+
+	// plugin setup
+	$.fn[pluginName] = function(options) {
+		if ($(this).length === 0) {
+			console.warn('No ' + pluginName + ' element exist.');
+			return;
+		}
+
+		// global variables
+		var datatable = this;
+
+		// debug enabled?
+		// 1) state will be cleared on each refresh
+		// 2) enable some logs
+		// 3) etc.
+		datatable.debug = false;
+
+		datatable.API = {
+			record: null,
+			value: null,
+			params: null,
+		};
+
+		var Plugin = {
+			/********************
+			 ** PRIVATE METHODS
+			 ********************/
+			isInit: false,
+			cellOffset: 110,
+			iconOffset: 15,
+			stateId: 'meta',
+			ajaxParams: {},
+			pagingObject: {},
+
+			init: function(options) {
+				var isHtmlTable = false;
+				// data source option empty is normal table
+				if (options.data.source === null) {
+					Plugin.extractTable();
+					isHtmlTable = true;
+				}
+
+				Plugin.setupBaseDOM.call();
+				Plugin.setupDOM(datatable.table);
+
+				// set custom query from options
+				Plugin.setDataSourceQuery(Plugin.getOption('data.source.read.params.query'));
+
+				// on event after layout had done setup, show datatable
+				$(datatable).on(pfx + 'datatable--on-layout-updated', Plugin.afterRender);
+
+				if (datatable.debug) {
+					Plugin.stateRemove(Plugin.stateId);
+				}
+
+				// initialize extensions
+				$.each(Plugin.getOption('extensions'), function(extName, extOptions) {
+					if (typeof $.fn[pluginName][extName] === 'function') {
+						new $.fn[pluginName][extName](datatable, extOptions);
+					}
+				});
+
+				Plugin.spinnerCallback(true);
+				// get data
+				if (options.data.type === 'remote' || options.data.type === 'local') {
+					if (options.data.saveState === false
+						|| options.data.saveState.cookie === false
+						&& options.data.saveState.webstorage === false) {
+						Plugin.stateRemove(Plugin.stateId);
+					}
+					// get data for local datatable and local table
+					if (options.data.type === 'local' && typeof options.data.source === 'object') {
+						datatable.dataSet = datatable.originalDataSet = Plugin.dataMapCallback(options.data.source);
+					}
+					Plugin.dataRender();
+				}
+
+                // if html table, remove and setup a new header
+                if (isHtmlTable) {
+                  $(datatable.tableHead).find('tr').remove();
+                  $(datatable.tableFoot).find('tr').remove();
+                }
+
+                Plugin.setHeadTitle();
+                if (Plugin.getOption('layout.footer')) {
+                  Plugin.setHeadTitle(datatable.tableFoot);
+                }
+
+				// hide header
+				if (typeof options.layout.header !== 'undefined' &&
+					options.layout.header === false) {
+					$(datatable.table).find('thead').remove();
+				}
+
+				// hide footer
+				if (typeof options.layout.footer !== 'undefined' &&
+					options.layout.footer === false) {
+					$(datatable.table).find('tfoot').remove();
+				}
+
+				// for normal and local data type, run layoutUpdate
+				if (options.data.type === null ||
+					options.data.type === 'local') {
+					Plugin.setupCellField.call();
+					Plugin.setupTemplateCell.call();
+
+					// setup nested datatable, if option enabled
+					Plugin.setupSubDatatable.call();
+
+					// setup extra system column properties
+					Plugin.setupSystemColumn.call();
+					Plugin.redraw();
+				}
+
+				var width;
+				var initialWidth = false;
+				$(window).resize(function() {
+					// get initial width
+					if (!initialWidth) {
+						width = $(this).width();
+						initialWidth = true;
+					}
+					// issue: URL Bar Resizing on mobile, https://developers.google.com/web/updates/2016/12/url-bar-resizing
+					// trigger datatable resize on width change only
+					if ($(this).width() !== width) {
+						width = $(this).width();
+						Plugin.fullRender();
+					}
+				});
+
+				$(datatable).height('');
+
+				$(Plugin.getOption('search.input')).on('keyup', function(e) {
+					if (Plugin.getOption('search.onEnter') && e.which !== 13) return;
+					Plugin.search($(this).val());
+				});
+
+				return datatable;
+			},
+
+			/**
+			 * Extract static HTML table content into datasource
+			 */
+			extractTable: function() {
+				var columns = [];
+				var headers = $(datatable).find('tr:first-child th').get().map(function(cell, i) {
+					var field = $(cell).data('field');
+					if (typeof field === 'undefined') {
+						field = $(cell).text().trim();
+					}
+					var column = {field: field, title: field};
+					for (var ii in options.columns) {
+						if (options.columns[ii].field === field) {
+							column = $.extend(true, {}, options.columns[ii], column);
+						}
+					}
+					columns.push(column);
+					return field;
+				});
+				// auto create columns config
+				options.columns = columns;
+
+				var rowProp = [];
+				var source = [];
+
+				$(datatable).find('tr').each(function() {
+					if ($(this).find('td').length) {
+						rowProp.push($(this).prop('attributes'));
+					}
+					var td = {};
+					$(this).find('td').each(function(i, cell) {
+						td[headers[i]] = cell.innerHTML.trim();
+					});
+					if (!util.isEmpty(td)) {
+						source.push(td);
+					}
+				});
+
+				options.data.attr.rowProps = rowProp;
+				options.data.source = source;
+			},
+
+			/**
+			 * One time layout update on init
+			 */
+			layoutUpdate: function() {
+				// setup nested datatable, if option enabled
+				Plugin.setupSubDatatable.call();
+
+				// setup extra system column properties
+				Plugin.setupSystemColumn.call();
+
+				// setup cell hover event
+				Plugin.setupHover.call();
+
+				if (typeof options.detail === 'undefined'
+					// temporary disable lock column in subtable
+					&& Plugin.getDepth() === 1) {
+					// lock columns handler
+					Plugin.lockTable.call();
+				}
+
+				Plugin.resetScroll();
+
+				// check if not is a locked column
+				if (!Plugin.isLocked()) {
+					Plugin.redraw.call();
+					// check if its not a subtable and has autoHide option enabled
+					if (!Plugin.isSubtable() && Plugin.getOption('rows.autoHide') === true) {
+						Plugin.autoHide();
+					}
+					// reset row
+					$(datatable.table).find('.' + pfx + 'datatable__row').css('height', '');
+				}
+
+				Plugin.columnHide.call();
+
+				Plugin.rowEvenOdd.call();
+
+				Plugin.sorting.call();
+
+				Plugin.scrollbar.call();
+
+				if (!Plugin.isInit) {
+					// run once dropdown inside datatable
+					Plugin.dropdownFix();
+					$(datatable).trigger(pfx + 'datatable--on-init', {table: $(datatable.wrap).attr('id'), options: options});
+					Plugin.isInit = true;
+				}
+
+				$(datatable).trigger(pfx + 'datatable--on-layout-updated', {table: $(datatable.wrap).attr('id')});
+			},
+
+			dropdownFix: function() {
+				var dropdownMenu;
+				$('body').on('show.bs.dropdown', '.' + pfx + 'datatable .' + pfx + 'datatable__body', function(e) {
+					dropdownMenu = $(e.target).find('.dropdown-menu');
+					$('body').append(dropdownMenu.detach());
+					dropdownMenu.css('display', 'block');
+					dropdownMenu.position({
+						'my': 'right top',
+						'at': 'right bottom',
+						'of': $(e.relatedTarget),
+					});
+					// if datatable is inside modal
+					if (datatable.closest('.modal').length) {
+						// increase dropdown z-index
+						dropdownMenu.css('z-index', '2000');
+					}
+				}).on('hide.bs.dropdown', '.' + pfx + 'datatable .' + pfx + 'datatable__body', function(e) {
+					$(e.target).append(dropdownMenu.detach());
+					dropdownMenu.hide();
+				});
+			},
+
+			lockTable: function() {
+				var lock = {
+					lockEnabled: false,
+					init: function() {
+						// check if table should be locked columns
+						lock.lockEnabled = Plugin.lockEnabledColumns();
+						if (lock.lockEnabled.left.length === 0 &&
+							lock.lockEnabled.right.length === 0) {
+							return;
+						}
+						lock.enable();
+					},
+					enable: function() {
+						var enableLock = function(tablePart) {
+							// check if already has lock column
+							if ($(tablePart).find('.' + pfx + 'datatable__lock').length > 0) {
+								Plugin.log('Locked container already exist in: ', tablePart);
+								return;
+							}
+							// check if no rows exists
+							if ($(tablePart).find('.' + pfx + 'datatable__row').length === 0) {
+								Plugin.log('No row exist in: ', tablePart);
+								return;
+							}
+
+							// locked div container
+							var lockLeft = $('<div/>').addClass(pfx + 'datatable__lock ' + pfx + 'datatable__lock--left');
+							var lockScroll = $('<div/>').addClass(pfx + 'datatable__lock ' + pfx + 'datatable__lock--scroll');
+							var lockRight = $('<div/>').addClass(pfx + 'datatable__lock ' + pfx + 'datatable__lock--right');
+
+							$(tablePart).find('.' + pfx + 'datatable__row').each(function() {
+								// create new row for lock columns and pass the data
+								var rowLeft = $('<tr/>').addClass(pfx + 'datatable__row').data('obj', $(this).data('obj')).appendTo(lockLeft);
+								var rowScroll = $('<tr/>').addClass(pfx + 'datatable__row').data('obj', $(this).data('obj')).appendTo(lockScroll);
+								var rowRight = $('<tr/>').addClass(pfx + 'datatable__row').data('obj', $(this).data('obj')).appendTo(lockRight);
+								$(this).find('.' + pfx + 'datatable__cell').each(function() {
+									var locked = $(this).data('locked');
+									if (typeof locked !== 'undefined') {
+										if (typeof locked.left !== 'undefined' || locked === true) {
+											// default locked to left
+											$(this).appendTo(rowLeft);
+										}
+										if (typeof locked.right !== 'undefined') {
+											$(this).appendTo(rowRight);
+										}
+									} else {
+										$(this).appendTo(rowScroll);
+									}
+								});
+								// remove old row
+								$(this).remove();
+							});
+
+							if (lock.lockEnabled.left.length > 0) {
+								$(datatable.wrap).addClass(pfx + 'datatable--lock');
+								$(lockLeft).appendTo(tablePart);
+							}
+							if (lock.lockEnabled.left.length > 0 || lock.lockEnabled.right.length > 0) {
+								$(lockScroll).appendTo(tablePart);
+							}
+							if (lock.lockEnabled.right.length > 0) {
+								$(datatable.wrap).addClass(pfx + 'datatable--lock');
+								$(lockRight).appendTo(tablePart);
+							}
+						};
+
+						$(datatable.table).find('thead,tbody,tfoot').each(function() {
+							var tablePart = this;
+							if ($(this).find('.' + pfx + 'datatable__lock').length === 0) {
+								$(this).ready(function() {
+									enableLock(tablePart);
+								});
+							}
+						});
+					},
+				};
+				lock.init();
+				return lock;
+			},
+
+			/**
+			 * Render everything for resize
+			 */
+			fullRender: function() {
+				$(datatable.tableHead).empty();
+				Plugin.setHeadTitle();
+				if (Plugin.getOption('layout.footer')) {
+					$(datatable.tableFoot).empty();
+					Plugin.setHeadTitle(datatable.tableFoot);
+				}
+
+				Plugin.spinnerCallback(true);
+				$(datatable.wrap).removeClass(pfx + 'datatable--loaded');
+
+				Plugin.insertData();
+			},
+
+			lockEnabledColumns: function() {
+				var screen = $(window).width();
+				var columns = options.columns;
+				var enabled = {left: [], right: []};
+				$.each(columns, function(i, column) {
+					if (typeof column.locked !== 'undefined') {
+						if (typeof column.locked.left !== 'undefined') {
+							if (util.getBreakpoint(column.locked.left) <= screen) {
+								enabled['left'].push(column.locked.left);
+							}
+						}
+						if (typeof column.locked.right !== 'undefined') {
+							if (util.getBreakpoint(column.locked.right) <= screen) {
+								enabled['right'].push(column.locked.right);
+							}
+						}
+					}
+				});
+				return enabled;
+			},
+
+			/**
+			 * After render event, called by
+			 * '+pfx+'-datatable--on-layout-updated
+			 * @param e
+			 * @param args
+			 */
+			afterRender: function(e, args) {
+				$(datatable).ready(function() {
+					// redraw locked columns table
+					if (Plugin.isLocked()) {
+						Plugin.redraw();
+					}
+
+					$(datatable.tableBody).css('visibility', '');
+					$(datatable.wrap).addClass(pfx + 'datatable--loaded');
+
+					Plugin.spinnerCallback(false);
+				});
+			},
+
+			hoverTimer: 0,
+			isScrolling: false,
+			setupHover: function() {
+				$(window).scroll(function(e) {
+					// stop hover when scrolling
+					clearTimeout(Plugin.hoverTimer);
+					Plugin.isScrolling = true;
+				});
+
+				$(datatable.tableBody).find('.' + pfx + 'datatable__cell').off('mouseenter', 'mouseleave').on('mouseenter', function() {
+					// reset scroll timer to hover class
+					Plugin.hoverTimer = setTimeout(function() {
+						Plugin.isScrolling = false;
+					}, 200);
+					if (Plugin.isScrolling) return;
+
+					// normal table
+					var row = $(this).closest('.' + pfx + 'datatable__row').addClass(pfx + 'datatable__row--hover');
+					var index = $(row).index() + 1;
+
+					// lock table
+					$(row).closest('.' + pfx + 'datatable__lock').parent().find('.' + pfx + 'datatable__row:nth-child(' + index + ')').addClass(pfx + 'datatable__row--hover');
+				}).on('mouseleave', function() {
+					// normal table
+					var row = $(this).closest('.' + pfx + 'datatable__row').removeClass(pfx + 'datatable__row--hover');
+					var index = $(row).index() + 1;
+
+					// look table
+					$(row).closest('.' + pfx + 'datatable__lock').parent().find('.' + pfx + 'datatable__row:nth-child(' + index + ')').removeClass(pfx + 'datatable__row--hover');
+				});
+			},
+
+			/**
+			 * Adjust width of locked table containers by resize handler
+			 * @returns {number}
+			 */
+			adjustLockContainer: function() {
+				if (!Plugin.isLocked()) return 0;
+
+				// refer to head dimension
+				var containerWidth = $(datatable.tableHead).width();
+				var lockLeft = $(datatable.tableHead).find('.' + pfx + 'datatable__lock--left').width();
+				var lockRight = $(datatable.tableHead).find('.' + pfx + 'datatable__lock--right').width();
+
+				if (typeof lockLeft === 'undefined') lockLeft = 0;
+				if (typeof lockRight === 'undefined') lockRight = 0;
+
+				var lockScroll = Math.floor(containerWidth - lockLeft - lockRight);
+				$(datatable.table).find('.' + pfx + 'datatable__lock--scroll').css('width', lockScroll);
+
+				return lockScroll;
+			},
+
+			/**
+			 * todo; not in use
+			 */
+			dragResize: function() {
+				var pressed = false;
+				var start = undefined;
+				var startX, startWidth;
+				$(datatable.tableHead).find('.' + pfx + 'datatable__cell').mousedown(function(e) {
+					start = $(this);
+					pressed = true;
+					startX = e.pageX;
+					startWidth = $(this).width();
+					$(start).addClass(pfx + 'datatable__cell--resizing');
+
+				}).mousemove(function(e) {
+					if (pressed) {
+						var i = $(start).index();
+						var tableBody = $(datatable.tableBody);
+						var ifLocked = $(start).closest('.' + pfx + 'datatable__lock');
+
+						if (ifLocked) {
+							var lockedIndex = $(ifLocked).index();
+							tableBody = $(datatable.tableBody).find('.' + pfx + 'datatable__lock').eq(lockedIndex);
+						}
+
+						$(tableBody).find('.' + pfx + 'datatable__row').each(function(tri, tr) {
+							$(tr).find('.' + pfx + 'datatable__cell').eq(i).width(startWidth + (e.pageX - startX)).children().width(startWidth + (e.pageX - startX));
+						});
+
+						$(start).children().css('width', startWidth + (e.pageX - startX));
+					}
+
+				}).mouseup(function() {
+					$(start).removeClass(pfx + 'datatable__cell--resizing');
+					pressed = false;
+				});
+
+				$(document).mouseup(function() {
+					$(start).removeClass(pfx + 'datatable__cell--resizing');
+					pressed = false;
+				});
+			},
+
+			/**
+			 * To prepare placeholder for table before content is loading
+			 */
+			initHeight: function() {
+				if (options.layout.height && options.layout.scroll) {
+					var theadHeight = $(datatable.tableHead).find('.' + pfx + 'datatable__row').outerHeight();
+					var tfootHeight = $(datatable.tableFoot).find('.' + pfx + 'datatable__row').outerHeight();
+					var bodyHeight = options.layout.height;
+					if (theadHeight > 0) {
+						bodyHeight -= theadHeight;
+					}
+					if (tfootHeight > 0) {
+						bodyHeight -= tfootHeight;
+					}
+
+					// scrollbar offset
+					bodyHeight -= 2;
+
+					$(datatable.tableBody).css('max-height', bodyHeight);
+
+					// set scrollable area fixed height
+					$(datatable.tableBody).find('.' + pfx + 'datatable__lock--scroll').css('height', bodyHeight);
+				}
+			},
+
+			/**
+			 * Setup base DOM (table, thead, tbody, tfoot) and create if not
+			 * exist.
+			 */
+			setupBaseDOM: function() {
+				// keep original state before datatable initialize
+				datatable.initialDatatable = $(datatable).clone();
+
+				// main element
+				if ($(datatable).prop('tagName') === 'TABLE') {
+					// if main init element is <table>, wrap with div
+					datatable.table = $(datatable).removeClass(pfx + 'datatable').addClass(pfx + 'datatable__table');
+					if ($(datatable.table).parents('.' + pfx + 'datatable').length === 0) {
+						datatable.table.wrap($('<div/>').addClass(pfx + 'datatable').addClass(pfx + 'datatable--' + options.layout.theme));
+						datatable.wrap = $(datatable.table).parent();
+					}
+				} else {
+					// create table
+					datatable.wrap = $(datatable).addClass(pfx + 'datatable').addClass(pfx + 'datatable--' + options.layout.theme);
+					datatable.table = $('<table/>').addClass(pfx + 'datatable__table').appendTo(datatable);
+				}
+
+				if (typeof options.layout.class !== 'undefined') {
+					$(datatable.wrap).addClass(options.layout.class);
+				}
+
+				$(datatable.table).removeClass(pfx + 'datatable--destroyed').css('display', 'block');
+
+				// force disable save state
+				if (typeof $(datatable).attr('id') === 'undefined') {
+					Plugin.setOption('data.saveState', false);
+					$(datatable.table).attr('id', util.getUniqueID(pfx + 'datatable--'));
+				}
+
+				// predefine table height
+				if (Plugin.getOption('layout.minHeight'))
+					$(datatable.table).css('min-height', Plugin.getOption('layout.minHeight'));
+
+				if (Plugin.getOption('layout.height'))
+					$(datatable.table).css('max-height', Plugin.getOption('layout.height'));
+
+				// for normal table load
+				if (options.data.type === null) {
+					$(datatable.table).css('width', '').css('display', '');
+				}
+
+				// create table head element
+				datatable.tableHead = $(datatable.table).find('thead');
+				if ($(datatable.tableHead).length === 0) {
+					datatable.tableHead = $('<thead/>').prependTo(datatable.table);
+				}
+
+				// create table head element
+				datatable.tableBody = $(datatable.table).find('tbody');
+				if ($(datatable.tableBody).length === 0) {
+					datatable.tableBody = $('<tbody/>').appendTo(datatable.table);
+				}
+
+				if (typeof options.layout.footer !== 'undefined' &&
+					options.layout.footer) {
+					// create table foot element
+					datatable.tableFoot = $(datatable.table).find('tfoot');
+					if ($(datatable.tableFoot).length === 0) {
+						datatable.tableFoot = $('<tfoot/>').appendTo(datatable.table);
+					}
+				}
+			},
+
+			/**
+			 * Set column data before table manipulation.
+			 */
+			setupCellField: function(tableParts) {
+				if (typeof tableParts === 'undefined') tableParts = $(datatable.table).children();
+				var columns = options.columns;
+				$.each(tableParts, function(part, tablePart) {
+					$(tablePart).find('.' + pfx + 'datatable__row').each(function(tri, tr) {
+						// prepare data
+						$(tr).find('.' + pfx + 'datatable__cell').each(function(tdi, td) {
+							if (typeof columns[tdi] !== 'undefined') {
+								$(td).data(columns[tdi]);
+							}
+						});
+					});
+				});
+			},
+
+			/**
+			 * Set column template callback
+			 * @param tablePart
+			 */
+			setupTemplateCell: function(tablePart) {
+				if (typeof tablePart === 'undefined') tablePart = datatable.tableBody;
+				var columns = options.columns;
+				$(tablePart).find('.' + pfx + 'datatable__row').each(function(tri, tr) {
+					// row data object, if any
+					var obj = $(tr).data('obj');
+					if (typeof obj === 'undefined') {
+						return;
+					}
+
+					// @deprecated in v5.0.6
+					// obj['getIndex'] = function() {
+					// 	return tri;
+					// };
+					// @deprecated in v5.0.6
+					// obj['getDatatable'] = function() {
+					// 	return datatable;
+					// };
+
+					// @deprecated in v5.0.6
+					var rowCallback = Plugin.getOption('rows.callback');
+					if (typeof rowCallback === 'function') {
+						rowCallback($(tr), obj, tri);
+					}
+					// before template row callback
+					var beforeTemplate = Plugin.getOption('rows.beforeTemplate');
+					if (typeof beforeTemplate === 'function') {
+						beforeTemplate($(tr), obj, tri);
+					}
+					// if data object is undefined, collect from table
+					if (typeof obj === 'undefined') {
+						obj = {};
+						$(tr).find('.' + pfx + 'datatable__cell').each(function(tdi, td) {
+							// get column settings by field
+							var column = $.grep(columns, function(n, i) {
+								return $(td).data('field') === n.field;
+							})[0];
+							if (typeof column !== 'undefined') {
+								obj[column['field']] = $(td).text();
+							}
+						});
+					}
+
+					$(tr).find('.' + pfx + 'datatable__cell').each(function(tdi, td) {
+						// get column settings by field
+						var column = $.grep(columns, function(n, i) {
+							return $(td).data('field') === n.field;
+						})[0];
+						if (typeof column !== 'undefined') {
+							// column template
+							if (typeof column.template !== 'undefined') {
+								var finalValue = '';
+								// template string
+								if (typeof column.template === 'string') {
+									finalValue = Plugin.dataPlaceholder(column.template, obj);
+								}
+								// template callback function
+								if (typeof column.template === 'function') {
+									finalValue = column.template(obj, tri, datatable);
+								}
+
+								// sanitize using DOMPurify if installed
+								if (typeof DOMPurify !== 'undefined') {
+									finalValue = DOMPurify.sanitize(finalValue);
+								}
+
+								var span = document.createElement('span');
+								span.innerHTML = finalValue;
+
+								// insert to cell, wrap with span
+								$(td).html(span);
+
+								// set span overflow
+								if (typeof column.overflow !== 'undefined') {
+									$(span).css('overflow', column.overflow);
+									$(span).css('position', 'relative');
+								}
+							}
+						}
+					});
+
+					// after template row callback
+					var afterTemplate = Plugin.getOption('rows.afterTemplate');
+					if (typeof afterTemplate === 'function') {
+						afterTemplate($(tr), obj, tri);
+					}
+				});
+			},
+
+			/**
+			 * Setup extra system column properties
+			 * Note: selector checkbox, subtable toggle
+			 */
+			setupSystemColumn: function() {
+				datatable.dataSet = datatable.dataSet || [];
+				// no records available
+				if (datatable.dataSet.length === 0) return;
+
+				var columns = options.columns;
+				$(datatable.tableBody).find('.' + pfx + 'datatable__row').each(function(tri, tr) {
+					$(tr).find('.' + pfx + 'datatable__cell').each(function(tdi, td) {
+						// get column settings by field
+						var column = $.grep(columns, function(n, i) {
+							return $(td).data('field') === n.field;
+						})[0];
+						if (typeof column !== 'undefined') {
+							var value = $(td).text();
+
+							// enable column selector
+							if (typeof column.selector !== 'undefined' && column.selector !== false) {
+								// check if checkbox exist
+								if ($(td).find('.' + pfx + 'checkbox [type="checkbox"]').length > 0) return;
+
+								$(td).addClass(pfx + 'datatable__cell--check');
+
+								// append checkbox
+								var chk = $('<label/>').
+									addClass(pfx + 'checkbox ' + pfx + 'checkbox--single').
+									append($('<input/>').attr('type', 'checkbox').attr('value', value).on('click', function() {
+										if ($(this).is(':checked')) {
+											// add checkbox active row class
+											Plugin.setActive(this);
+										} else {
+											// add checkbox active row class
+											Plugin.setInactive(this);
+										}
+									})).
+									append('&nbsp;<span></span>');
+
+								// checkbox selector has outline style
+								if (typeof column.selector.class !== 'undefined') {
+									$(chk).addClass(column.selector.class);
+								}
+
+								$(td).children().html(chk);
+							}
+
+							// enable column subtable toggle
+							if (typeof column.subtable !== 'undefined' && column.subtable) {
+								// check if subtable toggle exist
+								if ($(td).find('.' + pfx + 'datatable__toggle-subtable').length > 0) return;
+								// append subtable toggle
+								$(td).
+									children().
+									html($('<a/>').
+										addClass(pfx + 'datatable__toggle-subtable').
+										attr('href', '#').
+										attr('data-value', value).
+										append($('<i/>').addClass(Plugin.getOption('layout.icons.rowDetail.collapse'))));
+							}
+						}
+					});
+				});
+
+				// init checkbox for header/footer
+				var initCheckbox = function(tr) {
+					// get column settings by field
+					var column = $.grep(columns, function(n, i) {
+						return typeof n.selector !== 'undefined' && n.selector !== false;
+					})[0];
+
+					if (typeof column !== 'undefined') {
+						// enable column selector
+						if (typeof column.selector !== 'undefined' && column.selector !== false) {
+							var td = $(tr).find('[data-field="' + column.field + '"]');
+							// check if checkbox exist
+							if ($(td).find('.' + pfx + 'checkbox [type="checkbox"]').length > 0) return;
+
+							$(td).addClass(pfx + 'datatable__cell--check');
+
+							// append checkbox
+							var chk = $('<label/>').
+								addClass(pfx + 'checkbox ' + pfx + 'checkbox--single ' + pfx + 'checkbox--all').
+								append($('<input/>').attr('type', 'checkbox').on('click', function() {
+									if ($(this).is(':checked')) {
+										Plugin.setActiveAll(true);
+									} else {
+										Plugin.setActiveAll(false);
+									}
+								})).
+								append('&nbsp;<span></span>');
+
+							// checkbox selector has outline style
+							if (typeof column.selector.class !== 'undefined') {
+								$(chk).addClass(column.selector.class);
+							}
+
+							$(td).children().html(chk);
+						}
+					}
+				};
+
+				if (options.layout.header) {
+					initCheckbox($(datatable.tableHead).find('.' + pfx + 'datatable__row').first());
+				}
+				if (options.layout.footer) {
+					initCheckbox($(datatable.tableFoot).find('.' + pfx + 'datatable__row').first());
+				}
+			},
+
+            maxWidthList: {},
+
+			/**
+			 * Adjust width to match container size
+			 */
+			adjustCellsWidth: function() {
+				// get table width
+				var containerWidth = $(datatable.tableBody).innerWidth() - Plugin.iconOffset;
+
+				// get total number of columns
+				var columns = $(datatable.tableBody).
+					find('.' + pfx + 'datatable__row:first-child').
+					find('.' + pfx + 'datatable__cell').
+					// exclude expand icon
+					not('.' + pfx + 'datatable__toggle-detail').
+					not(':hidden').length;
+
+				if (columns > 0) {
+					//  remove reserved sort icon width
+					containerWidth = containerWidth - (Plugin.iconOffset * columns);
+					var minWidth = Math.floor(containerWidth / columns);
+
+					// minimum width
+					if (minWidth <= Plugin.cellOffset) {
+						minWidth = Plugin.cellOffset;
+					}
+
+					$(datatable.table).find('.' + pfx + 'datatable__row').
+							find('.' + pfx + 'datatable__cell').
+							// exclude expand icon
+							not('.' + pfx + 'datatable__toggle-detail').
+							not(':hidden').each(function(tdi, td) {
+
+						var width = minWidth;
+						var dataWidth = $(td).data('width');
+
+						if (typeof dataWidth !== 'undefined') {
+							if (dataWidth === 'auto') {
+								var field = $(td).data('field');
+								if (Plugin.maxWidthList[field]) {
+									width = Plugin.maxWidthList[field];
+								}
+								else {
+									var cells = $(datatable.table).find('.' + pfx + 'datatable__cell[data-field="' + field + '"]');
+									width = Plugin.maxWidthList[field] = Math.max.apply(null,
+											$(cells).map(function() {
+												return $(this).outerWidth();
+											}).get());
+								}
+							}
+							else {
+								width = dataWidth;
+							}
+						}
+						$(td).children().css('width', Math.ceil(width));
+					});
+				}
+
+				return datatable;
+			},
+
+			/**
+			 * Adjust height to match container size
+			 */
+			adjustCellsHeight: function() {
+				$.each($(datatable.table).children(), function(part, tablePart) {
+					var totalRows = $(tablePart).find('.' + pfx + 'datatable__row').first().parent().find('.' + pfx + 'datatable__row').length;
+					for (var i = 1; i <= totalRows; i++) {
+						var rows = $(tablePart).find('.' + pfx + 'datatable__row:nth-child(' + i + ')');
+						if ($(rows).length > 0) {
+							var maxHeight = Math.max.apply(null, $(rows).map(function() {
+								return $(this).outerHeight();
+							}).get());
+							$(rows).css('height', Math.ceil(maxHeight));
+						}
+					}
+				});
+			},
+
+			/**
+			 * Setup table DOM and classes
+			 */
+			setupDOM: function(table) {
+				// set table classes
+				$(table).find('> thead').addClass(pfx + 'datatable__head');
+				$(table).find('> tbody').addClass(pfx + 'datatable__body');
+				$(table).find('> tfoot').addClass(pfx + 'datatable__foot');
+				$(table).find('tr').addClass(pfx + 'datatable__row');
+				$(table).find('tr > th, tr > td').addClass(pfx + 'datatable__cell');
+				$(table).find('tr > th, tr > td').each(function(i, td) {
+					if ($(td).find('span').length === 0) {
+						$(td).wrapInner($('<span/>').css('width', Plugin.cellOffset));
+					}
+				});
+			},
+
+			/**
+			 * Default scrollbar
+			 * @returns {{tableLocked: null, init: init, onScrolling:
+			 *     onScrolling}}
+			 */
+			scrollbar: function() {
+				var scroll = {
+					scrollable: null,
+					tableLocked: null,
+					initPosition: null,
+					init: function() {
+						var screen = util.getViewPort().width;
+						// setup scrollable datatable
+						if (options.layout.scroll) {
+							// add scrollable datatable class
+							$(datatable.wrap).addClass(pfx + 'datatable--scroll');
+
+							var scrollable = $(datatable.tableBody).find('.' + pfx + 'datatable__lock--scroll');
+
+							// check if scrollable area have rows
+							if ($(scrollable).find('.' + pfx + 'datatable__row').length > 0 && $(scrollable).length > 0) {
+								scroll.scrollHead = $(datatable.tableHead).find('> .' + pfx + 'datatable__lock--scroll > .' + pfx + 'datatable__row');
+								scroll.scrollFoot = $(datatable.tableFoot).find('> .' + pfx + 'datatable__lock--scroll > .' + pfx + 'datatable__row');
+								scroll.tableLocked = $(datatable.tableBody).find('.' + pfx + 'datatable__lock:not(.' + pfx + 'datatable__lock--scroll)');
+								if (Plugin.getOption('layout.customScrollbar') && util.detectIE() != 10 && screen > util.getBreakpoint('lg')) {
+									scroll.initCustomScrollbar(scrollable[0]);
+								} else {
+									scroll.initDefaultScrollbar(scrollable);
+								}
+							} else if ($(datatable.tableBody).find('.' + pfx + 'datatable__row').length > 0) {
+								scroll.scrollHead = $(datatable.tableHead).find('> .' + pfx + 'datatable__row');
+								scroll.scrollFoot = $(datatable.tableFoot).find('> .' + pfx + 'datatable__row');
+								if (Plugin.getOption('layout.customScrollbar') && util.detectIE() != 10 && screen > util.getBreakpoint('lg')) {
+									scroll.initCustomScrollbar(datatable.tableBody);
+								} else {
+									scroll.initDefaultScrollbar(datatable.tableBody);
+								}
+							}
+						}
+					},
+					initDefaultScrollbar: function(scrollable) {
+						// get initial scroll position
+						scroll.initPosition = $(scrollable).scrollLeft();
+						$(scrollable).css('overflow-y', 'auto').off().on('scroll', scroll.onScrolling);
+						if (Plugin.getOption('rows.autoHide') !== true) {
+							$(scrollable).css('overflow-x', 'auto');
+						}
+					},
+					onScrolling: function(e) {
+						var left = $(this).scrollLeft();
+						var top = $(this).scrollTop();
+						if (util.isRTL()) {
+							// deduct initial position for RTL
+							left = left - scroll.initPosition;
+						}
+						$(scroll.scrollHead).css('left', -left);
+						$(scroll.scrollFoot).css('left', -left);
+						$(scroll.tableLocked).each(function(i, table) {
+							if (Plugin.isLocked()) {
+								// scrollbar offset
+								top -= 1;
+							}
+							$(table).css('top', -top);
+						});
+					},
+					initCustomScrollbar: function(scrollable) {
+						scroll.scrollable = scrollable;
+						// create a new instance for table body with scrollbar
+						Plugin.initScrollbar(scrollable);
+						// get initial scroll position
+						scroll.initPosition = $(scrollable).scrollLeft();
+						$(scrollable).off().on('scroll', scroll.onScrolling);
+					},
+				};
+				scroll.init();
+				return scroll;
+			},
+
+			/**
+			 * Init custom scrollbar and reset position
+			 * @param element
+			 * @param options
+			 */
+			initScrollbar: function(element, options) {
+				if (!element || !element.nodeName) {
+					return;
+				}
+				$(datatable.tableBody).css('overflow', '');
+				if (util.hasClass(element, 'ps')) {
+					$(element).data('ps').update();
+				} else {
+					var ps = new PerfectScrollbar(element, Object.assign({}, {
+						wheelSpeed: 0.5,
+						swipeEasing: true,
+						// wheelPropagation: false,
+						minScrollbarLength: 40,
+						maxScrollbarLength: 300,
+						suppressScrollX: Plugin.getOption('rows.autoHide') && !Plugin.isLocked()
+					}, options));
+					$(element).data('ps', ps);
+
+					// reset perfect scrollbar on resize
+					$(window).resize(function() {
+						ps.update();
+					});
+				}
+			},
+
+			/**
+			 * Set column title from options.columns settings
+			 */
+			setHeadTitle: function(tablePart) {
+				if (typeof tablePart === 'undefined') tablePart = datatable.tableHead;
+				tablePart = $(tablePart)[0];
+				var columns = options.columns;
+				var row = tablePart.getElementsByTagName('tr')[0];
+				var ths = tablePart.getElementsByTagName('td');
+
+				if (typeof row === 'undefined') {
+					row = document.createElement('tr');
+					tablePart.appendChild(row);
+				}
+
+				$.each(columns, function(i, column) {
+					var th = ths[i];
+					if (typeof th === 'undefined') {
+						th = document.createElement('th');
+						row.appendChild(th);
+					}
+
+					// set column title
+					if (typeof column['title'] !== 'undefined') {
+						th.innerHTML = column.title;
+						th.setAttribute('data-field', column.field);
+						util.addClass(th, column.class);
+						// set disable autoHide or force enable
+						if (typeof column.autoHide !== 'undefined') {
+							if (column.autoHide !== true) {
+								th.setAttribute('data-autohide-disabled', column.autoHide);
+							} else {
+								th.setAttribute('data-autohide-enabled', column.autoHide);
+							}
+						}
+						$(th).data(column);
+					}
+
+					// set header attr option
+					if (typeof column.attr !== 'undefined') {
+						$.each(column.attr, function(key, val) {
+							th.setAttribute(key, val);
+						});
+					}
+
+					// apply text align to thead/tfoot
+					if (typeof column.textAlign !== 'undefined') {
+						var align = typeof datatable.textAlign[column.textAlign] !== 'undefined' ? datatable.textAlign[column.textAlign] : '';
+						util.addClass(th, align);
+					}
+				});
+				Plugin.setupDOM(tablePart);
+			},
+
+			/**
+			 * Initiate to get remote or local data via ajax
+			 */
+			dataRender: function(action) {
+				$(datatable.table).siblings('.' + pfx + 'datatable__pager').removeClass(pfx + 'datatable--paging-loaded');
+
+				var buildMeta = function() {
+					datatable.dataSet = datatable.dataSet || [];
+					Plugin.localDataUpdate();
+					// local pagination meta
+					var meta = Plugin.getDataSourceParam('pagination');
+					if (meta.perpage === 0) {
+						meta.perpage = options.data.pageSize || 10;
+					}
+					meta.total = datatable.dataSet.length;
+					var start = Math.max(meta.perpage * (meta.page - 1), 0);
+					var end = Math.min(start + meta.perpage, meta.total);
+					datatable.dataSet = $(datatable.dataSet).slice(start, end);
+					return meta;
+				};
+
+				var afterGetData = function(result) {
+					var localPagingCallback = function(ctx, meta) {
+						if (!$(ctx.pager).hasClass(pfx + 'datatable--paging-loaded')) {
+							$(ctx.pager).remove();
+							ctx.init(meta);
+						}
+						$(ctx.pager).off().on(pfx + 'datatable--on-goto-page', function(e) {
+							$(ctx.pager).remove();
+							ctx.init(meta);
+						});
+
+						var start = Math.max(meta.perpage * (meta.page - 1), 0);
+						var end = Math.min(start + meta.perpage, meta.total);
+
+						Plugin.localDataUpdate();
+						datatable.dataSet = $(datatable.dataSet).slice(start, end);
+
+						// insert data into table content
+						Plugin.insertData();
+					};
+
+					$(datatable.wrap).removeClass(pfx + 'datatable--error');
+					// pagination enabled
+					if (options.pagination) {
+						if (options.data.serverPaging && options.data.type !== 'local') {
+							// server pagination
+							var serverMeta = Plugin.getObject('meta', result || null);
+							if (serverMeta !== null) {
+								Plugin.pagingObject = Plugin.paging(serverMeta);
+							} else {
+								// no meta object from server response, fallback to local pagination
+								Plugin.pagingObject = Plugin.paging(buildMeta(), localPagingCallback);
+							}
+						} else {
+							// local pagination can be used by remote data also
+							Plugin.pagingObject = Plugin.paging(buildMeta(), localPagingCallback);
+						}
+					} else {
+						// pagination is disabled
+						Plugin.localDataUpdate();
+					}
+					// insert data into table content
+					Plugin.insertData();
+				};
+
+				// get local datasource
+				if (options.data.type === 'local'
+					// for remote json datasource
+					// || typeof options.data.source.read === 'undefined' && datatable.dataSet !== null
+					// for remote datasource, server sorting is disabled and data already received from remote
+					|| options.data.serverSorting === false && action === 'sort'
+					|| options.data.serverFiltering === false && action === 'search'
+				) {
+					setTimeout(function() {
+						afterGetData();
+						Plugin.setAutoColumns();
+					});
+					return;
+				}
+
+				// getting data from remote only
+				Plugin.getData().done(afterGetData);
+			},
+
+			/**
+			 * Process ajax data
+			 */
+			insertData: function() {
+				datatable.dataSet = datatable.dataSet || [];
+				var params = Plugin.getDataSourceParam();
+
+				// get row attributes
+				var pagination = params.pagination;
+				var start = (Math.max(pagination.page, 1) - 1) * pagination.perpage;
+				var end = Math.min(pagination.page, pagination.pages) * pagination.perpage;
+				var rowProps = {};
+				if (typeof options.data.attr.rowProps !== 'undefined' && options.data.attr.rowProps.length) {
+					rowProps = options.data.attr.rowProps.slice(start, end);
+				}
+
+				var tableBody = document.createElement('tbody');
+				tableBody.style.visibility = 'hidden';
+				var colLength = options.columns.length;
+
+				$.each(datatable.dataSet, function(rowIndex, row) {
+					var tr = document.createElement('tr');
+					tr.setAttribute('data-row', rowIndex);
+					// keep data object to row
+					$(tr).data('obj', row);
+
+					if (typeof rowProps[rowIndex] !== 'undefined') {
+						$.each(rowProps[rowIndex], function() {
+							tr.setAttribute(this.name, this.value);
+						});
+					}
+
+					var cellIndex = 0;
+					var tds = [];
+					for (var a = 0; a < colLength; a += 1) {
+						var column = options.columns[a];
+						var classes = [];
+						// add sorted class to cells
+						if (Plugin.getObject('sort.field', params) === column.field) {
+							classes.push(pfx + 'datatable__cell--sorted');
+						}
+
+						// apply text align
+						if (typeof column.textAlign !== 'undefined') {
+							var align = typeof datatable.textAlign[column.textAlign] !== 'undefined' ? datatable.textAlign[column.textAlign] : '';
+							classes.push(align);
+						}
+
+						// var classAttr = '';
+						if (typeof column.class !== 'undefined') {
+							classes.push(column.class);
+						}
+
+						var td = document.createElement('td');
+						util.addClass(td, classes.join(' '));
+						td.setAttribute('data-field', column.field);
+						// set disable autoHide or force enable
+						if (typeof column.autoHide !== 'undefined') {
+							if (column.autoHide !== true) {
+								td.setAttribute('data-autohide-disabled', column.autoHide);
+							} else {
+								td.setAttribute('data-autohide-enabled', column.autoHide);
+							}
+						}
+						td.innerHTML = Plugin.getObject(column.field, row);
+						tr.appendChild(td);
+					}
+
+					tableBody.appendChild(tr);
+				});
+
+				// display no records message
+				if (datatable.dataSet.length === 0) {
+					var errorSpan = document.createElement('span');
+					util.addClass(errorSpan, pfx + 'datatable--error');
+					errorSpan.innerHTML = Plugin.getOption('translate.records.noRecords');
+					tableBody.appendChild(errorSpan);
+					$(datatable.wrap).addClass(pfx + 'datatable--error ' + pfx + 'datatable--loaded');
+					Plugin.spinnerCallback(false);
+				}
+
+				// replace existing table body
+				$(datatable.tableBody).replaceWith(tableBody);
+				datatable.tableBody = tableBody;
+
+				// layout update
+				Plugin.setupDOM(datatable.table);
+				Plugin.setupCellField([datatable.tableBody]);
+				Plugin.setupTemplateCell(datatable.tableBody);
+				Plugin.layoutUpdate();
+			},
+
+			updateTableComponents: function() {
+				datatable.tableHead = $(datatable.table).children('thead');
+				datatable.tableBody = $(datatable.table).children('tbody');
+				datatable.tableFoot = $(datatable.table).children('tfoot');
+			},
+
+			/**
+			 * Call ajax for raw JSON data
+			 */
+			getData: function() {
+				// Plugin.spinnerCallback(true);
+
+				var ajaxParams = {
+					dataType: 'json',
+					method: 'POST',
+					data: {},
+					timeout: Plugin.getOption('data.source.read.timeout') || 30000,
+				};
+
+				if (options.data.type === 'local') {
+					ajaxParams.url = options.data.source;
+				}
+
+				if (options.data.type === 'remote') {
+					var data = Plugin.getDataSourceParam();
+					// remove if server params is not enabled
+					if (!Plugin.getOption('data.serverPaging')) {
+						delete data['pagination'];
+					}
+					if (!Plugin.getOption('data.serverSorting')) {
+						delete data['sort'];
+					}
+					ajaxParams.data = $.extend({}, ajaxParams.data, Plugin.getOption('data.source.read.params'), data);
+					ajaxParams = $.extend({}, ajaxParams, Plugin.getOption('data.source.read'));
+
+					if (typeof ajaxParams.url !== 'string') ajaxParams.url = Plugin.getOption('data.source.read');
+					if (typeof ajaxParams.url !== 'string') ajaxParams.url = Plugin.getOption('data.source');
+					// ajaxParams.data = $.extend(ajaxParams.data, data.pagination);
+				}
+
+				return $.ajax(ajaxParams).done(function(response, textStatus, jqXHR) {
+					datatable.lastResponse = response;
+					// extendible data map callback for custom datasource
+					datatable.dataSet = datatable.originalDataSet = Plugin.dataMapCallback(response);
+					Plugin.setAutoColumns();
+					$(datatable).trigger(pfx + 'datatable--on-ajax-done', [datatable.dataSet]);
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					$(datatable).trigger(pfx + 'datatable--on-ajax-fail', [jqXHR]);
+					$(datatable.tableBody).html($('<span/>').addClass(pfx + 'datatable--error').html(Plugin.getOption('translate.records.noRecords')));
+					$(datatable.wrap).addClass(pfx + 'datatable--error ' + pfx + 'datatable--loaded');
+					Plugin.spinnerCallback(false);
+				}).always(function() {
+				});
+			},
+
+			/**
+			 * Pagination object
+			 * @param meta if null, local pagination, otherwise remote
+			 *     pagination
+			 * @param callback for update data when navigating page
+			 */
+			paging: function(meta, callback) {
+				var pg = {
+					meta: null,
+					pager: null,
+					paginateEvent: null,
+					pagerLayout: {pagination: null, info: null},
+					callback: null,
+					init: function(meta) {
+						pg.meta = meta;
+
+						// parse pagination meta to integer
+						pg.meta.page = parseInt(pg.meta.page);
+						pg.meta.pages = parseInt(pg.meta.pages);
+						pg.meta.perpage = parseInt(pg.meta.perpage);
+						pg.meta.total = parseInt(pg.meta.total);
+
+						// always recount total pages
+						pg.meta.pages = Math.max(Math.ceil(pg.meta.total / pg.meta.perpage), 1);
+
+						// current page must be not over than total pages
+						if (pg.meta.page > pg.meta.pages) pg.meta.page = pg.meta.pages;
+
+						// set unique event name between tables
+						pg.paginateEvent = Plugin.getTablePrefix('paging');
+
+						pg.pager = $(datatable.table).siblings('.' + pfx + 'datatable__pager');
+						if ($(pg.pager).hasClass(pfx + 'datatable--paging-loaded')) return;
+
+						// if class .'+pfx+'datatable--paging-loaded not exist, recreate pagination
+						$(pg.pager).remove();
+
+						// if no pages available
+						if (pg.meta.pages === 0) return;
+
+						// update datasource params
+						Plugin.setDataSourceParam('pagination', {
+							page: pg.meta.page,
+							pages: pg.meta.pages,
+							perpage: pg.meta.perpage,
+							total: pg.meta.total,
+						});
+
+						// default callback function, contains remote pagination handler
+						pg.callback = pg.serverCallback;
+						// custom callback function
+						if (typeof callback === 'function') pg.callback = callback;
+
+						pg.addPaginateEvent();
+						pg.populate();
+
+						pg.meta.page = Math.max(pg.meta.page || 1, pg.meta.page);
+
+						$(datatable).trigger(pg.paginateEvent, pg.meta);
+
+						pg.pagingBreakpoint.call();
+						$(window).resize(pg.pagingBreakpoint);
+					},
+					serverCallback: function(ctx, meta) {
+						Plugin.dataRender();
+					},
+					populate: function() {
+						var icons = Plugin.getOption('layout.icons.pagination');
+						var title = Plugin.getOption('translate.toolbar.pagination.items.default');
+						// pager root element
+						pg.pager = $('<div/>').addClass(pfx + 'datatable__pager ' + pfx + 'datatable--paging-loaded');
+						// numbering links
+						var pagerNumber = $('<ul/>').addClass(pfx + 'datatable__pager-nav');
+						pg.pagerLayout['pagination'] = pagerNumber;
+
+						// pager first/previous button
+						$('<li/>').
+							append($('<a/>').
+								attr('title', title.first).
+								addClass(pfx + 'datatable__pager-link ' + pfx + 'datatable__pager-link--first').
+								append($('<i/>').addClass(icons.first)).
+								on('click', pg.gotoMorePage).
+								attr('data-page', 1)).
+							appendTo(pagerNumber);
+						$('<li/>').
+							append($('<a/>').
+								attr('title', title.prev).
+								addClass(pfx + 'datatable__pager-link ' + pfx + 'datatable__pager-link--prev').
+								append($('<i/>').addClass(icons.prev)).
+								on('click', pg.gotoMorePage)).
+							appendTo(pagerNumber);
+
+						// more previous pages
+						$('<li/>').
+							append($('<a/>').
+								attr('title', title.more).
+								addClass(pfx + 'datatable__pager-link ' + pfx + 'datatable__pager-link--more-prev').
+								html($('<i/>').addClass(icons.more)).
+								on('click', pg.gotoMorePage)).
+							appendTo(pagerNumber);
+
+						$('<li/>').append($('<input/>').attr('type', 'text').addClass(pfx + 'pager-input form-control').attr('title', title.input).on('keyup', function() {
+							// on keyup update [data-page]
+							$(this).attr('data-page', Math.abs($(this).val()));
+						}).on('keypress', function(e) {
+							// on keypressed enter button
+							if (e.which === 13) pg.gotoMorePage(e);
+						})).appendTo(pagerNumber);
+
+						var pagesNumber = Plugin.getOption('toolbar.items.pagination.pages.desktop.pagesNumber');
+						var end = Math.ceil(pg.meta.page / pagesNumber) * pagesNumber;
+						var start = end - pagesNumber;
+						if (end > pg.meta.pages) {
+							end = pg.meta.pages;
+						}
+						for (var x = start; x < end; x++) {
+							var pageNumber = x + 1;
+							$('<li/>').
+								append($('<a/>').
+									addClass(pfx + 'datatable__pager-link ' + pfx + 'datatable__pager-link-number').
+									text(pageNumber).
+									attr('data-page', pageNumber).
+									attr('title', pageNumber).
+									on('click', pg.gotoPage)).
+								appendTo(pagerNumber);
+						}
+
+						// more next pages
+						$('<li/>').
+							append($('<a/>').
+								attr('title', title.more).
+								addClass(pfx + 'datatable__pager-link ' + pfx + 'datatable__pager-link--more-next').
+								html($('<i/>').addClass(icons.more)).
+								on('click', pg.gotoMorePage)).
+							appendTo(pagerNumber);
+
+						// pager next/last button
+						$('<li/>').
+							append($('<a/>').
+								attr('title', title.next).
+								addClass(pfx + 'datatable__pager-link ' + pfx + 'datatable__pager-link--next').
+								append($('<i/>').addClass(icons.next)).
+								on('click', pg.gotoMorePage)).
+							appendTo(pagerNumber);
+						$('<li/>').
+							append($('<a/>').
+								attr('title', title.last).
+								addClass(pfx + 'datatable__pager-link ' + pfx + 'datatable__pager-link--last').
+								append($('<i/>').addClass(icons.last)).
+								on('click', pg.gotoMorePage).
+								attr('data-page', pg.meta.pages)).
+							appendTo(pagerNumber);
+
+						// page info
+						if (Plugin.getOption('toolbar.items.info')) {
+							pg.pagerLayout['info'] = $('<div/>').addClass(pfx + 'datatable__pager-info').append($('<span/>').addClass(pfx + 'datatable__pager-detail'));
+						}
+
+						$.each(Plugin.getOption('toolbar.layout'), function(i, layout) {
+							$(pg.pagerLayout[layout]).appendTo(pg.pager);
+						});
+
+						// page size select
+						var pageSizeSelect = $('<select/>').
+							addClass('selectpicker ' + pfx + 'datatable__pager-size').
+							attr('title', Plugin.getOption('translate.toolbar.pagination.items.default.select')).
+							attr('data-width', '60px').
+							val(pg.meta.perpage).
+							on('change', pg.updatePerpage).
+							prependTo(pg.pagerLayout['info']);
+
+						var pageSizes = Plugin.getOption('toolbar.items.pagination.pageSizeSelect');
+						// default value here, to fix override option by user
+						if (pageSizes.length == 0) pageSizes = [10, 20, 30, 50, 100];
+						$.each(pageSizes, function(i, size) {
+							var display = size;
+							if (size === -1) display = Plugin.getOption('translate.toolbar.pagination.items.default.all');
+							$('<option/>').attr('value', size).html(display).appendTo(pageSizeSelect);
+						});
+
+						// init selectpicker to dropdown
+						$(datatable).ready(function() {
+							$('.selectpicker').
+								selectpicker().
+								on('hide.bs.select', function() {
+									// fix dropup arrow icon on hide
+									$(this).closest('.bootstrap-select').removeClass('dropup');
+								}).
+								siblings('.dropdown-toggle').
+								attr('title', Plugin.getOption('translate.toolbar.pagination.items.default.select'));
+						});
+
+						pg.paste();
+					},
+					paste: function() {
+						// insert pagination based on placement position, top|bottom
+						$.each($.unique(Plugin.getOption('toolbar.placement')),
+							function(i, position) {
+								if (position === 'bottom') {
+									$(pg.pager).clone(true).insertAfter(datatable.table);
+								}
+								if (position === 'top') {
+									// pager top need some extra space
+									$(pg.pager).clone(true).addClass(pfx + 'datatable__pager--top').insertBefore(datatable.table);
+								}
+							});
+					},
+					gotoMorePage: function(e) {
+						e.preventDefault();
+						// $(this) is a link of .'+pfx+'datatable__pager-link
+
+						if ($(this).attr('disabled') === 'disabled') return false;
+
+						var page = $(this).attr('data-page');
+
+						// event from text input
+						if (typeof page === 'undefined') {
+							page = $(e.target).attr('data-page');
+						}
+
+						pg.openPage(parseInt(page));
+						return false;
+					},
+					gotoPage: function(e) {
+						e.preventDefault();
+						// prevent from click same page number
+						if ($(this).hasClass(pfx + 'datatable__pager-link--active')) return;
+
+						pg.openPage(parseInt($(this).data('page')));
+					},
+					openPage: function(page) {
+						// currentPage is 1-based index
+						pg.meta.page = parseInt(page);
+
+						$(datatable).trigger(pg.paginateEvent, pg.meta);
+						pg.callback(pg, pg.meta);
+
+						// update page callback function
+						$(pg.pager).trigger(pfx + 'datatable--on-goto-page', pg.meta);
+					},
+					updatePerpage: function(e) {
+						e.preventDefault();
+						// if (Plugin.getOption('layout.height') === null) {
+						// fix white space, when perpage is set from many records to less records
+						// $('html, body').animate({scrollTop: $(datatable).position().top});
+						// }
+
+						pg.pager = $(datatable.table).siblings('.' + pfx + 'datatable__pager').removeClass(pfx + 'datatable--paging-loaded');
+
+						// on change select page size
+						if (e.originalEvent) {
+							pg.meta.perpage = parseInt($(this).val());
+						}
+
+						$(pg.pager).find('select.' + pfx + 'datatable__pager-size').val(pg.meta.perpage).attr('data-selected', pg.meta.perpage);
+
+						// update datasource params
+						Plugin.setDataSourceParam('pagination', {
+							page: pg.meta.page,
+							pages: pg.meta.pages,
+							perpage: pg.meta.perpage,
+							total: pg.meta.total,
+						});
+
+						// update page callback function
+						$(pg.pager).trigger(pfx + 'datatable--on-update-perpage', pg.meta);
+						$(datatable).trigger(pg.paginateEvent, pg.meta);
+						pg.callback(pg, pg.meta);
+
+						// update pagination info
+						pg.updateInfo.call();
+					},
+					addPaginateEvent: function(e) {
+						// pagination event
+						$(datatable).off(pg.paginateEvent).on(pg.paginateEvent, function(e, meta) {
+							Plugin.spinnerCallback(true);
+
+							pg.pager = $(datatable.table).siblings('.' + pfx + 'datatable__pager');
+							var pagerNumber = $(pg.pager).find('.' + pfx + 'datatable__pager-nav');
+
+							// set sync active page class
+							$(pagerNumber).find('.' + pfx + 'datatable__pager-link--active').removeClass(pfx + 'datatable__pager-link--active');
+							$(pagerNumber).find('.' + pfx + 'datatable__pager-link-number[data-page="' + meta.page + '"]').addClass(pfx + 'datatable__pager-link--active');
+
+							// set next and previous link page number
+							$(pagerNumber).find('.' + pfx + 'datatable__pager-link--prev').attr('data-page', Math.max(meta.page - 1, 1));
+							$(pagerNumber).find('.' + pfx + 'datatable__pager-link--next').attr('data-page', Math.min(meta.page + 1, meta.pages));
+
+							// current page input value sync
+							$(pg.pager).each(function() {
+								$(this).find('.' + pfx + 'pager-input[type="text"]').prop('value', meta.page);
+							});
+
+							$(pg.pager).find('.' + pfx + 'datatable__pager-nav').show();
+							if (meta.pages <= 1) {
+								// hide pager if has 1 page
+								$(pg.pager).find('.' + pfx + 'datatable__pager-nav').hide();
+							}
+
+							// update datasource params
+							Plugin.setDataSourceParam('pagination', {
+								page: pg.meta.page,
+								pages: pg.meta.pages,
+								perpage: pg.meta.perpage,
+								total: pg.meta.total,
+							});
+
+							$(pg.pager).find('select.' + pfx + 'datatable__pager-size').val(meta.perpage).attr('data-selected', meta.perpage);
+
+							// clear active rows
+							$(datatable.table).find('.' + pfx + 'checkbox > [type="checkbox"]').prop('checked', false);
+							$(datatable.table).find('.' + pfx + 'datatable__row--active').removeClass(pfx + 'datatable__row--active');
+
+							pg.updateInfo.call();
+							pg.pagingBreakpoint.call();
+							// Plugin.resetScroll();
+						});
+					},
+					updateInfo: function() {
+						var start = Math.max(pg.meta.perpage * (pg.meta.page - 1) + 1, 1);
+						var end = Math.min(start + pg.meta.perpage - 1, pg.meta.total);
+						// page info update
+						$(pg.pager).find('.' + pfx + 'datatable__pager-info').find('.' + pfx + 'datatable__pager-detail').html(Plugin.dataPlaceholder(
+							Plugin.getOption('translate.toolbar.pagination.items.info'), {
+								start: start,
+								end: pg.meta.perpage === -1 ? pg.meta.total : end,
+								pageSize: pg.meta.perpage === -1 ||
+								pg.meta.perpage >= pg.meta.total
+									? pg.meta.total
+									: pg.meta.perpage,
+								total: pg.meta.total,
+							}));
+					},
+
+					/**
+					 * Update pagination layout breakpoint
+					 */
+					pagingBreakpoint: function() {
+						// keep page links reference
+						var pagerNumber = $(datatable.table).siblings('.' + pfx + 'datatable__pager').find('.' + pfx + 'datatable__pager-nav');
+						if ($(pagerNumber).length === 0) return;
+
+						var currentPage = Plugin.getCurrentPage();
+						var pagerInput = $(pagerNumber).find('.' + pfx + 'pager-input').closest('li');
+
+						// reset
+						$(pagerNumber).find('li').show();
+
+						// pagination update
+						$.each(Plugin.getOption('toolbar.items.pagination.pages'),
+							function(mode, option) {
+								if (util.isInResponsiveRange(mode)) {
+									switch (mode) {
+										case 'desktop':
+										case 'tablet':
+											var end = Math.ceil(currentPage / option.pagesNumber) *
+												option.pagesNumber;
+											var start = end - option.pagesNumber;
+											$(pagerInput).hide();
+											pg.meta = Plugin.getDataSourceParam('pagination');
+											pg.paginationUpdate();
+											break;
+
+										case 'mobile':
+											$(pagerInput).show();
+											$(pagerNumber).find('.' + pfx + 'datatable__pager-link--more-prev').closest('li').hide();
+											$(pagerNumber).find('.' + pfx + 'datatable__pager-link--more-next').closest('li').hide();
+											$(pagerNumber).find('.' + pfx + 'datatable__pager-link-number').closest('li').hide();
+											break;
+									}
+
+									return false;
+								}
+							});
+					},
+
+					/**
+					 * Update pagination number and button display
+					 */
+					paginationUpdate: function() {
+						var pager = $(datatable.table).siblings('.' + pfx + 'datatable__pager').find('.' + pfx + 'datatable__pager-nav'),
+							pagerMorePrev = $(pager).find('.' + pfx + 'datatable__pager-link--more-prev'),
+							pagerMoreNext = $(pager).find('.' + pfx + 'datatable__pager-link--more-next'),
+							pagerFirst = $(pager).find('.' + pfx + 'datatable__pager-link--first'),
+							pagerPrev = $(pager).find('.' + pfx + 'datatable__pager-link--prev'),
+							pagerNext = $(pager).find('.' + pfx + 'datatable__pager-link--next'),
+							pagerLast = $(pager).find('.' + pfx + 'datatable__pager-link--last');
+
+						// get visible page
+						var pagerNumber = $(pager).find('.' + pfx + 'datatable__pager-link-number');
+						// get page before of first visible
+						var morePrevPage = Math.max($(pagerNumber).first().data('page') - 1, 1);
+						$(pagerMorePrev).each(function(i, prev) {
+							$(prev).attr('data-page', morePrevPage);
+						});
+						// show/hide <li>
+						if (morePrevPage === 1) {
+							$(pagerMorePrev).parent().hide();
+						} else {
+							$(pagerMorePrev).parent().show();
+						}
+
+						// get page after of last visible
+						var moreNextPage = Math.min($(pagerNumber).last().data('page') + 1,
+							pg.meta.pages);
+						$(pagerMoreNext).each(function(i, prev) {
+							$(pagerMoreNext).attr('data-page', moreNextPage).show();
+						});
+
+						// show/hide <li>
+						if (moreNextPage === pg.meta.pages
+							// missing dot fix when last hidden page is one left
+							&& moreNextPage === $(pagerNumber).last().data('page')) {
+							$(pagerMoreNext).parent().hide();
+						} else {
+							$(pagerMoreNext).parent().show();
+						}
+
+						// begin/end of pages
+						if (pg.meta.page === 1) {
+							$(pagerFirst).attr('disabled', true).addClass(pfx + 'datatable__pager-link--disabled');
+							$(pagerPrev).attr('disabled', true).addClass(pfx + 'datatable__pager-link--disabled');
+						} else {
+							$(pagerFirst).removeAttr('disabled').removeClass(pfx + 'datatable__pager-link--disabled');
+							$(pagerPrev).removeAttr('disabled').removeClass(pfx + 'datatable__pager-link--disabled');
+						}
+						if (pg.meta.page === pg.meta.pages) {
+							$(pagerNext).attr('disabled', true).addClass(pfx + 'datatable__pager-link--disabled');
+							$(pagerLast).attr('disabled', true).addClass(pfx + 'datatable__pager-link--disabled');
+						} else {
+							$(pagerNext).removeAttr('disabled').removeClass(pfx + 'datatable__pager-link--disabled');
+							$(pagerLast).removeAttr('disabled').removeClass(pfx + 'datatable__pager-link--disabled');
+						}
+
+						// display more buttons
+						var nav = Plugin.getOption('toolbar.items.pagination.navigation');
+						if (!nav.first) $(pagerFirst).remove();
+						if (!nav.prev) $(pagerPrev).remove();
+						if (!nav.next) $(pagerNext).remove();
+						if (!nav.last) $(pagerLast).remove();
+						if (!nav.more) {
+							$(pagerMorePrev).remove();
+							$(pagerMoreNext).remove();
+						}
+					},
+				};
+				pg.init(meta);
+				return pg;
+			},
+
+			/**
+			 * Hide/show table cell defined by
+			 * options[columns][i][responsive][visible/hidden]
+			 */
+			columnHide: function() {
+				var screen = util.getViewPort().width;
+				// foreach columns setting
+				$.each(options.columns, function(i, column) {
+					if (typeof column.responsive !== 'undefined' || typeof column.visible !== 'undefined') {
+						var field = column.field;
+						var tds = $.grep($(datatable.table).find('.' + pfx + 'datatable__cell'), function(n, i) {
+							return field === $(n).data('field');
+						});
+
+						setTimeout(function () {
+							// hide by force
+							if (Plugin.getObject('visible', column) === false) {
+								$(tds).hide();
+							} else {
+								// show/hide by responsive breakpoint
+								if (util.getBreakpoint(Plugin.getObject('responsive.hidden', column)) >= screen) {
+									$(tds).hide();
+								} else {
+									$(tds).show();
+								}
+								if (util.getBreakpoint(Plugin.getObject('responsive.visible', column)) <= screen) {
+									$(tds).show();
+								} else {
+									$(tds).hide();
+								}
+							}
+						});
+					}
+				});
+			},
+
+			/**
+			 * Setup sub datatable
+			 */
+			setupSubDatatable: function() {
+				var subTableCallback = Plugin.getOption('detail.content');
+				if (typeof subTableCallback !== 'function') return;
+
+				// subtable already exist
+				if ($(datatable.table).find('.' + pfx + 'datatable__subtable').length > 0) return;
+
+				$(datatable.wrap).addClass(pfx + 'datatable--subtable');
+
+				options.columns[0]['subtable'] = true;
+
+				// toggle on open sub table
+				var toggleSubTable = function(e) {
+					e.preventDefault();
+					// get parent row of this subtable
+					var parentRow = $(this).closest('.' + pfx + 'datatable__row');
+
+					// get subtable row for sub table
+					var subTableRow = $(parentRow).next('.' + pfx + 'datatable__row-subtable');
+					if ($(subTableRow).length === 0) {
+						// prepare DOM for sub table, each <tr> as parent and add <tr> as child table
+						subTableRow = $('<tr/>').
+							addClass(pfx + 'datatable__row-subtable ' + pfx + 'datatable__row-loading').
+							hide().
+							append($('<td/>').addClass(pfx + 'datatable__subtable').attr('colspan', Plugin.getTotalColumns()));
+						$(parentRow).after(subTableRow);
+						// add class to even row
+						if ($(parentRow).hasClass(pfx + 'datatable__row--even')) {
+							$(subTableRow).addClass(pfx + 'datatable__row-subtable--even');
+						}
+					}
+
+					$(subTableRow).toggle();
+
+					var subTable = $(subTableRow).find('.' + pfx + 'datatable__subtable');
+
+					// get id from first column of parent row
+					var primaryKey = $(this).closest('[data-field]:first-child').find('.' + pfx + 'datatable__toggle-subtable').data('value');
+
+					var icon = $(this).find('i').removeAttr('class');
+
+					// prevent duplicate datatable init
+					if ($(parentRow).hasClass(pfx + 'datatable__row--subtable-expanded')) {
+						$(icon).addClass(Plugin.getOption('layout.icons.rowDetail.collapse'));
+						// remove expand class from parent row
+						$(parentRow).removeClass(pfx + 'datatable__row--subtable-expanded');
+						// trigger event on collapse
+						$(datatable).trigger(pfx + 'datatable--on-collapse-subtable', [parentRow]);
+					} else {
+						// expand and run callback function
+						$(icon).addClass(Plugin.getOption('layout.icons.rowDetail.expand'));
+						// add expand class to parent row
+						$(parentRow).addClass(pfx + 'datatable__row--subtable-expanded');
+						// trigger event on expand
+						$(datatable).trigger(pfx + 'datatable--on-expand-subtable', [parentRow]);
+					}
+
+					// prevent duplicate datatable init
+					if ($(subTable).find('.' + pfx + 'datatable').length === 0) {
+						// get data by primary id
+						$.map(datatable.dataSet, function(n, i) {
+							// primary id must be at the first column, otherwise e.data will be undefined
+							if (primaryKey === n[options.columns[0].field]) {
+								e.data = n;
+								return true;
+							}
+							return false;
+						});
+
+						// deprecated in v5.0.6
+						e.detailCell = subTable;
+
+						e.parentRow = parentRow;
+						e.subTable = subTable;
+
+						// run callback with event
+						subTableCallback(e);
+
+						$(subTable).children('.' + pfx + 'datatable').on(pfx + 'datatable--on-init', function(e) {
+							$(subTableRow).removeClass(pfx + 'datatable__row-loading');
+						});
+						if (Plugin.getOption('data.type') === 'local') {
+							$(subTableRow).removeClass(pfx + 'datatable__row-loading');
+						}
+					}
+				};
+
+				var columns = options.columns;
+				$(datatable.tableBody).find('.' + pfx + 'datatable__row').each(function(tri, tr) {
+					$(tr).find('.' + pfx + 'datatable__cell').each(function(tdi, td) {
+						// get column settings by field
+						var column = $.grep(columns, function(n, i) {
+							return $(td).data('field') === n.field;
+						})[0];
+						if (typeof column !== 'undefined') {
+							var value = $(td).text();
+							// enable column subtable toggle
+							if (typeof column.subtable !== 'undefined' && column.subtable) {
+								// check if subtable toggle exist
+								if ($(td).find('.' + pfx + 'datatable__toggle-subtable').length > 0) return;
+								// append subtable toggle
+								$(td).
+									html($('<a/>').
+										addClass(pfx + 'datatable__toggle-subtable').
+										attr('href', '#').
+										attr('data-value', value).
+										attr('title', Plugin.getOption('detail.title')).
+										on('click', toggleSubTable).
+										append($('<i/>').css('width', $(td).data('width')).addClass(Plugin.getOption('layout.icons.rowDetail.collapse'))));
+							}
+						}
+					});
+				});
+
+				// $(datatable.tableHead).find('.'+pfx+'-datatable__row').first()
+			},
+
+			/**
+			 * Datasource mapping callback
+			 */
+			dataMapCallback: function(raw) {
+				// static dataset array
+				var dataSet = raw;
+				// dataset mapping callback
+				if (typeof Plugin.getOption('data.source.read.map') === 'function') {
+					return Plugin.getOption('data.source.read.map')(raw);
+				} else {
+					// default data mapping fallback
+					if (typeof raw !== 'undefined' && typeof raw.data !== 'undefined') {
+						dataSet = raw.data;
+					}
+				}
+				return dataSet;
+			},
+
+			isSpinning: false,
+			/**
+			 * BlockUI spinner callback
+			 * @param block
+			 * @param target
+			 */
+			spinnerCallback: function(block, target) {
+				if (typeof target === 'undefined') target = datatable;
+				// get spinner options
+				var spinnerOptions = Plugin.getOption('layout.spinner');
+				// spinner is disabled
+				if (typeof spinnerOptions === 'undefined' || !spinnerOptions) {
+					return;
+				}
+				if (block) {
+					if (!Plugin.isSpinning) {
+						if (typeof spinnerOptions.message !== 'undefined' && spinnerOptions.message === true) {
+							// use default spinner message from translation
+							spinnerOptions.message = Plugin.getOption('translate.records.processing');
+						}
+						Plugin.isSpinning = true;
+						if (typeof app !== 'undefined') {
+							app.block(target, spinnerOptions);
+						}
+					}
+				} else {
+					Plugin.isSpinning = false;
+					if (typeof app !== 'undefined') {
+						app.unblock(target);
+					}
+				}
+			},
+
+			/**
+			 * Default sort callback function
+			 * @param data
+			 * @param sort
+			 * @param column
+			 * @returns {*|Array.<T>|{sort, field}|{asc, desc}}
+			 */
+			sortCallback: function(data, sort, column) {
+				var type = column['type'] || 'string';
+				var format = column['format'] || '';
+				var field = column['field'];
+
+				return $(data).sort(function(a, b) {
+					var aField = a[field];
+					var bField = b[field];
+
+					switch (type) {
+						case 'date':
+							if (typeof moment === 'undefined') {
+								throw new Error('Moment.js is required.');
+							}
+							var diff = moment(aField, format).diff(moment(bField, format));
+							if (sort === 'asc') {
+								return diff > 0 ? 1 : diff < 0 ? -1 : 0;
+							} else {
+								return diff < 0 ? 1 : diff > 0 ? -1 : 0;
+							}
+							break;
+
+						case 'number':
+							if (isNaN(parseFloat(aField)) && aField != null) {
+								aField = Number(aField.replace(/[^0-9\.-]+/g, ''));
+							}
+							if (isNaN(parseFloat(bField)) && bField != null) {
+								bField = Number(bField.replace(/[^0-9\.-]+/g, ''));
+							}
+							aField = parseFloat(aField);
+							bField = parseFloat(bField);
+							if (sort === 'asc') {
+								return aField > bField ? 1 : aField < bField ? -1 : 0;
+							} else {
+								return aField < bField ? 1 : aField > bField ? -1 : 0;
+							}
+							break;
+
+						case 'string':
+						default:
+							if (sort === 'asc') {
+								return aField > bField ? 1 : aField < bField ? -1 : 0;
+							} else {
+								return aField < bField ? 1 : aField > bField ? -1 : 0;
+							}
+							break;
+					}
+				});
+			},
+
+			/**
+			 * Custom debug log
+			 * @param text
+			 * @param obj
+			 */
+			log: function(text, obj) {
+				if (typeof obj === 'undefined') obj = '';
+				if (datatable.debug) {
+					console.log(text, obj);
+				}
+			},
+
+			/**
+			 * Auto hide columnds overflow in row
+			 */
+			autoHide: function() {
+				var hiddenExist = false;
+				// force hide enabled
+				var hidDefault = $(datatable.table).find('[data-autohide-enabled]');
+				if (hidDefault.length) {
+					hiddenExist = true;
+					hidDefault.hide();
+				}
+
+				var toggleHiddenColumns = function(e) {
+					e.preventDefault();
+
+					var row = $(this).closest('.' + pfx + 'datatable__row');
+					var detailRow = $(row).next();
+
+					if (!$(detailRow).hasClass(pfx + 'datatable__row-detail')) {
+						$(this).find('i').removeClass(Plugin.getOption('layout.icons.rowDetail.collapse')).addClass(Plugin.getOption('layout.icons.rowDetail.expand'));
+
+						var hiddenCells = $(row).find('.' + pfx + 'datatable__cell:hidden');
+						var clonedCells = hiddenCells.clone().show();
+
+						detailRow = $('<tr/>').addClass(pfx + 'datatable__row-detail').insertAfter(row);
+						var detailRowTd = $('<td/>').addClass(pfx + 'datatable__detail').attr('colspan', Plugin.getTotalColumns()).appendTo(detailRow);
+
+						var detailSubTable = $('<table/>');
+						$(clonedCells).each(function() {
+							var field = $(this).data('field');
+							var column = $.grep(options.columns, function(n, i) {
+								return field === n.field;
+							})[0];
+							if (typeof column === 'undefined' || column.visible !== false) {
+								$(detailSubTable).
+										append($('<tr class="' + pfx + 'datatable__row"></tr>').
+												append($('<td class="' + pfx + 'datatable__cell"></td>').append($('<span/>').append(column.title))).
+												append(this));
+							}
+						});
+						$(detailRowTd).append(detailSubTable);
+
+					} else {
+						$(this).find('i').removeClass(Plugin.getOption('layout.icons.rowDetail.expand')).addClass(Plugin.getOption('layout.icons.rowDetail.collapse'));
+						$(detailRow).remove();
+					}
+				};
+
+				setTimeout(function () {
+					$(datatable.table).find('.' + pfx + 'datatable__cell').show();
+					$(datatable.tableBody).each(function() {
+						var recursive = 0;
+						while ($(this)[0].offsetWidth < $(this)[0].scrollWidth && recursive < options.columns.length) {
+							$(datatable.table).find('.' + pfx + 'datatable__row').each(function(i) {
+								var cell = $(this).find('.' + pfx + 'datatable__cell:not(:hidden):not([data-autohide-disabled])').last();
+								$(cell).hide();
+								hiddenExist = true;
+							});
+							recursive++;
+						}
+					});
+
+					if (hiddenExist) {
+						// toggle show hidden columns
+						$(datatable.tableBody).find('.' + pfx + 'datatable__row').each(function() {
+							// if no toggle yet
+							if($(this).find('.' + pfx + 'datatable__toggle-detail').length === 0) {
+								// add toggle
+								$(this).prepend($('<td/>').
+										addClass(pfx + 'datatable__cell ' + pfx + 'datatable__toggle-detail').
+										append($('<a/>').
+											addClass(pfx + 'datatable__toggle-detail').
+											attr('href', '').
+											on('click', toggleHiddenColumns).
+											append('<i class="' + Plugin.getOption('layout.icons.rowDetail.collapse') + '"></i>')));
+							}
+
+							// check if subtable toggle exist
+							if ($(datatable.tableHead).find('.' + pfx + 'datatable__toggle-detail').length === 0) {
+								// add empty column to the header and footer
+								$(datatable.tableHead).
+									find('.' + pfx + 'datatable__row').
+									first().
+									prepend('<th class="' + pfx + 'datatable__cell ' + pfx + 'datatable__toggle-detail"><span></span></th>');
+								$(datatable.tableFoot).
+									find('.' + pfx + 'datatable__row').
+									first().
+									prepend('<th class="' + pfx + 'datatable__cell ' + pfx + 'datatable__toggle-detail"><span></span></th>');
+							} else {
+								$(datatable.tableHead).find('.' + pfx + 'datatable__toggle-detail').find('span');
+							}
+						});
+					}
+				});
+
+				Plugin.adjustCellsWidth.call();
+			},
+
+			/**
+			 * To enable auto columns features for remote data source
+			 */
+			setAutoColumns: function() {
+				if (Plugin.getOption('data.autoColumns')) {
+					$.each(datatable.dataSet[0], function(k, v) {
+						var found = $.grep(options.columns, function(n, i) {
+							return k === n.field;
+						});
+						if (found.length === 0) {
+							options.columns.push({field: k, title: k});
+						}
+					});
+					$(datatable.tableHead).find('.' + pfx + 'datatable__row').remove();
+					Plugin.setHeadTitle();
+					if (Plugin.getOption('layout.footer')) {
+						$(datatable.tableFoot).find('.' + pfx + 'datatable__row').remove();
+						Plugin.setHeadTitle(datatable.tableFoot);
+					}
+				}
+			},
+
+			/********************
+			 ** HELPERS
+			 ********************/
+
+			/**
+			 * Check if table is a locked colums table
+			 */
+			isLocked: function() {
+				var isLocked = Plugin.lockEnabledColumns();
+				return isLocked.left.length > 0 || isLocked.right.length > 0;
+			},
+
+			isSubtable: function() {
+				return util.hasClass(datatable.wrap[0], pfx + 'datatable--subtable') || false;
+			},
+
+			/**
+			 * Get total extra space of an element for width calculation,
+			 * including padding, margin, border
+			 * @param element
+			 * @returns {number}
+			 */
+			getExtraSpace: function(element) {
+				var padding = parseInt($(element).css('paddingRight')) +
+					parseInt($(element).css('paddingLeft'));
+				var margin = parseInt($(element).css('marginRight')) +
+					parseInt($(element).css('marginLeft'));
+				var border = Math.ceil(
+					$(element).css('border-right-width').replace('px', ''));
+				return padding + margin + border;
+			},
+
+			/**
+			 * Insert data of array into {{ }} template placeholder
+			 * @param template
+			 * @param data
+			 * @returns {*}
+			 */
+			dataPlaceholder: function(template, data) {
+				var result = template;
+				$.each(data, function(key, val) {
+					result = result.replace('{{' + key + '}}', val);
+				});
+				return result;
+			},
+
+			/**
+			 * Get table unique ID
+			 * Note: table unique change each time refreshed
+			 * @param suffix
+			 * @returns {*}
+			 */
+			getTableId: function(suffix) {
+				if (typeof suffix === 'undefined') suffix = '';
+				var id = $(datatable).attr('id');
+				if (typeof id === 'undefined') {
+					id = $(datatable).attr('class').split(' ')[0];
+				}
+				return id + suffix;
+			},
+
+			/**
+			 * Get table prefix with depth number
+			 */
+			getTablePrefix: function(suffix) {
+				if (typeof suffix !== 'undefined') suffix = '-' + suffix;
+				return Plugin.getTableId() + '-' + Plugin.getDepth() + suffix;
+			},
+
+			/**
+			 * Get current table depth of sub table
+			 * @returns {number}
+			 */
+			getDepth: function() {
+				var depth = 0;
+				var table = datatable.table;
+				do {
+					table = $(table).parents('.' + pfx + 'datatable__table');
+					depth++;
+				} while ($(table).length > 0);
+				return depth;
+			},
+
+			/**
+			 * Keep state item
+			 * @param key
+			 * @param value
+			 */
+			stateKeep: function(key, value) {
+				key = Plugin.getTablePrefix(key);
+				if (Plugin.getOption('data.saveState') === false) return;
+				if (Plugin.getOption('data.saveState.webstorage') && localStorage) {
+					localStorage.setItem(key, JSON.stringify(value));
+				}
+				if (Plugin.getOption('data.saveState.cookie')) {
+					Cookies.set(key, JSON.stringify(value));
+				}
+			},
+
+			/**
+			 * Get state item
+			 * @param key
+			 * @param defValue
+			 */
+			stateGet: function(key, defValue) {
+				key = Plugin.getTablePrefix(key);
+				if (Plugin.getOption('data.saveState') === false) return;
+				var value = null;
+				if (Plugin.getOption('data.saveState.webstorage') && localStorage) {
+					value = localStorage.getItem(key);
+				} else {
+					value = Cookies.get(key);
+				}
+				if (typeof value !== 'undefined' && value !== null) {
+					return JSON.parse(value);
+				}
+			},
+
+			/**
+			 * Update data in state without clear existing
+			 * @param key
+			 * @param value
+			 */
+			stateUpdate: function(key, value) {
+				var ori = Plugin.stateGet(key);
+				if (typeof ori === 'undefined' || ori === null) ori = {};
+				Plugin.stateKeep(key, $.extend({}, ori, value));
+			},
+
+			/**
+			 * Remove state item
+			 * @param key
+			 */
+			stateRemove: function(key) {
+				key = Plugin.getTablePrefix(key);
+				if (localStorage) {
+					localStorage.removeItem(key);
+				}
+				Cookies.remove(key);
+			},
+
+			/**
+			 * Get total columns.
+			 */
+			getTotalColumns: function(tablePart) {
+				if (typeof tablePart === 'undefined') tablePart = datatable.tableBody;
+				return $(tablePart).find('.' + pfx + 'datatable__row').first().find('.' + pfx + 'datatable__cell').length;
+			},
+
+			/**
+			 * Get table row. Useful to get row when current table is in lock
+			 * mode. Can be used for both lock and normal table mode. By
+			 * default, returning result will be in a list of <td>.
+			 * @param tablePart
+			 * @param row 1-based index
+			 * @param tdOnly Optional. Default true
+			 * @returns {*}
+			 */
+			getOneRow: function(tablePart, row, tdOnly) {
+				if (typeof tdOnly === 'undefined') tdOnly = true;
+				// get list of <tr>
+				var result = $(tablePart).find('.' + pfx + 'datatable__row:not(.' + pfx + 'datatable__row-detail):nth-child(' + row + ')');
+				if (tdOnly) {
+					// get list of <td> or <th>
+					result = result.find('.' + pfx + 'datatable__cell');
+				}
+				return result;
+			},
+
+			/**
+			 * Sort table row at HTML level by column index.
+			 * todo; Not in use.
+			 * @param header Header sort clicked
+			 * @param sort asc|desc. Optional. Default asc
+			 * @param int Boolean. Optional. Comparison value parse to integer.
+			 *     Default false
+			 */
+			sortColumn: function(header, sort, int) {
+				if (typeof sort === 'undefined') sort = 'asc'; // desc
+				if (typeof int === 'undefined') int = false;
+
+				var column = $(header).index();
+				var rows = $(datatable.tableBody).find('.' + pfx + 'datatable__row');
+				var hIndex = $(header).closest('.' + pfx + 'datatable__lock').index();
+				if (hIndex !== -1) {
+					rows = $(datatable.tableBody).find('.' + pfx + 'datatable__lock:nth-child(' + (hIndex + 1) + ')').find('.' + pfx + 'datatable__row');
+				}
+
+				var container = $(rows).parent();
+				$(rows).sort(function(a, b) {
+					var tda = $(a).find('td:nth-child(' + column + ')').text();
+					var tdb = $(b).find('td:nth-child(' + column + ')').text();
+
+					if (int) {
+						// useful for integer type sorting
+						tda = parseInt(tda);
+						tdb = parseInt(tdb);
+					}
+
+					if (sort === 'asc') {
+						return tda > tdb ? 1 : tda < tdb ? -1 : 0;
+					} else {
+						return tda < tdb ? 1 : tda > tdb ? -1 : 0;
+					}
+				}).appendTo(container);
+			},
+
+			/**
+			 * Perform sort remote and local
+			 */
+			sorting: function() {
+				var sortObj = {
+					init: function() {
+						if (options.sortable) {
+							$(datatable.tableHead).
+								find('.' + pfx + 'datatable__cell:not(.' + pfx + 'datatable__cell--check)').
+								addClass(pfx + 'datatable__cell--sort').
+								off('click').
+								on('click', sortObj.sortClick);
+							// first init
+							sortObj.setIcon();
+						}
+					},
+					setIcon: function() {
+						var meta = Plugin.getDataSourceParam('sort');
+						if ($.isEmptyObject(meta)) return;
+
+						var column = Plugin.getColumnByField(meta.field);
+						// sort is disabled for this column
+						if (typeof column !== 'undefined' && typeof column.sortable !== 'undefined' && column.sortable === false) return;
+
+						// sort icon beside column header
+						var td = $(datatable.tableHead).find('.' + pfx + 'datatable__cell[data-field="' + meta.field + '"]').attr('data-sort', meta.sort);
+						var sorting = $(td).find('span');
+						var icon = $(sorting).find('i');
+
+						var icons = Plugin.getOption('layout.icons.sort');
+						// update sort icon; desc & asc
+						if ($(icon).length > 0) {
+							$(icon).removeAttr('class').addClass(icons[meta.sort]);
+						} else {
+							$(sorting).append($('<i/>').addClass(icons[meta.sort]));
+						}
+
+						// set sorted class to header on init
+						$(td).addClass(pfx + 'datatable__cell--sorted');
+					},
+					sortClick: function(e) {
+						var meta = Plugin.getDataSourceParam('sort');
+						var field = $(this).data('field');
+						var column = Plugin.getColumnByField(field);
+						// sort is disabled for this column
+						if (typeof column.sortable !== 'undefined' && column.sortable === false) return;
+
+						// set sorted class to header
+						$(datatable.tableHead).find('th').removeClass(pfx + 'datatable__cell--sorted');
+						util.addClass(this, pfx + 'datatable__cell--sorted');
+
+						$(datatable.tableHead).find('.' + pfx + 'datatable__cell > span > i').remove();
+
+						if (options.sortable) {
+							Plugin.spinnerCallback(true);
+
+							var sort = 'desc';
+							if (Plugin.getObject('field', meta) === field) {
+								sort = Plugin.getObject('sort', meta);
+							}
+
+							// toggle sort
+							sort = typeof sort === 'undefined' || sort === 'desc'
+								? 'asc'
+								: 'desc';
+
+							// update field and sort params
+							meta = {field: field, sort: sort};
+							Plugin.setDataSourceParam('sort', meta);
+
+							sortObj.setIcon();
+
+							setTimeout(function() {
+								Plugin.dataRender('sort');
+								$(datatable).trigger(pfx + 'datatable--on-sort', meta);
+							}, 300);
+						}
+					},
+				};
+				sortObj.init();
+			},
+
+			/**
+			 * Update JSON data list linked with sort, filter and pagination.
+			 * Call this method, before using dataSet variable.
+			 * @returns {*|null}
+			 */
+			localDataUpdate: function() {
+				var params = Plugin.getDataSourceParam();
+				if (typeof datatable.originalDataSet === 'undefined') {
+					datatable.originalDataSet = datatable.dataSet;
+				}
+
+				var field = Plugin.getObject('sort.field', params);
+				var sort = Plugin.getObject('sort.sort', params);
+				var column = Plugin.getColumnByField(field);
+				if (typeof column !== 'undefined' && Plugin.getOption('data.serverSorting') !== true) {
+					if (typeof column.sortCallback === 'function') {
+						datatable.dataSet = column.sortCallback(datatable.originalDataSet, sort, column);
+					} else {
+						datatable.dataSet = Plugin.sortCallback(datatable.originalDataSet, sort, column);
+					}
+				} else {
+					datatable.dataSet = datatable.originalDataSet;
+				}
+
+				// if server filter enable, don't pass local filter
+				if (typeof params.query === 'object' && !Plugin.getOption('data.serverFiltering')) {
+					params.query = params.query || {};
+
+					var nestedSearch = function(obj) {
+						for (var field in obj) {
+							if (!obj.hasOwnProperty(field)) continue;
+							if (typeof obj[field] === 'string') {
+								if (obj[field].toLowerCase() == search || obj[field].toLowerCase().indexOf(search) !== -1) {
+									return true;
+								}
+							} else if (typeof obj[field] === 'number') {
+								if (obj[field] === search) {
+									return true;
+								}
+							} else if (typeof obj[field] === 'object') {
+								if (nestedSearch(obj[field])) {
+									return true;
+								}
+							}
+						}
+						return false;
+					};
+
+					var search = $(Plugin.getOption('search.input')).val();
+					if (typeof search !== 'undefined' && search !== '') {
+						search = search.toLowerCase();
+						datatable.dataSet = $.grep(datatable.dataSet, nestedSearch);
+						// remove generalSearch as we don't need this for next columns filter
+						delete params.query[Plugin.getGeneralSearchKey()];
+					}
+
+					// remove empty element from array
+					$.each(params.query, function(k, v) {
+						if (v === '') {
+							delete params.query[k];
+						}
+					});
+
+					// filter array by query
+					datatable.dataSet = Plugin.filterArray(datatable.dataSet, params.query);
+
+					// reset array index
+					datatable.dataSet = datatable.dataSet.filter(function() {
+						return true;
+					});
+				}
+
+				return datatable.dataSet;
+			},
+
+			/**
+			 * Utility helper to filter array by object pair of {key:value}
+			 * @param list
+			 * @param args
+			 * @param operator
+			 * @returns {*}
+			 */
+			filterArray: function(list, args, operator) {
+				if (typeof list !== 'object') {
+					return [];
+				}
+
+				if (typeof operator === 'undefined') operator = 'AND';
+
+				if (typeof args !== 'object') {
+					return list;
+				}
+
+				operator = operator.toUpperCase();
+
+				if ($.inArray(operator, ['AND', 'OR', 'NOT']) === -1) {
+					return [];
+				}
+
+				var count = Object.keys(args).length;
+				var filtered = [];
+
+				$.each(list, function(key, obj) {
+					var to_match = obj;
+
+					var matched = 0;
+					$.each(args, function(m_key, m_value) {
+						m_value = m_value instanceof Array ? m_value : [m_value];
+						var match_property = Plugin.getObject(m_key, to_match);
+						if (typeof match_property !== 'undefined' && match_property) {
+							var lhs = match_property.toString().toLowerCase();
+							m_value.forEach(function(item, index) {
+								if (item.toString().toLowerCase() == lhs || lhs.indexOf(item.toString().toLowerCase()) !== -1) {
+									matched++;
+								}
+							});
+						}
+					});
+
+					if (('AND' == operator && matched == count) ||
+						('OR' == operator && matched > 0) ||
+						('NOT' == operator && 0 == matched)) {
+						filtered[key] = obj;
+					}
+				});
+
+				list = filtered;
+
+				return list;
+			},
+
+			/**
+			 * Reset lock column scroll to 0 when resize
+			 */
+			resetScroll: function() {
+				if (typeof options.detail === 'undefined' && Plugin.getDepth() === 1) {
+					$(datatable.table).find('.' + pfx + 'datatable__row').css('left', 0);
+					$(datatable.table).find('.' + pfx + 'datatable__lock').css('top', 0);
+					$(datatable.tableBody).scrollTop(0);
+				}
+			},
+
+			/**
+			 * Get column options by field
+			 * @param field
+			 * @returns {boolean}
+			 */
+			getColumnByField: function(field) {
+				if (typeof field === 'undefined') return;
+				var result;
+				$.each(options.columns, function(i, column) {
+					if (field === column.field) {
+						result = column;
+						return false;
+					}
+				});
+				return result;
+			},
+
+			/**
+			 * Get default sort column
+			 */
+			getDefaultSortColumn: function() {
+				var result;
+				$.each(options.columns, function(i, column) {
+					if (typeof column.sortable !== 'undefined'
+						&& $.inArray(column.sortable, ['asc', 'desc']) !== -1) {
+						result = {sort: column.sortable, field: column.field};
+						return false;
+					}
+				});
+				return result;
+			},
+
+			/**
+			 * Helper to get element dimensions, when the element is hidden
+			 * @param element
+			 * @param includeMargin
+			 * @returns {{width: number, height: number, innerWidth: number,
+			 *     innerHeight: number, outerWidth: number, outerHeight:
+			 *     number}}
+			 */
+			getHiddenDimensions: function(element, includeMargin) {
+				var props = {
+						position: 'absolute',
+						visibility: 'hidden',
+						display: 'block',
+					},
+					dim = {
+						width: 0,
+						height: 0,
+						innerWidth: 0,
+						innerHeight: 0,
+						outerWidth: 0,
+						outerHeight: 0,
+					},
+					hiddenParents = $(element).parents().addBack().not(':visible');
+				includeMargin = (typeof includeMargin === 'boolean')
+					? includeMargin
+					: false;
+
+				var oldProps = [];
+				hiddenParents.each(function() {
+					var old = {};
+
+					for (var name in props) {
+						old[name] = this.style[name];
+						this.style[name] = props[name];
+					}
+
+					oldProps.push(old);
+				});
+
+				dim.width = $(element).width();
+				dim.outerWidth = $(element).outerWidth(includeMargin);
+				dim.innerWidth = $(element).innerWidth();
+				dim.height = $(element).height();
+				dim.innerHeight = $(element).innerHeight();
+				dim.outerHeight = $(element).outerHeight(includeMargin);
+
+				hiddenParents.each(function(i) {
+					var old = oldProps[i];
+					for (var name in props) {
+						this.style[name] = old[name];
+					}
+				});
+
+				return dim;
+			},
+
+			getGeneralSearchKey: function() {
+				var searchInput = $(Plugin.getOption('search.input'));
+				return $(searchInput).prop('name') || $(searchInput).prop('id');
+			},
+
+			/**
+			 * Get value by dot notation path string and to prevent undefined
+			 * errors
+			 * @param path String Dot notation path in string
+			 * @param object Object to iterate
+			 * @returns {*}
+			 */
+			getObject: function(path, object) {
+				return path.split('.').reduce(function(obj, i) {
+					return obj !== null && typeof obj[i] !== 'undefined' ? obj[i] : null;
+				}, object);
+			},
+
+			/**
+			 * Extend object
+			 * @param obj
+			 * @param path
+			 * @param value
+			 * @returns {*}
+			 */
+			extendObj: function(obj, path, value) {
+				var levels = path.split('.'),
+					i = 0;
+
+				function createLevel(child) {
+					var name = levels[i++];
+					if (typeof child[name] !== 'undefined' && child[name] !== null) {
+						if (typeof child[name] !== 'object' &&
+							typeof child[name] !== 'function') {
+							child[name] = {};
+						}
+					} else {
+						child[name] = {};
+					}
+					if (i === levels.length) {
+						child[name] = value;
+					} else {
+						createLevel(child[name]);
+					}
+				}
+
+				createLevel(obj);
+				return obj;
+			},
+
+			rowEvenOdd: function() {
+				// row even class
+				$(datatable.tableBody).find('.' + pfx + 'datatable__row').removeClass(pfx + 'datatable__row--even');
+				if ($(datatable.wrap).hasClass(pfx + 'datatable--subtable')) {
+					$(datatable.tableBody).find('.' + pfx + 'datatable__row:not(.' + pfx + 'datatable__row-detail):even').addClass(pfx + 'datatable__row--even');
+				} else {
+					$(datatable.tableBody).find('.' + pfx + 'datatable__row:nth-child(even)').addClass(pfx + 'datatable__row--even');
+				}
+			},
+
+			/********************
+			 ** PUBLIC API METHODS
+			 ********************/
+
+			// delay timer
+			timer: 0,
+
+			/**
+			 * Redraw datatable by recalculating its DOM elements, etc.
+			 * @returns {jQuery}
+			 */
+			redraw: function() {
+				Plugin.adjustCellsWidth.call();
+				if (Plugin.isLocked()) {
+					// fix hiding cell width issue
+					Plugin.scrollbar();
+					Plugin.resetScroll();
+					Plugin.adjustCellsHeight.call();
+				}
+				Plugin.adjustLockContainer.call();
+				Plugin.initHeight.call();
+				return datatable;
+			},
+
+			/**
+			 * Shortcode to reload
+			 * @returns {jQuery}
+			 */
+			load: function() {
+				Plugin.reload();
+				return datatable;
+			},
+
+			/**
+			 * Datasource reload
+			 * @returns {jQuery}
+			 */
+			reload: function() {
+				var delay = (function() {
+					return function(callback, ms) {
+						clearTimeout(Plugin.timer);
+						Plugin.timer = setTimeout(callback, ms);
+					};
+				})();
+				delay(function() {
+					// local only. remote pagination will skip this block
+					if (!options.data.serverFiltering) {
+						Plugin.localDataUpdate();
+					}
+					Plugin.dataRender();
+					$(datatable).trigger(pfx + 'datatable--on-reloaded');
+				}, Plugin.getOption('search.delay'));
+				return datatable;
+			},
+
+			/**
+			 * Get record by record ID
+			 * @param id
+			 * @returns {jQuery}
+			 */
+			getRecord: function(id) {
+				if (typeof datatable.tableBody === 'undefined') datatable.tableBody = $(datatable.table).children('tbody');
+				$(datatable.tableBody).find('.' + pfx + 'datatable__cell:first-child').each(function(i, cell) {
+					if (id == $(cell).text()) {
+						var rowNumber = $(cell).closest('.' + pfx + 'datatable__row').index() + 1;
+						datatable.API.record = datatable.API.value = Plugin.getOneRow(datatable.tableBody, rowNumber);
+						return datatable;
+					}
+				});
+				return datatable;
+			},
+
+			/**
+			 * @deprecated in v5.0.6
+			 * Get column of current record ID
+			 * @param columnName
+			 * @returns {jQuery}
+			 */
+			getColumn: function(columnName) {
+				Plugin.setSelectedRecords();
+				datatable.API.value = $(datatable.API.record).find('[data-field="' + columnName + '"]');
+				return datatable;
+			},
+
+			/**
+			 * Destroy datatable to original DOM state before datatable was
+			 * initialized
+			 * @returns {jQuery}
+			 */
+			destroy: function() {
+				$(datatable).parent().find('.' + pfx + 'datatable__pager').remove();
+				var initialDatatable = $(datatable.initialDatatable).addClass(pfx + 'datatable--destroyed').show();
+				$(datatable).replaceWith(initialDatatable);
+				datatable = initialDatatable;
+				$(datatable).trigger(pfx + 'datatable--on-destroy');
+				Plugin.isInit = false;
+				initialDatatable = null;
+				return initialDatatable;
+			},
+
+			/**
+			 * Sort by column field
+			 * @param field
+			 * @param sort
+			 */
+			sort: function(field, sort) {
+				// toggle sort
+				sort = typeof sort === 'undefined' ? 'asc' : sort;
+
+				Plugin.spinnerCallback(true);
+
+				// update field and sort params
+				var meta = {field: field, sort: sort};
+				Plugin.setDataSourceParam('sort', meta);
+
+				setTimeout(function() {
+					Plugin.dataRender('sort');
+					$(datatable).trigger(pfx + 'datatable--on-sort', meta);
+					$(datatable.tableHead).find('.' + pfx + 'datatable__cell > span > i').remove();
+				}, 300);
+
+				return datatable;
+			},
+
+			/**
+			 * @deprecated in v5.0.6
+			 * Get current selected column value
+			 * @returns {jQuery}
+			 */
+			getValue: function() {
+				return $(datatable.API.value).text();
+			},
+
+			/**
+			 * Set checkbox active
+			 * @param cell JQuery selector or checkbox ID
+			 */
+			setActive: function(cell) {
+				if (typeof cell === 'string') {
+					// set by checkbox id
+					cell = $(datatable.tableBody).find('.' + pfx + 'checkbox--single > [type="checkbox"][value="' + cell + '"]');
+				}
+
+				$(cell).prop('checked', true);
+
+				var ids = [];
+				$(cell).each(function(i, td) {
+					// normal table
+					var row = $(td).closest('tr').addClass(pfx + 'datatable__row--active');
+					var colIndex = $(row).index() + 1;
+
+					// lock table
+					$(row).closest('tbody').find('tr:nth-child(' + colIndex + ')').not('.' + pfx + 'datatable__row-subtable').addClass(pfx + 'datatable__row--active');
+
+					var id = $(td).attr('value');
+					if (typeof id !== 'undefined') {
+						ids.push(id);
+					}
+				});
+
+				$(datatable).trigger(pfx + 'datatable--on-check', [ids]);
+			},
+
+			/**
+			 * Set checkbox inactive
+			 * @param cell JQuery selector or checkbox ID
+			 */
+			setInactive: function(cell) {
+				if (typeof cell === 'string') {
+					// set by checkbox id
+					cell = $(datatable.tableBody).find('.' + pfx + 'checkbox--single > [type="checkbox"][value="' + cell + '"]');
+				}
+
+				$(cell).prop('checked', false);
+
+				var ids = [];
+				$(cell).each(function(i, td) {
+					// normal table
+					var row = $(td).closest('tr').removeClass(pfx + 'datatable__row--active');
+					var colIndex = $(row).index() + 1;
+
+					// lock table
+					$(row).closest('tbody').find('tr:nth-child(' + colIndex + ')').not('.' + pfx + 'datatable__row-subtable').removeClass(pfx + 'datatable__row--active');
+
+					var id = $(td).attr('value');
+					if (typeof id !== 'undefined') {
+						ids.push(id);
+					}
+				});
+
+				$(datatable).trigger(pfx + 'datatable--on-uncheck', [ids]);
+			},
+
+			/**
+			 * Set all checkboxes active or inactive
+			 * @param active
+			 */
+			setActiveAll: function(active) {
+				var checkboxes = $(datatable.table).
+					find('> tbody, > thead').
+					find('tr').not('.' + pfx + 'datatable__row-subtable').
+					find('.' + pfx + 'datatable__cell--check [type="checkbox"]');
+				if (active) {
+					Plugin.setActive(checkboxes);
+				} else {
+					Plugin.setInactive(checkboxes);
+				}
+			},
+
+			/**
+			 * @deprecated in v5.0.6
+			 * Get selected rows which are active
+			 * @returns {jQuery}
+			 */
+			setSelectedRecords: function() {
+				datatable.API.record = $(datatable.tableBody).find('.' + pfx + 'datatable__row--active');
+				return datatable;
+			},
+
+			/**
+			 * Get selected records
+			 * @returns {null}
+			 */
+			getSelectedRecords: function() {
+				// support old method
+				Plugin.setSelectedRecords();
+				datatable.API.record = datatable.rows('.' + pfx + 'datatable__row--active').nodes();
+				return datatable.API.record;
+			},
+
+			/**
+			 * Get options by dots notation path
+			 * @param path String Dot notation path in string
+			 * @returns {*}
+			 */
+			getOption: function(path) {
+				return Plugin.getObject(path, options);
+			},
+
+			/**
+			 * Set global options nodes by dots notation path
+			 * @param path
+			 * @param object
+			 */
+			setOption: function(path, object) {
+				options = Plugin.extendObj(options, path, object);
+			},
+
+			/**
+			 * Search filter for local & remote
+			 * @param value
+			 * @param columns. Optional list of columns to be filtered.
+			 */
+			search: function(value, columns) {
+				if (typeof columns !== 'undefined') columns = $.makeArray(columns);
+				var delay = (function() {
+					return function(callback, ms) {
+						clearTimeout(Plugin.timer);
+						Plugin.timer = setTimeout(callback, ms);
+					};
+				})();
+
+				delay(function() {
+					// get query parameters
+					var query = Plugin.getDataSourceQuery();
+
+					// search not by columns
+					if (typeof columns === 'undefined' && typeof value !== 'undefined') {
+						var key = Plugin.getGeneralSearchKey();
+						query[key] = value;
+					}
+
+					// search by columns, support multiple columns
+					if (typeof columns === 'object') {
+						$.each(columns, function(k, column) {
+							query[column] = value;
+						});
+						// remove empty element from arrays
+						$.each(query, function(k, v) {
+							if (v === '' || $.isEmptyObject(v)) {
+								delete query[k];
+							}
+						});
+					}
+
+					Plugin.setDataSourceQuery(query);
+
+					// local filter only. remote pagination will skip this block
+					if (!options.data.serverFiltering) {
+						Plugin.localDataUpdate();
+					}
+					Plugin.dataRender('search');
+				}, Plugin.getOption('search.delay'));
+			},
+
+			/**
+			 * Set datasource params extract
+			 * @param param
+			 * @param value
+			 */
+			setDataSourceParam: function(param, value) {
+				datatable.API.params = $.extend({}, {
+					pagination: {page: 1, perpage: Plugin.getOption('data.pageSize')},
+					sort: Plugin.getDefaultSortColumn(),
+					query: {},
+				}, datatable.API.params, Plugin.stateGet(Plugin.stateId));
+
+				datatable.API.params = Plugin.extendObj(datatable.API.params, param, value);
+
+				Plugin.stateKeep(Plugin.stateId, datatable.API.params);
+			},
+
+			/**
+			 * Get datasource params
+			 * @param param
+			 */
+			getDataSourceParam: function(param) {
+				datatable.API.params = $.extend({}, {
+					pagination: {page: 1, perpage: Plugin.getOption('data.pageSize')},
+					sort: Plugin.getDefaultSortColumn(),
+					query: {},
+				}, datatable.API.params, Plugin.stateGet(Plugin.stateId));
+
+				if (typeof param === 'string') {
+					return Plugin.getObject(param, datatable.API.params);
+				}
+
+				return datatable.API.params;
+			},
+
+			/**
+			 * Shortcode to datatable.getDataSourceParam('query');
+			 * @returns {*}
+			 */
+			getDataSourceQuery: function() {
+				return Plugin.getDataSourceParam('query') || {};
+			},
+
+			/**
+			 * Shortcode to datatable.setDataSourceParam('query', query);
+			 * @param query
+			 */
+			setDataSourceQuery: function(query) {
+				Plugin.setDataSourceParam('query', query);
+			},
+
+			/**
+			 * Get current page number
+			 * @returns {number}
+			 */
+			getCurrentPage: function() {
+				return $(datatable.table).
+					siblings('.' + pfx + 'datatable__pager').
+					last().
+					find('.' + pfx + 'datatable__pager-nav').
+					find('.' + pfx + 'datatable__pager-link.' + pfx + 'datatable__pager-link--active').
+					data('page') || 1;
+			},
+
+			/**
+			 * Get selected dropdown page size
+			 * @returns {*|number}
+			 */
+			getPageSize: function() {
+				return $(datatable.table).siblings('.' + pfx + 'datatable__pager').last().find('select.' + pfx + 'datatable__pager-size').val() || 10;
+			},
+
+			/**
+			 * Get total rows
+			 */
+			getTotalRows: function() {
+				return datatable.API.params.pagination.total;
+			},
+
+			/**
+			 * Get full dataset in grid
+			 * @returns {*|null|Array}
+			 */
+			getDataSet: function() {
+				return datatable.originalDataSet;
+			},
+
+			nodeTr: [],
+			nodeTd: [],
+			nodeCols: [],
+			recentNode: [],
+
+			table: function() {
+				if (typeof datatable.table !== 'undefined') {
+					return datatable.table;
+				}
+			},
+
+			/**
+			 * Select a single row from the table
+			 * @param selector
+			 * @returns {jQuery}
+			 */
+			row: function(selector) {
+				Plugin.rows(selector);
+				Plugin.nodeTr = Plugin.recentNode = $(Plugin.nodeTr).first();
+				return datatable;
+			},
+
+			/**
+			 * Select multiple rows from the table
+			 * @param selector
+			 * @returns {jQuery}
+			 */
+			rows: function(selector) {
+				if (Plugin.isLocked()) {
+					Plugin.nodeTr = Plugin.recentNode = $(datatable.tableBody).find(selector).filter('.' + pfx + 'datatable__lock--scroll > .' + pfx + 'datatable__row');
+				} else {
+					Plugin.nodeTr = Plugin.recentNode = $(datatable.tableBody).find(selector).filter('.' + pfx + 'datatable__row');
+				}
+				return datatable;
+			},
+
+			/**
+			 * Select a single column from the table
+			 * @param index zero-based index
+			 * @returns {jQuery}
+			 */
+			column: function(index) {
+				Plugin.nodeCols = Plugin.recentNode = $(datatable.tableBody).find('.' + pfx + 'datatable__cell:nth-child(' + (index + 1) + ')');
+				return datatable;
+			},
+
+			/**
+			 * Select multiple columns from the table
+			 * @param selector
+			 * @returns {jQuery}
+			 */
+			columns: function(selector) {
+				var context = datatable.table;
+				if (Plugin.nodeTr === Plugin.recentNode) {
+					context = Plugin.nodeTr;
+				}
+				var columns = $(context).find('.' + pfx + 'datatable__cell[data-field="' + selector + '"]');
+				if (columns.length > 0) {
+					Plugin.nodeCols = Plugin.recentNode = columns;
+				} else {
+					Plugin.nodeCols = Plugin.recentNode = $(context).find(selector).filter('.' + pfx + 'datatable__cell');
+				}
+				return datatable;
+			},
+
+			cell: function(selector) {
+				Plugin.cells(selector);
+				Plugin.nodeTd = Plugin.recentNode = $(Plugin.nodeTd).first();
+				return datatable;
+			},
+
+			cells: function(selector) {
+				var cells = $(datatable.tableBody).find('.' + pfx + 'datatable__cell');
+				if (typeof selector !== 'undefined') {
+					cells = $(cells).filter(selector);
+				}
+				Plugin.nodeTd = Plugin.recentNode = cells;
+				return datatable;
+			},
+
+			/**
+			 * Delete the selected row from the table
+			 * @returns {jQuery}
+			 */
+			remove: function() {
+				if ($(Plugin.nodeTr.length) && Plugin.nodeTr === Plugin.recentNode) {
+					$(Plugin.nodeTr).remove();
+				}
+				Plugin.layoutUpdate();
+				return datatable;
+			},
+
+			/**
+			 * Show or hide the columns or rows
+			 */
+			visible: function(bool) {
+				if ($(Plugin.recentNode.length)) {
+					var locked = Plugin.lockEnabledColumns();
+					if (Plugin.recentNode === Plugin.nodeCols) {
+						var index = Plugin.recentNode.index();
+
+						if (Plugin.isLocked()) {
+							var scrollColumns = $(Plugin.recentNode).closest('.' + pfx + 'datatable__lock--scroll').length;
+							if (scrollColumns) {
+								// is at center of scrollable area
+								index += locked.left.length + 1;
+							} else if ($(Plugin.recentNode).closest('.' + pfx + 'datatable__lock--right').length) {
+								// is at the right locked table
+								index += locked.left.length + scrollColumns + 1;
+							}
+						}
+					}
+
+					if (bool) {
+						if (Plugin.recentNode === Plugin.nodeCols) {
+							delete options.columns[index-1].visible;
+						}
+						$(Plugin.recentNode).show();
+					} else {
+						if (Plugin.recentNode === Plugin.nodeCols) {
+							Plugin.setOption('columns.' + (index-1) + '.visible', false);
+						}
+						$(Plugin.recentNode).hide();
+					}
+					Plugin.columnHide();
+					Plugin.redraw();
+				}
+			},
+
+			/**
+			 * Get the the DOM element for the selected rows or columns
+			 * @returns {Array}
+			 */
+			nodes: function() {
+				return Plugin.recentNode;
+			},
+
+			/**
+			 * will be implemented soon
+			 * @returns {jQuery}
+			 */
+			dataset: function() {
+				return datatable;
+			},
+
+			/**
+			 * Open page by number
+			 * @param page number
+			 */
+			gotoPage: function (page) {
+				if (typeof Plugin.pagingObject !== 'undefined') {
+					Plugin.isInit = true;
+					Plugin.pagingObject.openPage(page);
+				}
+			},
+
+		};
+
+		/**
+		 * Public API methods can be used directly by datatable
+		 */
+		$.each(Plugin, function(funcName, func) {
+			datatable[funcName] = func;
+		});
+
+		// initialize main datatable plugin
+		if (typeof options !== 'undefined') {
+			if (typeof options === 'string') {
+				var method = options;
+				datatable = $(this).data(pluginName);
+				if (typeof datatable !== 'undefined') {
+					options = datatable.options;
+					Plugin[method].apply(this, Array.prototype.slice.call(arguments, 1));
+				}
+			} else {
+				if (!datatable.data(pluginName) && !$(this).hasClass(pfx + 'datatable--loaded')) {
+					datatable.dataSet = null;
+					datatable.textAlign = {
+						left: pfx + 'datatable__cell--left',
+						center: pfx + 'datatable__cell--center',
+						right: pfx + 'datatable__cell--right',
+					};
+
+					// merge default and user defined options
+					options = $.extend(true, {}, $.fn[pluginName].defaults, options);
+
+					datatable.options = options;
+
+					// init plugin process
+					Plugin.init.apply(this, [options]);
+
+					$(datatable.wrap).data(pluginName, datatable);
+				}
+			}
+		} else {
+			// get existing instance datatable
+			datatable = $(this).data(pluginName);
+			if (typeof datatable === 'undefined') {
+				$.error(pluginName + ' not initialized');
+			}
+			options = datatable.options;
+		}
+
+		return datatable;
+	};
+
+	// default options
+	$.fn[pluginName].defaults = {
+		// datasource definition
+		data: {
+			type: 'local',
+			source: null,
+			pageSize: 10, // display records per page
+			saveState: {
+				// save datatable state(pagination, filtering, sorting, etc) in cookie or browser webstorage
+				cookie: false,
+				webstorage: true,
+			},
+
+			serverPaging: false,
+			serverFiltering: false,
+			serverSorting: false,
+
+			autoColumns: false,
+			attr: {
+				rowProps: [],
+			},
+		},
+
+		// layout definition
+		layout: {
+			theme: 'default', // datatable will support multiple themes and designs
+			class: pfx + 'datatable--brand', // custom wrapper class
+			scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
+			height: null, // datatable's body's fixed height
+			minHeight: null,
+			footer: false, // display/hide footer
+			header: true, // display/hide header
+			customScrollbar: true, // set false to disable custom scrollbar
+
+			// datatable spinner
+			spinner: {
+				overlayColor: '#000000',
+				opacity: 0,
+				type: 'loader',
+				state: 'brand',
+				message: true,
+			},
+
+			// datatable UI icons
+			icons: {
+				sort: {asc: 'flaticon2-arrow-up', desc: 'flaticon2-arrow-down'},
+				pagination: {
+					next: 'flaticon2-next',
+					prev: 'flaticon2-back',
+					first: 'flaticon2-fast-back',
+					last: 'flaticon2-fast-next',
+					more: 'flaticon-more-1',
+				},
+				rowDetail: {expand: 'fa fa-caret-down', collapse: 'fa fa-caret-right'},
+			},
+		},
+
+		// column sorting
+		sortable: true,
+
+		// resize column size with mouse drag coming soon)
+		resizable: false,
+
+		// column based filtering (coming soon)
+		filterable: false,
+
+		pagination: true,
+
+		// inline and bactch editing (cooming soon)
+		editable: false,
+
+		// columns definition
+		columns: [],
+
+		search: {
+			// enable trigger search by keyup enter
+			onEnter: false,
+			// input text for search
+			input: null,
+			// search delay in milliseconds
+			delay: 400,
+		},
+
+		rows: {
+			// deprecated
+			callback: function() {
+			},
+			// call before row template
+			beforeTemplate: function() {
+			},
+			// call after row template
+			afterTemplate: function() {
+			},
+			autoHide: true,
+		},
+
+		// toolbar
+		toolbar: {
+			// place pagination and displayInfo blocks according to the array order
+			layout: ['pagination', 'info'],
+
+			// toolbar placement can be at top or bottom or both top and bottom repeated
+			placement: ['bottom'],  //'top', 'bottom'
+
+			// toolbar items
+			items: {
+				// pagination
+				pagination: {
+					// pagination type(default or scroll)
+					type: 'default',
+
+					// number of pages to display by breakpoints
+					pages: {
+						desktop: {
+							layout: 'default',
+							pagesNumber: 5,
+						},
+						tablet: {
+							layout: 'default',
+							pagesNumber: 3,
+						},
+						mobile: {
+							layout: 'compact',
+						},
+					},
+
+					// navigation buttons
+					navigation: {
+						prev: true, // display prev button
+						next: true, // display next button
+						first: true, // display first button
+						last: true, // display last button
+						more: false // display more button
+					},
+
+					// page size select
+					pageSizeSelect: [], // display dropdown to select pagination size. -1 is used for "ALl" option
+				},
+
+				// records info
+				info: true,
+			},
+		},
+
+		// here we will keep all strings and message used by datatable UI so developer can easiliy translate to any language.
+		// By default the stirngs will be in the plugin source and here can override it
+		translate: {
+			records: {
+				processing: 'Please wait...',
+				noRecords: 'No records found',
+			},
+			toolbar: {
+				pagination: {
+					items: {
+						default: {
+							first: 'First',
+							prev: 'Previous',
+							next: 'Next',
+							last: 'Last',
+							more: 'More pages',
+							input: 'Page number',
+							select: 'Select page size',
+							all: 'all',
+						},
+						info: 'Showing {{start}} - {{end}} of {{total}}',
+					},
+				},
+			},
+		},
+
+		extensions: {},
+	};
+
+}(jQuery));
+"use strict";
+(function($) {
+
+	var pluginName = 'KTDatatable';
+	var pfx = 'kt-';
+
+	$.fn[pluginName] = $.fn[pluginName] || {};
+
+	/**
+	 * @param datatable Main datatable plugin instance
+	 * @param options Extension options
+	 * @returns {*}
+	 */
+	$.fn[pluginName].checkbox = function(datatable, options) {
+		var Extension = {
+			selectedAllRows: false,
+			selectedRows: [],
+			unselectedRows: [],
+
+			init: function() {
+				if (Extension.selectorEnabled()) {
+					// reset
+					datatable.setDataSourceParam(options.vars.selectedAllRows, false);
+					datatable.stateRemove('checkbox');
+
+					// requestIds is not null
+					if (options.vars.requestIds) {
+						// request ids in response
+						datatable.setDataSourceParam(options.vars.requestIds, true);
+					}
+
+					// remove selected checkbox on datatable reload
+					$(datatable).on(pfx + 'datatable--on-reloaded', function() {
+						datatable.stateRemove('checkbox');
+						datatable.setDataSourceParam(options.vars.selectedAllRows, false);
+						Extension.selectedAllRows = false;
+						Extension.selectedRows = [];
+						Extension.unselectedRows = [];
+					});
+
+					// select all on extension init
+					Extension.selectedAllRows = datatable.getDataSourceParam(options.vars.selectedAllRows);
+
+					$(datatable).on(pfx + 'datatable--on-layout-updated', function(e, args) {
+						if (args.table != $(datatable.wrap).attr('id')) {
+							return;
+						}
+						datatable.ready(function() {
+							Extension.initVars();
+							Extension.initEvent();
+							Extension.initSelect();
+						});
+					});
+
+					$(datatable).on(pfx + 'datatable--on-check', function(e, ids) {
+						ids.forEach(function(id) {
+							Extension.selectedRows.push(id);
+							// // remove from unselected rows
+							Extension.unselectedRows = Extension.remove(Extension.unselectedRows, id);
+						});
+						var storage = {};
+						storage['selectedRows'] = $.unique(Extension.selectedRows);
+						storage['unselectedRows'] = $.unique(Extension.unselectedRows);
+						datatable.stateKeep('checkbox', storage);
+					});
+					$(datatable).on(pfx + 'datatable--on-uncheck', function(e, ids) {
+						ids.forEach(function(id) {
+							Extension.unselectedRows.push(id);
+							// // remove from selected rows
+							Extension.selectedRows = Extension.remove(Extension.selectedRows, id);
+						});
+						var storage = {};
+						storage['selectedRows'] = $.unique(Extension.selectedRows);
+						storage['unselectedRows'] = $.unique(Extension.unselectedRows);
+						datatable.stateKeep('checkbox', storage);
+					});
+				}
+			},
+
+			/**
+			 * Init checkbox clicks event
+			 */
+			initEvent: function() {
+				// select all checkbox click
+				$(datatable.tableHead).find('.' + pfx + 'checkbox--all > [type="checkbox"]').click(function(e) {
+					// clear selected and unselected rows
+					Extension.selectedRows = Extension.unselectedRows = [];
+					datatable.stateRemove('checkbox');
+
+					// select all rows
+					if ($(this).is(':checked')) {
+						Extension.selectedAllRows = true;
+					}
+					else {
+						Extension.selectedAllRows = false;
+					}
+
+					// local select all current page rows
+					if (!options.vars.requestIds) {
+						if ($(this).is(':checked')) {
+							Extension.selectedRows = $.makeArray($(datatable.tableBody).find('.' + pfx + 'checkbox--single > [type="checkbox"]').map(function(i, chk) {
+								return $(chk).val();
+							}));
+						}
+						var storage = {};
+						storage['selectedRows'] = $.unique(Extension.selectedRows);
+						datatable.stateKeep('checkbox', storage);
+					}
+
+					// keep selectedAllRows in datasource params
+					datatable.setDataSourceParam(options.vars.selectedAllRows, Extension.selectedAllRows);
+
+					$(datatable).trigger(pfx + 'datatable--on-click-checkbox', [$(this)]);
+				});
+
+				// single row checkbox click
+				$(datatable.tableBody).find('.' + pfx + 'checkbox--single > [type="checkbox"]').click(function(e) {
+					var id = $(this).val();
+					if ($(this).is(':checked')) {
+						Extension.selectedRows.push(id);
+						// remove from unselected rows
+						Extension.unselectedRows = Extension.remove(Extension.unselectedRows, id);
+					}
+					else {
+						Extension.unselectedRows.push(id);
+						// remove from selected rows
+						Extension.selectedRows = Extension.remove(Extension.selectedRows, id);
+					}
+
+					// local checkbox header check
+					if (!options.vars.requestIds && Extension.selectedRows.length < 1) {
+						// remove select all checkbox, if there is no checked checkbox left
+						$(datatable.tableHead).find('.' + pfx + 'checkbox--all > [type="checkbox"]').prop('checked', false);
+					}
+
+					var storage = {};
+					storage['selectedRows'] = $.unique(Extension.selectedRows);
+					storage['unselectedRows'] = $.unique(Extension.unselectedRows);
+					datatable.stateKeep('checkbox', storage);
+
+					$(datatable).trigger(pfx + 'datatable--on-click-checkbox', [$(this)]);
+				});
+			},
+
+			initSelect: function() {
+				// selected all rows from server
+				if (Extension.selectedAllRows && options.vars.requestIds) {
+					if (!datatable.hasClass(pfx + 'datatable--error')) {
+						// set header select all checkbox checked
+						$(datatable.tableHead).find('.' + pfx + 'checkbox--all > [type="checkbox"]').prop('checked', true);
+					}
+
+					// set all checkbox in table body
+					datatable.setActiveAll(true);
+
+					// remove unselected rows
+					Extension.unselectedRows.forEach(function(id) {
+						datatable.setInactive(id);
+					});
+
+				}
+				else {
+					// single check for server and local
+					Extension.selectedRows.forEach(function(id) {
+						datatable.setActive(id);
+					});
+
+					// local checkbox; check if all checkboxes of currect page are checked
+					if (!datatable.hasClass(pfx + 'datatable--error') && $(datatable.tableBody).find('.' + pfx + 'checkbox--single > [type="checkbox"]').not(':checked').length < 1) {
+						// set header select all checkbox checked
+						$(datatable.tableHead).find('.' + pfx + 'checkbox--all > [type="checkbox"]').prop('checked', true);
+					}
+				}
+			},
+
+			/**
+			 * Check if selector is enabled from options
+			 */
+			selectorEnabled: function() {
+				return $.grep(datatable.options.columns, function(n, i) {
+					return n.selector || false;
+				})[0];
+			},
+
+			initVars: function() {
+				// get single select/unselect from localstorage
+				var storage = datatable.stateGet('checkbox');
+				if (typeof storage !== 'undefined') {
+					Extension.selectedRows = storage['selectedRows'] || [];
+					Extension.unselectedRows = storage['unselectedRows'] || [];
+				}
+			},
+
+			getSelectedId: function(path) {
+				Extension.initVars();
+
+				// server selected all rows
+				if (Extension.selectedAllRows && options.vars.requestIds) {
+					if (typeof path === 'undefined') {
+						path = options.vars.rowIds;
+					}
+
+					// if selected all rows, return id from response meta
+					var selectedAllRows = datatable.getObject(path, datatable.lastResponse) || [];
+
+					if (selectedAllRows.length > 0) {
+						// remove single unselected rows from selectedAllRows ids from server response emta
+						Extension.unselectedRows.forEach(function(id) {
+							selectedAllRows = Extension.remove(selectedAllRows, parseInt(id));
+						});
+					}
+					return selectedAllRows;
+				}
+
+				// else return single checked selected rows
+				return Extension.selectedRows;
+			},
+
+			remove: function(array, element) {
+				return array.filter(function(e) {
+					return e !== element;
+				});
+			},
+		};
+
+		// make the extension accessible from datatable init
+		datatable.checkbox = function() {
+			return Extension;
+		};
+
+		if (typeof options === 'object') {
+			options = $.extend(true, {}, $.fn[pluginName].checkbox.default, options);
+			Extension.init.apply(this, [options]);
+		}
+
+		return datatable;
+	};
+
+	$.fn[pluginName].checkbox.default = {
+		vars: {
+			// select all rows flag to be sent to the server
+			selectedAllRows: 'selectedAllRows',
+			// request id parameter's name
+			requestIds: 'requestIds',
+			// response path to all rows id
+			rowIds: 'meta.rowIds',
+		},
+	};
+
+}(jQuery));
+var defaults = {
+	layout: {
+		icons: {
+			pagination: {
+				next: 'flaticon2-next',
+				prev: 'flaticon2-back',
+				first: 'flaticon2-fast-back',
+				last: 'flaticon2-fast-next',
+				more: 'flaticon-more-1',
+			},
+			rowDetail: {expand: 'fa fa-caret-down', collapse: 'fa fa-caret-right'},
+		}
+	}
+};
+
+if (KTUtil.isRTL()) {
+	defaults = {
+		layout: {
+			icons: {
+				pagination: {
+					next: 'flaticon2-back',
+					prev: 'flaticon2-next',
+					first: 'flaticon2-fast-next',
+					last: 'flaticon2-fast-back',
+				},
+				rowDetail: {collapse: 'fa fa-caret-down', expand: 'fa fa-caret-right'},
+			}
+		}
+	}
+}
+
+$.extend(true, $.fn.KTDatatable.defaults, defaults);
+"use strict";
+
+// Class definition
+var KTChat = function () {
+	var initChat = function (parentEl) {
+		var messageListEl = KTUtil.find(parentEl, '.kt-scroll');
+
+		if (!messageListEl) {
+			return;
+		}
+
+		// initialize perfect scrollbar(see:  https://github.com/utatti/perfect-scrollbar) 
+		KTUtil.scrollInit(messageListEl, {
+			windowScroll: false, // allow browser scroll when the scroll reaches the end of the side
+			mobileNativeScroll: true,  // enable native scroll for mobile
+			desktopNativeScroll: false, // disable native scroll and use custom scroll for desktop 
+			resetHeightOnDestroy: true,  // reset css height on scroll feature destroyed
+			handleWindowResize: true, // recalculate hight on window resize
+			rememberPosition: true, // remember scroll position in cookie
+			height: function() {  // calculate height
+				var height;
+
+				// Mobile mode
+				if (KTUtil.isInResponsiveRange('tablet-and-mobile')) {
+					return KTUtil.hasAttr(messageListEl, 'data-mobile-height') ? parseInt(KTUtil.attr(messageListEl, 'data-mobile-height')) : 300;
+				} 
+
+				// Desktop mode
+				if (KTUtil.isInResponsiveRange('desktop') && KTUtil.hasAttr(messageListEl, 'data-height')) {
+					return parseInt(KTUtil.attr(messageListEl, 'data-height'));
+				}
+
+				var chatEl = KTUtil.find(parentEl, '.kt-chat');
+				var portletHeadEl = KTUtil.find(parentEl, '.kt-portlet > .kt-portlet__head');
+				var portletBodyEl = KTUtil.find(parentEl, '.kt-portlet > .kt-portlet__body');
+				var portletFootEl = KTUtil.find(parentEl, '.kt-portlet > .kt-portlet__foot');
+				
+				if (KTUtil.isInResponsiveRange('desktop')) {
+					height = KTLayout.getContentHeight();
+				} else {
+					height = KTUtil.getViewPort().height;
+				}
+
+				if (chatEl) {
+					height = height - parseInt(KTUtil.css(chatEl, 'margin-top')) - parseInt(KTUtil.css(chatEl, 'margin-bottom'));
+					height = height - parseInt(KTUtil.css(chatEl, 'padding-top')) - parseInt(KTUtil.css(chatEl, 'padding-bottom'));
+				}
+
+				if (portletHeadEl) {
+					height = height - parseInt(KTUtil.css(portletHeadEl, 'height'));
+					height = height - parseInt(KTUtil.css(portletHeadEl, 'margin-top')) - parseInt(KTUtil.css(portletHeadEl, 'margin-bottom'));
+				}
+
+				if (portletBodyEl) {
+					height = height - parseInt(KTUtil.css(portletBodyEl, 'margin-top')) - parseInt(KTUtil.css(portletBodyEl, 'margin-bottom'));
+					height = height - parseInt(KTUtil.css(portletBodyEl, 'padding-top')) - parseInt(KTUtil.css(portletBodyEl, 'padding-bottom'));
+				}
+
+				if (portletFootEl) {
+					height = height - parseInt(KTUtil.css(portletFootEl, 'height'));
+					height = height - parseInt(KTUtil.css(portletFootEl, 'margin-top')) - parseInt(KTUtil.css(portletFootEl, 'margin-bottom'));
+				}
+
+				// remove additional space
+				height = height - 5;
+				
+				return height;
+			} 
+		});
+
+		// messaging
+		var handleMessaging = function() {
+			var scrollEl = KTUtil.find(parentEl, '.kt-scroll');
+			var messagesEl = KTUtil.find(parentEl, '.kt-chat__messages');
+            var textarea = KTUtil.find(parentEl, '.kt-chat__input textarea');
+            
+            if (textarea.value.length === 0 ) {
+                return;
+            }
+
+			var node = document.createElement("DIV");  
+			KTUtil.addClass(node, 'kt-chat__message kt-chat__message--brand kt-chat__message--right');
+
+			var html = 
+				'<div class="kt-chat__user">' +				
+					'<span class="kt-chat__datetime">Just now</span>' +
+					'<a href="#" class="kt-chat__username">Jason Muller</span></a>' +					
+					'<span class="kt-media kt-media--circle kt-media--sm">' +
+						'<img src="./assets/media/users/100_12.jpg" alt="image">'  + 
+					'</span>' +
+				'</div>' +
+				'<div class="kt-chat__text kt-bg-light-brand">' + 
+					textarea.value
+				'</div>';
+
+			KTUtil.setHTML(node, html);
+			messagesEl.appendChild(node);
+			textarea.value = '';
+			scrollEl.scrollTop = parseInt(KTUtil.css(messagesEl, 'height'));
+			
+			var ps;
+			if (ps = KTUtil.data(scrollEl).get('ps')) {
+				ps.update();
+			}					
+			
+			setTimeout(function() {
+				var node = document.createElement("DIV");  
+				KTUtil.addClass(node, 'kt-chat__message kt-chat__message--success');
+
+				var html = 
+					'<div class="kt-chat__user">' +
+						'<span class="kt-media kt-media--circle kt-media--sm">' +
+							'<img src="./assets/media/users/100_13.jpg" alt="image">'  + 
+						'</span>' +
+						'<a href="#" class="kt-chat__username">Max Born</span></a>' +
+						'<span class="kt-chat__datetime">Just now</span>' +
+					'</div>' +
+					'<div class="kt-chat__text kt-bg-light-success">' + 
+					'Right before vacation season we have the next Big Deal for you. <br>Book the car of your dreams and save up to <b>25%*</b> worldwide.'
+					'</div>';
+
+				KTUtil.setHTML(node, html);
+				messagesEl.appendChild(node);
+				textarea.value = '';
+				scrollEl.scrollTop = parseInt(KTUtil.css(messagesEl, 'height'));
+				
+				var ps;
+				if (ps = KTUtil.data(scrollEl).get('ps')) {
+					ps.update();
+				}					
+			}, 2000);
+		}
+
+		// attach events
+		KTUtil.on(parentEl, '.kt-chat__input textarea', 'keydown', function(e) {
+			if (e.keyCode == 13) {
+				handleMessaging();
+				e.preventDefault();
+
+				return false; 
+			}
+		});
+
+		KTUtil.on(parentEl, '.kt-chat__input .kt-chat__reply', 'click', function(e) {
+			handleMessaging();
+		});
+	}
+
+	return {
+		// public functions
+		init: function() {
+			// init modal chat example
+			initChat( KTUtil.getByID('kt_chat_modal'));
+
+			// trigger click to show popup modal chat on page load
+			setTimeout(function() {
+				//KTUtil.getByID('kt_app_chat_launch_btn').click();
+			}, 1000);
+        },
+        
+        setup: function(element) {
+            initChat(element);
+        }
+	};
+}();
+
+// webpack support
+if (typeof module !== 'undefined') {
+	module.exports = KTChat;
+}
+
+KTUtil.ready(function() {	
+	KTChat.init();
+});
+"use strict";
+
+var KTDemoPanel = function() {
+    var demoPanel = KTUtil.getByID('kt_demo_panel');
+    var offcanvas;
+
+    var init = function() {
+        offcanvas = new KTOffcanvas(demoPanel, {
+            overlay: true,  
+            baseClass: 'kt-demo-panel',
+            closeBy: 'kt_demo_panel_close',
+            toggleBy: 'kt_demo_panel_toggle'
+        }); 
+
+        var head = KTUtil.find(demoPanel, '.kt-demo-panel__head');
+        var body = KTUtil.find(demoPanel, '.kt-demo-panel__body');
+
+        KTUtil.scrollInit(body, {
+            disableForMobile: true, 
+            resetHeightOnDestroy: true, 
+            handleWindowResize: true, 
+            height: function() {
+                var height = parseInt(KTUtil.getViewPort().height);
+               
+                if (head) {
+                    height = height - parseInt(KTUtil.actualHeight(head));
+                    height = height - parseInt(KTUtil.css(head, 'marginBottom'));
+                }
+        
+                height = height - parseInt(KTUtil.css(demoPanel, 'paddingTop'));
+                height = height - parseInt(KTUtil.css(demoPanel, 'paddingBottom'));    
+
+                return height;
+            }
+        });
+
+        if (typeof offcanvas !== 'undefined' && offcanvas.length === 0) {
+            offcanvas.on('hide', function() {
+                var expires = new Date(new Date().getTime() + 60 * 60 * 1000); // expire in 60 minutes from now
+                Cookies.set('kt_demo_panel_shown', 1, {expires: expires});
+            });
+        }
+    }
+
+    var remind = function() {
+        if (!(encodeURI(window.location.hostname) == 'keenthemes.com' || encodeURI(window.location.hostname) == 'www.keenthemes.com')) {
+            return;
+        }
+
+        setTimeout(function() {
+            if (!Cookies.get('kt_demo_panel_shown')) {
+                var expires = new Date(new Date().getTime() + 15 * 60 * 1000); // expire in 15 minutes from now
+                Cookies.set('kt_demo_panel_shown', 1, { expires: expires });
+                offcanvas.show();
+            } 
+        }, 4000);
+    }
+
+    return {     
+        init: function() {  
+            init(); 
+            remind();
+        }
+    };
+}();
+
+$(document).ready(function() {
+    KTDemoPanel.init();
+});
+"use strict";
+
+var KTOffcanvasPanel = function() {
+    var notificationPanel = KTUtil.get('kt_offcanvas_toolbar_notifications');
+    var quickActionsPanel = KTUtil.get('kt_offcanvas_toolbar_quick_actions');
+    var profilePanel = KTUtil.get('kt_offcanvas_toolbar_profile');
+    var searchPanel = KTUtil.get('kt_offcanvas_toolbar_search');
+
+    var initNotifications = function() {
+        var head = KTUtil.find(notificationPanel, '.kt-offcanvas-panel__head');
+        var body = KTUtil.find(notificationPanel, '.kt-offcanvas-panel__body');
+
+        var offcanvas = new KTOffcanvas(notificationPanel, {
+            overlay: true,
+            baseClass: 'kt-offcanvas-panel',
+            closeBy: 'kt_offcanvas_toolbar_notifications_close',
+            toggleBy: 'kt_offcanvas_toolbar_notifications_toggler_btn'
+        });
+
+        KTUtil.scrollInit(body, {
+            disableForMobile: true,
+            resetHeightOnDestroy: true,
+            handleWindowResize: true,
+            height: function() {
+                var height = parseInt(KTUtil.getViewPort().height);
+
+                if (head) {
+                    height = height - parseInt(KTUtil.actualHeight(head));
+                    height = height - parseInt(KTUtil.css(head, 'marginBottom'));
+                }
+
+                height = height - parseInt(KTUtil.css(notificationPanel, 'paddingTop'));
+                height = height - parseInt(KTUtil.css(notificationPanel, 'paddingBottom'));
+
+                return height;
+            }
+        });
+    }
+
+    var initQucikActions = function() {
+        var head = KTUtil.find(quickActionsPanel, '.kt-offcanvas-panel__head');
+        var body = KTUtil.find(quickActionsPanel, '.kt-offcanvas-panel__body');
+
+        var offcanvas = new KTOffcanvas(quickActionsPanel, {
+            overlay: true,
+            baseClass: 'kt-offcanvas-panel',
+            closeBy: 'kt_offcanvas_toolbar_quick_actions_close',
+            toggleBy: 'kt_offcanvas_toolbar_quick_actions_toggler_btn'
+        });
+
+        KTUtil.scrollInit(body, {
+            disableForMobile: true,
+            resetHeightOnDestroy: true,
+            handleWindowResize: true,
+            height: function() {
+                var height = parseInt(KTUtil.getViewPort().height);
+
+                if (head) {
+                    height = height - parseInt(KTUtil.actualHeight(head));
+                    height = height - parseInt(KTUtil.css(head, 'marginBottom'));
+                }
+
+                height = height - parseInt(KTUtil.css(quickActionsPanel, 'paddingTop'));
+                height = height - parseInt(KTUtil.css(quickActionsPanel, 'paddingBottom'));
+
+                return height;
+            }
+        });
+    }
+
+    var initProfile = function() {
+        var head = KTUtil.find(profilePanel, '.kt-offcanvas-panel__head');
+        var body = KTUtil.find(profilePanel, '.kt-offcanvas-panel__body');
+
+        var offcanvas = new KTOffcanvas(profilePanel, {
+            overlay: true,
+            baseClass: 'kt-offcanvas-panel',
+            closeBy: 'kt_offcanvas_toolbar_profile_close',
+            toggleBy: 'kt_offcanvas_toolbar_profile_toggler_btn'
+        });
+
+        KTUtil.scrollInit(body, {
+            disableForMobile: true,
+            resetHeightOnDestroy: true,
+            handleWindowResize: true,
+            height: function() {
+                var height = parseInt(KTUtil.getViewPort().height);
+
+                if (head) {
+                    height = height - parseInt(KTUtil.actualHeight(head));
+                    height = height - parseInt(KTUtil.css(head, 'marginBottom'));
+                }
+
+                height = height - parseInt(KTUtil.css(profilePanel, 'paddingTop'));
+                height = height - parseInt(KTUtil.css(profilePanel, 'paddingBottom'));
+
+                return height;
+            }
+        });
+    }
+
+    var initSearch = function() {
+        var head = KTUtil.find(searchPanel, '.kt-offcanvas-panel__head');
+        var body = KTUtil.find(searchPanel, '.kt-offcanvas-panel__body');
+        var search = KTUtil.get('kt_quick_search_offcanvas');
+        var form = KTUtil.find(search, '.kt-quick-search__form');
+        var wrapper = KTUtil.find(search, '.kt-quick-search__wrapper');
+
+        var offcanvas = new KTOffcanvas(searchPanel, {
+            overlay: true,
+            baseClass: 'kt-offcanvas-panel',
+            closeBy: 'kt_offcanvas_toolbar_search_close',
+            toggleBy: 'kt_offcanvas_toolbar_search_toggler_btn'
+        });
+
+        KTUtil.scrollInit(wrapper, {
+            disableForMobile: true,
+            resetHeightOnDestroy: true,
+            handleWindowResize: true,
+            height: function() {
+                var height = parseInt(KTUtil.getViewPort().height);
+
+                height = height - parseInt(KTUtil.actualHeight(form));
+                height = height - parseInt(KTUtil.css(form, 'marginBottom'));
+
+                if (head) {
+                    height = height - parseInt(KTUtil.actualHeight(head));
+                    height = height - parseInt(KTUtil.css(head, 'marginBottom'));
+                }
+
+                height = height - parseInt(KTUtil.css(searchPanel, 'paddingTop'));
+                height = height - parseInt(KTUtil.css(searchPanel, 'paddingBottom'));
+
+                return height;
+            }
+        });
+    }
+
+    return {
+        init: function() {
+            initNotifications();
+            initQucikActions();
+            initProfile();
+            initSearch();
+        }
+    };
+}();
+
+// Init on page load completed
+KTUtil.ready(function() {
+    KTOffcanvasPanel.init();
+});
+
+"use strict";
+
+var KTQuickPanel = function() {
+    var panel = KTUtil.get('kt_quick_panel');
+    var notificationPanel = KTUtil.get('kt_quick_panel_tab_notifications');
+    var logsPanel = KTUtil.get('kt_quick_panel_tab_logs');
+    var settingsPanel = KTUtil.get('kt_quick_panel_tab_settings');
+
+    var getContentHeight = function() {
+        var height;
+        var nav = KTUtil.find(panel, '.kt-quick-panel__nav');
+        var content = KTUtil.find(panel, '.kt-quick-panel__content');
+
+        height = parseInt(KTUtil.getViewPort().height) - parseInt(KTUtil.actualHeight(nav)) - (2 * parseInt(KTUtil.css(nav, 'padding-top'))) - 10;
+
+        return height;
+    }
+
+    var initOffcanvas = function() {
+        new KTOffcanvas(panel, {
+            overlay: true,  
+            baseClass: 'kt-quick-panel',
+            closeBy: 'kt_quick_panel_close_btn',
+            toggleBy: 'kt_quick_panel_toggler_btn'
+        });   
+    }
+
+    var initNotifications = function() {
+        KTUtil.scrollInit(notificationPanel, {
+            mobileNativeScroll: true, 
+            resetHeightOnDestroy: true, 
+            handleWindowResize: true, 
+            height: function() {
+                return getContentHeight();
+            }
+        });
+    }
+
+    var initLogs = function() {
+        KTUtil.scrollInit(logsPanel, {
+            mobileNativeScroll: true, 
+            resetHeightOnDestroy: true, 
+            handleWindowResize: true, 
+            height: function() {
+                return getContentHeight();
+            }
+        });
+    }
+
+    var initSettings = function() {
+        KTUtil.scrollInit(settingsPanel, {
+            mobileNativeScroll: true, 
+            resetHeightOnDestroy: true, 
+            handleWindowResize: true, 
+            height: function() {
+                return getContentHeight();
+            }
+        });
+    }
+
+    var updatePerfectScrollbars = function() {
+        $(panel).find('a[data-toggle="tab"]').on('shown.bs.tab', function (e) { 
+            KTUtil.scrollUpdate(notificationPanel);
+            KTUtil.scrollUpdate(logsPanel);
+            KTUtil.scrollUpdate(settingsPanel);
+        });
+    }
+
+    return {     
+        init: function() {  
+            initOffcanvas(); 
+            initNotifications();
+            initLogs();
+            initSettings();
+            updatePerfectScrollbars();
+        }
+    };
+}();
+
+$(document).ready(function() {
+    KTQuickPanel.init();
+});
+"use strict";
+
+var KTQuickSearch = function() {
+    var target;
+    var form;
+    var input;
+    var closeIcon;
+    var resultWrapper;
+    var resultDropdown;
+    var resultDropdownToggle;
+    var inputGroup;
+    var query = '';
+
+    var hasResult = false;
+    var timeout = false;
+    var isProcessing = false;
+    var requestTimeout = 200; // ajax request fire timeout in milliseconds
+    var spinnerClass = 'kt-spinner kt-spinner--input kt-spinner--sm kt-spinner--brand kt-spinner--right';
+    var resultClass = 'kt-quick-search--has-result';
+    var minLength = 2;
+
+    var showProgress = function() {
+        isProcessing = true;
+        KTUtil.addClass(inputGroup, spinnerClass);
+
+        if (closeIcon) {
+            KTUtil.hide(closeIcon);
+        }
+    }
+
+    var hideProgress = function() {
+        isProcessing = false;
+        KTUtil.removeClass(inputGroup, spinnerClass);
+
+        if (closeIcon) {
+            if (input.value.length < minLength) {
+                KTUtil.hide(closeIcon);
+            } else {
+                KTUtil.show(closeIcon, 'flex');
+            }
+        }
+    }
+
+    var showDropdown = function() {
+        if (resultDropdownToggle && !KTUtil.hasClass(resultDropdown, 'show')) {
+            $(resultDropdownToggle).dropdown('toggle');
+            $(resultDropdownToggle).dropdown('update');
+        }
+    }
+
+    var hideDropdown = function() {
+        if (resultDropdownToggle && KTUtil.hasClass(resultDropdown, 'show')) {
+            $(resultDropdownToggle).dropdown('toggle');
+        }
+    }
+
+    var processSearch = function() {
+        if (hasResult && query === input.value) {
+            hideProgress();
+            KTUtil.addClass(target, resultClass);
+            showDropdown();
+            KTUtil.scrollUpdate(resultWrapper);
+
+            return;
+        }
+
+        query = input.value;
+
+        KTUtil.removeClass(target, resultClass);
+        showProgress();
+        hideDropdown();
+
+        setTimeout(function() {
+            $.ajax({
+                url: 'inc/api/quick_search.php',
+                data: {
+                    query: query
+                },
+                dataType: 'html',
+                success: function(res) {
+                    hasResult = true;
+                    hideProgress();
+                    KTUtil.addClass(target, resultClass);
+                    KTUtil.setHTML(resultWrapper, res);
+                    showDropdown();
+                    KTUtil.scrollUpdate(resultWrapper);
+                },
+                error: function(res) {
+                    hasResult = false;
+                    hideProgress();
+                    KTUtil.addClass(target, resultClass);
+                    KTUtil.setHTML(resultWrapper, '<span class="kt-quick-search__message">Connection error. Pleae try again later.</div>');
+                    showDropdown();
+                    KTUtil.scrollUpdate(resultWrapper);
+                }
+            });
+        }, 1000);
+    }
+
+    var handleCancel = function(e) {
+        input.value = '';
+        query = '';
+        hasResult = false;
+        KTUtil.hide(closeIcon);
+        KTUtil.removeClass(target, resultClass);
+        hideDropdown();
+    }
+
+    var handleSearch = function() {
+        if (input.value.length < minLength) {
+            hideProgress();
+            hideDropdown();
+
+            return;
+        }
+
+        if (isProcessing == true) {
+            return;
+        }
+
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+
+        timeout = setTimeout(function() {
+            processSearch();
+        }, requestTimeout);
+    }
+
+    return {
+        init: function(element) {
+            // Init
+            target = element;
+            form = KTUtil.find(target, '.kt-quick-search__form');
+            input = KTUtil.find(target, '.kt-quick-search__input');
+            closeIcon = KTUtil.find(target, '.kt-quick-search__close');
+            resultWrapper = KTUtil.find(target, '.kt-quick-search__wrapper');
+            resultDropdown = KTUtil.find(target, '.dropdown-menu');
+            resultDropdownToggle = KTUtil.find(target, '[data-toggle="dropdown"]');
+            inputGroup = KTUtil.find(target, '.input-group');
+
+            // Attach input keyup handler
+            KTUtil.addEvent(input, 'keyup', handleSearch);
+            KTUtil.addEvent(input, 'focus', handleSearch);
+
+            // Prevent enter click
+            form.onkeypress = function(e) {
+                var key = e.charCode || e.keyCode || 0;
+                if (key == 13) {
+                    e.preventDefault();
+                }
+            }
+
+            KTUtil.addEvent(closeIcon, 'click', handleCancel);
+        }
+    };
+};
+
+var KTQuickSearchInline = KTQuickSearch;
+var KTQuickSearchOffcanvas = KTQuickSearch;
+
+// Init on page load completed
+
+KTUtil.ready(function() {
+    if (KTUtil.get('kt_quick_search_dropdown')) {
+        KTQuickSearch().init(KTUtil.get('kt_quick_search_dropdown'));
+    }
+
+    if (KTUtil.get('kt_quick_search_inline')) {
+        KTQuickSearchInline().init(KTUtil.get('kt_quick_search_inline'));
+    }
+
+    if (KTUtil.get('kt_quick_search_offcanvas')) {
+        KTQuickSearchOffcanvas().init(KTUtil.get('kt_quick_search_offcanvas'));
+    }
+});
+
+"use strict";
+
+var KTLayout = function() {
+    var body;
+
+    var header;
+    var headerMenu;
+    var headerMenuOffcanvas;
+
+    var asideMenu;
+    var asideMenuOffcanvas;
+    var asideToggler;
+
+    var asideSecondary;
+    var asideSecondaryToggler;
+
+    var scrollTop;
+
+    var pageStickyPortlet;
+
+    // Header
+    var initHeader = function() {
+        var tmp;
+        var headerEl = KTUtil.get('kt_header');
+        var options = {
+            offset: {},
+            minimize: {
+                desktop: {
+                    on: 'kt-header--minimize'
+                },
+                mobile: {
+                    on: 'kt-header--minimize'
+                }
+            }
+        };
+
+        if (tmp = KTUtil.attr(headerEl, 'data-ktheader-minimize-offset')) {
+            options.offset.desktop = tmp;
+        }
+
+        if (tmp = KTUtil.attr(headerEl, 'data-ktheader-minimize-mobile-offset')) {
+            options.offset.mobile = tmp;
+        }
+
+        header = new KTHeader('kt_header', options);
+    }
+
+    // Header Menu
+    var initHeaderMenu = function() {
+        // init aside left offcanvas
+        headerMenuOffcanvas = new KTOffcanvas('kt_header_menu_wrapper', {
+            overlay: true,
+            baseClass: 'kt-header-menu-wrapper',
+            closeBy: 'kt_header_menu_mobile_close_btn',
+            toggleBy: {
+                target: 'kt_header_mobile_toggler',
+                state: 'kt-header-mobile__toolbar-toggler--active'
+            }
+        });
+
+        headerMenu = new KTMenu('kt_header_menu', {
+            submenu: {
+                desktop: 'dropdown',
+                tablet: 'accordion',
+                mobile: 'accordion'
+            },
+            accordion: {
+                slideSpeed: 200, // accordion toggle slide speed in milliseconds
+                expandAll: false // allow having multiple expanded accordions in the menu
+            }
+        });
+    }
+
+    // Header Topbar
+    var initHeaderTopbar = function() {
+        asideToggler = new KTToggle('kt_header_mobile_topbar_toggler', {
+            target: 'body',
+            targetState: 'kt-header__topbar--mobile-on',
+            togglerState: 'kt-header-mobile__toolbar-topbar-toggler--active'
+        });
+    }
+
+    // Aside
+    var initAside = function() {
+        // Init aside left offcanvas
+        var asidBrandHover = false;
+        var aside = KTUtil.get('kt_aside');
+        var asideBrand = KTUtil.get('kt_aside_brand');
+        var asideOffcanvasClass = KTUtil.hasClass(aside, 'kt-aside--offcanvas-default') ? 'kt-aside--offcanvas-default' : 'kt-aside';
+
+        asideMenuOffcanvas = new KTOffcanvas('kt_aside', {
+            baseClass: asideOffcanvasClass,
+            overlay: true,
+            closeBy: 'kt_aside_close_btn',
+            toggleBy: {
+                target: 'kt_aside_mobile_toggler',
+                state: 'kt-header-mobile__toolbar-toggler--active'
+            }
+        });
+    }
+
+    // Aside menu
+    var initAsideMenu = function() {
+        // Init aside menu
+        var aside = KTUtil.get('kt_aside');
+        var menu = KTUtil.get('kt_aside_menu');
+        var menuDesktopMode = (KTUtil.attr(menu, 'data-ktmenu-dropdown') === '1' ? 'dropdown' : 'accordion');
+
+        var scroll;
+
+        asideMenu = new KTMenu('kt_aside_menu', {
+            // Vertical scroll
+            scroll: scroll,
+
+            // Submenu setup
+            submenu: {
+                desktop: menuDesktopMode,
+                tablet: 'accordion', // menu set to accordion in tablet mode
+                mobile: 'accordion' // menu set to accordion in mobile mode
+            },
+
+            // Accordion setup
+            accordion: {
+                autoScroll: false, // enable auto scrolling(focus) to the clicked menu item
+                expandAll: false   // allow having multiple expanded accordions in the menu
+            }
+        });
+
+        // Handle full height dropdowns
+        if (KTUtil.isInResponsiveRange('desktop')) {
+            var query = KTUtil.findAll(aside, '.kt-menu__item--submenu-fullheight .kt-menu__submenu > .kt-menu__wrapper');
+
+            for (var i = 0, j = query.length; i < j; i++) {
+                var item = query[i];
+
+                if (item) {
+                    KTUtil.scrollInit(item, {
+                        mobileNativeScroll: true,
+                        resetHeightOnDestroy: true,
+                        handleWindowResize: true,
+                        rememberPosition: true,
+                        height: function() {
+                            return KTUtil.getViewPort().height;
+                        }
+                    });
+
+                    // Update scroller on submenu toggle
+                    asideMenu.on('submenuToggle', function(submenuEl) {
+                        if (submenuEl && item.contains(submenuEl)) {
+                            KTUtil.scrollUpdate(item);
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    // Sidebar toggle
+    var initAsideToggler = function() {
+        if (!KTUtil.get('kt_aside_toggler')) {
+            return;
+        }
+
+        asideToggler = new KTToggle('kt_aside_toggler', {
+            target: 'body',
+            targetState: 'kt-aside--minimize',
+            togglerState: 'kt-aside__brand-aside-toggler--active'
+        });
+
+        asideToggler.on('toggle', function(toggle) {
+            KTUtil.addClass(body, 'kt-aside--minimizing');
+
+            if (KTUtil.get('kt_page_portlet')) {
+                pageStickyPortlet.updateSticky();
+            }
+
+            KTUtil.transitionEnd(body, function() {
+                KTUtil.removeClass(body, 'kt-aside--minimizing');
+            });
+
+            headerMenu.pauseDropdownHover(800);
+            asideMenu.pauseDropdownHover(800);
+
+            // Remember state in cookie
+            Cookies.set('kt_aside_toggle_state', toggle.getState());
+            // to set default minimized left aside use this cookie value in your
+            // server side code and add "kt-brand--minimize kt-aside--minimize" classes to
+            // the body tag in order to initialize the minimized left aside mode during page loading.
+        });
+
+        asideToggler.on('beforeToggle', function(toggle) {
+            var body = KTUtil.get('body');
+            if (KTUtil.hasClass(body, 'kt-aside--minimize') === false && KTUtil.hasClass(body, 'kt-aside--minimize-hover')) {
+                KTUtil.removeClass(body, 'kt-aside--minimize-hover');
+            }
+        });
+    }
+
+    // Scrolltop
+    var initScrolltop = function() {
+        var scrolltop = new KTScrolltop('kt_scrolltop', {
+            offset: 300,
+            speed: 600
+        });
+    }
+
+	// Init page sticky portlet
+	var initPageStickyPortlet = function() {
+		var asideWidth = 265;
+		var asideMinimizeWidth = 70;
+		var asideSecondaryWidth = 60;
+		var asideSecondaryExpandedWidth = 310;
+
+		return new KTPortlet('kt_page_portlet', {
+			sticky: {
+				offset: parseInt(KTUtil.css(KTUtil.get('kt_header'), 'height')) + 200,
+				zIndex: 90,
+				position: {
+					top: function() {
+						var pos = 0;
+
+						if (KTUtil.isInResponsiveRange('desktop')) {
+							if (KTUtil.hasClass(body, 'kt-header--fixed')) {
+								pos = pos + 55;
+							}
+
+							if (KTUtil.hasClass(body, 'kt-subheader--fixed') && KTUtil.get('kt_subheader')) {
+								pos = pos + parseInt(KTUtil.css(KTUtil.get('kt_subheader'), 'height'));
+							}
+						} else {
+							if (KTUtil.hasClass(body, 'kt-header-mobile--fixed')) {
+								pos = pos + parseInt(KTUtil.css(KTUtil.get('kt_header_mobile'), 'height'));
+							}
+						}
+
+						return pos;
+					},
+					left: function(portlet) {
+						var porletEl = portlet.getSelf();
+
+						return KTUtil.offset(porletEl).left;
+					},
+					right: function(portlet) {
+                        var porletEl = portlet.getSelf();
+
+                        var portletWidth = parseInt(KTUtil.css(porletEl, 'width'));
+						var bodyWidth = parseInt(KTUtil.css(KTUtil.get('body'), 'width'));
+						var portletOffsetLeft = KTUtil.offset(porletEl).left;
+
+						return bodyWidth - portletWidth - portletOffsetLeft;
+					}
+				}
+			}
+		});
+	}
+
+	// Calculate content available full height
+	var getContentHeight = function() {
+		var height;
+
+		height = KTUtil.getViewPort().height;
+
+		if (KTUtil.getByID('kt_header')) {
+            height = height - KTUtil.actualHeight('kt_header');
+		}
+
+		if (KTUtil.getByID('kt_subheader')) {
+            height = height - KTUtil.actualHeight('kt_subheader');
+		}
+
+		if (KTUtil.getByID('kt_footer')) {
+			height = height - parseInt(KTUtil.css('kt_footer', 'height'));
+		}
+
+		if (KTUtil.getByID('kt_content')) {
+			height = height - parseInt(KTUtil.css('kt_content', 'padding-top')) - parseInt(KTUtil.css('kt_content', 'padding-bottom'));
+		}
+
+		return height;
+	}
+
+    return {
+        init: function() {
+            body = KTUtil.get('body');
+
+            this.initHeader();
+            this.initAside();
+            this.initPageStickyPortlet();
+
+            // Non functional links notice(can be removed in production)
+			$('#kt_aside_menu, #kt_header_menu').on('click', '.kt-menu__link[href="#"]', function(e) {
+				swal.fire("", "You have clicked on a non-functional dummy link!");
+
+				e.preventDefault();
+			});
+        },
+
+        initHeader: function() {
+            initHeader();
+            initHeaderMenu();
+            initHeaderTopbar();
+            initScrolltop();
+        },
+
+        initAside: function() {
+            initAside();
+            initAsideMenu();
+            initAsideToggler();
+
+            this.onAsideToggle(function(e) {
+                // Update sticky portlet
+                if (pageStickyPortlet) {
+                    pageStickyPortlet.updateSticky();
+                }
+
+                // Reload datatable
+                var datatables = $('.kt-datatable');
+                if (datatables) {
+                    datatables.each(function() {
+                        $(this).KTDatatable('redraw');
+                    });
+                }
+            });
+        },
+
+        initPageStickyPortlet: function() {
+            if (!KTUtil.get('kt_page_portlet')) {
+                return;
+            }
+
+            pageStickyPortlet = initPageStickyPortlet();
+            pageStickyPortlet.initSticky();
+
+            KTUtil.addResizeHandler(function(){
+                pageStickyPortlet.updateSticky();
+            });
+
+            initPageStickyPortlet();
+        },
+
+        getAsideMenu: function() {
+            return asideMenu;
+        },
+
+        onAsideToggle: function(handler) {
+            if (typeof asideToggler.element !== 'undefined') {
+                asideToggler.on('toggle', handler);
+            }
+        },
+
+        getAsideToggler: function() {
+            return asideToggler;
+        },
+
+        closeMobileAsideMenuOffcanvas: function() {
+            if (KTUtil.isMobileDevice()) {
+                asideMenuOffcanvas.hide();
+            }
+        },
+
+        closeMobileHeaderMenuOffcanvas: function() {
+            if (KTUtil.isMobileDevice()) {
+                headerMenuOffcanvas.hide();
+            }
+        },
+
+        getContentHeight: function() {
+			return getContentHeight();
+		}
+    };
+}();
+
+// webpack support
+if (typeof module !== 'undefined') {
+    module.exports = KTLayout;
+}
+
+$(document).ready(function() {
+    KTLayout.init();
+});

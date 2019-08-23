@@ -16,7 +16,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class AccountController extends AbstractController
 {
     /**
+     * @Route("/account/edit", name="edit")
      * @Route("/account/profile", name="profile")
+     * @Route("/account/edit-profile", name="edit_profile")
      */
     public function profile()
     {
@@ -26,9 +28,9 @@ class AccountController extends AbstractController
     }
     
     /**
-     * @Route("/account/edit", name="edit")
+     * @Route("/account/edit-info", name="edit_info")
      */
-    public function edit(Request $request)
+    public function info(Request $request)
     {
         $errors = [];
         $user = $this->getUser();
@@ -50,9 +52,31 @@ class AccountController extends AbstractController
             }
         }
         
-        return $this->render('account/edit.html.twig', [
+        return $this->render('account/edit_info.html.twig', [
             'user'   => $user,
             'errors' => $errors,
+        ]);
+    }
+    
+    /**
+     * @Route("/account/edit-password", name="edit_password")
+     */
+    public function password(Request $request)
+    {
+        $user = $this->getUser();
+        return $this->render('account/edit_password.html.twig', [
+            'user'   => $user,
+        ]);
+    }
+    
+    /**
+     * @Route("/account/edit-notification", name="edit_notification")
+     */
+    public function notification(Request $request)
+    {
+        $user = $this->getUser();
+        return $this->render('account/edit_notification.html.twig', [
+            'user'   => $user,
         ]);
     }
 }
