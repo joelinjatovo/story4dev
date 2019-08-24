@@ -112,4 +112,12 @@ class UploadController extends AbstractController
 
         return new JsonResponse(['123'], JsonResponse::HTTP_BAD_REQUEST);
     }
+
+    /**
+     * @Route("/u/chunk", name="get_upload", methods={"GET"})
+     */
+    public function chunk()
+    {
+        return $this->render('upload/chunk.html.twig');
+    }
 }

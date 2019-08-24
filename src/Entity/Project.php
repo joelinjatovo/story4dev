@@ -6,8 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -16,6 +14,8 @@ use JMS\Serializer\Annotation as Serializer;
 
 use App\Entity\Meta\ProjectMeta;
 use App\Entity\Contribution\ProjectContribution;
+use App\Traits\TimestampableEntity;
+use App\Traits\SoftDeleteableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
@@ -39,14 +39,14 @@ class Project
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw"})
+     * @Groups({"full", "project", "raw", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw"})
+     * @Groups({"full", "project", "raw", "user"})
      */
     private $picture;
 
@@ -63,35 +63,35 @@ class Project
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw"})
+     * @Groups({"full", "project", "raw", "user"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw"})
+     * @Groups({"full", "project", "raw", "user"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw"})
+     * @Groups({"full", "project", "raw", "user"})
      */
     private $budget;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw"})
+     * @Groups({"full", "project", "raw", "user"})
      */
     private $start_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw"})
+     * @Groups({"full", "project", "raw", "user"})
      */
     private $end_at;
     
@@ -106,17 +106,19 @@ class Project
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Periodicity", inversedBy="projects")
      * @Gedmo\Versioned
-     * @Groups({"full", "project"})
+     * @Groups({"full", "project", "user"})
      */
     private $periodicity;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "project"})
      */
     private $activities;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Iteration", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "project"})
      */
     private $iterations;
     

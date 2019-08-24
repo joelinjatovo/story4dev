@@ -24,7 +24,7 @@
 
         <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     </head>
-    <body  class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-aside--minimize kt-page--loading"  >
+    <body id="page-body" class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-aside--minimize kt-page--loading"  >
         
         <!-- begin:: Header Mobile -->
         {% block header_mobile %}
@@ -132,5 +132,32 @@
         <script src="{{ asset('js/fullcalendar.bundle.js') }}" type="text/javascript" ></script>
         {% endblock %}
         <!--end::Page Scripts & Vendor Scripts -->
+        <script>
+            $('#page-body').on('change keyup keydown', 'input, textarea, select', function (e) {
+                $(this).addClass('changed-input');
+            });
+            $(window).on('beforeunload', function () {
+                if ($('.changed-input').length) {
+                    /*
+                    return swal.fire({
+                        title: 'Are you sure?',
+                        text: "You haven\'t saved your changes.",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, quit this page!'
+                    }).then(function(result) {
+                        if (result.value) {
+                            swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                        }
+                    });
+                    */
+                    return "You haven\'t saved your changes.";
+                }
+            });
+        </script>
     </body>
 </html>

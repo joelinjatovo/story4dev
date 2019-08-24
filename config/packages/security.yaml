@@ -73,7 +73,7 @@ security:
             provider: user_db_provider
     access_control:
         - { path: ^/login$,           roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/v1/token$,    roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/token,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/v1/register$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,              roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/admin,            roles: ROLE_ADMIN }

@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Oneuoloader!{% endblock %}
+
+{% block content %}
+    <form action="{{ oneup_uploader_endpoint('gallery') }}" enctype="multipart/form-data" class="dropzone" style="width:200px; height:200px; border:4px dashed black">
+</form>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    Dropzone.autoDiscover=false;
+    var myDropzone = new Dropzone(".dropzone",
+        {
+            url: "{{ oneup_uploader_endpoint('gallery') }}",
+            method: "POST",
+            chunking: true,
+            //forceChunking:true,
+            chunkSize: 1024 // 1M chunk size
+        }
+    );
+</script>
+{% endblock %}

@@ -6,10 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+use App\Traits\TimestampableEntity;
+use App\Traits\SoftDeleteableEntity;
 
 use App\Entity\Meta\ActivityMeta;
 use App\Entity\Contribution\ActivityContribution;
@@ -35,6 +37,7 @@ class Activity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
+     * @Groups({"full", "project", "activity"})
      */
     private $id;
 
@@ -46,6 +49,7 @@ class Activity
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
+     * @Groups({"full", "project", "activity"})
      */
     private $title;
 
@@ -57,12 +61,14 @@ class Activity
      *     message="The value {{ value }} is not a valid {{ type }}."
      * )
      * @Gedmo\Versioned
+     * @Groups({"full", "project", "activity"})
      */
     private $budget;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
      * @Gedmo\Versioned
+     * @Groups({"activity"})
      */
     private $author;
     
@@ -74,6 +80,7 @@ class Activity
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "activity"})
      */
     private $indicators;
     

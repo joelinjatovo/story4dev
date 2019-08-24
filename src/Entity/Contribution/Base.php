@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * 
@@ -38,6 +39,7 @@ abstract class Base
     /**
      * @ORM\Column(type="json")
      * @Gedmo\Versioned
+     * @Groups({"user"})
      */
     private $roles = [];
 

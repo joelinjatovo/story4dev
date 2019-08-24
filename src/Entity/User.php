@@ -8,8 +8,6 @@ use App\Entity\Contribution\ActivityContribution;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -18,6 +16,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
+use App\Traits\TimestampableEntity;
+use App\Traits\SoftDeleteableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -44,25 +45,25 @@ class User implements UserInterface, \Serializable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"full", "raw", "project"})
+     * @Groups({"full", "raw", "project", "user"})
      */
     private $id;
     
     /**
      * @ORM\Column(name="facebook_id",type="string", nullable=true)
-     * @Groups({"full"})
+     * @Groups({"full", "raw", "user"})
      */
     protected $facebookId;
 
     /**
      * @ORM\Column(name="google_id", type="string", nullable=true)
-     * @Groups({"full", "raw"})
+     * @Groups({"full", "raw", "user"})
      */
     protected $googleId;
     
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"full", "raw"})
+     * @Groups({"full", "raw", "user"})
      */
     private $avatar;
 
@@ -78,7 +79,7 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your username cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(type="string", length=100, unique=true)
-     * @Groups({"full", "raw"})
+     * @Groups({"full", "raw", "user"})
      */
     private $username;
 
@@ -90,13 +91,13 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your email cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"full", "raw"})
+     * @Groups({"full", "raw", "user"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"full", "raw"})
+     * @Groups({"full", "raw", "user"})
      */
     private $roles = [];
 
@@ -114,7 +115,7 @@ class User implements UserInterface, \Serializable
     /**
      * @Gedmo\Slug(fields={"username"})
      * @ORM\Column(type="string", length=255, nullable=false, unique=true)
-     * @Groups({"full", "raw"})
+     * @Groups({"full", "raw", "user"})
      */
     private $slug;
     
@@ -125,7 +126,7 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your fullname cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="fullname", type="string", length=100, nullable=true)
-     * @Groups({"full", "raw"})
+     * @Groups({"full", "raw", "user"})
      */
     private $fullname;
     
@@ -136,14 +137,14 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your title cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="title", type="string", length=100, nullable=true)
-     * @Groups({"full", "raw"})
+     * @Groups({"full", "raw", "user"})
      */
     private $title;
     
     /**
      * @Assert\Type("string")
      * @ORM\Column(name="presentation", type="string", nullable=true)
-     * @Groups({"full", "raw"})
+     * @Groups({"full", "raw", "user"})
      */
     private $presentation;
     
@@ -154,7 +155,7 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your phone number cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="phone", type="string", length=50, nullable=true)
-     * @Groups({"full", "raw"})
+     * @Groups({"full", "raw", "user"})
      */
     private $phone;
     
@@ -259,11 +260,13 @@ class User implements UserInterface, \Serializable
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ProjectContribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "user"})
      */
     private $projectContributions;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ActivityContribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "user"})
      */
     private $activityContributions;
     

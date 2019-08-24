@@ -1,4 +1,7 @@
 {
+    "ankitpokhrel/tus-php": {
+        "version": "v1.0.12"
+    },
     "behat/transliterator": {
         "version": "v1.2.0"
     },
@@ -207,6 +210,15 @@
             "ref": "384cec52df45f3bfd46a09930d6960a58872b268"
         }
     },
+    "khanzadimahdi/uploadmanager": {
+        "version": "v1.0"
+    },
+    "knplabs/gaufrette": {
+        "version": "v0.8.3"
+    },
+    "knplabs/knp-gaufrette-bundle": {
+        "version": "v0.6.1"
+    },
     "knpuniversity/oauth2-client-bundle": {
         "version": "1.20",
         "recipe": {
@@ -249,6 +261,9 @@
     "namshi/jose": {
         "version": "7.2.3"
     },
+    "nesbot/carbon": {
+        "version": "2.23.1"
+    },
     "nikic/php-parser": {
         "version": "v4.2.2"
     },
@@ -258,6 +273,19 @@
     "ocramius/proxy-manager": {
         "version": "2.2.2"
     },
+    "oneup/uploader-bundle": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "b19678d1535b9fe7cdf4647fd3483455e4fca458"
+        },
+        "files": [
+            "./config/packages/oneup_uploader.yaml",
+            "./config/routes/oneup_uploader.yaml"
+        ]
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },
@@ -266,6 +294,9 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
+    },
+    "predis/predis": {
+        "version": "v1.1.1"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -284,6 +315,9 @@
     },
     "ralouphie/getallheaders": {
         "version": "3.0.3"
+    },
+    "ramsey/uuid": {
+        "version": "3.8.0"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

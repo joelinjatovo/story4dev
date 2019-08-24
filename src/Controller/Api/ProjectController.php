@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController ;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\Version;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 use App\Entity\Project;
 use App\Form\ProjectType;
@@ -18,6 +19,19 @@ use App\Form\ProjectType;
  */
 class ProjectController extends AbstractFOSRestController 
 {
+    /**
+     * @Rest\Get("/project/{project_id}")
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     */
+    public function index(Project $project, Request $request)
+    {
+        $this->denyAccessUnlessGranted('view', $project);
+        
+        return $this->json($project, 200, [], [
+            'groups' => ['project'],
+        ]);
+    }
+    
     /**
      * @Rest\Get("/projects")
      */
@@ -31,12 +45,13 @@ class ProjectController extends AbstractFOSRestController
             'groups' => ['project'],
         ]);
     }
+    
     /**
-     * @Rest\Post("/p")
+     * @Rest\Post("/request")
      */
-    public function p(Request $request)
+    public function request(Request $request)
     {
-        return $this->handleView($this->view($request->request));
+        return $this->json($request->request, 200);
     }
     
     /**
