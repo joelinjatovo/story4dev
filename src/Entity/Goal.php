@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GoalRepository")
@@ -30,24 +31,28 @@ class Goal
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
+     * @Groups({"full", "goal", "indicator"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
      * @Gedmo\Versioned
+     * @Groups({"full", "goal", "indicator"})
      */
     private $value;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
      * @Gedmo\Versioned
+     * @Groups({"full", "goal"})
      */
     private $author;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Indicator", inversedBy="goals")
      * @Gedmo\Versioned
+     * @Groups({"full", "goal"})
      */
     private $indicator;
     
@@ -55,6 +60,7 @@ class Goal
      * @ORM\OneToOne(targetEntity="App\Entity\Iteration", inversedBy="goal")
      * @ORM\JoinColumn(nullable=true)
      * @Gedmo\Versioned
+     * @Groups({"full", "goal"})
      */
     private $iteration;
 

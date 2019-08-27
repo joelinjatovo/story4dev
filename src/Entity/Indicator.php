@@ -35,7 +35,7 @@ class Indicator
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "activity", "unit"})
+     * @Groups({"full", "indicator", "activity", "unit", "goal"})
      */
     private $id;
 
@@ -47,7 +47,7 @@ class Indicator
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "activity", "unit"})
+     * @Groups({"full", "indicator", "activity", "unit", "goal"})
      */
     private $title;
     

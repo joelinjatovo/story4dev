@@ -31,14 +31,14 @@ class Iteration
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "project"})
+     * @Groups({"full", "project", "goal"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project"})
+     * @Groups({"full", "project", "goal"})
      */
     private $title;
     
