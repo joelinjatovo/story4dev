@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UnitRepository")
@@ -30,29 +31,34 @@ class Unit
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
+     * @Groups({"full", "indicator", "activity"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
+     * @Groups({"full", "indicator"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=10)
      * @Gedmo\Versioned
+     * @Groups({"full", "indicator"})
      */
     private $label;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
      * @Gedmo\Versioned
+     * @Groups({"full", "unit"})
      */
     private $author;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "unit"})
      */
     private $indicators;
 

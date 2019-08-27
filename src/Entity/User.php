@@ -45,7 +45,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"full", "raw", "project", "user"})
+     * @Groups({"full", "raw", "project", "user", "activity"})
      */
     private $id;
     

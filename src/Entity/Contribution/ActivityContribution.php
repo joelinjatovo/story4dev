@@ -4,9 +4,10 @@ namespace App\Entity\Contribution;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-use App\Entity\User;
 use App\Entity\Activity;
+use App\Entity\User;
 
 /**
  * @ORM\Entity
@@ -18,6 +19,7 @@ class ActivityContribution extends Base
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="activityContributions")
      * @Gedmo\Versioned
+     * @Groups({"activity"})
      */
     private $user;
     
@@ -25,6 +27,7 @@ class ActivityContribution extends Base
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="contributions")
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
      * @Gedmo\Versioned
+     * @Groups({"user"})
      */
     private $activity;
 

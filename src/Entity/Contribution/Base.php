@@ -39,7 +39,7 @@ abstract class Base
     /**
      * @ORM\Column(type="json")
      * @Gedmo\Versioned
-     * @Groups({"user"})
+     * @Groups({"user", "project", "activity"})
      */
     private $roles = [];
 

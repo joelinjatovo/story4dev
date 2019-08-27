@@ -66,7 +66,7 @@ class Activity
     private $budget;
     
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="activities")
      * @Gedmo\Versioned
      * @Groups({"activity"})
      */
@@ -75,6 +75,7 @@ class Activity
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="activities")
      * @Gedmo\Versioned
+     * @Groups({"activity"})
      */
     private $project;
 
@@ -85,13 +86,15 @@ class Activity
     private $indicators;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ActivityContribution", mappedBy="project", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ActivityContribution", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "activity"})
      */
     private $contributions;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\ActivityMeta", mappedBy="activity", orphanRemoval=true)
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     * @Groups({"meta_activity"})
      */
     protected $metas;
 

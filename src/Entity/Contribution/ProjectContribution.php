@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-use App\Entity\User;
 use App\Entity\Project;
+use App\Entity\User;
 
 /**
  * @ORM\Entity
@@ -19,6 +19,7 @@ class ProjectContribution extends Base
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projectContributions")
      * @Gedmo\Versioned
+     * @Groups({"project"})
      */
     private $user;
     

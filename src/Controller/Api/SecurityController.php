@@ -45,19 +45,5 @@ class SecurityController extends AbstractController
         
         return new JsonResponse(['token' => $token]);
     }
-    
-    /**
-     *
-     * @Route("/login/check", name="api_login_check")
-     */
-    public function loginCheck(Request $request)
-    {
-        if (!$this->getUser()) {
-            return new JsonResponse(array('status' => false, 'message' => "User not found!"));
-        } else {
-            return new JsonResponse(array('status' => $this->getUser()->getTokens()));
-        }
-
-    }
 
 }

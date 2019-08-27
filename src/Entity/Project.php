@@ -39,7 +39,7 @@ class Project
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user"})
+     * @Groups({"full", "project", "raw", "user", "activity"})
      */
     private $id;
 
@@ -63,35 +63,35 @@ class Project
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user"})
+     * @Groups({"full", "project", "raw", "user", "activity"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user"})
+     * @Groups({"full", "project", "raw", "user", "activity"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user"})
+     * @Groups({"full", "project", "raw", "user", "activity"})
      */
     private $budget;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user"})
+     * @Groups({"full", "project", "raw", "user", "activity"})
      */
     private $start_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user"})
+     * @Groups({"full", "project", "raw", "user", "activity"})
      */
     private $end_at;
     
@@ -106,7 +106,7 @@ class Project
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Periodicity", inversedBy="projects")
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user"})
+     * @Groups({"full", "project", "user", "activity"})
      */
     private $periodicity;
 
@@ -124,12 +124,14 @@ class Project
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ProjectContribution", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "project"})
      */
     private $contributions;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\ProjectMeta", mappedBy="project", orphanRemoval=true)
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     * @Groups({"full", "meta_project"})
      */
     protected $metas;
 

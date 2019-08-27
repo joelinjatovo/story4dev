@@ -10,6 +10,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 use App\Entity\Meta\IndicatorMeta;
 
@@ -34,6 +35,7 @@ class Indicator
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
+     * @Groups({"full", "indicator", "activity", "unit"})
      */
     private $id;
 
@@ -45,35 +47,41 @@ class Indicator
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
+     * @Groups({"full", "indicator", "activity", "unit"})
      */
     private $title;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
      * @Gedmo\Versioned
+     * @Groups({"full", "indicator", "activity"})
      */
     private $author;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="indicators")
      * @Gedmo\Versioned
+     * @Groups({"full", "indicator"})
      */
     private $activity;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Unit", inversedBy="indicators")
      * @Gedmo\Versioned
+     * @Groups({"full", "indicator", "activity"})
      */
     private $unit;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="indicator", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "indicator"})
      */
     private $goals;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\IndicatorMeta", mappedBy="indicator", orphanRemoval=true)
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     * @Groups({"meta_indicator"})
      */
     protected $metas;
 
