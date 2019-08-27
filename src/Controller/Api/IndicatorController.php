@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 use App\Entity\Indicator;
+use App\Entity\Activity;
 use App\Form\IndicatorType;
 use App\Service\FormError;
 
@@ -60,6 +61,8 @@ class IndicatorController extends AbstractFOSRestController
     public function update(Indicator $indicator, Request $reques, FormError $formErrort)
     {
         $this->denyAccessUnlessGranted('edit', $indicator);
+        
+        $data = json_decode($request->getContent(), true);
 
         $form = $this->createForm(IndicatorType::class, $indicator);
         $form->submit($data->payload);
@@ -76,9 +79,10 @@ class IndicatorController extends AbstractFOSRestController
     }
     
     /**
-     * @Rest\Get("/indicators")
+     * @Rest\Get("/indicators/{{activity_id}}")
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function list(Request $request)
+    public function list(Activity $activity, Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Indicator::class);
         

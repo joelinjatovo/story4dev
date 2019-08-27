@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 use App\Entity\Activity;
+use App\Entity\Project;
 use App\Form\ActivityType;
 use App\Service\FormError;
 
@@ -60,6 +61,8 @@ class ActivityController extends AbstractFOSRestController
     public function update(Activity $activity, Request $reques, FormError $formErrort)
     {
         $this->denyAccessUnlessGranted('edit', $activity);
+        
+        $data = json_decode($request->getContent(), true);
 
         $form = $this->createForm(ActivityType::class, $activity);
         $form->submit($data->payload);
@@ -76,9 +79,10 @@ class ActivityController extends AbstractFOSRestController
     }
     
     /**
-     * @Rest\Get("/activities")
+     * @Rest\Get("/activities/{project_id}")
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(Request $request)
+    public function list(Project $project, Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Activity::class);
         

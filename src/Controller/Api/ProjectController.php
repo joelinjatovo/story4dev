@@ -60,6 +60,8 @@ class ProjectController extends AbstractFOSRestController
     public function update(Project $project, Request $reques, FormError $formErrort)
     {
         $this->denyAccessUnlessGranted('edit', $project);
+        
+        $data = json_decode($request->getContent(), true);
 
         $form = $this->createForm(ProjectType::class, $project);
         $form->submit($data->payload);
