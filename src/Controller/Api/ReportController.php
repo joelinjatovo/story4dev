@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations\Version;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
+use App\Entity\Project;
 use App\Entity\Report;
 use App\Form\ReportType;
 use App\Service\FormError;
@@ -88,8 +89,9 @@ class ReportController extends AbstractController
     
     /**
      * @Rest\Get("/reports")
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(Request $request)
+    public function list(Project $project, Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Report::class);
         
