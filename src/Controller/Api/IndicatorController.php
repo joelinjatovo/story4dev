@@ -79,14 +79,14 @@ class IndicatorController extends AbstractFOSRestController
     }
     
     /**
-     * @Rest\Get("/indicators/{{activity_id}}")
+     * @Rest\Get("/activity/{activity_id}/indicators")
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
     public function list(Activity $activity, Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Indicator::class);
         
-        $indicators = $repository->findAll();
+        $indicators = $repository->findBy(['activity' => $activity]);
         
         return $this->json(['data' => $indicators], 200, [], ['groups' => ['indicator']]);
     }

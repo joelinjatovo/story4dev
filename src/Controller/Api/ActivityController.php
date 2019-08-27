@@ -79,14 +79,14 @@ class ActivityController extends AbstractFOSRestController
     }
     
     /**
-     * @Rest\Get("/activities/{project_id}")
+     * @Rest\Get("/project/{project_id}/activities")
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
     public function list(Project $project, Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Activity::class);
         
-        $activities = $repository->findAll();
+        $activities = $repository->findBy(['project' => $project]);
         
         return $this->json(['data' => $activities], 200, [], ['groups' => ['activity']]);
     }

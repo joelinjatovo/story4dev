@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -84,14 +85,14 @@ class ResultController extends AbstractController
     }
     
     /**
-     * @Rest\Get("/results/{report_id}")
+     * @Rest\Get("/report/{report_id}/results")
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
     public function list(Report $report, Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Result::class);
         
-        $results = $repository->findAll();
+        $results = $repository->findBy(['report' => $report]);
         
         return $this->json(['data' => $results], 200, [], ['groups' => ['result']]);
     }

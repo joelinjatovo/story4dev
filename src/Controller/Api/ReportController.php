@@ -88,14 +88,14 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Rest\Get("/reports")
+     * @Rest\Get("/project/{project_id}/reports")
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
     public function list(Project $project, Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Report::class);
         
-        $reports = $repository->findAll();
+        $reports = $repository->findBy(['project' => $project]);
         
         return $this->json(['data' => $reports], 200, [], ['groups' => ['report']]);
     }

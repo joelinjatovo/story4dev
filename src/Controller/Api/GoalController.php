@@ -77,14 +77,14 @@ class GoalController extends AbstractFOSRestController
     }
     
     /**
-     * @Rest\Get("/goals/{indicator_id}")
+     * @Rest\Get("/indicator/{indicator_id}/goals")
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
     public function list(Indicator $indicator, Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Goal::class);
         
-        $goals = $repository->findAll();
+        $goals = $repository->findBy(['indicator' => $indicator]);
         
         return $this->json(['data' => $goals], 200, [], ['groups' => ['goal']]);
     }
