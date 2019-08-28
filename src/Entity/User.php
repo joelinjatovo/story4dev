@@ -215,6 +215,7 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Address")
      * @ORM\JoinColumn(nullable=true)
+     * @Groups({"user"})
      */
     private $address;
 
