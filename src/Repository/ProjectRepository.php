@@ -27,11 +27,38 @@ class ProjectRepository extends AppRepository
             ->getQuery();
     }
     
-    public function getAllByAuthor(User $user)
+    public function findByAuthor(User $user)
     {
         return $this->createQueryBuilder('p')
             ->where('p.author = :query')
             ->setParameter('query', $user)
+            ->getQuery();
+    }
+    
+    public function findByContributor(User $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.contributions', 'c')
+            ->where('c.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery();
+    }
+    
+    public function findContributionsOnly(User $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.contributions', 'c')
+            ->where('p.author != :user')
+            ->where('c.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery();
+    }
+    
+    public function findByIds(Array $ids)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
             ->getQuery();
     }
 }

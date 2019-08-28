@@ -12,7 +12,7 @@ class FloatType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'scale' => 3,
+            'scale' => 2,
             'attr'  => [
                 'step' => 0.01,
                 'min'  => 0,

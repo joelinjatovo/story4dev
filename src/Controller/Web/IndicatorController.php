@@ -17,6 +17,7 @@ use App\Entity\Goal;
 use App\Entity\Unit;
 use App\Form\IndicatorType;
 use App\Form\GoalType;
+use App\Service\FormError;
 
 /** @Route(name="indicator_") */
 class IndicatorController extends AbstractController
@@ -56,6 +57,8 @@ class IndicatorController extends AbstractController
                     'errors'  => $errors
                 ]);
             }
+
+            $indicator->setAuthor($this->getUser());
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($indicator);
@@ -138,22 +141,25 @@ class IndicatorController extends AbstractController
             throw $this->createNotFoundException('The activity does not match');
         }
         
+        $form = $this->createForm(IndicatorType::class, $indicator);
+        
         return $this->render('indicator/edit.html.twig', [
             'user'      => $user,
             'project'   => $project,
             'activity'  => $activity, 
-            'indicator' => $indicator
+            'indicator' => $indicator, 
+            'form'      => $form->createView() 
         ]);
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/update/{indicator_id}", name="update", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/edit/{indicator_id}", name="update", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function update(User $user, Project $project, Activity $activity, Indicator $indicator)
+    public function update(User $user, Project $project, Activity $activity, Indicator $indicator, Request $request, FormError $formError)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -167,15 +173,49 @@ class IndicatorController extends AbstractController
             throw $this->createNotFoundException('The activity does not match');
         }
         
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $indicator->setTitle('New indicator name!');
-        
-        $entityManager->flush();
+        $form = $this->createForm(IndicatorType::class, $indicator);
 
-        return $this->redirectToRoute('indicator_show', [
+        $form->handleRequest($request);
+
+        if ( $form->isSubmitted() && $form->isValid() ) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($indicator);
+            $entityManager->flush();
+            
+            if ( $request->isXmlHttpRequest() ) {
+                return $this->json([
+                    'success' => true,
+                    'title'   => 'Success',
+                    'status'  => 'success',
+                    'message' => 'Indicator updated successfully.',
+                ]);
+            }
+        
+            $this->addFlash('success', 'Indicator updated succesfully.');
+
+            return $this->redirectToRoute('indicator_edit', [
+                'slug'        => $user->getSlug(),
+                'project_id'  => $project->getId(),
+                'activity_id' => $activity->getId(),
+                'indicator_id' => $indicator->getId()
+            ]);
+        }
+        
+        if ( $request->isXmlHttpRequest() ) {
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'status'  => 'error',
+                'message' => 'An error was occured. :)',
+                'errors'  => $formError->getErrorMessages($form),
+            ]);
+        }
+        
+        $this->addFlash('error', 'Something went wrong.');
+
+        return $this->redirectToRoute('indicator_edit', [
             'slug'         => $user->getSlug(),
-            'project_id'   => $project->getId(),
+            'project_id'   => $project->getId(), 
             'activity_id'  => $activity->getId(),
             'indicator_id' => $indicator->getId()
         ]);

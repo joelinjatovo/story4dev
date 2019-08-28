@@ -16,6 +16,7 @@ use App\Entity\Activity;
 use App\Entity\Iteration;
 use App\Form\ActivityType;
 use App\Form\ProjectType;
+use App\Service\FormError;
 use App\Service\PaginatorService;
 
 /** @Route(name="project_") */
@@ -107,7 +108,7 @@ class ProjectController extends AbstractController
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function update(User $user, Request $request, Project $project)
+    public function update(User $user, Project $project, Request $request, FormError $formError)
     {
         $this->denyAccessUnlessGranted('edit', $project);
         
@@ -124,25 +125,8 @@ class ProjectController extends AbstractController
         
         $form->handleRequest($request);
         
-        if ( $form->isSubmitted() ) {
-            if ( ! $form->isValid() ) {
-                
-                $errors = [];
-                foreach ($form->all() as $child) {
-                    if (!$child->isValid()) {
-                       $errors[$child->getName()] = (String) $form[$child->getName()]->getErrors();
-                    }
-                }
-                
-                return $this->json([
-                    'success' => false,
-                    'title'   => 'Validation Error',
-                    'status'  => 'error',
-                    'message' => 'An error was occured. :)',
-                    'errors'  => $errors
-                ]);
-            }
-            
+        if ( $form->isSubmitted() && $form->isValid() ) {
+
             $entityManager = $this->getDoctrine()->getManager();
             
             // remove the relationship between the tag and the Task
@@ -153,7 +137,7 @@ class ProjectController extends AbstractController
             }
 
             $entityManager->persist($project);
-            
+
             $entityManager->flush();
             
             if ( $request->isXmlHttpRequest() ) {
@@ -177,10 +161,10 @@ class ProjectController extends AbstractController
         if ( $request->isXmlHttpRequest() ) {
             return $this->json([
                 'success' => false,
-                'title'   => 'Error',
+                'title'   => 'Invalid Request',
                 'status'  => 'error',
-                'message' => 'Something went wrong. :)',
-                'errors'  => [],
+                'message' => 'An error was occured. :)',
+                'errors'  => $formError->getErrorMessages($form),
             ]);
         }
         
@@ -222,7 +206,7 @@ class ProjectController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $query = $entityManager->getRepository(Project::class)->getAllByAuthor($user);
+        $query = $entityManager->getRepository(Project::class)->findByContributor($user);
 
         $projects = $paginator->paginate($query, 2);
         

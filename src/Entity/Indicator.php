@@ -35,7 +35,7 @@ class Indicator
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "activity", "unit", "goal"})
+     * @Groups({"full", "indicator", "project", "activity", "unit", "goal"})
      */
     private $id;
 
@@ -47,7 +47,7 @@ class Indicator
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "activity", "unit", "goal"})
+     * @Groups({"full", "indicator", "project", "activity", "unit", "goal"})
      */
     private $title;
     
@@ -68,13 +68,13 @@ class Indicator
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Unit", inversedBy="indicators")
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "activity"})
+     * @Groups({"full", "indicator", "project", "activity"})
      */
     private $unit;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="indicator", orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @Groups({"full", "indicator"})
+     * @Groups({"full", "indicator", "project"})
      */
     private $goals;
     

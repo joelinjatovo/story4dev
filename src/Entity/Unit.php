@@ -31,21 +31,21 @@ class Unit
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "activity"})
+     * @Groups({"full", "project", "indicator", "activity"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator"})
+     * @Groups({"full", "project", "indicator"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=10)
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator"})
+     * @Groups({"full", "project", "indicator"})
      */
     private $label;
     

@@ -84,10 +84,41 @@ class ActivityController extends AbstractFOSRestController
      */
     public function list(Project $project, Request $request)
     {
+        $this->denyAccessUnlessGranted('view', $project);
+
         $repository = $this->getDoctrine()->getRepository(Activity::class);
         
         $activities = $repository->findBy(['project' => $project]);
         
+        return $this->json(['data' => $activities], 200, [], ['groups' => ['activity']]);
+    }
+    
+    /**
+     * @Rest\Post("/activities")
+     */
+    public function listIn(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $activities = [];
+        if( isset($data['payload']) && isset($data['payload']['activities']) ) {
+            $ids = $data['payload']['activities'];
+    
+            $repository = $this->getDoctrine()->getRepository(Activity::class);
+
+            foreach($ids as $id){
+                $activity = $repository->find($id);
+
+                if( ! $activity ) {
+                    return $this->json(['status' => 'error', 'error' => "Entity not found."], JsonResponse::HTTP_BAD_REQUEST);
+                }
+                
+                $this->denyAccessUnlessGranted('view', $activity);
+
+                $activities[] = $activity;
+            }
+            
+        }
         return $this->json(['data' => $activities], 200, [], ['groups' => ['activity']]);
     }
 }

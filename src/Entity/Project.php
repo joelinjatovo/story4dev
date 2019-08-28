@@ -39,14 +39,14 @@ class Project
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user"})
+     * @Groups({"full", "project", "user", "raw"})
      */
     private $picture;
 
@@ -63,35 +63,35 @@ class Project
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity"})
      */
     private $budget;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity"})
      */
     private $start_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw", "user", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity"})
      */
     private $end_at;
     
@@ -106,7 +106,7 @@ class Project
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Periodicity", inversedBy="projects")
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "activity"})
+     * @Groups({"full", "project", "activity"})
      */
     private $periodicity;
 

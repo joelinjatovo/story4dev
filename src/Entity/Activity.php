@@ -37,7 +37,7 @@ class Activity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "activity", "indicator"})
+     * @Groups({"full", "activity", "project", "indicator"})
      */
     private $id;
 
@@ -49,7 +49,7 @@ class Activity
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "activity", "indicator"})
+     * @Groups({"full", "activity", "project", "indicator"})
      */
     private $title;
 
@@ -61,7 +61,7 @@ class Activity
      *     message="The value {{ value }} is not a valid {{ type }}."
      * )
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "activity"})
+     * @Groups({"full", "activity", "project"})
      */
     private $budget;
     
@@ -81,7 +81,7 @@ class Activity
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @Groups({"full", "activity"})
+     * @Groups({"full", "activity", "project"})
      */
     private $indicators;
     

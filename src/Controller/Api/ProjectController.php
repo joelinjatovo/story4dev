@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\RestBundle\Controller\AbstractFOSRestController ;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\Version;
@@ -84,8 +85,37 @@ class ProjectController extends AbstractFOSRestController
     {
         $repository = $this->getDoctrine()->getRepository(Project::class);
         
-        $projects = $repository->findAll();
+        $projects = $repository->findByContributor($this->getUser())->execute();
         
+        return $this->json(['data' => $projects], 200, [], ['groups' => ['project']]);
+    }
+    
+    /**
+     * @Rest\Post("/projects")
+     */
+    public function listIn(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $projects = [];
+        if( isset($data['payload']) && isset($data['payload']['projects']) ) {
+            $ids = $data['payload']['projects'];
+    
+            $repository = $this->getDoctrine()->getRepository(Project::class);
+
+            foreach($ids as $id){
+                $project = $repository->find($id);
+
+                if( ! $project ) {
+                    return $this->json(['status' => 'error', 'error' => "Entity not found."], JsonResponse::HTTP_BAD_REQUEST);
+                }
+                
+                $this->denyAccessUnlessGranted('view', $project);
+
+                $projects[] = $project;
+            }
+            
+        }
         return $this->json(['data' => $projects], 200, [], ['groups' => ['project']]);
     }
 }
