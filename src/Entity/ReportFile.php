@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReportFileRepository")
- * @ORM\Table(name="activities_files")
+ * @ORM\Table(name="reports_files")
  */
 class ReportFile 
 {

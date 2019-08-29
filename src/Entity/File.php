@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File as SysFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FileRepository")
@@ -20,6 +21,7 @@ class File
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"full", "file"})
      */
     private $id;
 
@@ -27,6 +29,7 @@ class File
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="Name should not be blank.")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"full", "file"})
      */
     private $name;
 
@@ -42,6 +45,7 @@ class File
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"full", "file"})
      */
     private $path;
 

@@ -19,11 +19,13 @@ class UploadType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            //->add('file', FileType::class)
+            ->add('file', FileType::class)
+            /*
             ->add('file', VichImageType::class, [
                 'required' => false,
                 'allow_delete' => true, 
             ])
+            */
             ->add('submit', SubmitType::class, [
                 'label' => 'Upload File'
             ])

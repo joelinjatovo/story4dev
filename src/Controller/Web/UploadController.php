@@ -19,7 +19,7 @@ use App\Service\FileUploader;
 class UploadController extends AbstractController
 {
     /**
-     * @Route("/u/upload", name="get_upload", methods={"GET"})
+     * @Route("/xu/upload", name="get_upload", methods="GET")
      */
     public function index()
     {
@@ -47,7 +47,7 @@ class UploadController extends AbstractController
     /**
      * @Route("/u/avatar", name="post_avatar", methods={"POST"})
      */
-    public function postAvatar (Request $request, FormError $formError, FileUploader $fileUploader)
+    public function postAvatar(Request $request, FormError $formError, FileUploader $fileUploader)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -69,7 +69,7 @@ class UploadController extends AbstractController
     }
 
     /**
-     * @Route("/u/upload", name="post_upload", methods={"POST"})
+     * @Route("/xu/upload", name="post_upload", methods="POST")
      *
      * @param Request $request
      *
@@ -114,7 +114,7 @@ class UploadController extends AbstractController
     }
 
     /**
-     * @Route("/u/chunk", name="get_upload", methods={"GET"})
+     * @Route("/u/chunk", name="get_chunk", methods={"GET"})
      */
     public function chunk()
     {
