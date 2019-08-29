@@ -98,6 +98,11 @@ class Activity
      */
     protected $metas;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ActivityFile", mappedBy="activity", orphanRemoval=true)
+     */
+    private $activityFiles;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -105,6 +110,7 @@ class Activity
         $this->indicators = new ArrayCollection();
         $this->contributions = new ArrayCollection();
         $this->metas = new ArrayCollection();
+        $this->activityFiles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -235,6 +241,37 @@ class Activity
             $this->metas->removeElement($meta);
             if ($meta->getActivity() === $this) {
                 $meta->setActivity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ActivityFile[]
+     */
+    public function getActivityFiles(): Collection
+    {
+        return $this->activityFiles;
+    }
+
+    public function addActivityFile(ActivityFile $activityFile): self
+    {
+        if (!$this->activityFiles->contains($activityFile)) {
+            $this->activityFiles[] = $activityFile;
+            $activityFile->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivityFile(ActivityFile $activityFile): self
+    {
+        if ($this->activityFiles->contains($activityFile)) {
+            $this->activityFiles->removeElement($activityFile);
+            // set the owning side to null (unless already changed)
+            if ($activityFile->getActivity() === $this) {
+                $activityFile->setActivity(null);
             }
         }
 

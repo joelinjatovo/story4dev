@@ -10,6 +10,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReportRepository")
@@ -31,6 +32,7 @@ class Report
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $id;
 
@@ -42,37 +44,48 @@ class Report
      * )
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $synced_at;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reports")
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $author;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="reports")
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $project;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="report", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "report"})
      */
     private $results;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ReportFile", mappedBy="report")
+     */
+    private $reportFiles;
 
     public function __construct()
     {
@@ -80,6 +93,8 @@ class Report
         $this->setUpdatedAt(new \DateTime());
         $this->setSyncedAt(new \DateTime());
         $this->results = new ArrayCollection();
+        $this->files = new ArrayCollection();
+        $this->reportFiles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -168,6 +183,37 @@ class Report
             $this->results->removeElement($result);
             if ($result->getReport() === $this) {
                 $result->setReport(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReportFile[]
+     */
+    public function getReportFiles(): Collection
+    {
+        return $this->reportFiles;
+    }
+
+    public function addReportFile(ReportFile $reportFile): self
+    {
+        if (!$this->reportFiles->contains($reportFile)) {
+            $this->reportFiles[] = $reportFile;
+            $reportFile->setReport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReportFile(ReportFile $reportFile): self
+    {
+        if ($this->reportFiles->contains($reportFile)) {
+            $this->reportFiles->removeElement($reportFile);
+            // set the owning side to null (unless already changed)
+            if ($reportFile->getReport() === $this) {
+                $reportFile->setReport(null);
             }
         }
 

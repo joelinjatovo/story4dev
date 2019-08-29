@@ -40,6 +40,7 @@ class IndicatorType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Indicator::class,
+            'project'    => null,
         ]);
     }
 }

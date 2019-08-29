@@ -11,6 +11,8 @@ class IterationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $project = isset($options['project'])?$options['project']:null;
+        
         $builder
             ->add('title')
         ;
@@ -20,6 +22,7 @@ class IterationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Iteration::class,
+            'project'    => null,
         ]);
     }
 }

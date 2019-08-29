@@ -10,6 +10,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ResultRepository")
@@ -23,30 +24,35 @@ class Result
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=false)
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $value;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="results")
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $author;
     
@@ -59,6 +65,7 @@ class Result
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Indicator", inversedBy="goals")
      * @Gedmo\Versioned
+     * @Groups({"full", "report"})
      */
     private $indicator;
 

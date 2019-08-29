@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Entity\Project;
 use App\Entity\Activity;
 use App\Entity\Indicator;
+use App\Entity\Iteration;
 use App\Entity\Goal;
 use App\Entity\Unit;
 use App\Form\IndicatorType;
@@ -22,54 +23,94 @@ use App\Service\FormError;
 /** @Route(name="indicator_") */
 class IndicatorController extends AbstractController
 {
+    
     /**
-     * @Route("/indicator", name="index", methods="GET")
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator", name="index", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function index()
+    public function index(User $user, Project $project, Activity $activity)
     {
-        return $this->render('indicator/create.html.twig');
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+        
+        if($activity->getProject() != $project ){
+            throw $this->createNotFoundException('The project does not match');
+        }
+
+        $indicator = new Indicator();
+        $form = $this->createForm(IndicatorType::class, $indicator);
+
+        return $this->render('indicator/create.html.twig', [
+            'user'      => $user,
+            'project'   => $project,
+            'activity'  => $activity, 
+            'indicator' => $indicator,
+            'form'      => $form->createView() 
+        ]);
     }
     
     /**
-     * @Route("/indicator", name="create", methods="POST")
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator", name="create", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+"})
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function create(Request $request, ValidatorInterface $validator): Response
+    public function create(User $user, Project $project, Activity $activity, Request $request)
     {
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+        
+        if($activity->getProject() != $project ){
+            throw $this->createNotFoundException('The project does not match');
+        }
+
         $indicator = new Indicator();
         $form = $this->createForm(IndicatorType::class, $indicator);
         
         $form->handleRequest($request);
-        if ( $form->isSubmitted() ) {
-            if ( ! $form->isValid() ) {
-                
-                $errors = [];
-                foreach ($form->all() as $child) {
-                    if (!$child->isValid()) {
-                       $errors[$child->getName()] = (String) $form[$child->getName()]->getErrors();
-                    }
-                }
-                
-                return $this->json([
-                    'success' => false,
-                    'title'   => 'Validation Error',
-                    'status'  => 'error',
-                    'message' => 'An error was occured. :)',
-                    'errors'  => $errors
-                ]);
-            }
-
+        if ( $form->isSubmitted() && $form->isValid() ) {
             $indicator->setAuthor($this->getUser());
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($indicator);
+
+            $repository_iteration = $entityManager->getRepository(Iteration::class);
+            $repository_goal = $entityManager->getRepository(Goal::class);
+            $goals = $request->request->get('goals');
+            foreach( $goals as $goal ) {
+                $iteration = $repository_iteration->find($goal['iteration']);
+                
+                $entity = new Goal();
+                $entity->setAuthor($this->getUser());
+                $entity->setIteration($iteration);
+                $entity->setIndicator($indicator);
+                $entity->setValue($goal['value']);
+
+                $entityManager->persist($entity);
+            }
+
             $entityManager->flush();
             
-            return $this->json([
-                'success' => true,
-                'title'   => 'Success',
-                'status'  => 'success',
-                'message' => 'Indicator created successfully.',
-                'html'    => $this->renderView('activity/indicator.html.twig', ['indicator' => $indicator] )
+            if ( $request->isXmlHttpRequest() ) {
+                return $this->json([
+                    'success' => true,
+                    'title'   => 'Success',
+                    'status'  => 'success',
+                    'message' => 'Indicator created successfully.',
+                    'html'    => $this->renderView('activity/indicator.html.twig', ['indicator' => $indicator] )
+                ]);
+            }
+        
+            $this->addFlash('success', 'Indicator created succesfully.');
+
+            return $this->redirectToRoute('indicator_index', [
+                'slug'        => $user->getSlug(),
+                'project_id'  => $project->getId(),
+                'activity_id' => $activity->getId(),
             ]);
             
         }
@@ -77,14 +118,20 @@ class IndicatorController extends AbstractController
         if ( $request->isXmlHttpRequest() ) {
             return $this->json([
                 'success' => false,
-                'title'   => 'Error',
+                'title'   => 'Invalid Request',
                 'status'  => 'error',
-                'message' => 'Something went wrong. :)',
-                'errors'  => [],
+                'message' => 'An error was occured. :)',
+                'errors'  => $formError->getErrorMessages($form),
             ]);
         }
+        
+        $this->addFlash('error', 'Something went wrong.');
 
-        return new Response('Saved new indicator with id '.$indicator->getId());
+        return $this->redirectToRoute('activity_index', [
+            'slug'        => $user->getSlug(),
+            'project_id'  => $project->getId(),
+            'activity_id' => $activity->getId(), 
+        ]);
     }
     
     /**
@@ -180,6 +227,26 @@ class IndicatorController extends AbstractController
         if ( $form->isSubmitted() && $form->isValid() ) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($indicator);
+
+            $repository_iteration = $entityManager->getRepository(Iteration::class);
+            $repository_goal = $entityManager->getRepository(Goal::class);
+            $goals = $request->request->get('goals');
+            foreach( $goals as $goal ) {
+                $iteration = $repository_iteration->find($goal['iteration']);
+                $entity    = $repository_goal->findOneBy(['indicator' => $indicator, 'iteration' => $iteration]);
+                if($entity){
+                    $entity->setValue($goal['value']);
+                }else{
+                    $entity = new Goal();
+                    $entity->setAuthor($this->getUser());
+                    $entity->setIteration($iteration);
+                    $entity->setIndicator($indicator);
+                    $entity->setValue($goal['value']);
+                }
+
+                $entityManager->persist($entity);
+            }
+            
             $entityManager->flush();
             
             if ( $request->isXmlHttpRequest() ) {

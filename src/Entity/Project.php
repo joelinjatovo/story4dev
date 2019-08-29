@@ -39,14 +39,14 @@ class Project
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity", "report"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw"})
+     * @Groups({"full", "project", "user", "raw", "report"})
      */
     private $picture;
 
@@ -63,35 +63,35 @@ class Project
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity", "report"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity", "report"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity", "report"})
      */
     private $budget;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity", "report"})
      */
     private $start_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity"})
+     * @Groups({"full", "project", "user", "raw", "activity", "report"})
      */
     private $end_at;
     
@@ -127,6 +127,12 @@ class Project
      * @Groups({"full", "project"})
      */
     private $contributions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "project"})
+     */
+    private $reports;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\ProjectMeta", mappedBy="project", orphanRemoval=true)
@@ -143,6 +149,7 @@ class Project
         $this->iterations = new ArrayCollection();
         $this->contributions = new ArrayCollection();
         $this->metas = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -360,6 +367,37 @@ class Project
             $this->metas->removeElement($meta);
             if ($meta->getProject() === $this) {
                 $meta->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Report[]
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): self
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports[] = $report;
+            $report->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): self
+    {
+        if ($this->reports->contains($report)) {
+            $this->reports->removeElement($report);
+            // set the owning side to null (unless already changed)
+            if ($report->getProject() === $this) {
+                $report->setProject(null);
             }
         }
 

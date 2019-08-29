@@ -18,12 +18,11 @@ use App\Service\FileUploader;
 
 /**
  * @Version("v1")
- * @Route(name="upload_")
  */
 class UploadController extends AbstractController
 {
     /**
-     * @Rest\Get("/upload-chunk", name="index")
+     * @Rest\Get("/upload")
      */
     public function upload(FileUploader $uploader, Request $request)
     {

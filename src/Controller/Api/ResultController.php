@@ -20,7 +20,6 @@ use App\Service\FormError;
 
 /**
  * @Version("v1")
- * @Route(name="result_")
  */
 class ResultController extends AbstractController
 {
@@ -37,7 +36,7 @@ class ResultController extends AbstractController
     }
 
     /**
-     * @Rest\Post("/result", name="create")
+     * @Rest\Post("/result")
      */
     public function create(Request $request)
     {
@@ -45,7 +44,7 @@ class ResultController extends AbstractController
         
         $result = new Result();
         $form = $this->createForm(ResultType::class, $result, ['csrf_protection' => false]);
-        $form->submit($data->payload);
+        $form->submit($data['payload']);
         
         if ($form->isSubmitted() && $form->isValid() ) {
             $result->setAuthor($this->getUser());

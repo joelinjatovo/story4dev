@@ -17,7 +17,6 @@ use App\Service\FormError;
 
 /**
  * @Version("v1")
- * @Route(name="api_")
  */
 class ActivityController extends AbstractFOSRestController 
 {
@@ -41,7 +40,7 @@ class ActivityController extends AbstractFOSRestController
 
         $activity = new Activity();
         $form = $this->createForm(ActivityType::class, $activity);
-        $form->submit($data->payload);
+        $form->submit($data['payload']);
         
         if ( $form->isSubmitted() && $form->isValid() ){
             $em = $this->getDoctrine()->getManager();

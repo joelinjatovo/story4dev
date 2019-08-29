@@ -17,7 +17,6 @@ use App\Service\FormError;
 
 /**
  * @Version("v1")
- * @Route(name="api_")
  */
 class IndicatorController extends AbstractFOSRestController 
 {
@@ -65,7 +64,7 @@ class IndicatorController extends AbstractFOSRestController
         $data = json_decode($request->getContent(), true);
 
         $form = $this->createForm(IndicatorType::class, $indicator);
-        $form->submit($data->payload);
+        $form->submit($data['payload']);
         
         if ( $form->isSubmitted() && $form->isValid() ){
             $em = $this->getDoctrine()->getManager();

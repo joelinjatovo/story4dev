@@ -45,25 +45,25 @@ class User implements UserInterface, \Serializable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"full", "raw", "project", "user", "activity", "goal"})
+     * @Groups({"full", "raw", "project", "user", "activity", "goal", "report"})
      */
     private $id;
     
     /**
      * @ORM\Column(name="facebook_id",type="string", nullable=true)
-     * @Groups({"full", "raw", "user"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     protected $facebookId;
 
     /**
      * @ORM\Column(name="google_id", type="string", nullable=true)
-     * @Groups({"full", "raw", "user"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     protected $googleId;
     
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"full", "raw", "user"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     private $avatar;
 
@@ -79,7 +79,7 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your username cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(type="string", length=100, unique=true)
-     * @Groups({"full", "raw", "user"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     private $username;
 
@@ -91,13 +91,13 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your email cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"full", "raw", "user"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"full", "raw", "user"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     private $roles = [];
 
@@ -115,7 +115,7 @@ class User implements UserInterface, \Serializable
     /**
      * @Gedmo\Slug(fields={"username"})
      * @ORM\Column(type="string", length=255, nullable=false, unique=true)
-     * @Groups({"full", "raw", "user"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     private $slug;
     
@@ -126,7 +126,7 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your fullname cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="fullname", type="string", length=100, nullable=true)
-     * @Groups({"full", "raw", "user"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     private $fullname;
     
@@ -137,14 +137,14 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your title cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="title", type="string", length=100, nullable=true)
-     * @Groups({"full", "raw", "user"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     private $title;
     
     /**
      * @Assert\Type("string")
      * @ORM\Column(name="presentation", type="string", nullable=true)
-     * @Groups({"full", "raw", "user"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     private $presentation;
     
@@ -155,7 +155,7 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your phone number cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="phone", type="string", length=50, nullable=true)
-     * @Groups({"full", "raw", "user"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     private $phone;
     
@@ -215,7 +215,7 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Address")
      * @ORM\JoinColumn(nullable=true)
-     * @Groups({"user"})
+     * @Groups({"user", "project"})
      */
     private $address;
 

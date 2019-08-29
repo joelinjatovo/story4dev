@@ -10,12 +10,11 @@ use FOS\RestBundle\Controller\Annotations\Version;
 
 /**
  * @Version("v1")
- * @Route(name="user_")
  */
 class UserController extends AbstractController
 {
     /**
-     * @Rest\Get("/user", name="index")
+     * @Rest\Get("/user")
      */
     public function index(Request $request)
     {

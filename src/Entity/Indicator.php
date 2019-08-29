@@ -35,7 +35,7 @@ class Indicator
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "project", "activity", "unit", "goal"})
+     * @Groups({"full", "indicator", "project", "activity", "unit", "goal", "report"})
      */
     private $id;
 
@@ -47,7 +47,7 @@ class Indicator
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "project", "activity", "unit", "goal"})
+     * @Groups({"full", "indicator", "project", "activity", "unit", "goal", "report"})
      */
     private $title;
     
@@ -77,6 +77,12 @@ class Indicator
      * @Groups({"full", "indicator", "project"})
      */
     private $goals;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="indicator", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "report"})
+     */
+    private $results;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\IndicatorMeta", mappedBy="indicator", orphanRemoval=true)
@@ -90,6 +96,7 @@ class Indicator
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->goals = new ArrayCollection();
+        $this->results = new ArrayCollection();
         $this->metas = new ArrayCollection();
     }
 
@@ -167,6 +174,33 @@ class Indicator
             $this->goals->removeElement($goal);
             if ($goal->getIndicator() === $this) {
                 $goal->setIndicator(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getResults(): ?Collection
+    {
+        return $this->results;
+    }
+
+    public function addResult(?Result $result): self
+    {
+        if (!$this->results->contains($result)) {
+            $this->results[] = $result;
+            $result->setReport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResult(?Result $result): self
+    {
+        if ($this->results->contains($result)) {
+            $this->results->removeElement($result);
+            if ($result->getReport() === $this) {
+                $result->setReport(null);
             }
         }
 

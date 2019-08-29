@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File as SysFile;
@@ -43,6 +45,17 @@ class File
      */
     private $path;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ActivityFile", mappedBy="file", orphanRemoval=true)
+     */
+    private $activityFiles;
+
+    public function __construct()
+    {
+        $this->reportFiles = new ArrayCollection();
+        $this->activityFiles = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -80,6 +93,37 @@ class File
     public function setFile(?SysFile $file): self
     {
         $this->file = $file;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ActivityFile[]
+     */
+    public function getActivityFiles(): Collection
+    {
+        return $this->activityFiles;
+    }
+
+    public function addActivityFile(ActivityFile $activityFile): self
+    {
+        if (!$this->activityFiles->contains($activityFile)) {
+            $this->activityFiles[] = $activityFile;
+            $activityFile->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivityFile(ActivityFile $activityFile): self
+    {
+        if ($this->activityFiles->contains($activityFile)) {
+            $this->activityFiles->removeElement($activityFile);
+            // set the owning side to null (unless already changed)
+            if ($activityFile->getFile() === $this) {
+                $activityFile->setFile(null);
+            }
+        }
 
         return $this;
     }

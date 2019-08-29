@@ -82,6 +82,24 @@
 									</div>
 								</div>
 							</div>
+							<div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+							<div class="kt-section kt-section--first">
+								<div class="kt-section__body">
+									<h3 class="kt-section__title kt-section__title-lg">Indicator Goals:</h3>
+									{%- set i = 0 -%}
+									{% for iteration in project.iterations %}
+										<div class="form-group row">
+											<label class="col-3 col-form-label">{{ iteration.title }}</label>
+											<div class="col-9">
+												<input class="form-control" name="goals[{{i}}][indicator]" value="{{indicator.id}}" type="hidden">
+												<input class="form-control" name="goals[{{i}}][iteration]" value="{{iteration.id}}" type="hidden">
+												<input class="form-control" name="goals[{{i}}][value]" type="number">
+											</div>
+										</div>
+										{%- set i = i+1 -%}
+									{% endfor %}
+								</div>
+							</div>
 						</div>
 						<div class="col-xl-2"></div>
 					</div>

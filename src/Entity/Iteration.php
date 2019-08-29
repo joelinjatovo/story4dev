@@ -55,10 +55,9 @@ class Iteration
     private $project;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Goal", inversedBy="iteration")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="iteration", orphanRemoval=true, fetch="EXTRA_LAZY")
      */
-    private $goal;
+    private $goals;
 
     public function __construct()
     {
@@ -106,15 +105,30 @@ class Iteration
 
         return $this;
     }
-
-    public function getGoal(): ?Goal
+    
+    public function getGoals(): ?Collection
     {
-        return $this->goal;
+        return $this->goals;
     }
 
-    public function setGoal(?Goal $goal): self
+    public function addGoal(?Goal $goal): self
     {
-        $this->goal = $goal;
+        if (!$this->goals->contains($goal)) {
+            $this->goals[] = $goal;
+            $goal->setIndicator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGoal(?Goal $goal): self
+    {
+        if ($this->goals->contains($goal)) {
+            $this->goals->removeElement($goal);
+            if ($goal->getIndicator() === $this) {
+                $goal->setIndicator(null);
+            }
+        }
 
         return $this;
     }
