@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\ReportFileRepository")
  * @ORM\Table(name="activities_files")
  */
-class ReportFile extends ActivityFile
+class ReportFile 
 {
     /**
      * @ORM\Id()

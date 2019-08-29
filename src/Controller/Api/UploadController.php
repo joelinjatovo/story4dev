@@ -26,6 +26,7 @@ class UploadController extends AbstractController
      */
     public function upload(FileUploader $uploader, Request $request)
     {
+        
     }
 
 }
