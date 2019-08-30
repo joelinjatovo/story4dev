@@ -15,29 +15,13 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ReportType extends AbstractType
+class ReportFilesType extends AbstractType
 {
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('description', CKEditorType::class, [
-                'config' => array(
-                    'uiColor' => '#ffffff',
-                ),
-            ])
-            ->add('results', CollectionType::class, [
-                'entry_type' => ResultType::class,
-                'entry_options' => [
-                    'project' => isset($options['project'])?$options['project']:null,
-                    'label' => false,
-                ],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-            ])
-            ->add('reportFiles', CollectionType::class, [
+            ->add('data', CollectionType::class, [
                 'entry_type' => ReportFileType::class,
                 'entry_options' => [
                     'label' => false,
@@ -45,12 +29,6 @@ class ReportType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-            ])
-            ->add('project', EntityType::class, [
-                'class' => Project::class,
-                'choice_label' => function ($project) {
-                    return $project->getTitle();
-                }
             ])
         ;
     }

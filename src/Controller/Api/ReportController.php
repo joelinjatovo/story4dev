@@ -11,12 +11,15 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations\Version;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 use App\Entity\File;
 use App\Entity\Project;
 use App\Entity\Report;
+use App\Entity\ReportFile;
 use App\Form\ReportType;
 use App\Form\UploadType;
+use App\Form\ReportFileType;
 use App\Service\FormError;
 use App\Service\FileUploader;
 
@@ -71,55 +74,69 @@ class ReportController extends AbstractController
      * @Rest\Put("/report/{report_id}")
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function update(Report $report, Request $reques, FormError $formErrort)
+    public function update(Report $report, Request $request, FormError $formErrort)
     {
         $this->denyAccessUnlessGranted('edit', $report);
+
+        $originalFiles = $report->getReportFiles();
         
         $data = json_decode($request->getContent(), true);
 
-        $form = $this->createForm(ReportType::class, $report);
-        $form->submit($data->payload);
+        $form = $this->createForm(ReportType::class, $report, ['csrf_protection' => false]);
+        $form->submit($data['payload']);
         
         if ( $form->isSubmitted() && $form->isValid() ){
             $em = $this->getDoctrine()->getManager();
+
+            foreach ($report->getReportFiles() as $reportFile) {
+                $em->persist($reportFile);
+            }
+
             $em->persist($report);
             $em->flush();
             
-            return $this->json(['status' => 'ok', 'message' => 'Report updated.'], JsonResponse::HTTP_UPDATED);
+            return $this->json(['status' => 'ok', 'message' => 'Report updated.'], JsonResponse::HTTP_OK);
         }
         
         return $this->json(['status' => 'error', 'errors' => $form->getErrors()], JsonResponse::HTTP_BAD_REQUEST);
     }
     
     /**
-     * @Rest\Post("/report/{report_id}")
+     * @Rest\Post("/report/{report_id}/add-file")
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function upload(Report $report, FileUploader $uploader, Request $request)
+    public function addFile(Report $report, Request $request)
     {
         $this->denyAccessUnlessGranted('edit', $report);
 
-        /*
-        $file = new File();
-        $form = $this->createForm(UploadType::class, $file);
-        $form->handleRequest($request);
+        $data = json_decode($request->getContent(), true);
 
-        $uploadedFile = $form['file']->getData();
-        if ($uploadedFile) {
-            try{
-                $uploadedFileName = $fileUploader->upload($uploadedFile);
-                $file->setPath($uploadedFileName);
-            } catch (FileException $e) {
-                return new JsonResponse([
-                    'status' => 0,
-                    'error' => 'Can not upload file',
-                    'message'=> $e->getMessage(),
-                ], JsonResponse::HTTP_BAD_REQUEST);
+        $reportFile = new ReportFile();
+        $form = $this->createForm(ReportFileType::class, $reportFile, ['csrf_protection' => false]);
+
+        $form->submit($data['payload']);
+        
+        if ( $form->isSubmitted() && $form->isValid() ){
+            $reportFile->setReport($report);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $old = $em->getRepository(ReportFile::class)->findOneBy(['report' => $report, 'file' => $reportFile->getFile()]);
+            if($old){
+                $old->setFile($reportFile->getFile());
+                $old->setType($reportFile->getType());
+                $reportFile = $old;
             }
-        }
 
-        $uploader->upload('file');
-        */
+            $em->persist($reportFile);
+            $em->flush();
+            
+            if($old){
+                return $this->json(['status' => 'ok', 'action' => 'update', 'message' => 'Report File updated.'], JsonResponse::HTTP_OK);
+            }
+
+            return $this->json(['status' => 'ok', 'action' => 'create', 'message' => 'Report File added.'], JsonResponse::HTTP_OK);
+        }
         
         return $this->json(['data' => $report], 200, [], ['groups' => ['report']]);
     }

@@ -36,7 +36,7 @@ class File
     /**
      * @Assert\NotBlank(message="File should not be blank.")
      * @Assert\File(
-     *     mimeTypes={"image/jpeg", "image/png", "image/gif", "application/x-gzip", "application/zip"},
+     *     mimeTypes={"image/jpeg", "image/png", "image/gif", "application/x-gzip", "application/zip", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
      *     maxSize="1074000000"
      * )
      * @Vich\UploadableField(mapping="default", fileNameProperty="name")

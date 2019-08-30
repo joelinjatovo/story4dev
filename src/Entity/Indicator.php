@@ -80,7 +80,7 @@ class Indicator
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="indicator", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @Groups({"full", "report"})
+     * @Groups({"full"})
      */
     private $results;
     

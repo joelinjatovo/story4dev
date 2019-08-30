@@ -30,12 +30,13 @@ class ReportFile
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="activityFiles")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $activity;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Report", inversedBy="reportFiles")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $report;
 
