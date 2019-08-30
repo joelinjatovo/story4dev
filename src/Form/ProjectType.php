@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Project;
 use App\Entity\Periodicity;
 use App\Form\FloatType;
+use App\Form\AddressType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -37,6 +38,7 @@ class ProjectType extends AbstractType
                 'widget'     => 'single_text',
                 'html5'      => false,
             ])
+            ->add('address', AddressType::class)
             ->add('periodicity', EntityType::class, [
                 'class' => Periodicity::class,
                 'choice_label' => function ($periodicty) {

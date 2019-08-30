@@ -8,15 +8,13 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 /**
- * Meta
- * 
  * @ORM\Entity
+ * @ORM\Table(name="options")
  * @ORM\MappedSuperclass
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="option_type", type="string")
  * @ORM\DiscriminatorMap({"general" = "GeneralOption"})
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
- * @ORM\Table(name="options")
  */
 abstract class Base
 {

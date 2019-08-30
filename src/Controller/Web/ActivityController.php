@@ -51,6 +51,10 @@ class ActivityController extends AbstractController
         $form->handleRequest($request);
         if ( $form->isSubmitted() && $form->isValid() ) {
 
+            if($activity->getAddress() && $activity->getAddress()->isEmpty() ) {
+                $activity->setAddress(null);
+            }
+
             $activity->setAuthor($this->getUser());
             
             $entityManager = $this->getDoctrine()->getManager();
@@ -69,10 +73,33 @@ class ActivityController extends AbstractController
         
             $this->addFlash('success', 'Activity created succesfully.');
 
-            return $this->redirectToRoute('activity_index', [
-                'slug'       => $user->getSlug(),
-                'project_id' => $project->getId(), 
-            ]);
+            $action = strtolower( $request->request->get('submit') );
+            switch($action){
+                case 'save-continue':
+                    return $this->redirectToRoute('activity_show', [
+                        'slug'        => $user->getSlug(),
+                        'project_id'  => $project->getId(), 
+                        'activity_id' => $activity->getId(), 
+                    ]);
+                case 'save-edit':
+                    return $this->redirectToRoute('activity_edit', [
+                        'slug'        => $user->getSlug(),
+                        'project_id'  => $project->getId(), 
+                        'activity_id' => $activity->getId(), 
+                    ]);
+                case 'save-exit':
+                    return $this->redirectToRoute('project_show', [
+                        'slug' => $user->getSlug(),
+                        'id'   => $project->getId(), 
+                    ]);
+                case 'save-default':
+                default:
+                    return $this->redirectToRoute('activity_index', [
+                        'slug'       => $user->getSlug(),
+                        'project_id' => $project->getId(), 
+                    ]);
+            }
+
         }
         
         if ( $request->isXmlHttpRequest() ) {
@@ -181,6 +208,35 @@ class ActivityController extends AbstractController
             }
         
             $this->addFlash('success', 'Activity updated succesfully.');
+
+            $action = strtolower( $request->request->get('submit') );
+            switch($action){
+                case 'save-continue':
+                    return $this->redirectToRoute('activity_show', [
+                        'slug'        => $user->getSlug(),
+                        'project_id'  => $project->getId(), 
+                        'activity_id' => $activity->getId(), 
+                    ]);
+                case 'save-edit':
+                    return $this->redirectToRoute('activity_edit', [
+                        'slug'        => $user->getSlug(),
+                        'project_id'  => $project->getId(), 
+                        'activity_id' => $activity->getId(), 
+                    ]);
+                case 'save-exit':
+                    return $this->redirectToRoute('project_show', [
+                        'slug' => $user->getSlug(),
+                        'id'   => $project->getId(), 
+                    ]);
+                case 'save-default':
+                default:
+                    return $this->redirectToRoute('activity_edit', [
+                        'slug'       => $user->getSlug(),
+                        'project_id' => $project->getId(), 
+                        'activity_id' => $activity->getId(), 
+                    ]);
+
+            }
 
             return $this->redirectToRoute('activity_edit', [
                 'slug'        => $user->getSlug(),

@@ -6,15 +6,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+use App\Traits\TimestampableEntity;
+use App\Traits\SoftDeleteableEntity;
+
 /**
- * @ORM\Entity(repositoryClass="App\Repository\GoalRepository")
- * @ORM\Table(name="goals")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @Gedmo\Loggable
+ * @ORM\Entity(repositoryClass="App\Repository\GoalRepository")
+ * @ORM\Table(name="goals")
  */
 class Goal
 {
@@ -31,14 +32,14 @@ class Goal
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "goal", "project", "indicator"})
+     * @Groups({"full", "raw", "goal", "project", "indicator"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
      * @Gedmo\Versioned
-     * @Groups({"full", "goal", "project", "indicator"})
+     * @Groups({"full", "raw", "goal", "project", "indicator"})
      */
     private $value;
     

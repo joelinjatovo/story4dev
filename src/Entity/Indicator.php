@@ -6,19 +6,19 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 use App\Entity\Meta\IndicatorMeta;
+use App\Traits\TimestampableEntity;
+use App\Traits\SoftDeleteableEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\IndicatorRepository")
- * @ORM\Table(name="indicators")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @Gedmo\Loggable
+ * @ORM\Entity(repositoryClass="App\Repository\IndicatorRepository")
+ * @ORM\Table(name="indicators")
  */
 class Indicator
 {
@@ -35,7 +35,7 @@ class Indicator
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "project", "activity", "unit", "goal", "report"})
+     * @Groups({"full", "raw", "indicator", "project", "activity", "unit", "goal", "report"})
      */
     private $id;
 
@@ -47,7 +47,7 @@ class Indicator
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "project", "activity", "unit", "goal", "report"})
+     * @Groups({"full", "raw", "indicator", "project", "activity", "unit", "goal", "report"})
      */
     private $title;
     

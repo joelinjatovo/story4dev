@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Activity;
 use App\Entity\Project;
 use App\Form\FloatType;
+use App\Form\AddressType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,6 +23,10 @@ class ActivityType extends AbstractType
             ->add('budget', FloatType::class, [
                 'required'   => false,
             ])
+            ->add('contact_email')
+            ->add('contact_phone')
+            ->add('contact_address')
+            ->add('address', AddressType::class)
             ->add('project', EntityType::class, [
                 'class' => Project::class,
                 'choice_label' => function ($project) {

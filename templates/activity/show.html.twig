@@ -104,8 +104,8 @@
                             <i class="flaticon2-correct"></i>                       
                         </a>
                         <div class="kt-widget__action">
-                            <button type="button" class="btn btn-label-success btn-sm btn-upper">ask</button>&nbsp;
-                            <button type="button" class="btn btn-brand btn-sm btn-upper" data-toggle="modal" data-target="#kt_modal_add_indicator">Add Indicator</button>
+                            <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="btn btn-label-success btn-sm btn-upper">edit</a>&nbsp;
+                            <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="btn btn-brand btn-sm btn-upper">Add Indicator</a>
                         </div>
                     </div>
 

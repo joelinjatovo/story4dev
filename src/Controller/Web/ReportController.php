@@ -32,6 +32,10 @@ class ReportController extends AbstractController
      */
     public function index(User $user, Project $project)
     {
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+        
         $report = new Report();
         $report->setProject($project);
         $report->setAuthor($this->getUser());
@@ -52,6 +56,10 @@ class ReportController extends AbstractController
      */
     public function create(User $user, Project $project, Request $request): Response
     {
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+
         $report = new Report();
         $report->setProject($project);
         $report->setAuthor($this->getUser());
@@ -61,6 +69,8 @@ class ReportController extends AbstractController
         $form->handleRequest($request);
         if ( $form->isSubmitted() ) {
             if( $form->isValid()) {
+                $result->setProject($project);
+
                 $entityManager = $this->getDoctrine()->getManager();
                 
                 foreach ($report->getResults() as $result) {

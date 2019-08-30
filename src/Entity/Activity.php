@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+use App\Traits\ContactTrait;
 use App\Traits\TimestampableEntity;
 use App\Traits\SoftDeleteableEntity;
 
@@ -17,10 +18,10 @@ use App\Entity\Meta\ActivityMeta;
 use App\Entity\Contribution\ActivityContribution;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ActivityRepository")
- * @ORM\Table(name="activities")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @Gedmo\Loggable
+ * @ORM\Entity(repositoryClass="App\Repository\ActivityRepository")
+ * @ORM\Table(name="activities")
  */
 class Activity
 {
@@ -33,11 +34,16 @@ class Activity
     use SoftDeleteableEntity;
     
     /**
+     * Contact email,phone, address fields
+     */
+    use ContactTrait;
+    
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "activity", "project", "indicator"})
+     * @Groups({"full", "raw", "activity", "project", "indicator"})
      */
     private $id;
 
@@ -49,7 +55,7 @@ class Activity
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "activity", "project", "indicator"})
+     * @Groups({"full", "raw", "activity", "project", "indicator"})
      */
     private $title;
 
@@ -61,21 +67,28 @@ class Activity
      *     message="The value {{ value }} is not a valid {{ type }}."
      * )
      * @Gedmo\Versioned
-     * @Groups({"full", "activity", "project"})
+     * @Groups({"full", "raw", "activity", "project"})
      */
     private $budget;
     
     /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     * @Groups({"full", "activity"})
+     */
+    private $address;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="activities")
      * @Gedmo\Versioned
-     * @Groups({"activity"})
+     * @Groups({"full", "activity"})
      */
     private $author;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="activities")
      * @Gedmo\Versioned
-     * @Groups({"activity"})
+     * @Groups({"full", "activity"})
      */
     private $project;
 
@@ -141,6 +154,18 @@ class Activity
 
         return $this;
     }
+    
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+    
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
+        
+        return $this;
+    }  
 
     public function getAuthor(): ?User
     {

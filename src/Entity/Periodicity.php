@@ -6,15 +6,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+use App\Traits\TimestampableEntity;
+use App\Traits\SoftDeleteableEntity;
+
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PeriodicityRepository")
- * @ORM\Table(name="periodicities")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @Gedmo\Loggable
+ * @ORM\Entity(repositoryClass="App\Repository\PeriodicityRepository")
+ * @ORM\Table(name="periodicities")
  */
 class Periodicity
 {
@@ -31,21 +32,21 @@ class Periodicity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "project"})
+     * @Groups({"full", "raw", "project"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "project"})
+     * @Groups({"full", "raw", "project"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "project"})
+     * @Groups({"full", "raw", "project"})
      */
     private $delay;
     

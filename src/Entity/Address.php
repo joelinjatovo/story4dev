@@ -7,6 +7,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AddressRepository")
+ * @ORM\Table(name="addresses")
  */
 class Address
 {
@@ -14,43 +15,43 @@ class Address
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"user", "project"})
+     * @Groups({"raw", "user", "project"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"user", "project"})
+     * @Groups({"raw", "user", "project"})
      */
     private $addressLine1;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"user", "project"})
+     * @Groups({"raw", "user", "project"})
      */
     private $addressLine2;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"user", "project"})
+     * @Groups({"raw", "user", "project"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"user", "project"})
+     * @Groups({"raw", "user", "project"})
      */
     private $state;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"user", "project"})
+     * @Groups({"raw", "user", "project"})
      */
     private $postalCode;
 
     /**
      * @ORM\Column(type="string", length=3)
-     * @Groups({"user", "project"})
+     * @Groups({"raw", "user", "project"})
      */
     private $country;
 
@@ -129,5 +130,20 @@ class Address
         $this->country = $country;
 
         return $this;
+    }
+
+    public function isEmpty()
+    {
+        return empty( trim( $this->toString() ) );
+    }
+
+    public function toString(): ?string
+    {
+        return $this->getAddressLine1()
+                . ' ' .$this->getAddressLine2()
+                . ' ' .$this->getPostalCode()
+                . ' ' .$this->getCity()
+                . ' ' .$this->getState()
+                . ' ' .$this->getCountry();
     }
 }

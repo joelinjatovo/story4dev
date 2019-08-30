@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TokenRepository")
- * @ORM\Table(name="token")
+ * @ORM\Table(name="tokens")
  */
 class Token
 {

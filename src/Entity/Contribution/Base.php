@@ -11,12 +11,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * 
  * @ORM\Entity
+ * @ORM\Table(name="contributions")
  * @ORM\MappedSuperclass
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="contribution_type", type="string")
  * @ORM\DiscriminatorMap({"activity" = "ActivityContribution", "project" = "ProjectContribution"})
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
- * @ORM\Table(name="contributions")
  * @Gedmo\Loggable
  */
 abstract class Base

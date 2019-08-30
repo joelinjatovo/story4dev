@@ -7,14 +7,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
+
 use App\Traits\TimestampableEntity;
 use App\Traits\SoftDeleteableEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\IterationRepository")
- * @ORM\Table(name="iterations")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @Gedmo\Loggable
+ * @ORM\Entity(repositoryClass="App\Repository\IterationRepository")
+ * @ORM\Table(name="iterations")
  */
 class Iteration
 {
@@ -31,14 +32,14 @@ class Iteration
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "goal"})
+     * @Groups({"full", "raw", "project", "goal"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "goal"})
+     * @Groups({"full", "raw", "project", "goal"})
      */
     private $title;
     

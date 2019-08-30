@@ -12,8 +12,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\FileRepository")
  * @Vich\Uploadable
+ * @ORM\Entity(repositoryClass="App\Repository\FileRepository")
+ * @ORM\Table(name="files")
  */
 class File
 {
@@ -21,7 +22,7 @@ class File
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"full", "file"})
+     * @Groups({"full", "raw", "file"})
      */
     private $id;
 
@@ -29,7 +30,7 @@ class File
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="Name should not be blank.")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"full", "file"})
+     * @Groups({"full", "raw", "file"})
      */
     private $name;
 
@@ -45,9 +46,19 @@ class File
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"full", "file"})
+     * @Groups({"full", "raw", "file"})
      */
     private $path;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $url;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isExternal;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ActivityFile", mappedBy="file", orphanRemoval=true)
@@ -56,6 +67,7 @@ class File
 
     public function __construct()
     {
+        $this->isExternal = false;
         $this->reportFiles = new ArrayCollection();
         $this->activityFiles = new ArrayCollection();
     }
@@ -97,6 +109,30 @@ class File
     public function setFile(?SysFile $file): self
     {
         $this->file = $file;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function getIsExternal(): ?bool
+    {
+        return $this->isExternal;
+    }
+
+    public function setIsExternal(bool $isExternal): self
+    {
+        $this->isExternal = $isExternal;
 
         return $this;
     }

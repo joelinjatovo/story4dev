@@ -14,15 +14,16 @@ use JMS\Serializer\Annotation as Serializer;
 
 use App\Entity\Meta\ProjectMeta;
 use App\Entity\Contribution\ProjectContribution;
+use App\Traits\ContactTrait;
 use App\Traits\TimestampableEntity;
 use App\Traits\SoftDeleteableEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
- * @ORM\Table(name="projects")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @Gedmo\Loggable
  * @Vich\Uploadable
+ * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
+ * @ORM\Table(name="projects")
  */
 class Project
 {
@@ -35,18 +36,23 @@ class Project
     use SoftDeleteableEntity;
     
     /**
+     * Contact email,phone, address fields
+     */
+    use ContactTrait;
+    
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity", "report"})
+     * @Groups({"full", "raw", "project", "user", "activity", "report"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "report"})
+     * @Groups({"full", "raw", "project", "user", "report"})
      */
     private $picture;
 
@@ -63,43 +69,50 @@ class Project
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity", "report"})
+     * @Groups({"full", "raw", "project", "user", "activity", "report"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity", "report"})
+     * @Groups({"full", "raw", "project", "user", "activity", "report"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity", "report"})
+     * @Groups({"full", "raw", "project", "user", "activity", "report"})
      */
     private $budget;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity", "report"})
+     * @Groups({"full", "raw", "project", "user", "activity", "report"})
      */
     private $start_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "user", "raw", "activity", "report"})
+     * @Groups({"full", "raw", "project", "user", "activity", "report"})
      */
     private $end_at;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     * @Groups({"full", "project"})
+     */
+    private $address;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
      * @Gedmo\Versioned
-     * @Groups({"full", "project", "raw"})
+     * @Groups({"full", "project"})
      */
     private $author;
     
@@ -240,6 +253,18 @@ class Project
 
         return $this;
     }
+    
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+    
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
+        
+        return $this;
+    }  
 
     public function getAuthor(): ?User
     {

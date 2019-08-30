@@ -5,11 +5,13 @@ namespace App\Entity;
 use App\Entity\Meta\UserMeta;
 use App\Entity\Contribution\ProjectContribution;
 use App\Entity\Contribution\ActivityContribution;
+use App\Traits\TimestampableEntity;
+use App\Traits\SoftDeleteableEntity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,29 +19,26 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-use App\Traits\TimestampableEntity;
-use App\Traits\SoftDeleteableEntity;
-
 /**
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ * @Vich\Uploadable
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="users")
  * @UniqueEntity("email")
  * @UniqueEntity("username")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
- * @Vich\Uploadable
  */
 class User implements UserInterface, \Serializable
 {
-    const STATUS_PING    = 'ping';
-    const STATUS_ACTIVE  = 'active';
-    const STATUS_BLOCKED = 'blocked';
-    
     /**
      * Hook timestampable behavior
      * updates createdAt, updatedAt fields
      */
     use TimestampableEntity;
     use SoftDeleteableEntity;
+    
+    const STATUS_PING    = 'ping';
+    const STATUS_ACTIVE  = 'active';
+    const STATUS_BLOCKED = 'blocked';
     
     /**
      * @ORM\Id()
@@ -126,7 +125,7 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your fullname cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="fullname", type="string", length=100, nullable=true)
-     * @Groups({"full", "raw", "project", "user", "report"})
+     * @Groups({"full", "project", "user", "report"})
      */
     private $fullname;
     
@@ -137,14 +136,14 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your title cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="title", type="string", length=100, nullable=true)
-     * @Groups({"full", "raw", "project", "user", "report"})
+     * @Groups({"full", "project", "user", "report"})
      */
     private $title;
     
     /**
      * @Assert\Type("string")
      * @ORM\Column(name="presentation", type="string", nullable=true)
-     * @Groups({"full", "raw", "project", "user", "report"})
+     * @Groups({"full", "project", "user", "report"})
      */
     private $presentation;
     
@@ -155,7 +154,7 @@ class User implements UserInterface, \Serializable
      *      maxMessage = "Your phone number cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="phone", type="string", length=50, nullable=true)
-     * @Groups({"full", "raw", "project", "user", "report"})
+     * @Groups({"full", "project", "user", "report"})
      */
     private $phone;
     
@@ -183,6 +182,7 @@ class User implements UserInterface, \Serializable
     private $isVerified;
 
     /**
+     * Used in form to check if he was accepted terms and conditions
      * @Assert\IsTrue
      */
     private $agree;
@@ -213,7 +213,7 @@ class User implements UserInterface, \Serializable
     private $activedAt;
     
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Address")
+     * @ORM\OneToOne(targetEntity="App\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=true)
      * @Groups({"user", "project"})
      */
