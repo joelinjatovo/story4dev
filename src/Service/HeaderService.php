@@ -3,12 +3,8 @@
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\Pagination\Paginator;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Security;
-use InvalidArgumentException;
+
 use App\Entity\Project;
 
 class HeaderService
@@ -25,8 +21,18 @@ class HeaderService
     public function getProjects()
     {
         if( $this->user ){
-            return $this->em->getRepository(Project::class)->findByContributor($this->user);
+            return $this->em->getRepository(Project::class)->findByAuthor($this->user)->execute();
         }
-        return $this->em->getRepository(Project::class)->findAll();
+        
+        return null;
+    }
+    
+    public function getContributions()
+    {
+        if( $this->user ){
+            return $this->em->getRepository(Project::class)->findContributions($this->user)->execute();
+        }
+        
+        return null;
     }
 }

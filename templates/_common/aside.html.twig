@@ -3,7 +3,7 @@
     <!-- begin:: Brand -->
     <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
         <div class="kt-aside__brand-logo">
-            <a href="https://keenthemes.com/metronic/preview/demo7/metronic/preview/demo7/index.html">
+            <a href="/">
                 <img alt="Logo" src="{{ asset('images/logo.png') }}"/>
             </a>
         </div>
@@ -16,22 +16,29 @@
                 <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--submenu-fullheight kt-menu__item--open kt-menu__item--here" aria-haspopup="true"  data-ktmenu-submenu-toggle="click" data-ktmenu-dropdown-toggle-class="kt-aside-menu-overlay--on">
                     <a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
                         <i class="kt-menu__link-icon flaticon2-protection"></i>
-                        <span class="kt-menu__link-text">Applications</span>
+                        <span class="kt-menu__link-text">Projects</span>
                         <i class="kt-menu__ver-arrow la la-angle-right"></i>
                     </a>
                     <div class="kt-menu__submenu ">
                         <span class="kt-menu__arrow"></span>
                         <div class="kt-menu__wrapper">
                             <ul class="kt-menu__subnav">
-                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--submenu-fullheight" aria-haspopup="true" ><span class="kt-menu__link"><span class="kt-menu__link-text">Applications</span></span></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/metronic/preview/demo7/#.html" class="kt-menu__link "><span class="kt-menu__link-text">Finance</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/metronic/preview/demo7/#.html" class="kt-menu__link "><span class="kt-menu__link-text">Support</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/metronic/preview/demo7/#.html" class="kt-menu__link "><span class="kt-menu__link-text">Administration</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/metronic/preview/demo7/#.html" class="kt-menu__link "><span class="kt-menu__link-text">Management</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/metronic/preview/demo7/#.html" class="kt-menu__link "><span class="kt-menu__link-text">Order Management</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/metronic/preview/demo7/#.html" class="kt-menu__link "><span class="kt-menu__link-text">Delivery</span><span class="kt-menu__link-badge"><span class="kt-badge kt-badge--brand">2</span></span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/metronic/preview/demo7/#.html" class="kt-menu__link "><span class="kt-menu__link-text">Products</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/metronic/preview/demo7/#.html" class="kt-menu__link "><span class="kt-menu__link-text">Support</span></a></li>
+                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--submenu-fullheight" aria-haspopup="true" ><span class="kt-menu__link"><span class="kt-menu__link-text">Projects</span></span></li>
+                                {% for project in header.projects %}
+                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('project_show', { 'slug':project.author.slug, 'id':project.id}) }}" class="kt-menu__link "><span class="kt-menu__link-text">{{ project.title }}</span></a></li>
+                                {% else %}
+                                    <li class="kt-menu__item " aria-haspopup="true" >
+                                        You don't yet have a project
+                                    </li>
+                                {% endfor %}
+                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--submenu-fullheight" aria-haspopup="true" ><span class="kt-menu__link"><span class="kt-menu__link-text">Contributions</span></span></li>
+                                {% for project in header.contributions %}
+                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('project_show', { 'slug':project.author.slug, 'id':project.id}) }}" class="kt-menu__link "><span class="kt-menu__link-text">{{ project.title }}</span></a></li>
+                                {% else %}
+                                    <li class="kt-menu__item " aria-haspopup="true" >
+                                        You don't yet have a contribution
+                                    </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>

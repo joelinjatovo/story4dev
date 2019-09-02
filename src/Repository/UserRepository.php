@@ -60,5 +60,24 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->getQuery()
             ->getOneOrNullResult();
     }
+    
+    public function findAuthorAndContrubitors(Project $project)
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.projectContributions', 'c')
+            ->where('c.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery();
+    }
+    
+    public function findContributors(Project $project, User $user)
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.projectContributions', 'c')
+            ->where('c.project = :project AND c.user != :user')
+            ->setParameter('project', $project)
+            ->setParameter('user', $user)
+            ->getQuery();
+    }
 
 }

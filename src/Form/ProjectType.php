@@ -38,6 +38,9 @@ class ProjectType extends AbstractType
                 'widget'     => 'single_text',
                 'html5'      => false,
             ])
+            ->add('contactemail')
+            ->add('contactphone')
+            ->add('contactaddress')
             ->add('address', AddressType::class)
             ->add('periodicity', EntityType::class, [
                 'class' => Periodicity::class,

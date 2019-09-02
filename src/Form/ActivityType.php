@@ -23,9 +23,9 @@ class ActivityType extends AbstractType
             ->add('budget', FloatType::class, [
                 'required'   => false,
             ])
-            ->add('contact_email')
-            ->add('contact_phone')
-            ->add('contact_address')
+            ->add('contactemail')
+            ->add('contactphone')
+            ->add('contactaddress')
             ->add('address', AddressType::class)
             ->add('project', EntityType::class, [
                 'class' => Project::class,

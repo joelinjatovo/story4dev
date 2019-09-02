@@ -206,7 +206,7 @@ class ProjectController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $query = $entityManager->getRepository(Project::class)->findByContributor($user);
+        $query = $entityManager->getRepository(Project::class)->findProjectsAndContributions($user);
 
         $projects = $paginator->paginate($query, 2);
         

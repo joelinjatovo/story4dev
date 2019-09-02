@@ -92,14 +92,14 @@ class Project
      * @Gedmo\Versioned
      * @Groups({"full", "raw", "project", "user", "activity", "report"})
      */
-    private $start_at;
+    private $startAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
      * @Groups({"full", "raw", "project", "user", "activity", "report"})
      */
-    private $end_at;
+    private $endAt;
     
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Address", cascade={"persist", "remove"})
@@ -232,24 +232,24 @@ class Project
 
     public function getStartAt(): ?\DateTimeInterface
     {
-        return $this->start_at;
+        return $this->startAt;
     }
 
     public function setStartAt(?\DateTimeInterface $start_at): self
     {
-        $this->start_at = $start_at;
+        $this->startAt = $start_at;
 
         return $this;
     }
 
     public function getEndAt(): ?\DateTimeInterface
     {
-        return $this->end_at;
+        return $this->endAt;
     }
 
     public function setEndAt(?\DateTimeInterface $end_at): self
     {
-        $this->end_at = $end_at;
+        $this->endAt = $end_at;
 
         return $this;
     }

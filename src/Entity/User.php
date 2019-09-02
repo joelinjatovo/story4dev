@@ -117,6 +117,17 @@ class User implements UserInterface, \Serializable
      * @Groups({"full", "raw", "project", "user", "report"})
      */
     private $slug;
+
+    /**
+     * @Assert\Type("string")
+     * @Assert\Length(
+     *      max = 2,
+     *      maxMessage = "Language cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(type="string", length=2, nullable=true)
+     * @Groups({"full", "raw", "project", "user", "report"})
+     */
+    private $language;
     
     /**
      * @Assert\Type("string")
@@ -124,10 +135,10 @@ class User implements UserInterface, \Serializable
      *      max = 100,
      *      maxMessage = "Your fullname cannot be longer than {{ limit }} characters"
      * )
-     * @ORM\Column(name="fullname", type="string", length=100, nullable=true)
+     * @ORM\Column(name="full_name", type="string", length=100, nullable=true)
      * @Groups({"full", "project", "user", "report"})
      */
-    private $fullname;
+    private $fullName;
     
     /**
      * @Assert\Type("string")
@@ -150,6 +161,17 @@ class User implements UserInterface, \Serializable
     /**
      * @Assert\Type("string")
      * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "Company name cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(name="company", type="string", length=100, nullable=true)
+     * @Groups({"full", "project", "user", "report"})
+     */
+    private $company;
+    
+    /**
+     * @Assert\Type("string")
+     * @Assert\Length(
      *      max = 50,
      *      maxMessage = "Your phone number cannot be longer than {{ limit }} characters"
      * )
@@ -157,6 +179,17 @@ class User implements UserInterface, \Serializable
      * @Groups({"full", "project", "user", "report"})
      */
     private $phone;
+    
+    /**
+     * @Assert\Type("string")
+     * @Assert\Length(
+     *      max = 50,
+     *      maxMessage = "Your web site cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(name="website", type="string", length=50, nullable=true)
+     * @Groups({"full", "project", "user", "report"})
+     */
+    private $website;
     
     /**
      * @Assert\Type("string")
@@ -468,17 +501,41 @@ class User implements UserInterface, \Serializable
         return $this;
     }
     
-    public function getFullname(): ?string
+    public function getLanguage(): ?string
     {
-        return $this->fullname;
+        return $this->language;
     }
     
-    public function setFullname(?string $fullname): self
+    public function setLanguage(?string $language): self
     {
-        $this->fullname = $fullname;
+        $this->language = $language;
+        
+        return $this;
+    } 
+    
+    public function getFullName(): ?string
+    {
+        return $this->fullName;
+    }
+    
+    public function setFullName(?string $fullname): self
+    {
+        $this->fullName = $fullname;
         
         return $this;
     }  
+    
+    public function getCompany(): ?string
+    {
+        return $this->company;
+    }
+    
+    public function setCompany(string $company): self
+    {
+        $this->company = $company;
+        
+        return $this;
+    } 
     
     public function getPhone(): ?string
     {
@@ -488,6 +545,18 @@ class User implements UserInterface, \Serializable
     public function setPhone(string $phone): self
     {
         $this->phone = $phone;
+        
+        return $this;
+    } 
+    
+    public function getWebsite(): ?string
+    {
+        return $this->website;
+    }
+    
+    public function setWebsite(string $website): self
+    {
+        $this->website = $website;
         
         return $this;
     } 

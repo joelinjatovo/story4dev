@@ -84,7 +84,7 @@ class ProjectController extends AbstractFOSRestController
     {
         $repository = $this->getDoctrine()->getRepository(Project::class);
         
-        $projects = $repository->findByContributor($this->getUser())->execute();
+        $projects = $repository->findProjectsAndContributions($this->getUser())->execute();
         
         return $this->json(['data' => $projects], 200, [], ['groups' => ['project']]);
     }
