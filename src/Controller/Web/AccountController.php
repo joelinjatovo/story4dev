@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+use App\Form\AccountProfileType;
+use App\Form\AccountInfoType;
+use App\Form\AccountPasswordType;
+use App\Form\AccountNotificationType;
 /** 
  * @Route(name="account_")
  *
@@ -18,10 +22,20 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/profile", name="profile")
      */
-    public function profile()
+    public function profile(Request $request)
     {
+        $user = $this->getUser();
+        
+        $form = $this->createForm(AccountProfileType::class);
+        $form->handleRequest($request);
+        if ( $form->isSubmitted() ) {
+            if( $form->isValid()) {
+            }
+        }
+        
         return $this->render('account/profile.html.twig', [
-            'user' => $this->getUser(),
+            'user' => $user,
+            'form' => $form->createView(),
         ]);
     }
     
@@ -32,26 +46,18 @@ class AccountController extends AbstractController
     {
         $errors = [];
         $user = $this->getUser();
-        $form = $this->createForm(UserType::class, $user);
+        
+        $form = $this->createForm(AccountInfoType::class);
         $form->handleRequest($request);
         if ( $form->isSubmitted() ) {
-            if ( ! $form->isValid() ) {
-                $errors = $form->getErrors();
-            }else{
-                try{
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($user);
-                    $entityManager->flush();
-                    
-                    $this->addFlash('success', "Account updated successfully.");
-                }catch( \Exception $e){
-                    $this->addFlash('error', $e->getMessage());
-                }
+            if( $form->isValid()) {
+                
             }
         }
         
         return $this->render('account/info.html.twig', [
             'user'   => $user,
+            'form'   => $form->createView(),
             'errors' => $errors,
         ]);
     }
@@ -62,8 +68,18 @@ class AccountController extends AbstractController
     public function password(Request $request)
     {
         $user = $this->getUser();
+        
+        $form = $this->createForm(AccountInfoType::class);
+        $form->handleRequest($request);
+        if ( $form->isSubmitted() ) {
+            if( $form->isValid()) {
+                
+            }
+        }
+        
         return $this->render('account/password.html.twig', [
             'user'   => $user,
+            'form'   => $form->createView(),
         ]);
     }
     
@@ -73,8 +89,17 @@ class AccountController extends AbstractController
     public function notification(Request $request)
     {
         $user = $this->getUser();
+        
+        $form = $this->createForm(AccountInfoType::class);
+        $form->handleRequest($request);
+        if ( $form->isSubmitted() ) {
+            if( $form->isValid()) {
+                
+            }
+        }
         return $this->render('account/notification.html.twig', [
             'user'   => $user,
+            'form'   => $form->createView(),
         ]);
     }
 }
