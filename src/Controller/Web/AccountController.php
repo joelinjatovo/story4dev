@@ -6,6 +6,7 @@ use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Form\AccountProfileType;
@@ -27,6 +28,7 @@ class AccountController extends AbstractController
         $user = $this->getUser();
         
         $form = $this->createForm(AccountProfileType::class, $user);
+        
         $form->handleRequest($request);
         
         if ( $form->isSubmitted() ) {
@@ -56,6 +58,7 @@ class AccountController extends AbstractController
         $user = $this->getUser();
         
         $form = $this->createForm(AccountInfoType::class, $user);
+        
         $form->handleRequest($request);
         
         if ( $form->isSubmitted() ) {
@@ -80,15 +83,37 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/password", name="password")
      */
-    public function password(Request $request)
+    public function password(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $user = $this->getUser();
         
-        $form = $this->createForm(AccountInfoType::class);
+        $form = $this->createForm(AccountPasswordType::class);
+        
         $form->handleRequest($request);
+        
         if ( $form->isSubmitted() ) {
-            if( $form->isValid()) {
+            if( $form->isValid() ) {
+                $data = $form->getData();
                 
+                $password = $data['password'];
+                $new_password = $data['newpassword'];
+                
+                if ($passwordEncoder->isPasswordValid($user, $password)) {
+                    $newEncodedPassword = $passwordEncoder->encodePassword($user, $new_password);
+                    $user->setPassword($newEncodedPassword);
+                    
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'Votre mot de passe à bien été changé !');
+
+                } else {
+                    $this->addFlash('error', 'Ancien mot de passe incorrect');
+                }
+                
+            }else{
+                $this->addFlash('error', 'Invalid request. Try again!');
             }
         }
         
