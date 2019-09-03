@@ -26,10 +26,18 @@ class AccountController extends AbstractController
     {
         $user = $this->getUser();
         
-        $form = $this->createForm(AccountProfileType::class);
+        $form = $this->createForm(AccountProfileType::class, $user);
         $form->handleRequest($request);
+        
         if ( $form->isSubmitted() ) {
-            if( $form->isValid()) {
+            if( $form->isValid() ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+        
+                $this->addFlash('success', 'Account profile successfully updated.');
+            }else{
+                $this->addFlash('error', 'Invalid request. Try again!');
             }
         }
         

@@ -34,7 +34,7 @@ class UploadController extends AbstractController
     /**
      * @Route("/u/avatar", name="get_avatar", methods={"GET"})
      */
-    public function avatar ()
+    public function avatar()
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
