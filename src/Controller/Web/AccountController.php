@@ -142,4 +142,34 @@ class AccountController extends AbstractController
             'form'   => $form->createView(),
         ]);
     }
+    
+    /**
+     * @Route("/account/forgot", name="forgot")
+     */
+    public function forgot(Request $request)
+    {
+        // Logging user out.
+        $this->get('security.token_storage')->setToken(null);
+
+        // Invalidating the session.
+        $request->getSession()->invalidate();
+
+        // Redirecting user to login page in the end.
+        $response = $this->redirectToRoute('app_forgot_password');
+
+        // Clearing the cookies.
+        /*
+        $cookieNames = [
+            $this->container->getParameter('session.name'),
+            $this->container->getParameter('session.remember_me.name'),
+        ];
+        foreach ($cookieNames as $cookieName) {
+            $response->headers->clearCookie($cookieName);
+        }
+        */
+
+        return $response;
+    }
+    
+    
 }

@@ -116,7 +116,7 @@
                                 <label class="col-xl-3 col-lg-3 col-form-label">Avatar</label>
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="kt-avatar kt-avatar--outline" id="kt_user_avatar">
-                                        <div class="kt-avatar__holder" style="background-image: url(' {{ user.avatar ? vich_uploader_asset(user, 'avatarFile') : default_avatar }} ');"></div>
+                                        <div class="kt-avatar__holder" style="background-image: url('{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') : default_avatar }}');"></div>
                                         <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Change avatar">
                                             <i class="fa fa-pen"></i>
                                             <input type="file" id="account_profile_avatarFile_file" name="account_profile[avatarFile][file]" accept=".jpeg, .png, .jpg, .gif">

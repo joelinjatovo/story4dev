@@ -82,7 +82,7 @@
                 <div class="kt-widget kt-widget--user-profile-1">
                     <div class="kt-widget__head">
                         <div class="kt-widget__media">
-                            <img src="{{ user.avatar is null ? default_avatar : user.avatar }}" alt="avatar"> 
+                            <img src="{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') : default_avatar }}" alt="avatar"> 
                         </div>
                         <div class="kt-widget__content">
                             <div class="kt-widget__section">
