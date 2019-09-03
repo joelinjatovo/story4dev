@@ -35,7 +35,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     public function findOneByConfirmToken($token)
     {
         return $this->createQueryBuilder('u')
-            ->where('u.confirm_token = :query AND u.confirmed_at > :last')
+            ->where('u.confirmToken = :query AND u.confirmedAt > :last')
             ->setParameter('query', $token)
             ->setParameter('last', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
             ->getQuery()
@@ -45,7 +45,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     public function findOneByResetToken($token)
     {
         return $this->createQueryBuilder('u')
-            ->where('u.reset_token = :query AND u.confirmed_at > :last')
+            ->where('u.resetToken = :query AND u.resetedAt > :last')
             ->setParameter('query', $token)
             ->setParameter('last', new \DateTime('-1 hour'), \Doctrine\DBAL\Types\Type::DATETIME)
             ->getQuery()

@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Entity\User;
 use App\Service\TokenGenerator;
+use App\Form\AccountPasswordType;
 
 class LoginFormController extends AbstractController
 {
@@ -258,30 +259,57 @@ class LoginFormController extends AbstractController
     /**
      * @Route("/reset/{token}", name="app_reset_password")
      */
-    public function reset(Request $request, String $token, UserPasswordEncoderInterface $passwordEncoder)
+    public function reset(String $token, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        //Reset avec le mail envoyé
-        if ($request->isMethod('POST')) {
-            $entityManager = $this->getDoctrine()->getManager();
- 
-            $user = $entityManager->getRepository(User::class)->findOneByResetToken($token);
- 
-            if ($user === null) {
-                $this->addFlash('danger', 'Mot de passe non reconnu');
-                return $this->redirectToRoute('app_index');
-            }
- 
-            $user->setStatus(User::STATUS_ACTIVE);
-            $user->setResetToken(null);
-            $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
-            $entityManager->flush();
- 
-            $this->addFlash('notice', 'Mot de passe mis à jour !');
- 
-            return $this->redirectToRoute('app_login');
-        }else {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $user = $entityManager->getRepository(User::class)->findOneByResetToken($token);
+        
+        if ($user === null) {
+            $this->addFlash('danger', 'Utilisateur non reconnu');
             return $this->redirectToRoute('app_login');
         }
+
+        $form = $this->createForm(AccountPasswordType::class);
+        $form->remove('password');
+        
+        $form->handleRequest($request);
+        
+        if ( $form->isSubmitted() ) {
+            if( $form->isValid() ) {
+                $data = $form->getData();
+                
+                $new_password = $data['newpassword'];
+                
+                $newEncodedPassword = $passwordEncoder->encodePassword($user, $new_password);
+
+                $user->setPassword($newEncodedPassword);
+                $user->setStatus(User::STATUS_ACTIVE);
+                $user->setResetToken(null);
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Votre mot de passe à bien été changé !');
+
+                return $this->render($this->view, [
+                    'last_username' => '',
+                    'error' => '',
+                    'active_form' => 'forgot',
+                ]);
+                
+            }else{
+                $this->addFlash('error', 'Invalid request. Try again!');
+            }
+        }
+        
+        return $this->render('security/reset.html.twig', [
+            'last_username' => '',
+            'error' => '',
+            'active_form' => 'signup',
+            'form' => $form->createView()
+        ]);
  
     }
 }

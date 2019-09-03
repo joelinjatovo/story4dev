@@ -46,7 +46,7 @@ hr {
     border: 1px solid #eee;
 }
 
-button {
+button, a.button {
 	border-radius: 2rem;
 	border: 1px solid #22b9ff;
 	background-color: #22b9ff;
@@ -59,15 +59,15 @@ button {
 	transition: transform 80ms ease-in;
 }
 
-button:active {
+button:active, a.button:active {
 	transform: scale(0.95);
 }
 
-button:focus {
+button:focus, , a.button:focus {
 	outline: none;
 }
 
-button.ghost {
+button.ghost, a.ghost {
 	background-color: transparent;
 	border-color: #FFFFFF;
 }
