@@ -7,7 +7,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use InvalidArgumentException;
-use App\Entity\Option\OptionGeneral;
+use App\Entity\Option\GeneralOption;
 
 class PaginatorService
 {
@@ -35,7 +35,7 @@ class PaginatorService
         
         if($limit===false){
             $option = $this->em
-                ->getRepository(OptionGeneral::class)
+                ->getRepository(GeneralOption::class)
                 ->findOneBy(['option_key' => 'paginator_limit']);
 
             if($option){

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Report;
+use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,6 +18,14 @@ class ReportRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Report::class);
+    }
+    
+    public function findByProject(Project $project)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery();
     }
 
     // /**

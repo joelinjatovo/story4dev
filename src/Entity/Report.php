@@ -90,7 +90,7 @@ class Report
     private $results;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ReportFile", mappedBy="report")
+     * @ORM\OneToMany(targetEntity="App\Entity\ReportFile", mappedBy="report", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $reportFiles;
 

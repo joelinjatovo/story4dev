@@ -194,7 +194,7 @@ class ReportController extends AbstractController
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(User $user, Project $project, $page = 1)
+    public function list(User $user, Project $project, $page = 1, PaginatorService $paginator)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -202,11 +202,13 @@ class ReportController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
         
-        $reports = $entityManager->getRepository(Report::class)->findAll();
+        $query = $entityManager->getRepository(Report::class)->findByProject($project);
+
+        $reports = $paginator->paginate($query, 10);
         
         return $this->render('report/list.html.twig', [
-            'user'       => $user,
-            'project'    => $project,
+            'user'    => $user,
+            'project' => $project,
             'reports' => $reports
         ]);
     }
