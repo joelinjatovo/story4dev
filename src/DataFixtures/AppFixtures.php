@@ -124,20 +124,38 @@ class AppFixtures extends Fixture
             $unit->setAuthor($admin);
             $manager->persist($unit);
         }
+        
+        $projects = [
+          [
+              'title' => 'Project 1',
+              'description' => 'I distinguish three main text objecttives.First, your objective could be merely to inform people.A second be to persuade people. You want people buy your products.',
+              'author' => $admin,
+          ],
+          [
+              'title' => 'Project 2',
+              'description' => 'I distinguish three main text objecttives.First, your objective could be merely to inform people.A second be to persuade people. You want people buy your products.',
+              'author' => $user,
+          ]  ,
+          [
+              'title' => 'Project 3',
+              'description' => 'I distinguish three main text objecttives.First, your objective could be merely to inform people.A second be to persuade people. You want people buy your products.',
+              'author' => $user,
+          ]  
+        ];
 
-        for($i=1; $i<=5; $i++){
+        foreach($projects as $p){
             $project = new Project();
-            $project->setTitle( 'Project ' . $i );
-            $project->setDescription( 'Description ' . $i );
+            $project->setTitle( $p['title'] );
+            $project->setDescription( $p['description'] );
+            $project->setAuthor( $p['author'] );
             $project->setStartAt( new \DateTime() );
             $project->setEndAt( new \DateTime() );
-            $project->setAuthor($admin);
 
             $manager->persist($project);
             
             $meta = new ProjectMeta();
             $meta->setMetaKey('meta_key');
-            $meta->setMetaValue('test_value'. $i );
+            $meta->setMetaValue('test_value'. $p['title']);
             $manager->persist($meta);
             
             $project->addMeta($meta);
@@ -150,17 +168,31 @@ class AppFixtures extends Fixture
                 $manager->persist( $iteration );
             }
 
-            $contribution = new ProjectContribution();
-            $contribution->setUser( $admin );
-            $contribution->setProject( $project );
-            $contribution->setRoles(['ROLE_ADMIN']);
-            $manager->persist( $contribution );
+            if ( $project->getAuthor() == $admin ){
+                $contribution = new ProjectContribution();
+                $contribution->setUser( $admin );
+                $contribution->setProject( $project );
+                $contribution->setRoles(['ROLE_ADMIN']);
+                $manager->persist( $contribution );
 
-            $contribution = new ProjectContribution();
-            $contribution->setUser( $user );
-            $contribution->setProject( $project );
-            $contribution->setRoles(['ROLE_CONTRIBUTOR']);
-            $manager->persist( $contribution );
+                $contribution = new ProjectContribution();
+                $contribution->setUser( $user );
+                $contribution->setProject( $project );
+                $contribution->setRoles(['ROLE_CONTRIBUTOR']);
+                $manager->persist( $contribution );
+            }else{
+                $contribution = new ProjectContribution();
+                $contribution->setUser( $user );
+                $contribution->setProject( $project );
+                $contribution->setRoles(['ROLE_ADMIN']);
+                $manager->persist( $contribution );
+
+                $contribution = new ProjectContribution();
+                $contribution->setUser( $admin );
+                $contribution->setProject( $project );
+                $contribution->setRoles(['ROLE_CONTRIBUTOR']);
+                $manager->persist( $contribution );
+            }
         }
 
         $manager->flush();

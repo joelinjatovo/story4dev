@@ -428,4 +428,24 @@ class Project
 
         return $this;
     }
+    
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->title,
+            $this->description,
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+        
+        list(
+            $this->id,
+            $this->title,
+            $this->description
+        ) = $data;
+    }
 }
