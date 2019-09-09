@@ -105,7 +105,8 @@
                                 </a>
                                 <div class="kt-widget__action">
                                     <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="btn btn-label-success btn-sm btn-upper">edit</a>&nbsp;
-                                    <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="btn btn-brand btn-sm btn-upper">Add Indicator</a>
+                                    <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="btn btn-brand btn-sm btn-upper">Add Indicator</a>&nbsp;
+                            		<a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-brand btn-sm btn-upper">Create report</a>
                                 </div>
                             </div>
 

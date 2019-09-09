@@ -31,14 +31,19 @@ use App\Service\PaginatorService;
 class ReportController extends AbstractController
 {
     /**
-     * @Route("/{slug}/project/{project_id}/report", name="index", methods="GET")
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report", name="index", methods="GET", requirements={"project_id"="\d+","activity_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function index(User $user, Project $project)
+    public function index(User $user, Project $project, Activity $activity)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
+        }
+
+        if($activity->getProject() != $project ){
+            throw $this->createNotFoundException('The project does not match');
         }
         
         $report = new Report();
@@ -48,21 +53,27 @@ class ReportController extends AbstractController
         $form = $this->createForm(ReportType::class, $report, array('project' => $project));
         
         return $this->render('report/create.html.twig', [
-            'user'    => $user, 
-            'project' => $project, 
-            'form'    => $form->createView()
+            'user'     => $user, 
+            'project'  => $project, 
+            'activity' => $activity,
+            'form'     => $form->createView()
         ]);
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/report", name="create", methods="POST")
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report", name="create", methods="POST", requirements={"project_id"="\d+","activity_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function create(User $user, Project $project, Request $request): Response
+    public function create(User $user, Project $project, Activity $activity, Request $request): Response
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
+        }
+
+        if($activity->getProject() != $project ){
+            throw $this->createNotFoundException('The project does not match');
         }
 
         $report = new Report();
@@ -75,6 +86,7 @@ class ReportController extends AbstractController
         if ( $form->isSubmitted() ) {
             if( $form->isValid()) {
                 $report->setProject($project);
+                $report->setActivity($activity);
 
                 $entityManager = $this->getDoctrine()->getManager();
                 
@@ -93,74 +105,92 @@ class ReportController extends AbstractController
         }
         
         return $this->redirectToRoute('report_index', [
-            'slug'       => $user->getSlug(), 
-            'project_id' => $project->getId(), 
+            'slug'        => $user->getSlug(), 
+            'project_id'  => $project->getId(), 
+            'activity_id' => $activity->getId(), 
         ]);
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/report/{report_id}", name="show", methods="GET", requirements={"project_id"="\d+","report_id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report/{report_id}", name="show", methods="GET", requirements={"project_id"="\d+","report_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function show(User $user, Project $project, Report $report)
+    public function show(User $user, Project $project, Activity $activity, Report $report)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
         
-        if($report->getProject() != $project ){
+        if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
+        }
+
+        if($report->getActivity() != $activity ){
+            throw $this->createNotFoundException('The activity does not match');
         }
         
         return $this->render('report/show.html.twig', [
-            'user'    => $user,
-            'project' => $project,
-            'report'  => $report
+            'user'     => $user,
+            'project'  => $project,
+            'activity' => $activity,
+            'report'   => $report
         ]);
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/report/edit/{id}", name="edit", methods="GET", requirements={"project_id"="\d+","id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report/edit/{id}", name="edit", methods="GET", requirements={"project_id"="\d+","id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"id": "id"}})
      */
-    public function edit(User $user, Project $project, Report $report)
+    public function edit(User $user, Project $project, Activity $activity, Report $report)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
         
-        if($report->getProject() != $project ){
+        if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
+        }
+
+        if($report->getActivity() != $activity ){
+            throw $this->createNotFoundException('The activity does not match');
         }
         
         $form = $this->createForm(ReportType::class, $report, array('project' => $project));
         
         return $this->render('report/edit.html.twig', [
-            'user'    => $user, 
-            'project' => $project, 
-            'report'  => $report, 
-            'form'    => $form->createView()
+            'user'     => $user, 
+            'project'  => $project, 
+            'activity' => $activity,
+            'report'   => $report, 
+            'form'     => $form->createView()
         ]);
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/report/edit/{id}", name="update", methods="POST", requirements={"project_id"="\d+","id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report/edit/{id}", name="update", methods="POST", requirements={"project_id"="\d+","id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"id": "id"}})
      */
-    public function update(User $user, Project $project, Report $report, Request $request)
+    public function update(User $user, Project $project, Activity $activity, Report $report, Request $request)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
         
-        if($report->getProject() != $project ){
+        if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
+        }
+
+        if($report->getActivity() != $activity ){
+            throw $this->createNotFoundException('The activity does not match');
         }
         
         $originalResults = new ArrayCollection();
@@ -187,34 +217,51 @@ class ReportController extends AbstractController
         }
         
         return $this->redirectToRoute('report_edit', [
-            'slug'       => $user->getSlug(), 
-            'project_id' => $project->getId(), 
-            'id'         => $report->getId(), 
+            'slug'        => $user->getSlug(), 
+            'project_id'  => $project->getId(), 
+            'activity_id' => $activity->getId(),
+            'id'          => $report->getId(), 
         ]);
     }
     
     
     /**
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
      * @Route("/{slug}/project/{project_id}/reports/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(User $user, Project $project, $page = 1, PaginatorService $paginator)
+    public function list(User $user, Project $project, $activity_id = 0, $page = 1, PaginatorService $paginator)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
-        
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $query = $entityManager->getRepository(Report::class)->findByProject($project);
 
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $activity = null;
+        if( $activity_id > 0 ){
+            $activity = $entityManager->getRepository(Activity::class)->find($activity_id);
+
+            if( ! $activity ){
+                throw $this->createNotFoundException('The activity not found');
+            }
+            
+            if($activity->getProject() != $project ){
+                throw $this->createNotFoundException('The project does not match');
+            }
+            $query = $entityManager->getRepository(Report::class)->findByActivity($activity);
+        }else{
+            $query = $entityManager->getRepository(Report::class)->findByProject($project);
+        }
+        
         $reports = $paginator->paginate($query, 10);
         
         return $this->render('report/list.html.twig', [
-            'user'    => $user,
-            'project' => $project,
-            'reports' => $reports
+            'user'     => $user,
+            'project'  => $project,
+            'activity' => $activity,
+            'reports'  => $reports
         ]);
     }
 }

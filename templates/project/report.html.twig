@@ -2,7 +2,7 @@
     <span class="kt-widget4__icon">
         <i class="flaticon-pie-chart-1 kt-font-info"></i>
     </span>	
-    <a href="{{ path( 'report_show', {'slug': report.project.author.slug, 'project_id': report.project.id, 'report_id': report.id} ) }}" class="kt-widget4__title kt-widget4__title--light">
+    <a href="{{ path( 'report_show', {'slug': report.project.author.slug, 'project_id': report.project.id, 'activity_id': report.activity.id, 'report_id': report.id} ) }}" class="kt-widget4__title kt-widget4__title--light">
         {{ report.title }}
     </a> 		
     <span class="kt-widget4__number kt-font-info">+500</span>

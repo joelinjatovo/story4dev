@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Activity;
 use App\Entity\Report;
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -18,6 +19,14 @@ class ReportRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Report::class);
+    }
+    
+    public function findByActivity(Activity $activity)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.activity = :activity')
+            ->setParameter('activity', $activity)
+            ->getQuery();
     }
     
     public function findByProject(Project $project)
