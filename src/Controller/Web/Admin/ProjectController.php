@@ -15,6 +15,7 @@ use App\Entity\User;
 use App\Entity\Project;
 use App\Form\ProjectType;
 use App\Service\FormError;
+use App\Entity\Contribution\ProjectContribution;
 
 /** 
  * @Route(name="admin_project_")
@@ -44,7 +45,7 @@ class ProjectController extends AbstractController
     /**
      * @Route("/admin/project", name="create", methods="POST")
      */
-    public function create(ValidatorInterface $validator): Response
+    public function create(Request $request): Response
     {
         $user = $this->getUser();
         
@@ -56,16 +57,25 @@ class ProjectController extends AbstractController
         
         if ( $form->isSubmitted() && $form->isValid() ) {
 
-            $entityManager = $this->getDoctrine()->getManager();
+            if( $project->getAuthor() == null ) {
+                $project->setAuthor( $this->getUser() );
+            }
 
+            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($project);
+            
+            $contribution = new ProjectContribution();
+            $contribution->setUser( $project->getAuthor() );
+            $contribution->setProject( $project );
+            $contribution->setRoles(['ROLE_ADMIN']);
+            $entityManager->persist( $contribution );
 
             $entityManager->flush();
         
             $this->addFlash('success', 'Project created succesfully.');
 
             return $this->redirectToRoute('project_edit', [
-                'slug' => $user->getSlug(),
+                'slug' => $project->getAuthor()->getSlug(),
                 'id'   => $project->getId()
             ]);
             

@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Project;
+use App\Entity\User;
 use App\Entity\Periodicity;
 use App\Form\FloatType;
 use App\Form\AddressType;
@@ -15,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class ProjectType extends AbstractType
 {
@@ -22,6 +24,10 @@ class ProjectType extends AbstractType
     {
         $builder
             ->add('title')
+            ->add('pictureFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => true, 
+            ])
             ->add('description', CKEditorType::class, [
                 'config' => array(
                     'uiColor' => '#ffffff',
@@ -56,6 +62,12 @@ class ProjectType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+            ])
+            ->add('author', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => function ($user) {
+                    return $user->getFullName();
+                }
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Save project'

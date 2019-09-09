@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 use App\Entity\User;
 use App\Entity\Project;
@@ -96,10 +97,9 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
         
         if ( $form->isSubmitted() && $form->isValid() ) {
-
             $entityManager = $this->getDoctrine()->getManager();
             
-            // remove the relationship between the tag and the Task
+            // remove the relationship
             foreach ($originalIterations as $iteration) {
                 if (false === $project->getIterations()->contains($iteration)) {
                     $entityManager->remove($iteration);
@@ -107,17 +107,7 @@ class ProjectController extends AbstractController
             }
 
             $entityManager->persist($project);
-
             $entityManager->flush();
-            
-            if ( $request->isXmlHttpRequest() ) {
-                return $this->json([
-                    'success' => true,
-                    'title'   => 'Success',
-                    'status'  => 'success',
-                    'message' => 'Project updated successfully.',
-                ]);
-            }
         
             $this->addFlash('success', 'Project updated succesfully.');
 
@@ -128,19 +118,9 @@ class ProjectController extends AbstractController
             
         }
         
-        if ( $request->isXmlHttpRequest() ) {
-            return $this->json([
-                'success' => false,
-                'title'   => 'Invalid Request',
-                'status'  => 'error',
-                'message' => 'An error was occured. :)',
-                'errors'  => $formError->getErrorMessages($form),
-            ]);
-        }
-        
-        $this->addFlash('error', 'Something went wrong.');
+        $this->addFlash('error', 'Something went wrong.' . $form->getErrors());
 
-        return $this->redirectToRoute('project_show', [
+        return $this->redirectToRoute('project_edit', [
             'slug' => $user->getSlug(),
             'id'   => $project->getId(), 
         ]);
@@ -161,7 +141,7 @@ class ProjectController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
         
-        $entityManager->remove($product);
+        $entityManager->remove($project);
         
         $entityManager->flush();
         

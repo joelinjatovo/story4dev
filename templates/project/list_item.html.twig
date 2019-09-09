@@ -8,7 +8,7 @@
                     <div class="kt-widget__label">
                         <div class="kt-widget__media">
                             <span class="kt-media kt-media--lg kt-media--circle"> 
-                            <img src="{{ project.picture is null ? default_picture : project.picture }}" alt="image">  
+                            <img src="{{ project.picture ? vich_uploader_asset(project, 'pictureFile') : default_picture }}" alt="image">  
                             </span>
                         </div>
                         <div class="kt-widget__info kt-margin-t-5">
