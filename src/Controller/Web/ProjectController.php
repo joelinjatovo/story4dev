@@ -27,41 +27,6 @@ use App\Service\PaginatorService;
  */
 class ProjectController extends AbstractController
 {
-    /**
-     * @Route("/project", name="index", methods="GET")
-     */
-    public function index()
-    {
-        $project = new Project();
-        
-        return $this->render('project/create.html.twig');
-    }
-    
-    /**
-     * @Route("/project", name="create", methods="POST")
-     */
-    public function create(ValidatorInterface $validator): Response
-    {
-        $project = new Project();
-        
-        // you can fetch the EntityManager via $this->getDoctrine()
-        // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
-        $entityManager = $this->getDoctrine()->getManager();
-
-        
-        $errors = $validator->validate($project);
-        if (count($errors) > 0) {
-            return new Response((string) $errors, 400);
-        }
-
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($project);
-
-        // actually executes the queries (i.e. the INSERT query)
-        $entityManager->flush();
-
-        return new Response('Saved new product with id '.$project->getId());
-    }
     
     /**
      * @Route("/{slug}/project/{id}", name="show", methods="GET", requirements={"id"="\d+"})
