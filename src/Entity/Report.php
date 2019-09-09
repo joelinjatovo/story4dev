@@ -82,6 +82,13 @@ class Report
      * @Groups({"full", "report"})
      */
     private $project;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="reports")
+     * @Gedmo\Versioned
+     * @Groups({"full", "report"})
+     */
+    private $activity;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="report", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
@@ -165,6 +172,18 @@ class Report
     public function setProject(?Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function getActivity(): ?Activity
+    {
+        return $this->activity;
+    }
+
+    public function setActivity(?Activity $activity): self
+    {
+        $this->activity = $activity;
 
         return $this;
     }

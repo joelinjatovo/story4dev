@@ -116,6 +116,12 @@ class Activity
      */
     private $activityFiles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="activity", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "activity"})
+     */
+    private $reports;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -124,6 +130,7 @@ class Activity
         $this->contributions = new ArrayCollection();
         $this->metas = new ArrayCollection();
         $this->activityFiles = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -239,6 +246,37 @@ class Activity
             $this->contributions->removeElement($contribution);
             if ($contribution->getProject() === $this) {
                 $contribution->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Report[]
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): self
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports[] = $report;
+            $report->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): self
+    {
+        if ($this->reports->contains($report)) {
+            $this->reports->removeElement($report);
+            // set the owning side to null (unless already changed)
+            if ($report->getActivity() === $this) {
+                $report->setActivity(null);
             }
         }
 
