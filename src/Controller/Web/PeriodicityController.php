@@ -6,10 +6,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Periodicity;
 
-/** @Route(name="periodicity_") */
+/** 
+ * @Route(name="periodicity_")
+ *
+ * @IsGranted("ROLE_USER") 
+ */
 class PeriodicityController extends AbstractController
 {
     /**

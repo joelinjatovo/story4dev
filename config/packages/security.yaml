@@ -28,7 +28,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         api_login:
-            pattern:  ^/api/(v1|v2)/token
+            pattern:  ^/api/v1/token
             user_checker: App\Security\Checker\UserChecker
             stateless: true
             anonymous: true
@@ -39,11 +39,11 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             provider: user_db_provider
         refresh:
-            pattern:  ^/api/(v1|v2)/token/refresh
+            pattern:  ^/api/v1/token/refresh
             stateless: true
             anonymous: true
         api_register:
-            pattern:  ^/api/(v1|v2)/register
+            pattern:  ^/api/v1/register
             stateless: true
             anonymous: true
         api:
@@ -72,8 +72,12 @@ security:
                 entry_point: App\Security\LoginFormAuthenticator
             provider: user_db_provider
     access_control:
-        - { path: ^/login$,           roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/v1/token,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/v1/register$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,              roles: IS_AUTHENTICATED_FULLY }
+        
+        - { path: ^/login$,           roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register$,        roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/forgot$,          roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/reset$,           roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin,            roles: ROLE_ADMIN }

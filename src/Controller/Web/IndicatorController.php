@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\User;
 use App\Entity\Project;
@@ -20,7 +21,11 @@ use App\Form\IndicatorType;
 use App\Form\GoalType;
 use App\Service\FormError;
 
-/** @Route(name="indicator_") */
+/** 
+ * @Route(name="indicator_")
+ *
+ * @IsGranted("ROLE_USER") 
+ */
 class IndicatorController extends AbstractController
 {
     

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\User;
 use App\Entity\Project;
@@ -17,7 +18,11 @@ use App\Form\ActivityType;
 use App\Form\IndicatorType;
 use App\Service\FormError;
 
-/** @Route(name="activity_") */
+/** 
+ * @Route(name="activity_")
+ *
+ * @IsGranted("ROLE_USER") 
+ */
 class ActivityController extends AbstractController
 {
     /**

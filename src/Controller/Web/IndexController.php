@@ -20,10 +20,6 @@ class IndexController extends AbstractController
     */
     public function index(Request $request)
     {
-        $number = random_int(0, 100);
-
-        return $this->render('index/index.html.twig', [
-            'number' => $number,
-        ]);
+        return $this->redirectToRoute('app_login');
     }
 }

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use App\Entity\User;
@@ -19,7 +20,11 @@ use App\Form\ProjectType;
 use App\Service\FormError;
 use App\Service\PaginatorService;
 
-/** @Route(name="project_") */
+/** 
+ * @Route(name="project_")
+ *
+ * @IsGranted("ROLE_USER") 
+ */
 class ProjectController extends AbstractController
 {
     /**

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\User;
 use App\Entity\Project;
@@ -18,7 +19,11 @@ use App\Entity\Unit;
 use App\Form\IndicatorType;
 use App\Form\GoalType;
 
-/** @Route(name="goal_") */
+/** 
+ * @Route(name="goal_") 
+ *
+ * @IsGranted("ROLE_USER") 
+ */
 class GoalController extends AbstractController
 {
     /**

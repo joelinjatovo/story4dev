@@ -2,6 +2,7 @@
 
 namespace App\Controller\Web;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -16,6 +17,10 @@ use App\Form\UserType;
 use App\Service\FormError;
 use App\Service\FileUploader;
 
+/**
+ *
+ * @IsGranted("ROLE_USER") 
+ */
 class UploadController extends AbstractController
 {
     /**

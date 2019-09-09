@@ -2,6 +2,7 @@
 
 namespace App\Controller\Web;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -9,7 +10,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Unit;
 
-/** @Route(name="unit_") */
+/** 
+ * @Route(name="unit_")
+ *
+ * @IsGranted("ROLE_USER") 
+ */
 class UnitController extends AbstractController
 {
     /**

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use App\Entity\User;
@@ -22,7 +23,11 @@ use App\Form\ReportType;
 use App\Form\ResultType;
 use App\Service\PaginatorService;
 
-/** @Route(name="report_") */
+/** 
+ * @Route(name="report_")
+ *
+ * @IsGranted("ROLE_USER") 
+ */
 class ReportController extends AbstractController
 {
     /**
@@ -69,7 +74,7 @@ class ReportController extends AbstractController
         $form->handleRequest($request);
         if ( $form->isSubmitted() ) {
             if( $form->isValid()) {
-                $result->setProject($project);
+                $report->setProject($project);
 
                 $entityManager = $this->getDoctrine()->getManager();
                 
