@@ -7,14 +7,16 @@
                 <div class="kt-widget__head">
                     <div class="kt-widget__label">
                         <div class="kt-widget__media">
-                            <span class="kt-userpic kt-userpic--lg kt-userpic--circle"> 
-                                <img src="{{ project.picture is null ? default_picture : project.picture }}" alt="image">  
+                            <span class="kt-media kt-media--lg kt-media--circle"> 
+                            <img src="{{ project.picture is null ? default_picture : project.picture }}" alt="image">  
                             </span>
                         </div>
-                        <div class="kt-widget__info">
-                            <a href="{{ url('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="kt-widget__title">{{project.title}}</a>
+                        <div class="kt-widget__info kt-margin-t-5">
+                            <a href="{{ path('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="kt-widget__title">
+                                {{ project.title }}                                                 
+                            </a>
                             <span class="kt-widget__desc">
-                                Creates Limitless possibilities  
+                                Subtitle
                             </span>
                         </div>
                     </div>
@@ -63,7 +65,7 @@
                     <div class="kt-widget__stats">
                         <div class="kt-widget__item">
                             <span class="kt-widget__date">
-                                Start Date
+                                Date de début
                             </span>
                             <div class="kt-widget__label">
                                 <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ project.startat is empty ? "" : project.startat | date('Y-m-d') }}</span>
@@ -72,7 +74,7 @@
 
                         <div class="kt-widget__item">
                             <span class="kt-widget__date">
-                                Due Date
+                                Date de fin
                             </span>
                             <div class="kt-widget__label">
                                 <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ project.endat is empty ? "" : project.endat | date('Y-m-d') }}</span>
@@ -80,7 +82,7 @@
                         </div>
 
                         <div class="kt-widget__item flex-fill">
-                            <span class="kt-widget__subtitel">Progress</span>
+                            <span class="kt-widget__subtitel">Progression</span>
                             <div class="kt-widget__progress d-flex  align-items-center">
                                 <div class="progress" style="height: 5px;width: 100%;">
                                     <div class="progress-bar kt-bg-warning" role="progressbar" style="width: 78%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
@@ -93,43 +95,31 @@
                     </div>
 
                     <span class="kt-widget__text">
-                        I distinguish three main text objecttives.First, your objective could
-                        be merely to inform people.A second be to persuade people.                            
+                        {{ project.description }}                       
                     </span>
 
                     <div class="kt-widget__content">
+                        {% if project.budget > 0 %}
                         <div class="kt-widget__details">
                             <span class="kt-widget__subtitle">Budget</span>
-                            <span class="kt-widget__value"><span>$</span>249,500</span>
+                            <span class="kt-widget__value"><span>$</span>{{ project.budget }}</span>
                         </div>
+                        {% endif %}
 
                         <div class="kt-widget__details">
-                            <span class="kt-widget__subtitle">Expances</span>
-                            <span class="kt-widget__value"><span>$</span>76,810</span>
-                        </div>
-
-                        <div class="kt-widget__details">
-                            <span class="kt-widget__subtitle">Members</span>
-                            <div class="kt-badge kt-badge__pics">
-                                <a href="#" class="kt-badge__pic" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-                                    <img src="./assets/media/users/100_7.jpg" alt="image">
+                            <span class="kt-widget__subtitle">Contributeurs</span>
+                            <div class="kt-media-group">
+                                {% for contribution in project.contributions.slice(0, 7) %}
+                                <a href="{{ path('user_show', { 'slug': contribution.user.slug }) }}" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{{ contribution.user.fullname ?? contribution.user.email }}">
+                                    <img src="{{ contribution.user.avatar is null ? default_avatar : contribution.user.avatar }}" alt="avatar">
                                 </a>
-                                <a href="#" class="kt-badge__pic" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
-                                    <img src="./assets/media/users/100_3.jpg" alt="image">
-                                </a>
-                                <a href="#" class="kt-badge__pic" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
-                                    <img src="./assets/media/users/100_2.jpg" alt="image">
-                                </a>
-                                <a href="#" class="kt-badge__pic" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
-                                    <img src="./assets/media/users/100_13.jpg" alt="image">
-                                </a>
-                                <a href="#" class="kt-badge__pic" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
-                                    <img src="./assets/media/users/100_4.jpg" alt="image">
-                                </a>
-                                <a href="#" class="kt-badge__pic kt-badge__pic--last kt-font-brand">
-                                    +7
-                                </a>
-                            </div>
+                                {% endfor %}
+                                {% if project.contributions.count > 7 %}
+                                    <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                        <span>+{{ project.contributions.count - 7 }}</span>
+                                    </a>
+                                {% endif %}
+                            </div>                                 
                         </div>
                     </div>
                 </div>
@@ -139,17 +129,17 @@
                         <div class="kt-widget__section">
                             <div class="kt-widget__blog">
                                 <i class="flaticon2-list-1"></i>
-                                <a href="#" class="kt-widget__value kt-font-brand">72 Tasks</a>
+                                <a href="{{ path( 'activity_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">{{ project.activities.count }}  Activities</a>
                             </div>
 
                             <div class="kt-widget__blog">
                                 <i class="flaticon2-talk"></i>
-                                <a href="#" class="kt-widget__value kt-font-brand">648 Comments</a>
+                                <a href="{{ path( 'report_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">{{ project.reports.count }} Reports</a>
                             </div>
                         </div>
 
                         <div class="kt-widget__section">
-                            <a href="{{ url('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="btn btn-brand btn-sm btn-upper btn-bold">details</a>                                 
+                            <a href="{{ path('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="btn btn-brand btn-sm btn-upper btn-bold">details</a>                                 
                         </div>
                     </div>
                 </div>
@@ -157,5 +147,4 @@
             <!--end::Widget -->
         </div>
     </div>
-    <!--end:: Portlet-->
 </div>
