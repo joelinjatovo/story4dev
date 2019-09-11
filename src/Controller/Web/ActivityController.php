@@ -17,6 +17,7 @@ use App\Entity\Indicator;
 use App\Form\ActivityType;
 use App\Form\IndicatorType;
 use App\Service\FormError;
+use App\Service\PaginatorService;
 
 /** 
  * @Route(name="activity_")
@@ -299,19 +300,15 @@ class ActivityController extends AbstractController
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(User $user, Project $project, $page = 1)
+    public function list(User $user, Project $project, $page = 1, PaginatorService $paginator)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
         
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-        
         $entityManager = $this->getDoctrine()->getManager();
-        
-        $activities = $entityManager->getRepository(Activity::class)->findAll();
+        $query = $entityManager->getRepository(Activity::class)->findByProject($project);
+        $activities = $paginator->paginate($query, 10);
         
         return $this->render('activity/list.html.twig', [
             'user'       => $user,

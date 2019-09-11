@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Activity;
 use App\Entity\Report;
 use App\Entity\Project;
 use App\Form\ResultType;
@@ -30,7 +31,7 @@ class ReportType extends AbstractType
             ->add('results', CollectionType::class, [
                 'entry_type' => ResultType::class,
                 'entry_options' => [
-                    'project' => isset($options['project'])?$options['project']:null,
+                    'activity' => isset($options['activity'])?$options['activity']:null,
                     'label' => false,
                 ],
                 'allow_add' => true,
@@ -46,10 +47,10 @@ class ReportType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
             ])
-            ->add('project', EntityType::class, [
-                'class' => Project::class,
-                'choice_label' => function ($project) {
-                    return $project->getTitle();
+            ->add('activity', EntityType::class, [
+                'class' => Activity::class,
+                'choice_label' => function ($activity) {
+                    return $activity->getTitle();
                 }
             ])
         ;
@@ -59,7 +60,7 @@ class ReportType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Report::class,
-            'project'    => null,
+            'activity'   => null,
             'author'     => null,
         ]);
     }

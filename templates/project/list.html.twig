@@ -143,7 +143,9 @@
 {% block content %}
 <div class="row">
     {% for project in projects %}
-        {{ include('project/list_item.html.twig', {'project': project}) }}
+        <div class="col-xl-6">
+            {{ include('project/list_item.html.twig', {'project': project}) }}
+        </div>
     {% endfor %}
 </div>
     

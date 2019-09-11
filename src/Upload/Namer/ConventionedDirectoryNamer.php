@@ -24,13 +24,14 @@ class ConventionedDirectoryNamer implements DirectoryNamerInterface
 
     public function directoryName($object, PropertyMapping $mapping): string
     {
-        return sprintf('%s/%s', $this->getShortClassName($object), $this->getIdentifier($object));
+        return sprintf('%s', $this->getShortClassName($object));
     }
 
     /**
      * Get short class name of given object :
      *  - App\Entity\Project : project
      *  - App\Entity\User : user
+     *  - App\Entity\File : file
      *
      * @param object $object
      *
@@ -42,23 +43,5 @@ class ConventionedDirectoryNamer implements DirectoryNamerInterface
         $classParts = explode('\\', $fqcn);
 
         return Transliterator::transliterate(array_pop($classParts));
-    }
-
-    /**
-     * Get identifier given object.
-     * Use Doctrine metadata as a generic method.
-     *
-     * @param object $object
-     *
-     * @return string
-     */
-    private function getIdentifier($object)
-    {
-        $fqcn = get_class($object);
-        $identifiers = $this->doctrine->getManagerForClass($fqcn)
-            ->getClassMetadata($fqcn)
-            ->getIdentifierValues($object);
-
-        return Transliterator::transliterate(reset($identifiers));
     }
 }

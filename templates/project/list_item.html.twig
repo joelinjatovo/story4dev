@@ -1,150 +1,148 @@
-<div class="col-xl-6">
-    <!--begin:: Portlet-->
-    <div class="kt-portlet kt-portlet--height-fluid">
-        <div class="kt-portlet__body kt-portlet__body--fit">
-            <!--begin::Widget -->
-            <div class="kt-widget kt-widget--project-1">
-                <div class="kt-widget__head">
-                    <div class="kt-widget__label">
-                        <div class="kt-widget__media">
-                            <span class="kt-media kt-media--lg kt-media--circle"> 
-                            <img src="{{ project.picture ? vich_uploader_asset(project, 'pictureFile') : default_picture }}" alt="image">  
-                            </span>
-                        </div>
-                        <div class="kt-widget__info kt-margin-t-5">
-                            <a href="{{ path('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="kt-widget__title">
-                                {{ project.title }}                                                 
-                            </a>
-                            <span class="kt-widget__desc">
-                                Subtitle
-                            </span>
-                        </div>
+<!--begin:: Portlet-->
+<div class="kt-portlet kt-portlet--height-fluid">
+    <div class="kt-portlet__body kt-portlet__body--fit">
+        <!--begin::Widget -->
+        <div class="kt-widget kt-widget--project-1">
+            <div class="kt-widget__head">
+                <div class="kt-widget__label">
+                    <div class="kt-widget__media">
+                        <span class="kt-media kt-media--lg kt-media--circle"> 
+                        <img src="{{ project.picture ? vich_uploader_asset(project, 'pictureFile') : default_picture }}" alt="image">  
+                        </span>
                     </div>
-                    <div class="kt-portlet__head-toolbar">
-                        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
-                            <i class="flaticon-more-1"></i>
+                    <div class="kt-widget__info kt-margin-t-5">
+                        <a href="{{ path('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="kt-widget__title">
+                            {{ project.title }}                                                 
                         </a>
-                        <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
-                            <ul class="kt-nav">
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link">
-                                        <i class="kt-nav__link-icon flaticon2-line-chart"></i>
-                                        <span class="kt-nav__link-text">Reports</span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link">
-                                        <i class="kt-nav__link-icon flaticon2-send"></i>
-                                        <span class="kt-nav__link-text">Messages</span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link">
-                                        <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
-                                        <span class="kt-nav__link-text">Charts</span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link">
-                                        <i class="kt-nav__link-icon flaticon2-avatar"></i>
-                                        <span class="kt-nav__link-text">Members</span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link">
-                                        <i class="kt-nav__link-icon flaticon2-settings"></i>
-                                        <span class="kt-nav__link-text">Settings</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <span class="kt-widget__desc">
+                            Subtitle
+                        </span>
                     </div>
                 </div>
-
-                <div class="kt-widget__body">
-                    <div class="kt-widget__stats">
-                        <div class="kt-widget__item">
-                            <span class="kt-widget__date">
-                                Date de début
-                            </span>
-                            <div class="kt-widget__label">
-                                <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ project.startat is empty ? "" : project.startat | date('Y-m-d') }}</span>
-                            </div>
-                        </div>
-
-                        <div class="kt-widget__item">
-                            <span class="kt-widget__date">
-                                Date de fin
-                            </span>
-                            <div class="kt-widget__label">
-                                <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ project.endat is empty ? "" : project.endat | date('Y-m-d') }}</span>
-                            </div>
-                        </div>
-
-                        <div class="kt-widget__item flex-fill">
-                            <span class="kt-widget__subtitel">Progression</span>
-                            <div class="kt-widget__progress d-flex  align-items-center">
-                                <div class="progress" style="height: 5px;width: 100%;">
-                                    <div class="progress-bar kt-bg-warning" role="progressbar" style="width: 78%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <span class="kt-widget__stat">
-                                    78%
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <span class="kt-widget__text">
-                        {{ project.description }}                       
-                    </span>
-
-                    <div class="kt-widget__content">
-                        {% if project.budget > 0 %}
-                        <div class="kt-widget__details">
-                            <span class="kt-widget__subtitle">Budget</span>
-                            <span class="kt-widget__value"><span>$</span>{{ project.budget }}</span>
-                        </div>
-                        {% endif %}
-
-                        <div class="kt-widget__details">
-                            <span class="kt-widget__subtitle">Contributeurs</span>
-                            <div class="kt-media-group">
-                                {% for contribution in project.contributions.slice(0, 7) %}
-                                <a href="{{ path('user_show', { 'slug': contribution.user.slug }) }}" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{{ contribution.user.fullname ?? contribution.user.email }}">
-                                    <img src="{{ contribution.user.avatar is null ? default_avatar : contribution.user.avatar }}" alt="avatar">
+                <div class="kt-portlet__head-toolbar">
+                    <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                        <i class="flaticon-more-1"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+                        <ul class="kt-nav">
+                            <li class="kt-nav__item">
+                                <a href="#" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                    <span class="kt-nav__link-text">Reports</span>
                                 </a>
-                                {% endfor %}
-                                {% if project.contributions.count > 7 %}
-                                    <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
-                                        <span>+{{ project.contributions.count - 7 }}</span>
-                                    </a>
-                                {% endif %}
-                            </div>                                 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kt-widget__footer">
-                    <div class="kt-widget__wrapper">
-                        <div class="kt-widget__section">
-                            <div class="kt-widget__blog">
-                                <i class="flaticon2-list-1"></i>
-                                <a href="{{ path( 'activity_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">{{ project.activities.count }}  Activities</a>
-                            </div>
-
-                            <div class="kt-widget__blog">
-                                <i class="flaticon2-talk"></i>
-                                <a href="{{ path( 'report_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">{{ project.reports.count }} Reports</a>
-                            </div>
-                        </div>
-
-                        <div class="kt-widget__section">
-                            <a href="{{ path('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="btn btn-brand btn-sm btn-upper btn-bold">details</a>                                 
-                        </div>
+                            </li>
+                            <li class="kt-nav__item">
+                                <a href="#" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-send"></i>
+                                    <span class="kt-nav__link-text">Messages</span>
+                                </a>
+                            </li>
+                            <li class="kt-nav__item">
+                                <a href="#" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
+                                    <span class="kt-nav__link-text">Charts</span>
+                                </a>
+                            </li>
+                            <li class="kt-nav__item">
+                                <a href="#" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-avatar"></i>
+                                    <span class="kt-nav__link-text">Members</span>
+                                </a>
+                            </li>
+                            <li class="kt-nav__item">
+                                <a href="#" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                    <span class="kt-nav__link-text">Settings</span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <!--end::Widget -->
+
+            <div class="kt-widget__body">
+                <div class="kt-widget__stats">
+                    <div class="kt-widget__item">
+                        <span class="kt-widget__date">
+                            Date de début
+                        </span>
+                        <div class="kt-widget__label">
+                            <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ project.startat is empty ? "" : project.startat | date('Y-m-d') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="kt-widget__item">
+                        <span class="kt-widget__date">
+                            Date de fin
+                        </span>
+                        <div class="kt-widget__label">
+                            <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ project.endat is empty ? "" : project.endat | date('Y-m-d') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="kt-widget__item flex-fill">
+                        <span class="kt-widget__subtitel">Progression</span>
+                        <div class="kt-widget__progress d-flex  align-items-center">
+                            <div class="progress" style="height: 5px;width: 100%;">
+                                <div class="progress-bar kt-bg-warning" role="progressbar" style="width: 78%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="kt-widget__stat">
+                                78%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <span class="kt-widget__text">
+                    {{ project.description }}                       
+                </span>
+
+                <div class="kt-widget__content">
+                    {% if project.budget > 0 %}
+                    <div class="kt-widget__details">
+                        <span class="kt-widget__subtitle">Budget</span>
+                        <span class="kt-widget__value"><span>$</span>{{ project.budget }}</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="kt-widget__details">
+                        <span class="kt-widget__subtitle">Contributeurs</span>
+                        <div class="kt-media-group">
+                            {% for contribution in project.contributions.slice(0, 7) %}
+                            <a href="{{ path('user_show', { 'slug': contribution.user.slug }) }}" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{{ contribution.user.fullname ?? contribution.user.email }}">
+                                <img src="{{ contribution.user.avatar is null ? default_avatar : contribution.user.avatar }}" alt="avatar">
+                            </a>
+                            {% endfor %}
+                            {% if project.contributions.count > 7 %}
+                                <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                    <span>+{{ project.contributions.count - 7 }}</span>
+                                </a>
+                            {% endif %}
+                        </div>                                 
+                    </div>
+                </div>
+            </div>
+
+            <div class="kt-widget__footer">
+                <div class="kt-widget__wrapper">
+                    <div class="kt-widget__section">
+                        <div class="kt-widget__blog">
+                            <i class="flaticon2-list-1"></i>
+                            <a href="{{ path( 'activity_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">{{ project.activities.count }}  Activities</a>
+                        </div>
+
+                        <div class="kt-widget__blog">
+                            <i class="flaticon2-talk"></i>
+                            <a href="{{ path( 'report_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">{{ project.reports.count }} Reports</a>
+                        </div>
+                    </div>
+
+                    <div class="kt-widget__section">
+                        <a href="{{ path('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="btn btn-brand btn-sm btn-upper btn-bold">details</a>                                 
+                    </div>
+                </div>
+            </div>
         </div>
+        <!--end::Widget -->
     </div>
 </div>

@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Reports {% if activity is not null %}- Activity #{{ activity.id }}{% endif %} - Project #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+
 {% block stylesheets %}
 {% endblock %}
 
@@ -7,10 +9,10 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Users</h3>
+            <h3 class="kt-subheader__title">{{ project.title }} {% if activity is null %}{% else %} / {{ activity.title }}{% endif %}</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__group" id="kt_subheader_search">
-                <span class="kt-subheader__desc" id="kt_subheader_total">450 Total</span>
+                <span class="kt-subheader__desc" id="kt_subheader_total">450 Reports</span>
                 <form class="kt-margin-l-20" id="kt_subheader_search_form">
                     <div class="kt-input-icon kt-input-icon--right kt-subheader__search">
                         <input type="text" class="form-control" placeholder="Search..." id="generalSearch">
@@ -29,54 +31,10 @@
                     </div>
                 </form>
             </div>
-            <div class="kt-subheader__group kt-hidden" id="kt_subheader_group_actions">
-                <div class="kt-subheader__desc"><span id="kt_subheader_group_selected_rows"></span> Selected:</div>
-                <div class="btn-toolbar kt-margin-l-20">
-                    <div class="dropdown" id="kt_subheader_group_actions_status_change">
-                        <button type="button" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
-                            Update Status
-                        </button>
-                        <div class="dropdown-menu">
-                            <ul class="kt-nav">
-                                <li class="kt-nav__section kt-nav__section--first">
-                                    <span class="kt-nav__section-text">Change status to:</span>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link" data-toggle="status-change" data-status="1">
-                                        <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-success kt-badge--inline kt-badge--bold">Approved</span></span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link" data-toggle="status-change" data-status="2">
-                                        <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-danger kt-badge--inline kt-badge--bold">Rejected</span></span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link" data-toggle="status-change" data-status="3">
-                                        <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-warning kt-badge--inline kt-badge--bold">Pending</span></span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link" data-toggle="status-change" data-status="4">
-                                        <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-info kt-badge--inline kt-badge--bold">On Hold</span></span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <button class="btn btn-label-success btn-bold btn-sm btn-icon-h" id="kt_subheader_group_actions_fetch" data-toggle="modal" data-target="#kt_datatable_records_fetch_modal">
-                        Fetch Selected
-                    </button>                
-                    <button class="btn btn-label-danger btn-bold btn-sm btn-icon-h" id="kt_subheader_group_actions_delete_all">
-                        Delete All
-                    </button>
-                </div>
-            </div>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="/metronic/preview/demo7/.html" class=""></a>
-            <a href="/metronic/preview/demo7/custom/apps/user/add-user.html" class="btn btn-label-brand btn-bold">Add User</a>
-            <div class="kt-subheader__wrapper">
+            <a href="" class="btn btn-label-brand btn-bold">New Report</a>
+            <div class="kt-subheader__wrapper kt-hidden">
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
                     <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">

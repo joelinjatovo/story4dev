@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Project #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+
 {% block stylesheets %}
 {% endblock %}
 
@@ -238,7 +240,7 @@
                         <i class="flaticon-chat-1"></i>
                     </div>
                     <div class="kt-widget__details">
-                        <span class="kt-widget__title">{{ project.reports.count }} Reports</span>
+                        <span class="kt-widget__title">--- Reports</span>
                         <a href="{{ path( 'report_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">View</a>
                     </div>
                 </div>
@@ -358,11 +360,6 @@
             <div class="kt-portlet__body">
                 <!--begin::widget 12-->
                 <div class="kt-widget4">
-                    {% for report in project.reports.slice(0, 5) %}
-                        {{ include('project/report.html.twig', { 'report' : report } ) }}
-                    {% else %}
-                        Il n'y a pas encore de rapport dans ce projet.
-                    {% endfor %}
                 </div>
                 <!--end::Widget 12-->
             </div>

@@ -21,6 +21,8 @@ use App\Traits\SoftDeleteableEntity;
  */
 class Report
 {
+    const STATUS_OPENED = 'opened';
+    const STATUS_CLOSED = 'closed';
     
     /**
      * Hook timestampable behavior
@@ -70,18 +72,22 @@ class Report
     private $synced_at;
     
     /**
+     * @Assert\Type("string")
+     * @Assert\Length(
+     *      max = 10,
+     *      maxMessage = "Your status cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(name="status", type="string", length=10, nullable=true)
+     * @Groups({"full", "report"})
+     */
+    private $status;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reports")
      * @Gedmo\Versioned
      * @Groups({"full", "report"})
      */
     private $author;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="reports")
-     * @Gedmo\Versioned
-     * @Groups({"full", "report"})
-     */
-    private $project;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="reports")
@@ -103,6 +109,7 @@ class Report
 
     public function __construct()
     {
+        $this->setStatus(self::STATUS_OPENED);
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->setSyncedAt(new \DateTime());
@@ -150,6 +157,32 @@ class Report
         $this->synced_at = $synced_at;
 
         return $this;
+    }    
+
+    public function getStatus(): ?string
+    {
+        return (string) $this->status;
+    }
+    
+    public function setStatus(?string $status): self
+    {
+        $this->status = $status;
+        
+        return $this;
+    }
+    
+    public function open(): self
+    {
+        $this->setStatus(self::STATUS_OPENED);
+        
+        return $this;
+    }
+    
+    public function close(): self
+    {
+        $this->setStatus(self::STATUS_CLOSED);
+        
+        return $this;
     }
 
     public function getAuthor(): ?User
@@ -160,18 +193,6 @@ class Report
     public function setAuthor(?User $user): self
     {
         $this->author = $user;
-
-        return $this;
-    }
-
-    public function getProject(): ?Project
-    {
-        return $this->project;
-    }
-
-    public function setProject(?Project $project): self
-    {
-        $this->project = $project;
 
         return $this;
     }

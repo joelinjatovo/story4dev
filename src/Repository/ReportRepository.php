@@ -32,37 +32,9 @@ class ReportRepository extends ServiceEntityRepository
     public function findByProject(Project $project)
     {
         return $this->createQueryBuilder('r')
-            ->where('r.project = :project')
+            ->innerJoin('r.activity', 'a')
+            ->where('a.project = :project')
             ->setParameter('project', $project)
             ->getQuery();
     }
-
-    // /**
-    //  * @return Report[] Returns an array of Report objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Report
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

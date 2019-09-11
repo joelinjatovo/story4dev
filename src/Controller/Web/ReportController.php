@@ -47,10 +47,10 @@ class ReportController extends AbstractController
         }
         
         $report = new Report();
-        $report->setProject($project);
+        $report->setActivity($activity);
         $report->setAuthor($this->getUser());
         
-        $form = $this->createForm(ReportType::class, $report, array('project' => $project));
+        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity ));
         
         return $this->render('report/create.html.twig', [
             'user'     => $user, 
@@ -77,18 +77,16 @@ class ReportController extends AbstractController
         }
 
         $report = new Report();
-        $report->setProject($project);
-        $report->setAuthor($this->getUser());
         
-        $form = $this->createForm(ReportType::class, $report, array('project' => $project));
+        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity ));
         
         $form->handleRequest($request);
         if ( $form->isSubmitted() ) {
             if( $form->isValid()) {
-                $report->setProject($project);
-                $report->setActivity($activity);
-
                 $entityManager = $this->getDoctrine()->getManager();
+                
+                $report->setActivity($activity);
+                $report->setAuthor($this->getUser());
                 
                 foreach ($report->getResults() as $result) {
                     $result->setAuthor($this->getUser());
@@ -141,11 +139,11 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report/edit/{id}", name="edit", methods="GET", requirements={"project_id"="\d+","id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report/edit/{report_id}", name="edit", methods="GET", requirements={"project_id"="\d+","id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
-     * @Entity("report", options={"mapping": {"id": "id"}})
+     * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
     public function edit(User $user, Project $project, Activity $activity, Report $report)
     {
@@ -161,7 +159,7 @@ class ReportController extends AbstractController
             throw $this->createNotFoundException('The activity does not match');
         }
         
-        $form = $this->createForm(ReportType::class, $report, array('project' => $project));
+        $form = $this->createForm(ReportType::class, $report, array('activity' => $activity));
         
         return $this->render('report/edit.html.twig', [
             'user'     => $user, 
@@ -173,11 +171,11 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report/edit/{id}", name="update", methods="POST", requirements={"project_id"="\d+","id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report/edit/{report_id}", name="update", methods="POST", requirements={"project_id"="\d+","id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
-     * @Entity("report", options={"mapping": {"id": "id"}})
+     * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
     public function update(User $user, Project $project, Activity $activity, Report $report, Request $request)
     {
@@ -250,6 +248,7 @@ class ReportController extends AbstractController
             if($activity->getProject() != $project ){
                 throw $this->createNotFoundException('The project does not match');
             }
+            
             $query = $entityManager->getRepository(Report::class)->findByActivity($activity);
         }else{
             $query = $entityManager->getRepository(Report::class)->findByProject($project);

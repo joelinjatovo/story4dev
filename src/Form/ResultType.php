@@ -16,7 +16,7 @@ class ResultType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $project = isset($options['project'])?$options['project']:null;
+        $activity = isset($options['activity'])?$options['activity']:null;
         
         $builder
             ->add('value', FloatType::class, [
@@ -28,33 +28,22 @@ class ResultType extends AbstractType
                 'placeholder' => 'Choose an indicator',
                 'required' => true,
                 'class' => Indicator::class,
-                'query_builder' => function (IndicatorRepository $er) use ($project) {
-                    
-                    if(! $project){
+                'query_builder' => function (IndicatorRepository $er) use ($activity) {
+                    if( ! $activity) {
                         return $er->createQueryBuilder('i')
                             ->orderBy('i.title', 'ASC');
                     }
                     
                     return $er->createQueryBuilder('i')
-                        ->innerJoin('i.activity', 'a')
-                        ->where('a.project = :project')
-                        ->setParameter('project', $project)
+                        ->where('i.activity = :activity')
+                        ->setParameter('activity', $activity)
                         ->orderBy('i.title', 'ASC');
                     
                 },
                 'choice_label' => function ($indicator) {
                     return $indicator->getTitle();
-                },
-                'group_by' => function($indicator, $key, $value) {
-                    return $indicator->getActivity()->getTitle();
-                },
+                }
             ])
-            /*
-            ->add('title')
-            ->add('description')
-            ->add('author')
-            ->add('report')
-            */
         ;
     }
 
@@ -62,7 +51,7 @@ class ResultType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Result::class,
-            'project'    => null,
+            'activity'   => null,
             'author'     => null,
         ]);
     }
