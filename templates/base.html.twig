@@ -16,6 +16,24 @@
         <link href="{{ asset('css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>
         <!--end::Global Theme Styles -->
 
+        <style>
+        form.dropzone
+        {
+            /* positions to point 0,0 - required for z-index */
+            position: fixed; top: 0; left: 0; 
+            /* above all elements, even if z-index is used elsewhere
+               it can be lowered as needed, but this value surpasses
+               all elements when used on YouTube for example. */
+            z-index: 9999999999;               
+            /* takes up 100% of page */
+            width: 100%; height: 100%;         
+            /* dim the page with 50% black background when visible */
+            background-color: rgba(0,0,0,0.7);
+            /* a nice fade effect, visibility toggles after 175ms, opacity will animate for 175ms. note display:none cannot be animated.  */
+            transition: visibility 175ms, opacity 175ms;
+        }
+        </style>
+        
         <!--begin::Layout Skins & Vendor Skins(used by this page) -->
         {% block stylesheets %}
         <link href="{{ asset('css/fullcalendar.bundle.css') }}" rel="stylesheet" type="text/css"/>
@@ -24,7 +42,14 @@
 
         <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     </head>
-    <body id="page-body" class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-aside--minimize kt-page--loading"  >
+    <body id="page-body" class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-aside--minimize kt-page--loading">
+        
+        <form enctype="multipart/form-data" style="visibility:hidden; opacity:0" class="dropzone dropzone-default dropzone-success dz-clickable">
+            <div class="dropzone-msg dz-message needsclick">
+                <h3 class="dropzone-msg-title">Drop files here or click to upload.</h3>
+                <span class="dropzone-msg-desc">Only image, pdf and psd files are allowed for upload</span>
+            </div>
+        </form>
         
         <!-- begin:: Header Mobile -->
         {% block header_mobile %}
@@ -156,6 +181,43 @@
                     });
                     */
                     return "You haven\'t saved your changes.";
+                }
+            });
+            
+            window.addEventListener("dragenter", function(e)
+            {
+                document.querySelector(".dropzone").style.visibility = "";
+                document.querySelector(".dropzone").style.opacity = 1;
+            });
+            $('.dropzone').dropzone({
+                url: "/xu/vich-upload", // Set the url for your upload script location
+                method: "POST",
+                paramName: "upload[file]", // The name that will be used to transfer the file
+                maxFiles: 10,
+                maxFilesize: 10, // MB
+                addRemoveLinks: true,
+                acceptedFiles: "image/*,application/pdf,.psd",
+                accept: function(file, done) {
+                    if (file.name == "justinbieber.jpg") {
+                        done("Naha, you don't.");
+                    } else {
+                        done();
+                    }
+                },
+                init: function () {
+                    this.on("maxfilesexceeded", function(file) {
+                        this.removeFile(file);
+                    });
+                    this.on("sending", function(file, xhr, formData) {
+                        // send additional data with the file as POST data if needed.
+                        formData.append("upload[name]", "value");  
+                        document.querySelector(".dropzone").style.visibility = "hidden";
+                        document.querySelector(".dropzone").style.opacity = 0;
+                    });
+                    this.on("success", function(file, response) {
+                        if (response.data) 
+                            alert('File Uploaded: ' + response.data.name);
+                    });
                 }
             });
         </script>

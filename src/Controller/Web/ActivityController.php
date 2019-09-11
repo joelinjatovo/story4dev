@@ -316,4 +316,23 @@ class ActivityController extends AbstractController
             'activities' => $activities
         ]);
     }
+    
+    /**
+     * @Route("/{slug}/project/{project_id}/activities", name="choose", methods="GET")
+     */
+    public function choose(User $user, Project $project)
+    {
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        $activities = $entityManager->getRepository(Activity::class)->findBy(['project' => $project]);
+        
+        return $this->json([
+            'status'  => 'success',
+            'message' => 'OK',
+            'html'    => $this->renderView('activity/choose.html.twig', ['activities' => $activities] )
+        ]);
+    }
 }

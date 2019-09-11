@@ -74,7 +74,7 @@ class UploadController extends AbstractController
     }
 
     /**
-     * @Route("/xu/upload", name="post_upload", methods="POST")
+     * @Route("/xu/vich-upload", name="post_upload", methods="POST")
      *
      * @param Request $request
      *
@@ -84,38 +84,24 @@ class UploadController extends AbstractController
     {
         $file = new File();
         
-        $form = $this->createForm(UploadType::class, $file);
+        $form = $this->createForm(UploadType::class, $file, ['csrf_protection' => false]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if(!$form->isValid()){
-                return new JsonResponse($formError->getErrorMessages($form), JsonResponse::HTTP_BAD_REQUEST);
-            }
+        if ($form->isSubmitted()){
             
-            /*
-            $uploadedFile = $form['file']->getData();
-            if ($uploadedFile) {
-                try{
-                    $uploadedFileName = $fileUploader->upload($uploadedFile);
-                    $file->setPath($uploadedFileName);
-                } catch (FileException $e) {
-                    return new JsonResponse([
-                        'status' => 0,
-                        'error' => 'Can not upload file',
-                        'message'=> $e->getMessage(),
-                    ], JsonResponse::HTTP_BAD_REQUEST);
-                }
+            if( ! $form->isValid() ) {
+                $errors = $formError->getErrorMessages($form);
+                return $this->json(['status' => 0,'errors' => $errors], JsonResponse::HTTP_BAD_REQUEST, [], ['groups' => ['file']]);
             }
-            */
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($file);
             $entityManager->flush();
-
-            return new JsonResponse(['123'], 201);
+        
+            return $this->json(['data' => $file], 200, [], ['groups' => ['file']]);
         }
-
-        return new JsonResponse(['123'], JsonResponse::HTTP_BAD_REQUEST);
+        
+        return $this->json(['status' => 0,'errors' => "Form not submitted"], JsonResponse::HTTP_BAD_REQUEST);
     }
 
     /**

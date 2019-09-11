@@ -97,12 +97,17 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
         
         if ( $form->isSubmitted() && $form->isValid() ) {
+            
             $entityManager = $this->getDoctrine()->getManager();
             
             // remove the relationship
             foreach ($originalIterations as $iteration) {
+                
                 if (false === $project->getIterations()->contains($iteration)) {
-                    $entityManager->remove($iteration);
+                    if( $iteration->hasGoals() ) {
+                        $project->addIteration($iteration);
+                        $this->addFlash('error', 'Can not delete '.$iteration->getTitle());
+                    }
                 }
             }
 

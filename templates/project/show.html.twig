@@ -156,8 +156,8 @@
 
                         <div class="kt-widget__action">
                             <a href="{{ path('project_edit', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-sm btn-upper" style="background: #edeff6">edit</a>&nbsp;
-                            <a href="{{ path('activity_index', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-success btn-sm btn-upper">Add Activity</a>&nbsp;
-                            <a href="#" class="btn btn-brand btn-sm btn-upper">Create report</a>
+                            <a href="{{ path('activity_index', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-success btn-sm btn-upper" >Add Activity</a>&nbsp;
+                            <button class="btn btn-brand btn-sm btn-upper" data-toggle="modal" data-target="#kt_modal_activities">Create report</button>
                         </div>
                     </div>
 
@@ -271,7 +271,42 @@
     </div>
 </div>
 <!--end:: Portlet-->
-
+    
+<!-- begin: Modal -->
+<div class="modal fade" id="kt_modal_activities" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Choisissez une activité pour créer un rapport</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="kt-notification-v2">
+                    {% for activity in project.activities %}
+                        <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-notification-v2__item">
+                            <div class="kt-notification-v2__itek-wrapper">
+                                <div class="kt-notification-v2__item-title">
+                                    {{ activity.title }}
+                                </div>
+                                <div class="kt-notification-v2__item-desc">
+                                    {{ activity.author.fullname }}
+                                </div>
+                            </div>	
+                        </a>
+                    {% else %}
+                        Aucunes activités trouvées sur ce projet.
+                    {% endfor %}
+                </div>  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end: Modal -->
+    
 <div class="row">
     <div class="col-lg-6">
         <!--begin:: Widgets/Notifications-->
@@ -478,7 +513,6 @@
     </div>
 </div>
 {% endblock %}
-
 
 {% block javascripts %}
 {% endblock %}

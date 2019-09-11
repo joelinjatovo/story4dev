@@ -159,7 +159,8 @@
                                                 {% if project.iterations is empty %}
 													<div data-repeater-item="" class="kt-margin-b-10">
 														<div class="input-group">
-															{{ form_widget(form.iterations.vars.prototype.title, { 'attr' : { 'form' : 'report', 'class' : 'form-control' } } ) }}
+															{{ form_widget(form.iterations.vars.prototype.id ) }}
+															{{ form_widget(form.iterations.vars.prototype.title, { 'attr' : { 'form' : 'project', 'class' : 'form-control' } } ) }}
 															<div class="input-group-append">
 																<a href="javascript:;" data-repeater-delete class="btn btn-danger btn-icon">
 																	<i class="la la-close"></i>
@@ -172,6 +173,7 @@
                                                 {% for iteration in form.iterations %}
                                                     <div data-repeater-item="" class="kt-margin-b-10">
                                                         <div class="input-group">
+                                                            {{ form_widget( iteration.id ) }}
                                                             {{ form_widget( iteration.title, { 'attr' : { 'form' : 'project', 'class' : 'form-control' } } ) }}
                                                             <div class="input-group-append">
                                                                 <a href="javascript:;" data-repeater-delete class="btn btn-danger btn-icon">

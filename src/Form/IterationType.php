@@ -7,6 +7,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
 class IterationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -14,6 +16,7 @@ class IterationType extends AbstractType
         $project = isset($options['project'])?$options['project']:null;
         
         $builder
+            ->add('id', HiddenType::class)
             ->add('title')
         ;
     }

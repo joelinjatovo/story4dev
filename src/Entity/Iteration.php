@@ -66,6 +66,13 @@ class Iteration
         $this->setUpdatedAt(new \DateTime());
     }
 
+    public function setId(int $id): ?self
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +112,11 @@ class Iteration
         $this->project = $project;
 
         return $this;
+    }
+    
+    public function hasGoals()
+    {
+        return $this->goals->count() > 0;
     }
     
     public function getGoals(): ?Collection
