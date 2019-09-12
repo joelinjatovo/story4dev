@@ -56,6 +56,7 @@ class ReportController extends AbstractController
             'user'     => $user, 
             'project'  => $project, 
             'activity' => $activity,
+            'report'   => $report,
             'form'     => $form->createView()
         ]);
     }
@@ -196,7 +197,7 @@ class ReportController extends AbstractController
             $originalResults->add($result);
         }
         
-        $form = $this->createForm(ReportType::class, $report, array('project' => $project));
+        $form = $this->createForm(ReportType::class, $report, array('activity' => $activity));
         
         $form->handleRequest($request);
         
@@ -204,7 +205,10 @@ class ReportController extends AbstractController
             if( $form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
                 
+                $report->setActivity($activity);
+                
                 $entityManager->persist($report);
+                
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Report Updated! Knowledge is power!');
@@ -218,7 +222,7 @@ class ReportController extends AbstractController
             'slug'        => $user->getSlug(), 
             'project_id'  => $project->getId(), 
             'activity_id' => $activity->getId(),
-            'id'          => $report->getId(), 
+            'report_id'   => $report->getId(), 
         ]);
     }
     

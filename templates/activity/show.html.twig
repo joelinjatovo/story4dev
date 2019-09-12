@@ -252,7 +252,7 @@
             </div>
             <div class="kt-portlet__body">
                 <div class="kt-notification" id="kt-activity-list">
-					{% for file in activity.activityFiles.slice(0, 5) %}
+					{% for activityFile in activity.activityFiles.slice(0, 5) %}
                         <a href="#" class="kt-notification__item">
                             <div class="kt-notification__item-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--brand">
@@ -265,7 +265,7 @@
                             </div>
                             <div class="kt-notification__item-details">
                                 <div class="kt-notification__item-title">
-                                    {{ file.name }}
+                                    {{ activityFile.file.name }}
                                 </div>
                                 <div class="kt-notification__item-time">
                                     3 hrs ago

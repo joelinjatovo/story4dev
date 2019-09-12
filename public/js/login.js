@@ -69,7 +69,8 @@ jQuery(document).ready(function($){
                     console.log(t);
                     KTApp.unblock(form);
     ;               if(t.success===true){
-                        i("success", "Success", "You will be redirect in few secondes."),
+                        i("success", "Success", "You will be redirect in few secondes.");
+                        KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
                         setTimeout(function(){
                             window.location.replace(t.redirect);
                         },2e3)

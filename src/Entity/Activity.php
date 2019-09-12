@@ -112,7 +112,7 @@ class Activity
     protected $metas;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ActivityFile", mappedBy="activity", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ActivityFile", mappedBy="activity", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $activityFiles;
 

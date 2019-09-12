@@ -94,7 +94,7 @@
                 </div>
 
                 <span class="kt-widget__text">
-                    {{ project.description }}                       
+                    {{ project.description|html|raw }}                       
                 </span>
 
                 <div class="kt-widget__content">
@@ -133,7 +133,7 @@
 
                         <div class="kt-widget__blog">
                             <i class="flaticon2-talk"></i>
-                            <a href="{{ path( 'report_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">{{ project.reports.count }} Reports</a>
+                            <a href="{{ path( 'report_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">--- Reports</a>
                         </div>
                     </div>
 

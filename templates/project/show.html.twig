@@ -175,7 +175,7 @@
 
                     <div class="kt-widget__info">
                         <div class="kt-widget__desc">
-                            {{ project.description }}
+                            {{ project.description|html|raw }}
                         </div>
 
                         <div class="kt-widget__stats d-flex align-items-center flex-fill">

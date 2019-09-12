@@ -37407,3 +37407,84 @@ body {
     .kt-footer .kt-footer__menu .kt-footer__menu-link:first-child {
       padding-left: 0;
       margin-left: 0; } }
+
+div.dropzone-container
+{
+    position: fixed; top: 0; left: 0; 
+    z-index: 9999999999;               
+    width: 100%; height: 100%;         
+    background-color: rgba(0,0,0,0.7);
+    transition: visibility 175ms, opacity 175ms;
+}
+div.dropzone-container > .dropzone-inner {
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+}
+div.dropzone-container > .dropzone-inner > .dropzone {
+    position: absolute;
+    height: calc( 100% - 100px);
+    top: 0;
+    bottom: 0;
+    margin: 50px;
+    width: calc( 100% - 100px );
+}
+div.dropzone-container > .btn-close {
+    display: block;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 30px;
+    font-weight: 400;
+    font-stretch: normal;
+    line-height: 1;
+    z-index: 1005;
+    -webkit-appearance: none;
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+    background: none;
+    border: none;
+    border-collapse: separate;
+    -o-border-image: none;
+    border-image: none;
+    border-radius: 0;
+    border-spacing: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    clear: none;
+    display: inline;
+    empty-cells: show;
+    float: none;
+    font-family: inherit;
+    -webkit-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+    left: auto;
+    letter-spacing: normal;
+    list-style: none;
+    opacity: 1;
+    outline: medium none invert;
+    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
+    text-align: left;
+    text-decoration: none;
+    text-indent: 0;
+    text-shadow: none;
+    text-transform: none;
+    -webkit-transform: none;
+    transform: none;
+    -webkit-transform-origin: 50% 50% 0;
+    transform-origin: 50% 50% 0;
+    -webkit-transform-style: flat;
+    transform-style: flat;
+    -webkit-transition: none 0s ease 0s;
+    transition: none 0s ease 0s;
+    unicode-bidi: normal;
+    vertical-align: baseline;
+    visibility: visible;
+    white-space: normal;
+    z-index: auto;
+}

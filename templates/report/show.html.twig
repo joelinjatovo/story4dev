@@ -92,7 +92,7 @@
                     </div>
                     <div class="kt-widget__info">
                         <div class="kt-widget__desc">
-                            {{ report.description }}
+                            {{ report.description|html|raw }}
                         </div>
                         <div class="kt-widget__progress kt-hidden">
                             <div class="kt-widget__text">

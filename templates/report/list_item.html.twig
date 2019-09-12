@@ -9,9 +9,6 @@
                         <a href="{{ path('report_show', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-widget__title">
                             {{ report.title }}
                         </a>
-                        <span class="kt-widget__desc">
-                            {{ report.description }}
-                        </span>
                     </div>
                 </div>
                 <div class="kt-portlet__head-toolbar">
@@ -89,7 +86,7 @@
                 </div>
 
                 <span class="kt-widget__text">
-                    {{ report.description }}                         
+                    {{ report.description|html|raw }}                         
                 </span>
 
                 <div class="kt-widget__content">

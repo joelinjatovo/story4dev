@@ -9,6 +9,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+use App\Entity\Project;
+
 /** 
  * @Route(name="app_")
  *
@@ -20,6 +22,27 @@ class IndexController extends AbstractController
     */
     public function index(Request $request)
     {
+        if( $this->getUser() ){
+            
+            $contributions = $this->getUser()->getProjectContributions();
+            if( $contributions->count() === 1 ){
+                foreach($contributions as $contribution){
+                    $project = $contribution->getProject();
+                    return $this->redirectToRoute('project_show',[
+                        'slug' => $project->getAuthor()->getSlug(),
+                        'id'   => $project->getId(),
+                    ]);
+                }
+            }
+            
+            if( $contributions->count() === 0 ){
+                return $this->redirectToRoute('account_profile');
+            }
+            
+            return $this->redirectToRoute('project_list',[
+                'slug' => $this->getUser()->getSlug()
+            ]);
+        }
         return $this->redirectToRoute('app_login');
     }
 }

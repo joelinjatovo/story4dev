@@ -37,9 +37,10 @@ class ActivityController extends AbstractController
         $form = $this->createForm(ActivityType::class, $activity);
 
         return $this->render('activity/create.html.twig', [
-            'user'    => $user, 
-            'project' => $project, 
-            'form'    => $form->createView()
+            'user'     => $user, 
+            'project'  => $project, 
+            'activity' => $activity, 
+            'form'     => $form->createView()
         ]);
     }
     
@@ -122,7 +123,7 @@ class ActivityController extends AbstractController
 
         return $this->redirectToRoute('activity_index', [
             'slug'       => $user->getSlug(),
-            'project_id' => $project->getId(), 
+            'project_id' => $project->getId(),
         ]);
     }
     

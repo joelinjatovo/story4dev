@@ -433,19 +433,17 @@
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                             <div class="kt-section kt-section--last">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg" style="color: red">Attachments:</h3>
-									<div class="form-group row">
-										<label class="col-3 col-form-label">First Name</label>
-										<div class="col-9">
-											<input class="form-control" type="text" value="Nick">
-										</div>
-									</div>
-									<div class="form-group row">
-										<label class="col-3 col-form-label">Last Name</label>
-										<div class="col-9">
-											<input class="form-control" type="text" value="Watson">
-										</div>
-									</div>
+									<h3 class="kt-section__title kt-section__title-lg" style="color: red">Attacher des fichiers:</h3>
+                                    <button class="btn btn-label-success btn-bold btn-sm btn-upload">Upload file</button>
+									<div class="kt-notification-v2" id="file-list" data-name="activity[activityFiles]" data-count="{{ activity.activityFiles.count }}">
+                                        {% set i = 0 %}
+                                        {% for activityFile in activity.activityFiles %}
+                                            <input type="hidden" name="activity[activityFiles][{{i}}][type]" value="{{activityFile.type}}">
+                                            <input type="hidden" name="activity[activityFiles][{{i}}][file]" value="{{activityFile.file.id}}">
+                                            {% set i = i + 1 %}
+                                            {{ include('upload/file.html.twig', {'file': activityFile.file}) }}
+                                        {% endfor %}
+                                    </div>
 								</div>
 							</div>
 						</div>
