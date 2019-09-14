@@ -15,20 +15,20 @@ class ReportFile
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"full", "activity"})
+     * @Groups({"full", "activity", "project"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"full", "activity"})
+     * @Groups({"full", "activity", "project"})
      */
     private $type;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\File", inversedBy="activityFiles")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"full", "activity"})
+     * @Groups({"full", "activity", "project"})
      */
     private $file;
 

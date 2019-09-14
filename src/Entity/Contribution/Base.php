@@ -33,6 +33,7 @@ abstract class Base
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
+     * @Groups({"user"})
      */
     private $id;
 

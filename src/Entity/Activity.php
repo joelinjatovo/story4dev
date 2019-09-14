@@ -74,7 +74,7 @@ class Activity
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=true)
-     * @Groups({"full", "activity"})
+     * @Groups({"full", "activity", "project"})
      */
     private $address;
     
@@ -94,7 +94,7 @@ class Activity
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @Groups({"full", "activity"})
+     * @Groups({"full", "activity", "project"})
      */
     private $indicators;
     
@@ -106,13 +106,13 @@ class Activity
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ActivityFile", mappedBy="activity", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @Groups({"full", "activity"})
+     * @Groups({"full", "activity", "project"})
      */
     private $activityFiles;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="activity", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @Groups({"full", "activity"})
+     * @Groups({"full", "activity", "project"})
      */
     private $reports;
     
