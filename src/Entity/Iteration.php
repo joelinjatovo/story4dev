@@ -32,14 +32,14 @@ class Iteration
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "project", "goal"})
+     * @Groups({"full", "raw", "project", "goal", "activity"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "project", "goal"})
+     * @Groups({"full", "raw", "project", "goal", "activity"})
      */
     private $title;
     

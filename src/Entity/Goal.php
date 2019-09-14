@@ -32,14 +32,14 @@ class Goal
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "goal", "project", "indicator"})
+     * @Groups({"full", "raw", "goal", "project", "indicator", "activity"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "goal", "project", "indicator"})
+     * @Groups({"full", "raw", "goal", "project", "indicator", "activity"})
      */
     private $value;
     
@@ -61,7 +61,7 @@ class Goal
      * @ORM\ManyToOne(targetEntity="App\Entity\Iteration", inversedBy="goals")
      * @ORM\JoinColumn(nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "goal", "project"})
+     * @Groups({"full", "goal", "project", "activity"})
      */
     private $iteration;
 
