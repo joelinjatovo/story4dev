@@ -112,7 +112,7 @@ class Project
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
      * @Gedmo\Versioned
-     * @Groups({"full", "project"})
+     * @Groups({"full"})
      */
     private $author;
     

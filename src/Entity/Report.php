@@ -41,7 +41,7 @@ class Report
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report"})
+     * @Groups({"full", "raw", "report", "activity"})
      */
     private $id;
 
@@ -53,21 +53,21 @@ class Report
      * )
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report"})
+     * @Groups({"full", "raw", "report", "activity"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report"})
+     * @Groups({"full", "raw", "report", "activity"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report"})
+     * @Groups({"full", "raw", "report", "activity"})
      */
     private $synced_at;
     
@@ -78,14 +78,14 @@ class Report
      *      maxMessage = "Your status cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="status", type="string", length=10, nullable=true)
-     * @Groups({"full", "report"})
+     * @Groups({"full", "report", "activity"})
      */
     private $status;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reports")
      * @Gedmo\Versioned
-     * @Groups({"full", "report"})
+     * @Groups({"full", "report", "activity"})
      */
     private $author;
     
@@ -98,12 +98,13 @@ class Report
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="report", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @Groups({"full", "report"})
+     * @Groups({"full", "report", "activity"})
      */
     private $results;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ReportFile", mappedBy="report", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @Groups({"full", "report", "activity"})
      */
     private $reportFiles;
 

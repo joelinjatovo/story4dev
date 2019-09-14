@@ -22,7 +22,7 @@ class File
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"full", "raw", "file"})
+     * @Groups({"full", "raw", "file", "activity"})
      */
     private $id;
 
@@ -30,7 +30,7 @@ class File
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="Name should not be blank.")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"full", "raw", "file"})
+     * @Groups({"full", "raw", "file", "activity"})
      */
     private $name;
 
@@ -46,17 +46,19 @@ class File
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"full", "raw", "file"})
+     * @Groups({"full", "raw", "file", "activity"})
      */
     private $path;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"full", "raw", "file", "activity"})
      */
     private $url;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"full", "raw", "file", "activity"})
      */
     private $isExternal;
 

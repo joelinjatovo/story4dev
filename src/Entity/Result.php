@@ -32,7 +32,7 @@ class Result
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report"})
+     * @Groups({"full", "raw", "report", "activity"})
      */
     private $id;
 
@@ -53,7 +53,7 @@ class Result
     /**
      * @ORM\Column(type="float", nullable=false)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report"})
+     * @Groups({"full", "raw", "report", "activity"})
      */
     private $value;
     
@@ -73,7 +73,7 @@ class Result
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Indicator", inversedBy="goals")
      * @Gedmo\Versioned
-     * @Groups({"full", "report"})
+     * @Groups({"full", "report", "activity"})
      */
     private $indicator;
 

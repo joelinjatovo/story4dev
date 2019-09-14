@@ -39,14 +39,14 @@ class Unit
     /**
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "project", "indicator"})
+     * @Groups({"full", "raw", "project", "indicator", "activity"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=10)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "project", "indicator"})
+     * @Groups({"full", "raw", "project", "indicator", "activity"})
      */
     private $label;
     

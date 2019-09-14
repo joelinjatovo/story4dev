@@ -15,43 +15,43 @@ class Address
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"raw", "user", "project"})
+     * @Groups({"raw", "user", "project", "activity"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"raw", "user", "project"})
+     * @Groups({"raw", "user", "project", "activity"})
      */
     private $addressLine1;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"raw", "user", "project"})
+     * @Groups({"raw", "user", "project", "activity"})
      */
     private $addressLine2;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"raw", "user", "project"})
+     * @Groups({"raw", "user", "project", "activity"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"raw", "user", "project"})
+     * @Groups({"raw", "user", "project", "activity"})
      */
     private $state;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"raw", "user", "project"})
+     * @Groups({"raw", "user", "project", "activity"})
      */
     private $postalCode;
 
     /**
      * @ORM\Column(type="string", length=3)
-     * @Groups({"raw", "user", "project"})
+     * @Groups({"raw", "user", "project", "activity"})
      */
     private $country;
 

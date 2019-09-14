@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ActivityFileRepository")
@@ -14,17 +15,20 @@ class ActivityFile
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"full", "activity"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"full", "activity"})
      */
     private $type;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\File", inversedBy="activityFiles")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"full", "activity"})
      */
     private $file;
 

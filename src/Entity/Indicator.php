@@ -54,7 +54,7 @@ class Indicator
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "activity"})
+     * @Groups({"full", "indicator"})
      */
     private $author;
     
