@@ -9,10 +9,7 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            
             <h3 class="kt-subheader__title">{{ activity.project.title }}</h3>
-            
-            <span class="kt-subheader__separator kt-hidden"></span>
             <div class="kt-subheader__breadcrumbs">
                 <a href="{{ url('admin_index') }}" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
@@ -26,60 +23,40 @@
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a href="#" class="btn kt-subheader__btn-primary">
-                    Actions &nbsp;
-                    <!--<i class="flaticon2-calendar-1"></i>-->
+                <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="btn kt-subheader__btn-primary">
+                    Modifier &nbsp;
                 </a>
                                 
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip" title="" data-placement="left" data-original-title="Quick actions">
                     <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-        <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-        <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
-    </g>
-</svg>                        <!--<i class="flaticon2-plus"></i>-->
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+                                <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
+                            </g>
+                        </svg>
+                        <!--<i class="flaticon2-plus"></i>-->
                     </a>
                     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
                         <!--begin::Nav-->
                         <ul class="kt-nav">
                             <li class="kt-nav__head">
-                                Add anything or jump to:                                   
+                                Creer un nouveau                                   
                                 <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                             </li>
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
+                                <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Order</span>
+                                    <span class="kt-nav__link-text">Indicator</span>
                                 </a>
                             </li>
                             <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
+                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">Ticket</span>
+                                    <span class="kt-nav__link-text">Rapport</span>
                                 </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-link"></i>
-                                    <span class="kt-nav__link-text">Goal</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Support Case</span>
-                                    <span class="kt-nav__link-badge">
-                                        <span class="kt-badge kt-badge--success">5</span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__foot">
-                                <a class="btn btn-label-brand btn-bold btn-sm" href="#">Upgrade plan</a>                                    
-                                <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                             </li>
                         </ul>
                         <!--end::Nav-->
@@ -103,85 +80,13 @@
                             <div class="kt-widget__head">
                                 <a href="#" class="kt-widget__username">
                                     {{ activity.title }}    
-                                    <i class="flaticon2-correct"></i>                       
                                 </a>
-                                <div class="kt-widget__action">
-                                    <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="btn btn-label-success btn-sm btn-upper">edit</a>&nbsp;
-                                    <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="btn btn-brand btn-sm btn-upper">Add Indicator</a>&nbsp;
-                            		<a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-brand btn-sm btn-upper">Create report</a>
-                                </div>
                             </div>
-
                             <div class="kt-widget__subhead">
                                 {% if activity.contactEmail %}<a href="#"><i class="flaticon2-new-email"></i>{{ activity.contactEmail }}</a>{% endif %}
                                 {% if activity.contactPhone %}<a href="#"><i class="flaticon2-calendar-3"></i>{{ activity.contactPhone }} </a>{% endif %}
                                 {% if activity.contactAddress %}<a href="#"><i class="flaticon2-placeholder"></i>{{ activity.contactAddress }}</a>{% endif %}
                             </div> 
-
-                            <div class="kt-widget__info">
-                                <div class="kt-widget__progress">
-                                    <div class="kt-widget__text">
-                                        Progress
-                                    </div>
-                                    <div class="progress" style="height: 5px;width: 100%;">
-                                        <div class="progress-bar kt-bg-success" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <div class="kt-widget__stats">
-                                        78%
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="kt-widget__bottom">
-                        <div class="kt-widget__item">
-                            <div class="kt-widget__icon">
-                                <i class="flaticon-piggy-bank"></i>
-                            </div>
-                            <div class="kt-widget__details">
-                                <span class="kt-widget__title">Earnings</span>
-                                <span class="kt-widget__value"><span>$</span>249,500</span>
-                            </div>
-                        </div>
-
-                        <div class="kt-widget__item">
-                            <div class="kt-widget__icon">
-                                <i class="flaticon-confetti"></i>
-                            </div>
-                            <div class="kt-widget__details">
-                                <span class="kt-widget__title">Expances</span>
-                                <span class="kt-widget__value"><span>$</span>164,700</span>
-                            </div>
-                        </div>
-
-                        <div class="kt-widget__item">
-                            <div class="kt-widget__icon">
-                                <i class="flaticon-pie-chart"></i>
-                            </div>
-                            <div class="kt-widget__details">
-                                <span class="kt-widget__title">Net</span>
-                                <span class="kt-widget__value"><span>$</span>164,700</span>
-                            </div>
-                        </div>
-
-                        <div class="kt-widget__item">
-                            <div class="kt-widget__icon">
-                                <i class="flaticon-file-2"></i>
-                            </div>
-                            <div class="kt-widget__details">
-                                <span class="kt-widget__title">73 Tasks</span>
-                                <a href="#" class="kt-widget__value kt-font-brand">View</a>
-                            </div>
-                        </div>
-
-                        <div class="kt-widget__item">
-                            <div class="kt-widget__icon">
-                                <i class="flaticon-chat-1"></i>
-                            </div>
-                            <div class="kt-widget__details">
-                                <span class="kt-widget__title">648 Comments</span>
-                                <a href="#" class="kt-widget__value kt-font-brand">View</a>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -191,47 +96,17 @@
     </div>
 </div>
     
-<!--begin::Modal-->
-<div class="modal fade" id="kt_modal_add_indicator" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    {{ form_start( form, { 'method' : 'POST', 'attr' : { 'id' : 'indicator_form', 'class' : 'modal-dialog modal-sm', 'role' : 'document' } } ) }}
-        <input type="hidden" name="indicator[activity]" value="{{ activity.id }}" >
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">New indicator</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    {{ form_label( form.title, null, { 'label_attr': { 'class': 'form-control-label' } } ) }}
-                    {{ form_widget( form.title, { 'attr' : { 'class' : 'form-control' } } ) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label( form.unit, null, { 'label_attr': { 'class': 'form-control-label' } } ) }}
-                    {{ form_widget( form.unit, { 'attr' : { 'class' : 'form-control' } } ) }}
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                {{ form_widget( form.submit, { 'attr' : { 'class' : 'btn btn-primary' } } ) }}
-            </div>
-        </div>
-        {{ form_row( form._token ) }}
-    {{ form_end( form, {'render_rest': false}) }}
-</div>
-<!--end::Modal-->
-    
 <div class="row">
     <div class="col-lg-6">
         <!--begin:: Widgets/Notifications-->
 		<div class="kt-portlet kt-portlet--height-fluid">
 			<div class="kt-portlet__head">
 				<div class="kt-portlet__head-label">
-					<h3 class="kt-portlet__head-title">Indicators</h3>
+					<a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}"><h3 class="kt-portlet__head-title">Indicators</h3></a>
 				</div>
 			</div>
 			<div class="kt-portlet__body">
-				<div class="kt-notification" id="kt-indicator-list">
+                <div class="kt-widget31">
 					{% for indicator in activity.indicators.slice(0, 5) %}
 						{{ include('activity/indicator.html.twig', { 'indicator' : indicator } ) }}
 					{% else %}

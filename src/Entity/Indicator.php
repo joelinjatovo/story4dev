@@ -233,4 +233,30 @@ class Indicator
 
         return $this;
     }
+
+    public function getProgression()
+    {
+        if( $this->getGoalsTotal() != 0 ) {
+            return (int) ($this->getResultsTotal()/$this->getGoalsTotal() * 100);
+        }
+        return 0;
+    }
+
+    public function getGoalsTotal()
+    {
+        $value = 0;
+        foreach($this->getGoals() as $goal){
+            $value += $goal->getValue();
+        }
+        return $value;
+    }
+
+    public function getResultsTotal()
+    {
+        $value = 0;
+        foreach($this->getResults() as $result){
+            $value += $result->getValue();
+        }
+        return $value;
+    }
 }

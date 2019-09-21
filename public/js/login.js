@@ -71,6 +71,7 @@ jQuery(document).ready(function($){
     ;               if(t.success===true){
                         i("success", "Success", "You will be redirect in few secondes.");
                         KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+                        $('.overlay-container').css('z-index', 0);
                         setTimeout(function(){
                             window.location.replace(t.redirect);
                         },2e3)

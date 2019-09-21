@@ -21,6 +21,7 @@ use App\Traits\SoftDeleteableEntity;
  */
 class Report
 {
+    const STATUS_DRAFT  = 'draft';
     const STATUS_OPENED = 'opened';
     const STATUS_CLOSED = 'closed';
     
