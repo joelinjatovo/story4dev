@@ -28,6 +28,9 @@ class ReportType extends AbstractType
                     'uiColor' => '#ffffff',
                 ),
             ])
+            ->add('longitude')
+            ->add('latitude')
+            ->add('altitude')
             ->add('results', CollectionType::class, [
                 'entry_type' => ResultType::class,
                 'entry_options' => [

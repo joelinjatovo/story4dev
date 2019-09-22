@@ -52,6 +52,7 @@ class UploadController extends AbstractController
         return $this->json(['data' => $file], 200, [], ['groups' => ['file']]);
         
     }
+    
     /**
      * @Rest\Post("/vich-upload")
      */
@@ -65,17 +66,17 @@ class UploadController extends AbstractController
         if ($form->isSubmitted()){
             if( ! $form->isValid() ) {
                 $errors = $formError->getErrorMessages($form);
-                return $this->json(['status' => 0,'errors' => $errors], JsonResponse::HTTP_BAD_REQUEST, [], ['groups' => ['file']]);
+                return $this->json(['status' => 'error', 'errors' => $errors], JsonResponse::HTTP_BAD_REQUEST, [], ['groups' => ['file']]);
             }
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($file);
             $entityManager->flush();
         
-            return $this->json(['data' => $file], 200, [], ['groups' => ['file']]);
+            return $this->json(['status' => 'success', 'message' => 'File uploaded.', 'data' => $file], 200, [], ['groups' => ['file']]);
         }
         
-        return $this->json(['status' => 0,'errors' => "Form not submitted"], JsonResponse::HTTP_BAD_REQUEST);
+        return $this->json(['status' => 'error', 'errors' => "Form not submitted"], JsonResponse::HTTP_BAD_REQUEST);
         
     }
 

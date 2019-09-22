@@ -64,7 +64,7 @@ class ReportController extends AbstractController
             $em->persist($report);
             $em->flush();
             
-            return $this->json(['status' => 'ok', 'message' => 'Report created.', 'data' => $report], JsonResponse::HTTP_CREATED, [], ['groups' => ['report']]);
+            return $this->json(['status' => 'success', 'message' => 'Report created.', 'data' => $report], JsonResponse::HTTP_CREATED, [], ['groups' => ['report']]);
         }
         
         return $this->json(['status' => 'error', 'errors' => $formError->getErrorMessages($form)], JsonResponse::HTTP_BAD_REQUEST);
