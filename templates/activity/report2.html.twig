@@ -1,0 +1,28 @@
+<div class="kt-widget31__item">
+    <div class="kt-widget31__content">
+        <div class="kt-widget31__pic">
+            <img src="{{ report.author.avatar ? vich_uploader_asset(report.author, 'avatarFile') : default_avatar }}" alt="">   
+        </div>
+        <div class="kt-widget31__info">
+            <a href="#" class="kt-widget31__username">
+                {{ report.author.fullname }}
+            </a>
+            <p class="kt-widget31__text">
+                {{ report.title }}
+            </p>							 		 
+        </div>					 
+    </div>
+
+    <div class="kt-widget31__content">
+        <div class="kt-widget31__progress">
+            <a href="#" class="kt-widget31__stats">
+                <span>63%</span>
+                <span>London</span>						    							 
+            </a>
+            <div class="progress progress-sm">
+                <div class="progress-bar bg-brand" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>	
+        <a href="#" class="btn-label-brand btn btn-sm btn-bold">Follow</a>													
+    </div>						
+</div>

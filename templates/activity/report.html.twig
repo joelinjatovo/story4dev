@@ -1,0 +1,51 @@
+<div class="kt-widget2__item kt-widget2__item--{{ report.status == 'opened' ? 'success' : 'danger'}}">
+    <div class="kt-widget2__checkbox">
+    </div>
+    <div class="kt-widget2__info">
+        <a href="{{ path('report_show', { 'report_id' : report.id,  'activity_id' : report.activity.id, 'project_id' : report.activity.project.id, 'slug': report.activity.project.author.slug } ) }}" class="kt-widget2__title">
+            {{ report.title }}
+        </a>							 
+        <a href="#" class="kt-widget2__username">
+            {{ report.author.fullname }}
+        </a>							 	 
+    </div>
+    <div class="kt-widget2__actions">
+        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+            <i class="flaticon-more-1"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+            <ul class="kt-nav">
+                <li class="kt-nav__item">
+                    <a href="#" class="kt-nav__link">
+                        <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                        <span class="kt-nav__link-text">Reports</span>
+                    </a>
+                </li>
+                <li class="kt-nav__item">
+                    <a href="#" class="kt-nav__link">
+                        <i class="kt-nav__link-icon flaticon2-send"></i>
+                        <span class="kt-nav__link-text">Messages</span>
+                    </a>
+                </li>
+                <li class="kt-nav__item">
+                    <a href="#" class="kt-nav__link">
+                        <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
+                        <span class="kt-nav__link-text">Charts</span>
+                    </a>
+                </li>
+                <li class="kt-nav__item">
+                    <a href="#" class="kt-nav__link">
+                        <i class="kt-nav__link-icon flaticon2-avatar"></i>
+                        <span class="kt-nav__link-text">Members</span>
+                    </a>
+                </li>
+                <li class="kt-nav__item">
+                    <a href="#" class="kt-nav__link">
+                        <i class="kt-nav__link-icon flaticon2-settings"></i>
+                        <span class="kt-nav__link-text">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

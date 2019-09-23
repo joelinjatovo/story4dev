@@ -80,7 +80,6 @@
 </div>
 {% endblock %}
 
-
 {% block content %}
 <div class="kt-portlet ">
     <div class="kt-portlet__body">
@@ -88,8 +87,43 @@
             <div class="kt-widget__top">
                 <div class="kt-widget__content">
                     <div class="kt-widget__head">
-                        <a href="#" class="kt-widget__title">{{ report.title }}</a>
+                        <div class="kt-widget__user">
+                            <a href="#" class="kt-widget__username" style="margin-right: 10px;">{{ report.title }}</a>
+                            <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-success report-status">{{ report.status }}</span>
+                            <div class="dropdown dropdown-inline kt-margin-l-5" data-toggle="kt-tooltip-" title="Change label" data-placement="right">
+                                <a href="#" class="btn btn-clean btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-caret-down"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-md dropdown-menu-fit dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-227px, 33px, 0px);">
+                                    <ul class="kt-nav">
+                                        <li class="kt-nav__head">
+                                            Choose status:
+                                            <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                        </li>
+                                        <li class="kt-nav__separator">
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="opened">
+                                                <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-success kt-badge--inline kt-badge--lg kt-badge--bold">Opened</span></span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="closed">
+                                                <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-danger kt-badge--inline kt-badge--lg kt-badge--bold">Closed</span></span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__separator">
+                                        </li>
+                                        <li class="kt-nav__foot">
+                                            <a class="btn btn-clean btn-bold btn-sm" href="#"><i class="flaticon2-add-1 kt-icon-sm"></i> Add new</a>
+                                            <a class="btn btn-clean btn-bold btn-sm kt-hidden" href="#" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <div class="kt-widget__subhead"></div>
                     <div class="kt-widget__info">
                         <div class="kt-widget__desc">
                             {{ report.description|html|raw }}
@@ -212,36 +246,12 @@
                     </div>
                 </div>
             </div>
-            <div class="kt-portlet__body kt-portlet__body--fluid">
-                <div class="kt-widget12">
-                    <div class="kt-widget12__content">
-                        <div class="kt-widget12__item">
-                            {% for result in report.results.slice(0, 5) %}
-                                {{ include('report/result.html.twig', { 'result' : result } ) }}
-                            {% endfor %}						 		 	 
-                        </div>
-                        <div class="kt-widget12__item">
-                            <div class="kt-widget12__info">
-                                <span class="kt-widget12__desc">Avarage Revenue</span> 
-                                <span class="kt-widget12__value">$60M</span>
-                            </div>
-                            <div class="kt-widget12__info">
-                                <span class="kt-widget12__desc">Revenue Margin</span> 
-                                <div class="kt-widget12__progress">	
-                                    <div class="progress kt-progress--sm">
-                                        <div class="progress-bar kt-bg-brand" role="progressbar" style="width: 40%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>								 
-                                    <span class="kt-widget12__stat">
-                                        40%
-                                    </span>
-                                </div>
-                            </div>						
-                        </div>
-                    </div>
-                    <div class="kt-widget12__chart" style="height:250px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                        <canvas id="kt_chart_order_statistics" style="display: block; width: 1149px; height: 250px;" width="1149" height="250" class="chartjs-render-monitor"></canvas>
-                    </div>
-                </div>		 
+			<div class="kt-portlet__body">
+                <div class="kt-widget31">
+                    {% for result in report.results.slice(0, 5) %}
+                        {{ include('report/result.html.twig', { 'result' : result } ) }}
+                    {% endfor %}	
+                </div>
             </div>
         </div>
         <!--end:: Widgets/Order Statistics-->
@@ -268,4 +278,5 @@
 
 
 {% block javascripts %}
+    <script src="{{ asset('js/report.js') }}" type="text/javascript" ></script>
 {% endblock %}

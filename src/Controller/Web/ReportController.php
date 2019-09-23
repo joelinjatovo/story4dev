@@ -226,6 +226,43 @@ class ReportController extends AbstractController
         ]);
     }
     
+    /**
+     * @Route("/report/status", name="status_change", methods="POST")
+     */
+    public function statusChange(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $status = $request->request->get('status');
+            $id = $request->request->get('id');
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $report = $entityManager->getRepository(Report::class)->find($id);
+            if( $report ){
+                if( $status == 'closed' ){
+                    $report->setStatus('closed');
+                }else{
+                    $status = 'opened';
+                    $report->setStatus('opened');
+                }
+                $entityManager->persist($report);
+                $entityManager->flush();
+                
+                return $this->json([
+                    'success' => true,
+                    'status'  => $status,
+                    'class'  => $status=='opened'?'success':'danger',
+                    'message' => 'Status changed',
+                ]);
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
+    }
+    
     
     /**
      * @Route("/{slug}/project/{project_id}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})

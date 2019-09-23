@@ -1,4 +1,24 @@
-<div class="kt-widget12__info">
-    <span class="kt-widget12__desc">{{ result.indicator.title }}</span> 
-    <span class="kt-widget12__value">{{ result.value }} {{ result.indicator.unit.title }}</span>
-</div>	
+<div class="kt-widget31__item">
+    <div class="kt-widget31__content">
+        <div class="kt-widget31__info">
+            <a href="{{ url('indicator_show', { 'slug' : result.indicator.activity.project.author.slug, 'project_id' : result.indicator.activity.project.id, 'activity_id' : result.indicator.activity.id, 'indicator_id' : result.indicator.id }) }}" class="kt-widget31__username">
+                {{ result.indicator.title }}
+            </a>
+            <p class="kt-widget31__text">
+                Unit : {{ result.value }} {{ result.indicator.unit.title }}
+            </p>							 		 
+        </div>					 
+    </div>
+
+    <div class="kt-widget31__content">
+        <div class="kt-widget31__progress">
+            <a href="{{ url('indicator_show', { 'slug' : result.indicator.activity.project.author.slug, 'project_id' : result.indicator.activity.project.id, 'activity_id' : result.indicator.activity.id, 'indicator_id' : result.indicator.id }) }}" class="kt-widget31__stats">
+                <span>{{ result.indicator.progression }}%</span>
+                <span>{{ result.indicator.resultsTotal }} / {{ result.indicator.goalsTotal }}</span>						    							 
+            </a>
+            <div class="progress progress-sm">
+                <div class="progress-bar bg-brand" role="progressbar" style="width: {{ result.indicator.progression }}%" aria-valuenow="{{ result.indicator.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>	
+    </div>						
+</div>

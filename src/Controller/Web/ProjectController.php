@@ -14,6 +14,7 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 use App\Entity\User;
 use App\Entity\Project;
+use App\Entity\Report;
 use App\Entity\Activity;
 use App\Entity\Iteration;
 use App\Form\ActivityType;
@@ -41,14 +42,14 @@ class ProjectController extends AbstractController
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
-        
-        $activity = new Activity();
-        $form = $this->createForm(ActivityType::class, $activity);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
         
         return $this->render('project/show.html.twig', [
             'user'    => $user, 
             'project' => $project, 
-            'form'    => $form->createView()
+            'reports' => $reports, 
         ]);
     }
     
