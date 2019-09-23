@@ -42,6 +42,20 @@ class Iteration
      * @Groups({"full", "raw", "project", "goal", "activity"})
      */
     private $title;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Versioned
+     * @Groups({"full", "raw", "project", "goal", "activity"})
+     */
+    private $startAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Versioned
+     * @Groups({"full", "raw", "project", "goal", "activity"})
+     */
+    private $endAt;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="iterations")
@@ -86,6 +100,30 @@ class Iteration
     public function setTitle(?string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getStartAt(): ?\DateTimeInterface
+    {
+        return $this->startAt;
+    }
+
+    public function setStartAt(?\DateTimeInterface $start_at): self
+    {
+        $this->startAt = $start_at;
+
+        return $this;
+    }
+
+    public function getEndAt(): ?\DateTimeInterface
+    {
+        return $this->endAt;
+    }
+
+    public function setEndAt(?\DateTimeInterface $end_at): self
+    {
+        $this->endAt = $end_at;
 
         return $this;
     }
