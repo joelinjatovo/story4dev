@@ -109,8 +109,15 @@ class Report
      */
     private $reportFiles;
 
+    /**
+     * @ORM\Column(type="boolean")
+     * @Groups({"full", "report", "activity", "project"})
+     */
+    private $isModified;
+
     public function __construct()
     {
+        $this->isModified = false;
         $this->setStatus(self::STATUS_OPENED);
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
@@ -265,6 +272,18 @@ class Report
                 $reportFile->setReport(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsModified(): ?bool
+    {
+        return $this->isModified;
+    }
+
+    public function setIsModified(bool $isModified): self
+    {
+        $this->isModified = $isModified;
 
         return $this;
     }
