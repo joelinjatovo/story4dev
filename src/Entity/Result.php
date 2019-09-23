@@ -51,7 +51,7 @@ class Result
     private $description;
 
     /**
-     * @ORM\Column(type="float", nullable=false)
+     * @ORM\Column(type="integer", nullable=false)
      * @Gedmo\Versioned
      * @Groups({"full", "raw", "report", "activity", "project"})
      */
@@ -106,12 +106,12 @@ class Result
         return $this;
     }
 
-    public function getValue(): ?float
+    public function getValue(): ?int
     {
         return $this->value;
     }
 
-    public function setValue(?float $value): self
+    public function setValue(?int $value): self
     {
         $this->value = $value;
 

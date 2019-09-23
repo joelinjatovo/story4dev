@@ -37,7 +37,7 @@ class Goal
     private $id;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="integer")
      * @Gedmo\Versioned
      * @Groups({"full", "raw", "goal", "project", "indicator", "activity"})
      */
@@ -76,12 +76,12 @@ class Goal
         return $this->id;
     }
 
-    public function getValue(): ?float
+    public function getValue(): ?int
     {
         return $this->value;
     }
 
-    public function setValue(float $value): self
+    public function setValue(int $value): self
     {
         $this->value = $value;
 
