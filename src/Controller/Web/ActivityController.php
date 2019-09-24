@@ -308,7 +308,9 @@ class ActivityController extends AbstractController
         }
         
         $entityManager = $this->getDoctrine()->getManager();
+        
         $query = $entityManager->getRepository(Activity::class)->findByProject($project);
+        
         $activities = $paginator->paginate($query, 10);
         
         return $this->render('activity/list.html.twig', [

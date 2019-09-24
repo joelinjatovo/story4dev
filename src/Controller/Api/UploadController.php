@@ -69,6 +69,10 @@ class UploadController extends AbstractController
                 return $this->json(['status' => 'error', 'errors' => $errors], JsonResponse::HTTP_BAD_REQUEST, [], ['groups' => ['file']]);
             }
             
+            $uploadedFile = $form['file']->getData();
+            $file->setMimeType($uploadedFile->getMimeType());
+            $file->setSize($uploadedFile->getSize());
+            
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($file);
             $entityManager->flush();

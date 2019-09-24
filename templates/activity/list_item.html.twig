@@ -5,87 +5,58 @@
                 <div class="kt-widget__content">
                     <div class="kt-widget__head">
                         <a href="{{ path('activity_show', { 'slug': activity.project.author.slug, 'project_id': activity.project.id, 'activity_id': activity.id }) }}" class="kt-widget__username">
-                            {{ activity.title }}
-                            <i class="flaticon2-correct kt-font-success"></i>                       
+                            {{ activity.title }}                 
                         </a>                         
-                       
                         <div class="kt-widget__action">
-                            <button type="button" class="btn btn-label-success btn-sm btn-upper">ask</button>&nbsp;                            
-                            <button type="button" class="btn btn-brand btn-sm btn-upper">hire</button>                     
-                        </div>                        
+                            <div class="kt-portlet__head-toolbar">
+                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                    <i class="flaticon-more-1"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+                                    <ul class="kt-nav">
+                                        <li class="kt-nav__item">
+                                            <a href="{{ path('activity_show', { 'slug': activity.project.author.slug, 'project_id': activity.project.id, 'activity_id': activity.id }) }}" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                                <span class="kt-nav__link-text">Details</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                                <span class="kt-nav__link-text">Edit</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
+                                                <span class="kt-nav__link-text">Créer un indicateur</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-avatar"></i>
+                                                <span class="kt-nav__link-text">Rapporter vos activités</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                                <span class="kt-nav__link-text">Settings</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
+                    {% if activity.contactEmail or activity.contactPhone or activity.contactAddress %}
                     <div class="kt-widget__subhead">
                         {% if activity.contactEmail %}<a href="#"><i class="flaticon2-new-email"></i>{{ activity.contactEmail }}</a>{% endif %}
                         {% if activity.contactPhone %}<a href="#"><i class="flaticon2-calendar-3"></i>{{ activity.contactPhone }} </a>{% endif %}
                         {% if activity.contactAddress %}<a href="#"><i class="flaticon2-placeholder"></i>{{ activity.contactAddress }}</a>{% endif %}
-                    </div> 
-
-                    <div class="kt-widget__info">
-                        <div class="kt-widget__progress">
-                            <div class="kt-widget__text">
-                                Progression
-                            </div>
-                            <div class="progress" style="height: 5px;width: 100%;">
-                                <div class="progress-bar kt-bg-success" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <div class="kt-widget__stats">
-                                78% 
-                            </div>
-                        </div> 
                     </div>
+                    {% endif  %}
                 </div>    
-            </div>
-            <div class="kt-widget__bottom">
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-piggy-bank"></i>    
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">Earnings</span>
-                        <span class="kt-widget__value"><span>$</span>249,500</span>  
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-confetti"></i>    
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">Expenses</span>
-                        <span class="kt-widget__value"><span>$</span>164,700</span>  
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-pie-chart"></i>    
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">Net</span>
-                        <span class="kt-widget__value"><span>$</span>782,300</span>  
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-file-2"></i>    
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">73 Tasks</span>
-                        <a href="#" class="kt-widget__value kt-font-brand">View</a>  
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-chat-1"></i>    
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">648 Comments</span>
-                        <a href="#" class="kt-widget__value kt-font-brand">View</a>  
-                    </div>
-                </div>
             </div>
         </div>
     </div>

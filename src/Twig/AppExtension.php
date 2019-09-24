@@ -11,9 +11,19 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('html', [$this, 'formatHtml']),
+            new TwigFilter('excerpt', [$this, 'formatExcerpt']),
         ];
     }
 
+    public function formatExcerpt($text, $length = 200, $more = '...'){
+        $text = strip_tags($text);
+        if( strlen($text) > $length ){
+            return mb_substr($text, 0, $length).$more;
+        }
+        
+        return $text;
+    }
+    
     public function formatHtml($html)
     {
         $html = trim($html);

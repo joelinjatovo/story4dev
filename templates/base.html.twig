@@ -25,7 +25,7 @@
         <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     </head>
     <body id="page-body" class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-aside--minimize kt-page--loading">
-        <div style="visibility:hidden; opacity:0" class="dropzone-container" aria-modal="true" role="dialog">
+        <div style="visibility:hidden; opacity:0; display: none;" class="dropzone-container" aria-modal="true" role="dialog">
             <button class="btn-close" type="button" aria-label="Close Modal" title="Close Modal"><span aria-hidden="true">×</span></button>
             <div class="dropzone-inner">
                 <div class="dropzone dropzone-default dropzone-success dz-clickable">
@@ -174,16 +174,19 @@
             {
                 document.querySelector(".dropzone-container").style.visibility = "";
                 document.querySelector(".dropzone-container").style.opacity = 1;
+                document.querySelector(".dropzone-container").style.display = "block";
             });
             $('.btn-close').click(function(e){
                 e.preventDefault();
                 document.querySelector(".dropzone-container").style.visibility = "hidden";
                 document.querySelector(".dropzone-container").style.opacity = 0;
+                document.querySelector(".dropzone-container").style.display = "none";
             });
             $('.btn-upload').click(function(e){
                 e.preventDefault();
                 document.querySelector(".dropzone-container").style.visibility = "";
                 document.querySelector(".dropzone-container").style.opacity = 1;
+                document.querySelector(".dropzone-container").style.display = "block";
                 $('.dropzone').trigger('click');
             });
             $('.dropzone').dropzone({
@@ -221,7 +224,7 @@
                         }
                         document.querySelector(".dropzone-container").style.visibility = "hidden";
                         document.querySelector(".dropzone-container").style.opacity = 0;
-                        
+                        document.querySelector(".dropzone-container").style.display = "none";
                     });
                 }
             });

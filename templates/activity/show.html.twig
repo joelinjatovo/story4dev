@@ -82,11 +82,13 @@
                                     {{ activity.title }}    
                                 </a>
                             </div>
+                            {% if activity.contactEmail or activity.contactPhone or activity.contactAddress %}
                             <div class="kt-widget__subhead">
                                 {% if activity.contactEmail %}<a href="#"><i class="flaticon2-new-email"></i>{{ activity.contactEmail }}</a>{% endif %}
                                 {% if activity.contactPhone %}<a href="#"><i class="flaticon2-calendar-3"></i>{{ activity.contactPhone }} </a>{% endif %}
                                 {% if activity.contactAddress %}<a href="#"><i class="flaticon2-placeholder"></i>{{ activity.contactAddress }}</a>{% endif %}
                             </div> 
+                            {% endif  %}
                         </div>
                     </div>
                 </div>
@@ -167,8 +169,8 @@
                 <div class="kt-portlet__head-toolbar">
                 </div>
             </div>
-            <div class="kt-portlet__body">
-                <div class="kt-widget2">
+            <div class="kt-portlet__body"> 
+                <div class="kt-widget5">    
 					{% for report in activity.reports.slice(0, 5) %}
 						{{ include('activity/report.html.twig', { 'report' : report } ) }}
 					{% else %}
@@ -177,34 +179,6 @@
                 </div>            
             </div>
         </div>
-    </div>
-</div>
-	
-    
-<div class="row">
-    <div class="col-lg-12">
-        <!--begin:: Widgets/User Progress -->
-        <div class="kt-portlet kt-portlet--height-fluid">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">
-                        Rapports v2
-                    </h3>
-                </div>
-                <div class="kt-portlet__head-toolbar">
-                </div>
-            </div>
-            <div class="kt-portlet__body">
-                <div class="kt-widget31">
-					{% for report in activity.reports.slice(0, 5) %}
-						{{ include('activity/report2.html.twig', { 'report' : report } ) }}
-					{% else %}
-                        Il n'y a pas encore des rapports sur cette activités
-					{% endfor %}
-                </div>
-            </div>
-        </div>
-<!--end:: Widgets/User Progress -->
     </div>
 </div>
     

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Indicator;
+use App\Entity\Activity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,6 +18,14 @@ class IndicatorRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Indicator::class);
+    }
+    
+    public function findByActivity(Activity $activity)
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.activity = :activity')
+            ->setParameter('activity', $activity)
+            ->getQuery();
     }
 
     // /**

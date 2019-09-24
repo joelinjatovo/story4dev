@@ -20,6 +20,7 @@ use App\Entity\Unit;
 use App\Form\IndicatorType;
 use App\Form\GoalType;
 use App\Service\FormError;
+use App\Service\PaginatorService;
 
 /** 
  * @Route(name="indicator_")
@@ -330,7 +331,7 @@ class IndicatorController extends AbstractController
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function list(User $user, Project $project, Activity $activity, $page = 1)
+    public function list(User $user, Project $project, Activity $activity, $page = 1, PaginatorService $paginator)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -340,13 +341,11 @@ class IndicatorController extends AbstractController
             throw $this->createNotFoundException('The project does not match');
         }
         
-        if($indicator->getActivity() != $activity ){
-            throw $this->createNotFoundException('The activity does not match');
-        }
-        
         $entityManager = $this->getDoctrine()->getManager();
         
-        $indicators = $entityManager->getRepository(Indicator::class)->findAll();
+        $query = $entityManager->getRepository(Indicator::class)->findByActivity($activity);
+        
+        $indicators = $paginator->paginate($query, 10);
         
         return $this->render('indicator/list.html.twig', [
             'user'       => $user,
