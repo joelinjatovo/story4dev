@@ -45,11 +45,13 @@ class ProjectController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
         $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
+        $users = $entityManager->getRepository(User::class)->findAll();
         
         return $this->render('project/show.html.twig', [
             'user'    => $user, 
             'project' => $project, 
             'reports' => $reports, 
+            'users'   => $users, 
         ]);
     }
     

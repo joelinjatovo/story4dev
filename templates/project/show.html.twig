@@ -249,8 +249,49 @@
 <!-- end: Modal -->
     
 <div class="row">
+    <div class="col-xl-6">
+    </div>
+</div>
+    
+<div class="row">
     <div class="col-lg-6">
-        <!--begin:: Widgets/Notifications-->
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__body">
+                <div class="kt-searchbar">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24"></rect>
+                                        <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                        <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                        </div>
+                        <input data-project="{{ project.id }}" id="search-collaborator" type="text" class="form-control" placeholder="Ajouter un collaborateur" aria-describedby="basic-addon1">
+                        <ul id="search-collaborator-results" class="search-results">
+                            {{ include('collaborator/search.html.twig', { search : 'search', project: project, users: users } ) }}
+                        </ul>
+                    </div>
+                </div>
+                <div class="kt-widget kt-widget--users kt-mt-20">                
+                    <div class="kt-scroll kt-scroll--pull">
+                        <div class="kt-widget__items">
+                            {% for contribution in project.contributions %}
+                                {{ include('project/contribution.html.twig', { 'contribution' : contribution } ) }}
+                            {% else %}
+                                Il n'y a pas encore des contributeurs dans ce projet.
+                            {% endfor %}
+
+                        </div>
+                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 365px; right: -2px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 115px;"></div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
@@ -267,10 +308,11 @@
                 </div>
             </div>
         </div>
-        <!--end:: Widgets/Notifications-->
     </div>
-    <div class="col-lg-6">
-        <!--begin:: Widgets/Last Updates-->
+</div>
+    
+<div class="row">
+    <div class="col-xl-6">
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
@@ -334,42 +376,20 @@
                 </div>
             </div>
             <div class="kt-portlet__body">
-                <div class="kt-widget31">
+                <div class="kt-widget5">
                     {% for report in reports %}
-                        <div class="kt-widget31__item">
-                            <div class="kt-widget31__content">
-                                <div class="kt-widget31__info">
-                                    <a href="{{ path('report_show', { 'report_id' : report.id,  'activity_id' : report.activity.id, 'project_id' : report.activity.project.id, 'slug': report.activity.project.author.slug } ) }}" class="kt-widget31__username">
-                                        {{ report.title }}
-                                    </a>
-                                    <p class="kt-widget31__text">
-                                        {{ report.author.fullname }}
-                                    </p>							 		 
-                                </div>					 
-                            </div>
-
-                            <div class="kt-widget31__content">
-                                <div class="kt-widget31__progress">
-                                    <a href="{{ path('report_show', { 'report_id' : report.id,  'activity_id' : report.activity.id, 'project_id' : report.activity.project.id, 'slug': report.activity.project.author.slug } ) }}" class="kt-widget31__stats">
-                                        <span>25%</span>
-                                        <span>10 / 40</span>						    							 
-                                    </a>
-                                </div>	
-                            </div>						
-                        </div>
+                        {{ include('project/report.html.twig', { 'report' : report } ) }}
                     {% else %}
                         Il n'y a pas encore de rapports dans ce projet.
                     {% endfor %}
                 </div>
             </div>
         </div>
-        <!--end:: Widgets/Last Updates-->
     </div>
 </div>
     
 <div class="row">
     <div class="col-xl-6">
-        <!--begin:: Widgets/Order Statistics-->
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
@@ -473,10 +493,10 @@
                 </div>		 
             </div>
         </div>
-        <!--end:: Widgets/Order Statistics-->
     </div>
 </div>
 {% endblock %}
 
 {% block javascripts %}
+        <script src="{{ asset('js/project.js') }}" type="text/javascript" ></script>
 {% endblock %}

@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 
 use App\Entity\User;
+use App\Entity\Project;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)

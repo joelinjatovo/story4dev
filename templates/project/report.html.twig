@@ -1,9 +1,31 @@
-<div class="kt-widget4__item">
-    <span class="kt-widget4__icon">
-        <i class="flaticon-pie-chart-1 kt-font-info"></i>
-    </span>	
-    <a href="{{ path( 'report_show', {'slug': report.project.author.slug, 'project_id': report.project.id, 'activity_id': report.activity.id, 'report_id': report.id} ) }}" class="kt-widget4__title kt-widget4__title--light">
-        {{ report.title }}
-    </a> 		
-    <span class="kt-widget4__number kt-font-info">+500</span>
+<div class="kt-widget5__item">
+    <div class="kt-widget5__content">
+        <div class="kt-widget5__pic">
+            <img class="kt-widget7__img"  src="{{ report.author.avatar ? vich_uploader_asset(report.author, 'avatarFile') : default_avatar }}" alt="avatar">
+        </div>
+        <div class="kt-widget5__section">
+            <a href="{{ path('report_show', { 'report_id' : report.id,  'activity_id' : report.activity.id, 'project_id' : report.activity.project.id, 'slug': report.activity.project.author.slug } ) }}" class="kt-widget5__title">
+                {{ report.title }}
+            </a>
+            <p class="kt-widget5__desc">
+                {{ report.description|excerpt }} 
+            </p>
+            <div class="kt-widget5__info">
+                <span>Contributeur:</span>
+                <span class="kt-font-info">{{ report.author.fullname }}</span>
+                <span>Date du rapport:</span>
+                <span class="kt-font-info">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d') }}</span>
+            </div>
+        </div>
+    </div>						
+    <div class="kt-widget5__content">
+        <div class="kt-widget5__stats">
+            <span class="kt-widget5__number">{{ report.results.count }}</span>
+            <span class="kt-widget5__sales">results</span>
+        </div>
+        <div class="kt-widget5__stats">
+            <span class="kt-widget5__number">{{ report.reportFiles.count }}</span>
+            <span class="kt-widget5__votes">files</span>
+        </div>
+    </div>	
 </div>

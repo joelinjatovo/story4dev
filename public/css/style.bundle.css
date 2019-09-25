@@ -37639,3 +37639,12 @@ div.dropzone-container > .btn-close {
     white-space: normal;
     z-index: auto;
 }
+
+ul.search-results{
+    position: absolute;
+    z-index: 999;
+    background: wheat;
+    width: 100%;
+    top: 40px;
+    list-style: none;
+}

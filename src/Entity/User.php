@@ -1010,6 +1010,11 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
+    public function isAdmin()
+    {
+        return in_array('ROLE_ADMIN', $this->getRoles());
+    }
     
     /** @see \Serializable::serialize() */
     public function serialize()

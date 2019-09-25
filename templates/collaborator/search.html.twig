@@ -1,0 +1,5 @@
+{% for user in users %}
+    <li><a href="javascript:void;" data-project="{{ project.id }}" data-id="{{ user.id }}" class="add-contributor">{{ user.fullname }}</a></li>
+{% else %}
+    <li>No user found</li>
+{% endfor %}

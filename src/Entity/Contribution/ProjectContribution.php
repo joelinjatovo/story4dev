@@ -12,6 +12,7 @@ use App\Entity\User;
 /**
  * @ORM\Entity
  * @Gedmo\Loggable
+ * @ORM\Entity(repositoryClass="App\Repository\ProjectContributionRepository")
  */
 class ProjectContribution extends Base
 {
