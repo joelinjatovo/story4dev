@@ -95,7 +95,7 @@ class ContributorController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $project = $entityManager->getRepository(Project::class)->find($project_id);
                 if($project){
-                    $users = $entityManager->getRepository(User::class)->findAll();
+                    $users = $entityManager->getRepository(User::class)->searchAllNotInProject($project, $search)->execute();
                     $content = $this->renderView('collaborator/search.html.twig', [ 'search' => $search, 'project' => $project, 'users' => $users]);
                     return $this->json([
                         'success' => true,
@@ -129,7 +129,7 @@ class ContributorController extends AbstractController
 
                 if( $contribution && ! $contribution->getUser()->isAdmin()){
                     $entityManager->remove($contribution);
-                    //$entityManager->flush();
+                    $entityManager->flush();
 
                     return $this->json([
                         'success' => true,
@@ -161,11 +161,11 @@ class ContributorController extends AbstractController
                 $project = $entityManager->getRepository(Project::class)->find($project_id);
                 $contribution = $entityManager->getRepository(ProjectContribution::class)->findOneBy(['project'=>$project, 'user'=>$user]);
                 
-                if($contribution){
+                if( $contribution ){
                     return $this->json([
                         'success' => true,
                         'status'  => 'success',
-                        'html'    => $this->renderView('project/contribution.html.twig', [ 'contribution' => $contribution]),
+                        'html'    => '',
                     ]);
                 }
 

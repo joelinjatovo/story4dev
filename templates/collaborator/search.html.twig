@@ -1,5 +1,14 @@
 {% for user in users %}
-    <li><a href="javascript:void;" data-project="{{ project.id }}" data-id="{{ user.id }}" class="add-contributor">{{ user.fullname }}</a></li>
+     <a href="javascript:void;" class="kt-notification-v2__item add-contributor" data-project="{{ project.id }}" data-id="{{ user.id }}">
+        <div class="kt-notification-v2__itek-wrapper">
+            <div class="kt-notification-v2__item-title">
+                {{ user.fullname }}
+            </div>
+            <div class="kt-notification-v2__item-desc">
+                {{ user.title is not null ? user.title : user.email }}
+            </div>
+        </div>	
+    </a>
 {% else %}
     <li>No user found</li>
 {% endfor %}

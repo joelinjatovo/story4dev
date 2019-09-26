@@ -1,19 +1,17 @@
 jQuery(document).ready(function($){
-    $(".btn-remove-contributor").on('click',function(e){
+    $(document).on('click', '.btn-remove-contributor', function(e){
         e.preventDefault();
         var $this = $(this);
         KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
         $.post("/contributor/remove", { id: $this.attr('data-id') })
         .done(function( data ) {
             KTApp.unblockPage();
-            alert(data.status);
             if(data.success){
                 $this.closest('.contributor-item').remove();
             }
         })
         .fail(function() {
             KTApp.unblockPage();
-            alert("my error");
         });
     });
     
@@ -56,6 +54,7 @@ jQuery(document).ready(function($){
             KTApp.unblockPage();
             if(data.success){
                 $this.remove();
+                $("#project-contributions").append(data.html);
             }else{
                 $this.show();
             }

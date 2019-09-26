@@ -37640,10 +37640,10 @@ div.dropzone-container > .btn-close {
     z-index: auto;
 }
 
-ul.search-results{
+div.search-results{
     position: absolute;
     z-index: 999;
-    background: wheat;
+    background: #f2f3f7;
     width: 100%;
     top: 40px;
     list-style: none;

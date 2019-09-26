@@ -271,14 +271,13 @@
                             </span>
                         </div>
                         <input data-project="{{ project.id }}" id="search-collaborator" type="text" class="form-control" placeholder="Ajouter un collaborateur" aria-describedby="basic-addon1">
-                        <ul id="search-collaborator-results" class="search-results">
-                            {{ include('collaborator/search.html.twig', { search : 'search', project: project, users: users } ) }}
-                        </ul>
+                        <div id="search-collaborator-results" class="kt-notification-v2 search-results">
+                        </div>
                     </div>
                 </div>
                 <div class="kt-widget kt-widget--users kt-mt-20">                
                     <div class="kt-scroll kt-scroll--pull">
-                        <div class="kt-widget__items">
+                        <div class="kt-widget__items" id="project-contributions">
                             {% for contribution in project.contributions %}
                                 {{ include('project/contribution.html.twig', { 'contribution' : contribution } ) }}
                             {% else %}

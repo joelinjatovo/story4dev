@@ -80,5 +80,15 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->setParameter('user', $user)
             ->getQuery();
     }
+    
+    public function searchAllNotInProject(Project $project, string $search)
+    {
+        return $this->createQueryBuilder('u')
+            //->join('u.projectContributions', 'c')
+            ->where('( ( u.fullName LIKE :search ) OR (u.email LIKE :search) OR (u.username LIKE :search) )')
+            //->setParameter('project', $project)
+            ->setParameter('search', '%'.$search.'%')
+            ->getQuery();
+    }
 
 }
