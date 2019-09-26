@@ -255,6 +255,8 @@ class AppFixtures extends Fixture
                     $activityObject->setContactEmail($activity['contactEmail']);
                     $activityObject->setContactPhone($activity['contactPhone']);
                     $activityObject->setBudget(0);
+                    $activityObject->setProject($project);
+                    $activityObject->setAuthor($admin);
                     $manager->persist( $activityObject );
                 }
                     
