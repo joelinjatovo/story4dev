@@ -13,6 +13,7 @@ use Vich\UploaderBundle\Handler\DownloadHandler;
 
 use App\Entity\File;
 use App\Entity\ActivityFile;
+use App\Entity\Activity;
 use App\Entity\User;
 use App\Entity\Project;
 use App\Service\PaginatorService;
@@ -28,10 +29,12 @@ class FileController extends AbstractController
     /**
      * @Route("/{slug}/files/{page<\d+>?1}", name="list", methods="GET")
      * @Route("/{slug}/project/{project_id}/files/{page<\d+>?1}", name="list_project", methods="GET")
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/files/{page<\d+>?1}", name="list_activity", methods="GET")
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function list(User $user, Project $project = null, $page = 1, Request $request, PaginatorService $paginator)
+    public function list(User $user, Project $project = null, Activity $activity = null, $page = 1, Request $request, PaginatorService $paginator)
     {
         if($this->getUser() != $user ){
             throw $this->createNotFoundException('The author does not match');
