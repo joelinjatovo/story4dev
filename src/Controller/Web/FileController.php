@@ -11,7 +11,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\File;
+use App\Entity\ActivityFile;
 use App\Entity\User;
+use App\Entity\Project;
+use App\Service\PaginatorService;
 
 /** 
  * @Route(name="file_") 
@@ -23,9 +26,11 @@ class FileController extends AbstractController
     
     /**
      * @Route("/{slug}/files/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/{slug}/project/{project_id}/files/{page<\d+>?1}", name="list_project", methods="GET")
      * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(User $user, $page = 1)
+    public function list(User $user, Project $project = null, $page = 1, Request $request, PaginatorService $paginator)
     {
         if($this->getUser() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -33,10 +38,31 @@ class FileController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
         
-        $files = $entityManager->getRepository(File::class)->findAll();
+        $projects = $entityManager->getRepository(Project::class)->findAll();
+            
+        if( $project != null ) {
+
+            $query = $entityManager->getRepository(File::class)->findByProject($project, $user);
+
+            $files = $paginator->paginate($query);
+            
+            return $this->render('file/list.html.twig', [
+                'files'    => $files,
+                'user'     => $user,
+                'project'  => $project,
+                'projects' => $projects,
+            ]);
+        }
+        
+        $query = $entityManager->getRepository(File::class)->findAllQuery($user);
+
+        $files = $paginator->paginate($query);
         
         return $this->render('file/list.html.twig', [
-            'files' => $files
+            'files'    => $files,
+            'user'     => $user,
+            'project'  => null,
+            'projects' => $projects,
         ]);
     }
 }

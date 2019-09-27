@@ -196,7 +196,7 @@
                 maxFiles: 10,
                 maxFilesize: 10, // MB
                 addRemoveLinks: true,
-                acceptedFiles: "image/*,application/pdf,.psd",
+                acceptedFiles: "image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.ms-powerpoint,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 accept: function(file, done) {
                     if (file.name == "justinbieber.jpg") {
                         done("Naha, you don't.");
@@ -220,7 +220,8 @@
                             $('#file-list').append('<input type="hidden" name="' + name + '[' + count + '][file]" value="' + response.data.id + '" >');
                             $('#file-list').append(response.html);
                             $('#file-list').data('count', count + 1);
-                            alert('File Uploaded: ' + response.data.name);
+                            
+                            $('#files-list').append(response.fileHtml);
                         }
                         document.querySelector(".dropzone-container").style.visibility = "hidden";
                         document.querySelector(".dropzone-container").style.opacity = 0;

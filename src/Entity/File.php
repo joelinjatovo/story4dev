@@ -37,7 +37,18 @@ class File
     /**
      * @Assert\NotBlank(message="File should not be blank.")
      * @Assert\File(
-     *     mimeTypes={"image/jpeg", "image/png", "image/gif", "application/x-gzip", "application/zip", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+     *     mimeTypes={
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "application/pdf",
+            "application/msword",
+            "application/vnd.ms-powerpoint",
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        },
      *     maxSize="1074000000"
      * )
      * @Vich\UploadableField(mapping="default", fileNameProperty="name")
@@ -188,7 +199,7 @@ class File
             'html' => 'text/html',
             'php' => 'text/html',
             'css' => 'text/css',
-            'js' => 'application/javascript',
+            'js'   => 'application/javascript',
             'json' => 'application/json',
             'xml' => 'application/xml',
             'swf' => 'application/x-shockwave-flash',
@@ -226,10 +237,13 @@ class File
             'ps' => 'application/postscript',
 
             // ms office
-            'doc' => 'application/msword',
-            'rtf' => 'application/rtf',
-            'xls' => 'application/vnd.ms-excel',
-            'ppt' => 'application/vnd.ms-powerpoint',
+            'doc'  => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls'  => 'application/vnd.ms-excel',
+            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'ppt'  => 'application/vnd.ms-powerpoint',
+            'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'rtf'  => 'application/rtf',
 
             // open office
             'odt' => 'application/vnd.oasis.opendocument.text',
@@ -245,7 +259,7 @@ class File
             $type = array_search($this->getMimeType(), $this->getMimeTypes());
         }
         
-        if( in_array( $type, ['pdf', 'xml', 'csv', 'jpg', 'jpeg', 'html', 'javascript', 'doc', 'docx', 'zip', 'mp4'] ) ){
+        if( in_array( $type, ['pdf', 'xml', 'csv', 'jpg', 'jpeg', 'html', 'javascript', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'zip', 'mp4'] ) ){
             return 'images/'.$type.'.svg';
         }
            

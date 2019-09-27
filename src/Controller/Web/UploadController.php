@@ -52,6 +52,9 @@ class UploadController extends AbstractController
                 'data' => $file,
                 'html' => $this->renderView('upload/file.html.twig', [
                     'file' => $file
+                ]),
+                'fileHtml' => $this->renderView('file/list_item.html.twig', [
+                    'file' => $file
                 ])
             ], 200, [], ['groups' => ['file']]);
         }

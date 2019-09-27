@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\ActivityFile;
+use App\Entity\Project;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -17,6 +19,17 @@ class ActivityFileRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ActivityFile::class);
+    }
+    
+    public function findByProject(Project $project, User $user)
+    {
+        return $this->createQueryBuilder('af')
+            ->innerJoin('af.activity', 'a')
+            ->andWhere('a.project = :project')
+            ->setParameter('project', $project)
+            ->orderBy('af.id', 'ASC')
+            ->getQuery()
+        ;
     }
 
     // /**

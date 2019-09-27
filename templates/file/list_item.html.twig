@@ -1,62 +1,48 @@
-<!--Begin::Portlet-->
-<div class="kt-portlet">
-    <div class="kt-portlet__head kt-portlet__head--noborder">
-        <div class="kt-portlet__head-label">
-            <h3 class="kt-portlet__head-title">
+<div class="col-xl-3 col-lg-6 col-md-6">
+    <div class="kt-portlet">
+        <div class="kt-portlet__head kt-portlet__head--noborder">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
 
-            </h3>
-        </div>
-        <div class="kt-portlet__head-toolbar">
-            <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
-                <i class="flaticon-more-1"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <ul class="kt-nav">
-                    <li class="kt-nav__item">
-                        <a href="#" class="kt-nav__link">
-                        <i class="kt-nav__link-icon flaticon2-line-chart"></i>
-                        <span class="kt-nav__link-text">Reports</span>
-                        </a>
-                    </li>
-                    <li class="kt-nav__item">
-                        <a href="#" class="kt-nav__link">
-                        <i class="kt-nav__link-icon flaticon2-send"></i>
-                        <span class="kt-nav__link-text">Messages</span>
-                        </a>
-                    </li>
-                    <li class="kt-nav__item">
-                        <a href="#" class="kt-nav__link">
-                        <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
-                        <span class="kt-nav__link-text">Charts</span>
-                        </a>
-                    </li>
-                    <li class="kt-nav__item">
-                        <a href="#" class="kt-nav__link">
-                        <i class="kt-nav__link-icon flaticon2-avatar"></i>
-                        <span class="kt-nav__link-text">Members</span>
-                        </a>
-                    </li>
-                    <li class="kt-nav__item">
-                        <a href="#" class="kt-nav__link">
-                        <i class="kt-nav__link-icon flaticon2-settings"></i>
-                        <span class="kt-nav__link-text">Settings</span>
-                        </a>
-                    </li>
-                </ul>
+                </h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                    <i class="flaticon-more-1"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <ul class="kt-nav">
+                        <li class="kt-nav__item">
+                            <a href="#" class="kt-nav__link">
+                            <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                            <span class="kt-nav__link-text">Open</span>
+                            </a>
+                        </li>
+                        <li class="kt-nav__item">
+                            <a href="#" class="kt-nav__link">
+                            <i class="kt-nav__link-icon flaticon2-send"></i>
+                            <span class="kt-nav__link-text">Edit</span>
+                            </a>
+                        </li>
+                        <li class="kt-nav__item">
+                            <a href="#" class="kt-nav__link">
+                            <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
+                            <span class="kt-nav__link-text">Download</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="kt-portlet__body">
-        <!--begin::Widget -->
-        <div class="kt-widget__files">
-            <div class="kt-widget__media">
-                <img class="kt-widget__img kt-hidden-" src="{{ asset(file.icone) }}" alt="image">
+        <div class="kt-portlet__body">
+            <div class="kt-widget__files">
+                <div class="kt-widget__media">
+                    <img class="kt-widget__img kt-hidden-" src="{{ asset(file.icone) }}" alt="image">
+                </div>
+                <a href="#" class="kt-widget__desc">
+                    {{ file.name }}
+                </a>
             </div>
-
-            <a href="#" class="kt-widget__desc">
-                Technical Requiremnts.pdf
-            </a>
         </div>
-        <!--end::Widget -->
     </div>
 </div>

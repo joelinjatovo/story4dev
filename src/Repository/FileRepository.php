@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\File;
+use App\Entity\User;
+use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,6 +19,26 @@ class FileRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, File::class);
+    }
+    
+    public function findAllQuery(User $user)
+    {
+        return $this->createQueryBuilder('f')
+            ->orderBy('f.id', 'ASC')
+            ->getQuery()
+        ;
+    }
+    
+    public function findByProject(Project $project, User $user)
+    {
+        return $this->createQueryBuilder('f')
+            ->leftJoin('f.activityFiles', 'af')
+            ->leftJoin('af.activity', 'a')
+            ->andWhere('a.project = :project')
+            ->setParameter('project', $project)
+            ->orderBy('f.id', 'ASC')
+            ->getQuery()
+        ;
     }
 
     // /**
