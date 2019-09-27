@@ -24,7 +24,12 @@ class FileRepository extends ServiceEntityRepository
     public function findAllQuery(User $user)
     {
         return $this->createQueryBuilder('f')
-            ->orderBy('f.id', 'ASC')
+            ->innerJoin('f.activityFiles', 'af')
+            ->innerJoin('af.activity', 'a')
+            ->innerJoin('a.project', 'p')
+            ->innerJoin('p.contributions', 'c')
+            ->where('c.user = :user OR p.author = :user')
+            ->setParameter('user', $user)
             ->getQuery()
         ;
     }
@@ -32,10 +37,13 @@ class FileRepository extends ServiceEntityRepository
     public function findByProject(Project $project, User $user)
     {
         return $this->createQueryBuilder('f')
-            ->leftJoin('f.activityFiles', 'af')
-            ->leftJoin('af.activity', 'a')
-            ->andWhere('a.project = :project')
+            ->innerJoin('f.activityFiles', 'af')
+            ->innerJoin('af.activity', 'a')
+            ->innerJoin('a.project', 'p')
+            ->innerJoin('p.contributions', 'c')
+            ->where('a.project = :project AND ( c.user = :user OR p.author = :user )')
             ->setParameter('project', $project)
+            ->setParameter('user', $user)
             ->orderBy('f.id', 'ASC')
             ->getQuery()
         ;

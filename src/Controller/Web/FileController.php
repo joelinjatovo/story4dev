@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Vich\UploaderBundle\Handler\DownloadHandler;
 
 use App\Entity\File;
 use App\Entity\ActivityFile;
@@ -41,6 +42,8 @@ class FileController extends AbstractController
         $projects = $entityManager->getRepository(Project::class)->findAll();
             
         if( $project != null ) {
+            
+            $this->denyAccessUnlessGranted('view', $project);
 
             $query = $entityManager->getRepository(File::class)->findByProject($project, $user);
 
@@ -64,5 +67,14 @@ class FileController extends AbstractController
             'project'  => null,
             'projects' => $projects,
         ]);
+    }
+    
+    /**
+     * @Route("/download/{id}", name="download", methods="GET", requirements={"id"="\d+"})
+     * @Entity("file", options={"mapping": {"id": "id"}})
+     */
+    public function download(File $file, DownloadHandler $downloadHandler)
+    {
+        return $downloadHandler->downloadObject($file, 'file');
     }
 }
