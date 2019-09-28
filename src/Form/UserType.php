@@ -9,6 +9,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserType extends AbstractType
 {
@@ -19,18 +21,12 @@ class UserType extends AbstractType
                 'required' => false,
                 'allow_delete' => true, 
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Upload File'
-            ])
-            /*
             ->add('username')
             ->add('email')
-            ->add('password')
             ->add('fullname')
-            ->add('title')
-            ->add('presentation')
+            ->add('company')
             ->add('phone')
-            */
+            ->add('website')
         ;
     }
 

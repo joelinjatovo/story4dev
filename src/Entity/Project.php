@@ -148,6 +148,11 @@ class Project
      */
     protected $metas;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Unit", mappedBy="project")
+     */
+    private $units;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -156,6 +161,7 @@ class Project
         $this->iterations = new ArrayCollection();
         $this->contributions = new ArrayCollection();
         $this->metas = new ArrayCollection();
+        $this->units = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -409,5 +415,36 @@ class Project
             $this->title,
             $this->description
         ) = $data;
+    }
+
+    /**
+     * @return Collection|Unit[]
+     */
+    public function getUnits(): Collection
+    {
+        return $this->units;
+    }
+
+    public function addUnit(Unit $unit): self
+    {
+        if (!$this->units->contains($unit)) {
+            $this->units[] = $unit;
+            $unit->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUnit(Unit $unit): self
+    {
+        if ($this->units->contains($unit)) {
+            $this->units->removeElement($unit);
+            // set the owning side to null (unless already changed)
+            if ($unit->getProject() === $this) {
+                $unit->setProject(null);
+            }
+        }
+
+        return $this;
     }
 }

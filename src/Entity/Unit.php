@@ -63,6 +63,16 @@ class Unit
      */
     private $indicators;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $main;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="units")
+     */
+    private $project;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -134,6 +144,35 @@ class Unit
                 $indicator->setActivity(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isMain(): ?bool
+    {
+        return $this->main;
+    }
+
+    public function getMain(): ?bool
+    {
+        return $this->main;
+    }
+
+    public function setMain(?bool $main): self
+    {
+        $this->main = $main;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
 
         return $this;
     }

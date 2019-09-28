@@ -9,7 +9,7 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">{{ project.title }}</h3>
+            <h3 class="kt-subheader__title">Detail du projet</h3>
         </div>        
         <div class="kt-subheader__toolbar">
             <a href="{{ path('project_edit', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-label-brand btn-bold">Modifier</a>
@@ -48,9 +48,6 @@
                                 <a href="{{ path('activity_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-new-email"></i>
                                     <span class="kt-nav__link-text">Les activités</span>
-                                    <span class="kt-nav__link-badge">
-                                        <span class="kt-badge kt-badge--brand kt-badge--rounded">{{ project.activities.count }}</span>
-                                    </span>
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
@@ -60,7 +57,7 @@
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
-                                <a href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
+                                <a href="{{ path('contributor_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-new-email"></i>
                                     <span class="kt-nav__link-text">Les contributeurs</span>
                                 </a>
@@ -87,10 +84,6 @@
                 <div class="kt-widget__content">
                     <div class="kt-widget__head">
                         <a href="#" class="kt-widget__title">{{ project.title }}</a>
-
-                        <div class="kt-widget__action">
-                            <button class="btn btn-brand btn-sm btn-upper" data-toggle="modal" data-target="#kt_modal_activities">Create report</button>
-                        </div>
                     </div>
 
                     <div class="kt-widget__subhead">
@@ -144,61 +137,6 @@
                     </div>
                 </div>
             </div>
-            <div class="kt-widget__bottom">
-                {% if project.budget > 0 %}
-                    <div class="kt-widget__item">
-                        <div class="kt-widget__icon">
-                            <i class="flaticon-piggy-bank"></i>
-                        </div>
-                        <div class="kt-widget__details">
-                            <span class="kt-widget__title">Budget</span>
-                            <span class="kt-widget__value"><span>$</span>{{ project.budget }}</span>
-                        </div>
-                    </div>
-                {% endif %}
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-file-2"></i>
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">{{ project.activities.count }} Activities</span>
-                        <a href="{{ path( 'activity_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">View</a>
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-chat-1"></i>
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">Reports</span>
-                        <a href="{{ path( 'report_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">View</a>
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-network"></i>
-                    </div>
-                    <div class="kt-widget__details">
-                        <div class="kt-section__content kt-section__content--solid">
-                            <div class="kt-badge kt-badge__pics">
-                                {% for contribution in project.contributions.slice(0, 7) %}
-                                <a href="{{ path('user_show', { 'slug': contribution.user.slug }) }}" class="kt-badge__pic" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{{ contribution.user.fullname ?? contribution.user.email }}">
-                                    <img src="{{ contribution.user.avatar is null ? default_avatar : contribution.user.avatar }}" alt="avatar">
-                                </a>
-                                {% endfor %}
-                                {% if project.contributions.count > 7 %}
-                                    <a href="#" class="kt-badge__pic kt-badge__pic--last kt-font-brand">
-                                        +{{ project.contributions.count - 7 }}
-                                    </a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -247,6 +185,18 @@
 <div class="row">
     <div class="col-xl-6">
         <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <a href="{{ path('contributor_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}">
+                        <h3 class="kt-portlet__head-title">Contributeurs</h3>
+                    </a>
+                </div>
+                <div class="kt-portlet__head-toolbar">
+                    <a href="{{ path('contributor_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-label-brand btn-bold btn-sm">
+                        Tous
+                    </a>
+                </div>
+            </div>
             <div class="kt-portlet__body">
                 <div class="kt-searchbar">
                     <div class="input-group">
@@ -285,7 +235,23 @@
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Liste des Activities</h3>
+                    <a href="{{ path('activity_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}">
+                        <h3 class="kt-portlet__head-title">Activities</h3>
+                    </a>
+                </div>
+                <div class="kt-portlet__head-toolbar">
+                    <a href="{{ path('activity_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
+                        Toutes
+                    </a>
+                    <a href="{{ path('activity_index', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+                                <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
+                            </g>
+                        </svg>
+                    </a>
                 </div>
             </div>
             <div class="kt-portlet__body">
@@ -306,63 +272,23 @@
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Liste des rapports</h3>
+                    <a href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}">
+                        <h3 class="kt-portlet__head-title">Rapports</h3>
+                    </a>
                 </div>
                 <div class="kt-portlet__head-toolbar">
-                    <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        Today
+                    <a href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
+                        Tous
                     </a>
-                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(1174px, 46px, 0px);">
-                        <!--begin::Nav-->
-                        <ul class="kt-nav">
-                            <li class="kt-nav__head">
-                                Export Options                                    
-                                <span data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--brand kt-svg-icon--md1">
+                    <button class="btn btn-icon" data-toggle="modal" data-target="#kt_modal_activities">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <rect id="bound" x="0" y="0" width="24" height="24"></rect>
-                                <circle id="Oval-5" fill="#000000" opacity="0.3" cx="12" cy="12" r="10"></circle>
-                                <rect id="Rectangle-9" fill="#000000" x="11" y="10" width="2" height="7" rx="1"></rect>
-                                <rect id="Rectangle-9-Copy" fill="#000000" x="11" y="7" width="2" height="2" rx="1"></rect>
+                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+                                <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
                             </g>
-                        </svg>        </span>
-                        </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Activity</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">FAQ</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-link"></i>
-                                    <span class="kt-nav__link-text">Settings</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Support</span>
-                                    <span class="kt-nav__link-badge">
-                                        <span class="kt-badge kt-badge--success kt-badge--rounded">5</span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__foot">
-                                <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>                                    
-                                <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
-                            </li>
-                        </ul>
-                        <!--end::Nav-->
-                    </div>
+                        </svg>
+                    </button>
                 </div>
             </div>
             <div class="kt-portlet__body">

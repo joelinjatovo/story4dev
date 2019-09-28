@@ -36,7 +36,7 @@ trait LocationTrait
         return $this->longitude;
     }
 
-    public function setLongitude(string $longitude): self
+    public function setLongitude(?string $longitude): self
     {
         $this->longitude = $longitude;
 
@@ -48,7 +48,7 @@ trait LocationTrait
         return $this->latitude;
     }
 
-    public function setLatitude(string $latitude): self
+    public function setLatitude(?string $latitude): self
     {
         $this->latitude = $latitude;
 
@@ -60,7 +60,7 @@ trait LocationTrait
         return $this->altitude;
     }
 
-    public function setAltitude(string $altitude): self
+    public function setAltitude(?string $altitude): self
     {
         $this->altitude = $altitude;
 

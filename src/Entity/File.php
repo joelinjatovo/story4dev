@@ -88,6 +88,16 @@ class File
      */
     private $size;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="files")
+     */
+    private $author;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $displayName;
+
     public function __construct()
     {
         $this->isExternal = false;
@@ -286,6 +296,30 @@ class File
     public function setSize(?int $size): self
     {
         $this->size = $size;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getDisplayName(): ?string
+    {
+        return $this->displayName;
+    }
+
+    public function setDisplayName(?string $displayName): self
+    {
+        $this->displayName = $displayName;
 
         return $this;
     }

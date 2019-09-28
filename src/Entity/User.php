@@ -310,6 +310,11 @@ class User implements UserInterface, \Serializable
      */
     protected $metas;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\File", mappedBy="author")
+     */
+    private $files;
+
     public function __construct()
     {
         $this->agree = true;
@@ -327,6 +332,7 @@ class User implements UserInterface, \Serializable
         $this->results = new ArrayCollection();
         $this->projectContributions = new ArrayCollection();
         $this->activityContributions = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -1038,5 +1044,36 @@ class User implements UserInterface, \Serializable
             $this->password,
             // $this->salt
         ) = unserialize($serialized);
+    }
+
+    /**
+     * @return Collection|File[]
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
+            $file->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): self
+    {
+        if ($this->files->contains($file)) {
+            $this->files->removeElement($file);
+            // set the owning side to null (unless already changed)
+            if ($file->getAuthor() === $this) {
+                $file->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 }

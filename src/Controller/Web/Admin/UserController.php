@@ -3,13 +3,16 @@
 namespace App\Controller\Web\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\User;
+use App\Form\UserType;
 use App\Service\PaginatorService;
+use App\Service\FormError;
 
 /**
  * @Route("/admin", name="admin_user_")
@@ -23,32 +26,49 @@ class UserController extends AbstractController
      */
     public function index()
     {
-        return $this->render('admin/user/create.html.twig');
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        
+        return $this->render('admin/user/create.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
     
     /**
      * @Route("/user", name="create", methods="POST")
      */
-    public function create(ValidatorInterface $validator): Response
+    public function create(Request $request, FormError $formError)
     {
-        // you can fetch the EntityManager via $this->getDoctrine()
-        // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
-        $entityManager = $this->getDoctrine()->getManager();
-
         $user = new User();
         
-        $errors = $validator->validate($user);
-        if (count($errors) > 0) {
-            return new Response((string) $errors, 400);
+        $form = $this->createForm(UserType::class, $user);
+        
+        $form->handleRequest($request);
+        
+        if ( $form->isSubmitted() ) {
+            if( $form->isValid() ) {
+                $user->setPassword("njnj");
+                
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+        
+                $this->addFlash('success', 'Account profile successfully updated.');
+
+                return $this->redirectToRoute('user_show', [
+                    'slug' => $user->getSlug()
+                ]);
+                
+            }else{
+                $this->addFlash('error', 'Invalid request. Try again!' . $form->getErrors() );
+            }
         }
-
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($user);
-
-        // actually executes the queries (i.e. the INSERT query)
-        $entityManager->flush();
-
-        return new Response('Saved new user with id '.$project->getId());
+        
+        return $this->render('admin/user/create.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
     
     /**

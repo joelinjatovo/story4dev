@@ -146,6 +146,7 @@ class AppFixtures extends Fixture
             $unit = new Unit();
             $unit->setLabel($label);
             $unit->setTitle($title);
+            $unit->setMain(true);
             $unit->setAuthor($admin);
             $manager->persist($unit);
         }
