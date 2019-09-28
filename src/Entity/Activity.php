@@ -341,4 +341,36 @@ class Activity
 
         return $this;
     }
+
+    public function getValue(Iteration $iteration)
+    {
+        $value = 0;
+        foreach($this->getIndicators() as $indicator){
+            $value += $indicator->getValue($iteration);
+        }
+        return $value;
+    }
+    
+    public function getData()
+    {
+        $datas = [];
+        foreach($this->getProject()->getIterations() as $iteration){
+            $value = 0;
+            $subdatas = [];
+            foreach($this->getIndicators() as $indicator){
+                $value += $indicator->getValue($iteration);
+                //$subdatas[] = $indicator->getData();
+            }
+            
+            $data = [
+                "iteration" => $iteration->getTitle(),
+                "value"     => $value,
+                //"subdata"   => $subdatas,
+            ];
+            
+            $datas[$iteration->getId()] = $data;
+        }
+        
+        return $datas;
+    }
 }

@@ -447,4 +447,42 @@ class Project
 
         return $this;
     }
+
+    public function getValue(Iteration $iteration)
+    {
+        $value = 0;
+        foreach($this->getActivities() as $activity){
+            $value += $activity->getValue($iteration);
+        }
+        return $value;
+    }
+    
+    public function getData()
+    {
+        $datas = [];
+        foreach($this->getIterations() as $iteration){
+            $value = 0;
+            //$subdatas = [];
+            foreach($this->getActivities() as $activity){
+                $value += $activity->getValue($iteration);
+                //$subdatas[] = $activity->getData();
+            }
+            
+            $goalValue = 0;
+            foreach($iteration->getGoals() as $goal){
+                $goalValue += $goal->getValue();
+            }
+            
+            $data = [
+                "iteration" => $iteration->getTitle(),
+                "value"     => $value,
+                "goal"      => $goalValue,
+                //"subdata"   => $subdata,
+            ];
+            
+            $datas[] = $data;
+        }
+        
+        return $datas;
+    }
 }

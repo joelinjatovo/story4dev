@@ -259,4 +259,30 @@ class Indicator
         }
         return $value;
     }
+
+    public function getValue(Iteration $iteration)
+    {
+        $value = 0;
+        foreach($this->getResults() as $result){
+            if(($result->getReport()->getCreatedAt() >= $iteration->getStartAt()) && ($result->getReport()->getCreatedAt() < $iteration->getEndAt())){
+                $value += $result->getValue();
+            }
+        }
+        return $value;
+    }
+    
+    public function getData()
+    {
+        $datas = [];
+        foreach($this->getActivity()->getProject()->getIterations() as $iteration){
+            $data = (object) [
+                "iteration" => $iteration->getTitle(),
+                "value"     => $this->getValue($iteration),
+            ];
+            
+            $datas[] = $data;
+        }
+        
+        return $datas;
+    }
 }

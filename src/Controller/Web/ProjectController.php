@@ -47,11 +47,16 @@ class ProjectController extends AbstractController
         $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
         $users = $entityManager->getRepository(User::class)->findAll();
         
+        $data =  $project->getData();
+        
+        //dump($data); exit;
+        
         return $this->render('project/show.html.twig', [
             'user'    => $user, 
             'project' => $project, 
             'reports' => $reports, 
-            'users'   => $users, 
+            'users'   => $users,
+            'data'    => json_encode($data)
         ]);
     }
     
