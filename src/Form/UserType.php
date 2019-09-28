@@ -11,6 +11,7 @@ use Vich\UploaderBundle\Form\Type\VichFileType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserType extends AbstractType
 {
@@ -27,6 +28,22 @@ class UserType extends AbstractType
             ->add('company')
             ->add('phone')
             ->add('website')
+            ->add('status', ChoiceType::class, [
+                'choices'  => [
+                    'En cours de validation' => User::STATUS_PING,
+                    'Active'                 => User::STATUS_ACTIVE,
+                    'Bloqué'                 => User::STATUS_BLOCKED,
+                    'Annulé'                 => User::STATUS_CANCELED,
+                ],
+            ])
+            ->add('roles', ChoiceType::class, [
+                'multiple' => true,
+                'expanded' => true, // render check-boxes
+                'choices'  => [
+                    'Client'  => 'ROLE_USER',
+                    'Admin'   => 'ROLE_ADMIN',
+                ],
+            ])
         ;
     }
 

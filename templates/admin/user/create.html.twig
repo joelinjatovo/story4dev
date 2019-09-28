@@ -13,7 +13,9 @@
 		<div class="kt-portlet kt-portlet--last kt-portlet--head-lg kt-portlet--responsive-mobile" id="kt_page_portlet">
 			<div class="kt-portlet__head kt-portlet__head--lg" style="">
 				<div class="kt-portlet__head-label">
-                   <h3 class="kt-portlet__head-title">Ajouter un utilisateur <small>enter user detail and save change</small></h3>
+                    {% block headtitle %}
+                        <h3 class="kt-portlet__head-title">Ajouter un utilisateur <small>enter user detail and save change</small></h3>
+                    {% endblock %}
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<a href="javascript:history.back();" class="btn btn-clean kt-margin-r-10">
@@ -59,18 +61,18 @@
 				</div>
 			</div>
 
-            {{ form_start( form, { 'method' : 'POST', 'attr' : {'class' : 'kt-form kt-form--label-right' } } ) }}
+            {{ form_start( form, { 'method' : 'POST', 'attr' : {'class' : 'kt-form kt-form--label-right', 'id': 'user' } } ) }}
                 <div class="kt-portlet__body">
                     <div class="kt-section kt-section--first">
                         <div class="kt-section__body">
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Account Info:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">Information du compte:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Username</label>
+                                {{ form_label( form.username, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                     {{ form_widget( form.username, { 'attr' : { 'class' : 'form-control' } } ) }}
@@ -78,7 +80,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Email Address</label>
+                                {{ form_label( form.email, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
@@ -86,11 +88,34 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                {{ form_label( form.status, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                <div class="col-lg-9 col-xl-6">
+                                    <div class="input-group">
+                                        {{ form_widget( form.status, { 'attr' : { 'class' : 'form-control' } } ) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-xl-3 col-lg-3 col-form-label">Rôle de l'utilisateur</label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <div class="kt-checkbox-inline">
+                                        <label class="kt-checkbox">
+                                            <input type="checkbox" id="user_roles_1" name="user[roles][]" value="ROLE_USER" class="changed-input" checked>Client
+                                            <span></span>
+                                        </label>
+                                        <label class="kt-checkbox">
+                                            <input type="checkbox" id="user_roles_1" name="user[roles][]" value="ROLE_ADMIN" class="changed-input" {{ user.admin? 'checked' : '' }} >Admin
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                             
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Customer Info:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">Information de l'utilisateur:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -100,7 +125,7 @@
                                         <div class="kt-avatar__holder" style="background-image: url('{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') : default_avatar }}');"></div>
                                         <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Change avatar">
                                             <i class="fa fa-pen"></i>
-                                            <input type="file" id="account_profile_avatarFile_file" name="account_profile[avatarFile][file]" accept=".jpeg, .png, .jpg, .gif">
+                                            <input type="file" id="user_avatarFile_file" name="user[avatarFile][file]" accept=".jpeg, .png, .jpg, .gif">
                                         </label>
                                         <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
                                             <i class="fa fa-times"></i>
@@ -125,7 +150,7 @@
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Contact Info:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">Contact:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -146,19 +171,6 @@
                                         {{ form_widget( form.website, { 'attr' : { 'class' : 'form-control'} } ) }}
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="kt-portlet__foot">
-                    <div class="kt-form__actions">
-                        <div class="row">
-                            <div class="col-lg-3 col-xl-3">
-                            </div>
-                            <div class="col-lg-9 col-xl-9">
-                                <button type="submit" class="btn btn-success">Submit</button>&nbsp;
-                                <button type="reset" class="btn btn-secondary">Cancel</button>
                             </div>
                         </div>
                     </div>

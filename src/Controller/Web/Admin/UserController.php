@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 use App\Entity\User;
 use App\Form\UserType;
@@ -38,9 +40,12 @@ class UserController extends AbstractController
     /**
      * @Route("/user", name="create", methods="POST")
      */
-    public function create(Request $request, FormError $formError)
+    public function create(Request $request, FormError $formError, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $password = base64_encode (random_bytes( 10 ) );
+        
         $user = new User();
+        $user->setPassword($passwordEncoder->encodePassword($user, $password));
         
         $form = $this->createForm(UserType::class, $user);
         
@@ -48,13 +53,11 @@ class UserController extends AbstractController
         
         if ( $form->isSubmitted() ) {
             if( $form->isValid() ) {
-                $user->setPassword("njnj");
-                
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
         
-                $this->addFlash('success', 'Account profile successfully updated.');
+                $this->addFlash('success', 'Account profile successfully updated. Password:' . $password);
 
                 return $this->redirectToRoute('user_show', [
                     'slug' => $user->getSlug()
@@ -73,6 +76,7 @@ class UserController extends AbstractController
     
     /**
      * @Route("/user/{id}", name="show", methods="GET", requirements={"id"="\d+"})
+     * @Entity("user", options={"mapping": {"id": "id"}})
      */
     public function show(User $user)
     {
@@ -81,39 +85,75 @@ class UserController extends AbstractController
     
     /**
      * @Route("/user/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
+     * @Entity("user", options={"mapping": {"id": "id"}})
      */
     public function edit(User $user)
     {
-        return $this->render('admin/user/edit.html.twig', ['user' => $user]);
+        $form = $this->createForm(UserType::class, $user);
+        
+        return $this->render('admin/user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
     
     /**
      * @Route("/user/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
      */
-    public function update(User $user)
+    public function update(User $user, Request $request, FormError $formError)
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $form = $this->createForm(UserType::class, $user);
         
-        //$user->setTitle('New user name!');
+        $form->handleRequest($request);
         
-        $entityManager->flush();
+        if ( $form->isSubmitted() ) {
+            if( $form->isValid() ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+        
+                $this->addFlash('success', 'User Information successfully updated.');
 
-        return $this->redirectToRoute('sadmin_user_show', ['id' => $user->getId()]);
+                return $this->redirectToRoute('admin_user_edit', [
+                    'id' => $user->getId()
+                ]);
+                
+            }else{
+                $this->addFlash('error', 'Invalid request. Try again!' . $form->getErrors() );
+            }
+        }
+        
+        return $this->render('admin/user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
     
     /**
-     * @Route("/users/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/users/{page<\d+>?1}", name="grid", methods="GET")
+     * @Route("/users/{display}/{page<\d+>?1}", name="list", methods="GET")
      */
-    public function list(PaginatorService $paginator, $page = 1)
+    public function list(string $display = 'grid', PaginatorService $paginator, $page = 1, Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
         
         $entityManager = $this->getDoctrine()->getManager();
         
-        $query = $entityManager->getRepository(User::class)->getAll();
-
-        $users = $paginator->paginate($query, 2);
+        $search = $request->query->get('s');
+        if( strlen($search) > 20 ) {
+            $search = substr($search, 0, 20);
+        }
         
-        return $this->render('admin/user/list.html.twig', ['users' => $users]);
+        $query = $entityManager->getRepository(User::class)->getAll($search);
+
+        $users = $paginator->paginate($query, 10);
+        
+        $params = ['users' => $users, 'search' => $search];
+        
+        if($display == 'list') {
+            return $this->render('admin/user/list.html.twig', $params);
+        }
+        
+        return $this->render('admin/user/grid.html.twig', $params);
     }
 }

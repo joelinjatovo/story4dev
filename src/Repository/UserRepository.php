@@ -27,9 +27,23 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
         parent::__construct($registry, User::class);
     }
     
-    public function getAll()
+    public function getAll($search = null)
     {
+        if( empty($search) ){
+            return $this->createQueryBuilder('u')
+                ->getQuery();
+        }
+        
         return $this->createQueryBuilder('u')
+            ->orWhere('u.fullName LIKE :search')
+            ->orWhere('u.email LIKE :search')
+            ->orWhere('u.username LIKE :search')
+            ->orWhere('u.phone LIKE :search')
+            ->orWhere('u.website LIKE :search')
+            ->orWhere('u.title LIKE :search')
+            ->orWhere('u.company LIKE :search')
+            ->orWhere('u.presentation LIKE :search')
+            ->setParameter('search', '%'.$search.'%')
             ->getQuery();
     }
     

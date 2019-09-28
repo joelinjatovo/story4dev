@@ -36,9 +36,10 @@ class User implements UserInterface, \Serializable
     use TimestampableEntity;
     use SoftDeleteableEntity;
     
-    const STATUS_PING    = 'ping';
-    const STATUS_ACTIVE  = 'active';
-    const STATUS_BLOCKED = 'blocked';
+    const STATUS_PING     = 'ping';
+    const STATUS_ACTIVE   = 'active';
+    const STATUS_CANCELED = 'canceled';
+    const STATUS_BLOCKED  = 'blocked';
     
     /**
      * @ORM\Id()
@@ -579,6 +580,11 @@ class User implements UserInterface, \Serializable
         return $this;
     }    
 
+    public function getStatusClass(): ?string
+    {
+        return $this->isCanceled() ? 'warning': ( $this->isBlocked() ? 'danger' : ( $this->isPinged() ? 'brand' : 'success' ) );
+    }    
+
     public function getStatus(): ?string
     {
         return (string) $this->status;
@@ -589,6 +595,21 @@ class User implements UserInterface, \Serializable
         $this->status = $status;
         
         return $this;
+    }
+    
+    public function isPinged()
+    {
+        return $this->getStatus() == self::STATUS_PING;
+    }
+    
+    public function isBlocked()
+    {
+        return $this->getStatus() == self::STATUS_BLOCKED;
+    }
+    
+    public function isCanceled()
+    {
+        return $this->getStatus() == self::STATUS_CANCELED;
     }
     
     public function isActive()

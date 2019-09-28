@@ -1,5 +1,7 @@
 {% extends 'admin/base.html.twig' %}
 
+{% block title %}Tous les utilisateurs - Admin - {{ app.user.fullname }}{% endblock %}
+
 {% block stylesheets %}
 {% endblock %}
 
@@ -7,13 +9,13 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Users</h3>
+            <h3 class="kt-subheader__title">{% if search is not empty %} Résultat de recherche : {{ search }} {% else %}Liste d'utilisateur{% endif %}</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__group" id="kt_subheader_search">
-                <span class="kt-subheader__desc" id="kt_subheader_total">450 Total</span>
-                <form class="kt-margin-l-20" id="kt_subheader_search_form">
+                <span class="kt-subheader__desc" id="kt_subheader_total">{{ users.count }} Total</span>
+                <form class="kt-margin-l-20" id="kt_subheader_search_form" method="GET">
                     <div class="kt-input-icon kt-input-icon--right kt-subheader__search">
-                        <input type="text" class="form-control" placeholder="Search..." id="generalSearch">
+                        <input type="text" name="s" value="{{ search }}" maxlength="20" class="form-control" placeholder="Rechercher..." id="generalSearch">
                         <span class="kt-input-icon__icon kt-input-icon__icon--right">
                             <span>
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
@@ -23,59 +25,14 @@
                                         <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" id="Path" fill="#000000" fill-rule="nonzero"></path>
                                     </g>
                                 </svg>
-                                <!--<i class="flaticon2-search-1"></i>-->
                             </span>
                         </span>
                     </div>
                 </form>
             </div>
-            <div class="kt-subheader__group kt-hidden" id="kt_subheader_group_actions">
-                <div class="kt-subheader__desc"><span id="kt_subheader_group_selected_rows"></span> Selected:</div>
-                <div class="btn-toolbar kt-margin-l-20">
-                    <div class="dropdown" id="kt_subheader_group_actions_status_change">
-                        <button type="button" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
-                            Update Status
-                        </button>
-                        <div class="dropdown-menu">
-                            <ul class="kt-nav">
-                                <li class="kt-nav__section kt-nav__section--first">
-                                    <span class="kt-nav__section-text">Change status to:</span>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link" data-toggle="status-change" data-status="1">
-                                        <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-success kt-badge--inline kt-badge--bold">Approved</span></span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link" data-toggle="status-change" data-status="2">
-                                        <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-danger kt-badge--inline kt-badge--bold">Rejected</span></span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link" data-toggle="status-change" data-status="3">
-                                        <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-warning kt-badge--inline kt-badge--bold">Pending</span></span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="#" class="kt-nav__link" data-toggle="status-change" data-status="4">
-                                        <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-info kt-badge--inline kt-badge--bold">On Hold</span></span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <button class="btn btn-label-success btn-bold btn-sm btn-icon-h" id="kt_subheader_group_actions_fetch" data-toggle="modal" data-target="#kt_datatable_records_fetch_modal">
-                        Fetch Selected
-                    </button>                
-                    <button class="btn btn-label-danger btn-bold btn-sm btn-icon-h" id="kt_subheader_group_actions_delete_all">
-                        Delete All
-                    </button>
-                </div>
-            </div>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="/metronic/preview/demo7/.html" class=""></a>
-            <a href="/metronic/preview/demo7/custom/apps/user/add-user.html" class="btn btn-label-brand btn-bold">Add User</a>
+            <a href="{{ path( 'admin_user_index' ) }}" class="btn btn-label-brand btn-bold">Ajouter un utilisateur</a>
             <div class="kt-subheader__wrapper">
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
                     <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -92,41 +49,21 @@
                         <!--begin::Nav-->
                         <ul class="kt-nav">
                             <li class="kt-nav__head">
-                                Add New:                                    
+                                Nouveau:                                    
                                 <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                             </li>
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
+                                <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Orders</span>
+                                    <span class="kt-nav__link-text">Project</span>
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
+                                <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Members</span>
-                                    <span class="kt-nav__link-badge">
-                                        <span class="kt-badge kt-badge--brand kt-badge--rounded">15</span>
-                                    </span>
+                                    <span class="kt-nav__link-text">Unit</span>
                                 </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">Reports</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-link"></i>
-                                    <span class="kt-nav__link-text">Finance</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__foot">
-                                <a class="btn btn-label-brand btn-bold btn-sm" href="#">More options</a>                                    
-                                <a class="btn btn-clean btn-bold btn-sm kt-hidden" href="#" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                             </li>
                         </ul>
                         <!--end::Nav-->
@@ -140,9 +77,54 @@
 
 {% block content %}
 <div class="row">
-    {% for _user in users %}
-        {{ include('admin/user/list_item.html.twig', {'user': _user}) }}
-    {% endfor %}
+	<div class="col-xl-8 col-lg-12 order-lg-1 order-xl-1">
+		<div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
+            <div class="kt-portlet__body kt-portlet__body--fit">
+                <!--begin: Datatable -->
+                <div class="kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--loaded" id="local_data" style="">
+                    <table class="kt-datatable__table" style="display: block;">
+                        <thead class="kt-datatable__head">
+                            <tr class="kt-datatable__row" style="left: 0px;">
+                                <th class="kt-datatable__cell kt-datatable__toggle-detail"><span></span></th>
+                                <th data-field="ID" class="kt-datatable__cell--center kt-datatable__cell kt-datatable__cell--check">
+                                    <span style="width: 40px;">
+                                        <label class="kt-checkbox kt-checkbox--single kt-checkbox--all kt-checkbox--solid"><input type="checkbox">&nbsp;<span></span></label>
+                                    </span>
+                                </th>
+                                <th data-field="ShipName" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">Utilisateur</span>
+                                </th>
+                                <th data-field="Country" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 50px;">Pays</span>
+                                </th>
+                                <th data-field="Date" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Date</span>
+                                </th>
+                                <th data-field="Status" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Status</span>
+                                </th>
+                                <th data-field="Roles" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Roles</span>
+                                </th>
+                                <th data-field="Datas" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Data</span>
+                                </th>
+                                <th data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 80px;">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="kt-datatable__body">
+                            {% for _user in users %}
+                                {{ include('admin/user/list_item.html.twig', {'user': _user}) }}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!--end: Datatable -->
+            </div>
+        </div>
+    </div>
 </div>
     
 <div class="row">
