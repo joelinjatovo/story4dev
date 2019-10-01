@@ -23,37 +23,6 @@ use App\Service\FormError;
 class UploadController extends AbstractController
 {
     /**
-     * @Rest\Post("/upload")
-     */
-    public function upload(FileUploader $uploader, Request $request, FormError $formError)
-    {
-        $file = new File();
-        
-        $form = $this->createForm(UploadType::class, $file, ['csrf_protection' => false]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()){
-            if( ! $form->isValid() ) {
-                $errors = $formError->getErrorMessages($form);
-                return $this->json(['status' => 0,'errors' => $errors], 400, [], ['groups' => ['file']]);
-            }
-            
-            $uploadedFile = $form['file']->getData();
-            if ($uploadedFile) {
-                try{
-                    $uploadedFileName = $uploader->upload($uploadedFile);
-                    $file->setPath($uploadedFileName);
-                } catch (FileException $e) {
-                    return $this->json(['status' => 0,'error' => 'Can not upload file', 'message'=> $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
-                }
-            }
-        }
-        
-        return $this->json(['data' => $file], 200, [], ['groups' => ['file']]);
-        
-    }
-    
-    /**
      * @Rest\Post("/vich-upload")
      */
     public function vichUpload(FileUploader $uploader, Request $request, FormError $formError)
@@ -63,24 +32,36 @@ class UploadController extends AbstractController
         $form = $this->createForm(UploadType::class, $file, ['csrf_protection' => false]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()){
-            if( ! $form->isValid() ) {
-                $errors = $formError->getErrorMessages($form);
-                return $this->json(['status' => 'error', 'errors' => $errors], JsonResponse::HTTP_BAD_REQUEST, [], ['groups' => ['file']]);
+        if ($form->isSubmitted() && $form->isValid() ) {
+            try{
+                $uploadedFile = $form['file']->getData();
+                $file->setMimeType($uploadedFile->getMimeType());
+                $file->setSize($uploadedFile->getSize());
+                $file->setAuthor($this->getUser());
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($file);
+                $entityManager->flush();
+
+                return $this->json([
+                    'status'  => 'success', 
+                    'message' => 'file_uploaded', 
+                    'data'    => $file
+                ], JsonResponse::HTTP_CREATED, [], ['groups' => ['file']]);
+            }catch(\Exception $e){
+                return $this->json([
+                    'status' => 'error', 
+                    'error'  => "bad_request",
+                    'errors' => []
+                ], JsonResponse::HTTP_BAD_REQUEST);
             }
-            
-            $uploadedFile = $form['file']->getData();
-            $file->setMimeType($uploadedFile->getMimeType());
-            $file->setSize($uploadedFile->getSize());
-            
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($file);
-            $entityManager->flush();
-        
-            return $this->json(['status' => 'success', 'message' => 'File uploaded.', 'data' => $file], 200, [], ['groups' => ['file']]);
         }
         
-        return $this->json(['status' => 'error', 'errors' => "Form not submitted"], JsonResponse::HTTP_BAD_REQUEST);
+        return $this->json([
+            'status' => 'error',
+            'error'  => "form_not_submitted",
+            'errors' => $formError->getErrorMessages($form)
+        ], JsonResponse::HTTP_BAD_REQUEST);
         
     }
 

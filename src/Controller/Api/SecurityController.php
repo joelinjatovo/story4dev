@@ -43,7 +43,9 @@ class SecurityController extends AbstractController
                 'exp' => time() + 3600 // 1 hour expiration
             ]);
         
-        return new JsonResponse(['token' => $token]);
+        return new JsonResponse([
+            'token' => $token
+        ]);
     }
 
 }

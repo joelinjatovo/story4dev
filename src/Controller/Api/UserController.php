@@ -18,12 +18,11 @@ class UserController extends AbstractController
      */
     public function index(Request $request)
     {
-        $format = "user";
-        if( $request->query->has('_format') ){
-             $format = $request->query->get('_format');
-        }
-        
-        return $this->json(['_format' => $format, 'data' => $this->getUser()], 200, [], ['groups' => [$format]]);
+        return $this->json([
+            'status'  => 'success', 
+            'message' => 'Logged in user', 
+            'data'    => $this->getUser()
+        ], 200, [], ['groups' => ["user"]]);
     }
 
 }
