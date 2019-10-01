@@ -41,6 +41,7 @@ class UploadController extends AbstractController
             }
             
             $uploadedFile = $form['file']->getData();
+            $file->setAuthor($this->getUser());
             $file->setMimeType($uploadedFile->getMimeType());
             $file->setSize($uploadedFile->getSize());
             
