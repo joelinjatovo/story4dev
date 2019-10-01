@@ -4,6 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\Project;
 use App\Entity\User;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -15,10 +16,12 @@ class ProjectVoter extends Voter
     const REMOVE = 'remove';
 
     private $security;
+    private $em;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, EntityManager $em)
     {
         $this->security = $security;
+        $this->em = $em;
     }
     
     protected function supports($attribute, $subject)

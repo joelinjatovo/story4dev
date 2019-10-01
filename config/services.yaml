@@ -35,6 +35,30 @@ services:
         arguments:
             $targetDirectory: '%upload_directory%'
 
+    App\Security\Voter\ProjectVoter:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+
+    App\Security\Voter\ActivityVoter:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+
+    App\Security\Voter\ReportVoter:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+
+    App\Security\Voter\ResultVoter:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+
+    App\Security\Voter\GoalVoter:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+
+    App\Security\Voter\IndicatorVoter:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+
 #sensio_framework_extra.view.listener:
     #alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
 
