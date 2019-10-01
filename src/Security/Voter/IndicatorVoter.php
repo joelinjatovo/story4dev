@@ -4,6 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\Indicator;
 use App\Entity\User;
+use App\Repository\ProjectContributionRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -63,8 +64,8 @@ class IndicatorVoter extends Voter
                 return $this->canView($indicator, $user);
             case self::EDIT:
                 return $this->canEdit($indicator, $user);
-            case self::LIST:
-                return $this->canList($indicator, $user);
+            case self::REMOVE:
+                return $this->canRemove($indicator, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
@@ -76,6 +77,24 @@ class IndicatorVoter extends Voter
         if ($this->canEdit($indicator, $user)) {
             return true;
         }
+        
+        $activity = $indicator->getActivity();
+        if( ! $activity ){
+            return false;
+        }
+        
+        $project = $activity->getProject();
+        if( ! $project ){
+            return false;
+        }
+        
+        $contribution = $this->em
+            ->getRepository(ProjectContributionRepository::class)
+            ->findBy(['project' => $project, 'user' => $user]);
+        
+        if($contribution){
+            return true;
+        }
 
         // the Project object could have, for example, a method isPrivate()
         // that checks a boolean $private property
@@ -84,15 +103,33 @@ class IndicatorVoter extends Voter
 
     private function canEdit(Indicator $indicator, User $user)
     {
-        // this assumes that the data object has a getOwner() method
-        // to get the entity of the user who owns this data object
-        return $user === $indicator->getAuthor();
+        if( $user === $indicator->getAuthor() ) {
+            return true;
+        }
+        
+        $activity = $indicator->getActivity();
+        if( ! $activity ){
+            return false;
+        }
+        
+        $project = $activity->getProject();
+        if( ! $project ){
+            return false;
+        }
+        
+        $contribution = $this->em
+            ->getRepository(ProjectContributionRepository::class)
+            ->findBy(['project' => $project, 'user' => $user]);
+        
+        if($contribution){
+            return $contribution->isAdmin();
+        }
+        
+        return false;
     }
 
-    private function canList(Indicator $indicator, User $user)
+    private function canRemove(Indicator $indicator, User $user)
     {
-        // this assumes that the data object has a getOwner() method
-        // to get the entity of the user who owns this data object
-        return $user === $indicator->getAuthor();
+        return false;
     }
 }

@@ -38,6 +38,8 @@ class IndicatorController extends AbstractController
      */
     public function index(User $user, Project $project, Activity $activity)
     {
+        $this->denyAccessUnlessGranted('edit', $activity);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -66,6 +68,8 @@ class IndicatorController extends AbstractController
      */
     public function create(User $user, Project $project, Activity $activity, Request $request)
     {
+        $this->denyAccessUnlessGranted('edit', $activity);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -149,6 +153,8 @@ class IndicatorController extends AbstractController
      */
     public function show(User $user, Project $project, Activity $activity, Indicator $indicator)
     {
+        $this->denyAccessUnlessGranted('view', $indicator);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -182,6 +188,8 @@ class IndicatorController extends AbstractController
      */
     public function edit(User $user, Project $project, Activity $activity, Indicator $indicator)
     {
+        $this->denyAccessUnlessGranted('edit', $indicator);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -214,6 +222,8 @@ class IndicatorController extends AbstractController
      */
     public function update(User $user, Project $project, Activity $activity, Indicator $indicator, Request $request, FormError $formError)
     {
+        $this->denyAccessUnlessGranted('edit', $indicator);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -303,6 +313,8 @@ class IndicatorController extends AbstractController
      */
     public function remove(User $user, Project $project, Activity $activity, Indicator $indicator)
     {
+        $this->denyAccessUnlessGranted('remove', $indicator);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }

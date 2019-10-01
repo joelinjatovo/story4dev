@@ -38,6 +38,8 @@ class ReportController extends AbstractController
      */
     public function index(User $user, Project $project, Activity $activity)
     {
+        $this->denyAccessUnlessGranted('edit', $activity);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -69,6 +71,8 @@ class ReportController extends AbstractController
      */
     public function create(User $user, Project $project, Activity $activity, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('edit', $activity);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -119,6 +123,8 @@ class ReportController extends AbstractController
      */
     public function show(User $user, Project $project, Activity $activity, Report $report)
     {
+        $this->denyAccessUnlessGranted('view', $report);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -148,6 +154,8 @@ class ReportController extends AbstractController
      */
     public function edit(User $user, Project $project, Activity $activity, Report $report)
     {
+        $this->denyAccessUnlessGranted('edit', $report);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -180,6 +188,8 @@ class ReportController extends AbstractController
      */
     public function update(User $user, Project $project, Activity $activity, Report $report, Request $request)
     {
+        $this->denyAccessUnlessGranted('edit', $report);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -231,6 +241,8 @@ class ReportController extends AbstractController
      */
     public function statusChange(Request $request)
     {
+        $this->denyAccessUnlessGranted('edit', $report);
+        
         if ( $request->isXmlHttpRequest() ) {
             $status = $request->request->get('status');
             $id = $request->request->get('id');

@@ -2,7 +2,7 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Report;
+use App\Entity\File;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
 
-class ReportVoter extends Voter
+class FileVoter extends Voter
 {
     const VIEW   = 'view';
     const EDIT   = 'edit';
@@ -33,7 +33,7 @@ class ReportVoter extends Voter
         }
 
         // only vote on Report objects inside this voter
-        if (!$subject instanceof Report) {
+        if (!$subject instanceof File) {
             return false;
         }
 
@@ -56,42 +56,24 @@ class ReportVoter extends Voter
 
         // you know $subject is a Report object, thanks to supports
         /** @var Report $report */
-        $report = $subject;
+        $file = $subject;
 
         switch ($attribute) {
             case self::VIEW:
-                return $this->canView($report, $user);
+                return $this->canView($file, $user);
             case self::EDIT:
-                return $this->canEdit($report, $user);
+                return $this->canEdit($file, $user);
             case self::REMOVE:
-                return $this->canRemove($report, $user);
+                return $this->canRemove($file, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
     }
 
-    private function canView(Report $report, User $user)
+    private function canView(File $file, User $user)
     {
         // if they can edit, they can view
-        if ($this->canEdit($report, $user)) {
-            return true;
-        }
-        
-        $activity = $report->getActivity();
-        if( ! $activity ){
-            return false;
-        }
-        
-        $project = $activity->getProject();
-        if( ! $project ){
-            return false;
-        }
-        
-        $contribution = $this->em
-            ->getRepository(ProjectContributionRepository::class)
-            ->findBy(['project' => $project, 'user' => $user]);
-        
-        if($contribution){
+        if ($this->canEdit($file, $user)) {
             return true;
         }
 
@@ -100,34 +82,16 @@ class ReportVoter extends Voter
         return false; //!$report->isPrivate();
     }
 
-    private function canEdit(Report $report, User $user)
+    private function canEdit(File $file, User $user)
     {
-        if( $user === $report->getAuthor() ) {
+        if( $user === $file->getAuthor() ) {
             return true;
-        }
-        
-        $activity = $report->getActivity();
-        if( ! $activity ){
-            return false;
-        }
-        
-        $project = $activity->getProject();
-        if( ! $project ){
-            return false;
-        }
-        
-        $contribution = $this->em
-            ->getRepository(ProjectContributionRepository::class)
-            ->findBy(['project' => $project, 'user' => $user]);
-        
-        if($contribution){
-            return $contribution->isAdmin();
         }
         
         return false;
     }
 
-    private function canRemove(Report $report, User $user)
+    private function canRemove(File $file, User $user)
     {
         return false;
     }

@@ -33,6 +33,8 @@ class ActivityController extends AbstractController
      */
     public function index(User $user, Project $project)
     {
+        $this->denyAccessUnlessGranted('edit', $project);
+        
         $activity = new Activity();
         $form = $this->createForm(ActivityType::class, $activity);
 
@@ -52,6 +54,8 @@ class ActivityController extends AbstractController
      */
     public function create(?User $user, ?Project $project, Request $request, FormError $formError): Response
     {
+        $this->denyAccessUnlessGranted('edit', $project);
+        
         $activity = new Activity();
         $form = $this->createForm(ActivityType::class, $activity);
         
@@ -135,6 +139,8 @@ class ActivityController extends AbstractController
      */
     public function show(User $user, Project $project, Activity $activity)
     {
+        $this->denyAccessUnlessGranted('view', $activity);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -162,6 +168,8 @@ class ActivityController extends AbstractController
      */
     public function edit(User $user, Project $project, Activity $activity)
     {
+        $this->denyAccessUnlessGranted('edit', $activity);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -188,6 +196,8 @@ class ActivityController extends AbstractController
      */
     public function update(User $user, Project $project, Activity $activity, Request $request, FormError $formError)
     {
+        $this->denyAccessUnlessGranted('edit', $activity);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -279,6 +289,8 @@ class ActivityController extends AbstractController
      */
     public function remove(User $user, Project $project, Activity $activity)
     {
+        $this->denyAccessUnlessGranted('remove', $activity);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }

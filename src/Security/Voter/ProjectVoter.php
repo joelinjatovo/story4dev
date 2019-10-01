@@ -4,6 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\Project;
 use App\Entity\User;
+use App\Repository\ProjectContributionRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -62,8 +63,8 @@ class ProjectVoter extends Voter
                 return $this->canView($project, $user);
             case self::EDIT:
                 return $this->canEdit($project, $user);
-            case self::LIST:
-                return $this->canList($project, $user);
+            case self::REMOVE:
+                return $this->canRemove($project, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
@@ -73,6 +74,14 @@ class ProjectVoter extends Voter
     {
         // if they can edit, they can view
         if ($this->canEdit($project, $user)) {
+            return true;
+        }
+        
+        $contribution = $this->em
+            ->getRepository(ProjectContributionRepository::class)
+            ->findBy(['project'=>$project, 'user' => $user]);
+        
+        if($contribution){
             return true;
         }
 
@@ -85,13 +94,23 @@ class ProjectVoter extends Voter
     {
         // this assumes that the data object has a getOwner() method
         // to get the entity of the user who owns this data object
-        return $user === $project->getAuthor();
+        if( $user === $project->getAuthor() ) {
+            return true;
+        }
+        
+        $contribution = $this->em
+            ->getRepository(ProjectContributionRepository::class)
+            ->findBy(['project'=>$project, 'user' => $user]);
+        
+        if($contribution){
+            return $contribution->isAdmin();
+        }
+        
+        return false;
     }
 
-    private function canList(Project $project, User $user)
+    private function canRemove(Project $project, User $user)
     {
-        // this assumes that the data object has a getOwner() method
-        // to get the entity of the user who owns this data object
-        return $user === $project->getAuthor();
+        return false;
     }
 }

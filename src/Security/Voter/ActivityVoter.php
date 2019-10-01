@@ -4,6 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\Activity;
 use App\Entity\User;
+use App\Repository\ProjectContributionRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -62,8 +63,8 @@ class ActivityVoter extends Voter
                 return $this->canView($activity, $user);
             case self::EDIT:
                 return $this->canEdit($activity, $user);
-            case self::LIST:
-                return $this->canList($activity, $user);
+            case self::REMOVE:
+                return $this->canRemove($activity, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
@@ -73,6 +74,19 @@ class ActivityVoter extends Voter
     {
         // if they can edit, they can view
         if ($this->canEdit($activity, $user)) {
+            return true;
+        }
+        
+        $project = $activity->getProject();
+        if( ! $project ){
+            return false;
+        }
+        
+        $contribution = $this->em
+            ->getRepository(ProjectContributionRepository::class)
+            ->findBy(['project' => $project, 'user' => $user]);
+        
+        if($contribution){
             return true;
         }
 
@@ -85,13 +99,28 @@ class ActivityVoter extends Voter
     {
         // this assumes that the data object has a getOwner() method
         // to get the entity of the user who owns this data object
-        return $user === $activity->getAuthor();
+        if( $user === $activity->getAuthor() ) {
+            return true;
+        }
+        
+        $project = $activity->getProject();
+        if( ! $project ){
+            return false;
+        }
+        
+        $contribution = $this->em
+            ->getRepository(ProjectContributionRepository::class)
+            ->findBy(['project' => $project, 'user' => $user]);
+        
+        if($contribution){
+            return $contribution->isAdmin();
+        }
+        
+        return false;
     }
 
-    private function canList(Activity $activity, User $user)
+    private function canRemove(Activity $activity, User $user)
     {
-        // this assumes that the data object has a getOwner() method
-        // to get the entity of the user who owns this data object
-        return $user === $activity->getAuthor();
+        return false;
     }
 }
