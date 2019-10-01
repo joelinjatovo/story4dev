@@ -100,7 +100,6 @@
 
                     <div class="kt-widget__info">
                         <div class="kt-widget__desc">
-                            {{ project.description|html|raw }}
                         </div>
 
                         <div class="kt-widget__stats d-flex align-items-center flex-fill">
@@ -136,6 +135,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="kt-widget__body">
+                <span class="kt-widget__text">
+                    {{ project.description|html|raw }}                       
+                </span>
             </div>
         </div>
     </div>
@@ -360,18 +364,45 @@ AmCharts.ready(function() {
     graph1.valueField = "value";
     graph1.balloonText = "[[category]]: [[value]]";
     graph1.type = "column";
+    graph1.clustered = false;
     graph1.lineAlpha = 0.2;
     graph1.fillAlphas = 0.8;
     graph1.titles = [{
         "text": "Yearly data"
     }];
     chart.addGraph(graph1);
+    
     var graph2 = new AmCharts.AmGraph();
     graph2.valueField = "goal";
-    graph2.balloonText = "[[category]]: [[value]]";
+    graph2.balloonText = "[[category]] 2 [[value]]";
     graph2.type = "column";
     graph2.clustered = false;
-    graph2.columnWidth = 0.5;
+    graph2.columnWidth = 0.2;
+    graph2.lineAlpha = 0.2;
+    graph2.fillAlphas = 0.8;
+    graph2.titles = [{
+        "text": "Yearly data"
+    }];
+    chart.addGraph(graph2);
+    
+    graph1 = new AmCharts.AmGraph();
+    graph1.valueField = "value";
+    graph1.balloonText = "[[category]] 3 [[value]]";
+    graph1.type = "column";
+    graph1.clustered = false;
+    graph1.columnWidth = 0.2;
+    graph1.fillAlphas = 0.8;
+    graph1.titles = [{
+        "text": "Yearly data"
+    }];
+    chart.addGraph(graph1);
+    
+    graph2 = new AmCharts.AmGraph();
+    graph2.valueField = "goal";
+    graph2.balloonText = "[[category]] 4 [[value]]";
+    graph2.type = "column";
+    graph2.clustered = false;
+    graph2.columnWidth = 0.2;
     graph2.lineAlpha = 0.2;
     graph2.fillAlphas = 0.8;
     graph2.titles = [{
