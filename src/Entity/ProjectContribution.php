@@ -12,9 +12,9 @@ use App\Entity\Project;
 use App\Entity\User;
 
 /**
- * @Gedmo\Loggable
  * @ORM\Table(name="project_contributions")
  * @ORM\Entity(repositoryClass="App\Repository\ProjectContributionRepository")
+ * @Gedmo\Loggable
  */
 class ProjectContribution
 {

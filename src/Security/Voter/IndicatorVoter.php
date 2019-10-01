@@ -4,7 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\Indicator;
 use App\Entity\User;
-use App\Repository\ProjectContributionRepository;
+use App\Entity\ProjectContribution;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -89,7 +89,7 @@ class IndicatorVoter extends Voter
         }
         
         $contribution = $this->em
-            ->getRepository(ProjectContributionRepository::class)
+            ->getRepository(ProjectContribution::class)
             ->findBy(['project' => $project, 'user' => $user]);
         
         if($contribution){
@@ -118,7 +118,7 @@ class IndicatorVoter extends Voter
         }
         
         $contribution = $this->em
-            ->getRepository(ProjectContributionRepository::class)
+            ->getRepository(ProjectContribution::class)
             ->findBy(['project' => $project, 'user' => $user]);
         
         if($contribution){

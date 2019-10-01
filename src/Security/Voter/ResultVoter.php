@@ -4,6 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\Result;
 use App\Entity\User;
+use App\Entity\ProjectContribution;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
