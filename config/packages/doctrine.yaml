@@ -20,6 +20,11 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            AppRepository:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Repository'
+                prefix: 'App\Repository'
             gedmo_translatable:
                 type: annotation
                 prefix: Gedmo\Translatable\Entity

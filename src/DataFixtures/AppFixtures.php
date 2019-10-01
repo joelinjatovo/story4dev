@@ -7,8 +7,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use App\Entity\User;
-use App\Entity\Contribution\ProjectContribution;
-use App\Entity\Contribution\ActivityContribution;
+use App\Entity\ProjectContribution;
+use App\Entity\ActivityContribution;
 use App\Entity\Project;
 use App\Entity\Activity;
 use App\Entity\Iteration;

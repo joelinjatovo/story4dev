@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Contribution;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -8,18 +8,15 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+use App\Entity\Activity;
+use App\Entity\User;
+
 /**
- * 
- * @ORM\Entity
- * @ORM\Table(name="contributions")
- * @ORM\MappedSuperclass
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="contribution_type", type="string")
- * @ORM\DiscriminatorMap({"activity" = "ActivityContribution", "project" = "ProjectContribution"})
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ * @ORM\Table(name="activity_contributions")
+ * @ORM\Entity(repositoryClass="App\Repositor\ActivityContributionRepository")
  * @Gedmo\Loggable
  */
-abstract class Base
+class ActivityContribution
 {
     /**
      * Hook timestampable behavior
@@ -43,6 +40,21 @@ abstract class Base
      * @Groups({"user", "project", "activity"})
      */
     private $roles = [];
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="activityContributions")
+     * @Gedmo\Versioned
+     * @Groups({"activity"})
+     */
+    private $user;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="contributions")
+     * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     * @Gedmo\Versioned
+     * @Groups({"user"})
+     */
+    private $activity;
 
     public function __construct()
     {
@@ -74,5 +86,29 @@ abstract class Base
     public function isAdmin()
     {
         return in_array('ROLE_ADMIN', $this->getRoles());
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getActivity(): ?Activity
+    {
+        return $this->activity;
+    }
+
+    public function setActivity(?Activity $activity): self
+    {
+        $this->activity = $activity;
+
+        return $this;
     }
 }

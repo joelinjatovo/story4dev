@@ -3,8 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\Meta\UserMeta;
-use App\Entity\Contribution\ProjectContribution;
-use App\Entity\Contribution\ActivityContribution;
+use App\Entity\ProjectContribution;
+use App\Entity\ActivityContribution;
 use App\Traits\TimestampableEntity;
 use App\Traits\SoftDeleteableEntity;
 
@@ -294,13 +294,13 @@ class User implements UserInterface, \Serializable
     private $tokens;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ProjectContribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\ProjectContribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
      * @Groups({"full", "user"})
      */
     private $projectContributions;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ActivityContribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\ActivityContribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
      * @Groups({"full", "user"})
      */
     private $activityContributions;

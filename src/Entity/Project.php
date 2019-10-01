@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation as Serializer;
 
 use App\Entity\Meta\ProjectMeta;
-use App\Entity\Contribution\ProjectContribution;
+use App\Entity\ProjectContribution;
 use App\Traits\ContactTrait;
 use App\Traits\TimestampableEntity;
 use App\Traits\SoftDeleteableEntity;
@@ -136,7 +136,7 @@ class Project
     private $iterations;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ProjectContribution", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\ProjectContribution", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      * @Groups({"full", "project"})
      */
     private $contributions;

@@ -15,7 +15,7 @@ use App\Traits\TimestampableEntity;
 use App\Traits\SoftDeleteableEntity;
 
 use App\Entity\Meta\ActivityMeta;
-use App\Entity\Contribution\ActivityContribution;
+use App\Entity\ActivityContribution;
 
 /**
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
@@ -99,7 +99,7 @@ class Activity
     private $indicators;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contribution\ActivityContribution", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\ActivityContribution", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
      * @Groups({"full"})
      */
     private $contributions;
