@@ -50,7 +50,6 @@ class ProjectContribution
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="contributions")
-     * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
      * @Gedmo\Versioned
      * @Groups({"user"})
      */
