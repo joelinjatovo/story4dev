@@ -241,8 +241,6 @@ class ReportController extends AbstractController
      */
     public function statusChange(Request $request)
     {
-        $this->denyAccessUnlessGranted('edit', $report);
-        
         if ( $request->isXmlHttpRequest() ) {
             $status = $request->request->get('status');
             $id = $request->request->get('id');
@@ -250,6 +248,8 @@ class ReportController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $report = $entityManager->getRepository(Report::class)->find($id);
             if( $report ){
+                $this->denyAccessUnlessGranted('edit', $report);
+                
                 if( $status == 'closed' ){
                     $report->setStatus('closed');
                 }else{
