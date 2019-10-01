@@ -10,8 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-use App\Entity\Contribution\ProjectContribution;
-use App\Entity\Contribution\Base as BaseContribution;
+use App\Entity\ProjectContribution;
 use App\Entity\Project;
 use App\Entity\User;
 use App\Service\PaginatorService;
