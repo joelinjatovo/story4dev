@@ -24,6 +24,7 @@
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
+            <a href="{{ path('project_show', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
             <a href="{{ path('activity_create', { 'slug': project.author.slug, 'project_id': project.id }) }}" class="btn btn-label-brand btn-bold">Add Activity</a>
             <div class="kt-subheader__wrapper kt-hidden">
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">

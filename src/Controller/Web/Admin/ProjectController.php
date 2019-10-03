@@ -15,7 +15,7 @@ use App\Entity\User;
 use App\Entity\Project;
 use App\Form\ProjectType;
 use App\Service\FormError;
-use App\Entity\Contribution\ProjectContribution;
+use App\Entity\ProjectContribution;
 
 /** 
  * @Route(name="admin_project_")

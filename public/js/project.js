@@ -1,13 +1,13 @@
 jQuery(document).ready(function($){
-    $(document).on('click', '.btn-remove-contributor', function(e){
+    $(document).on('click', '.btn-remove-contribution', function(e){
         e.preventDefault();
         var $this = $(this);
         KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
-        $.post("/contributor/remove", { id: $this.attr('data-id') })
+        $.post("/contribution/remove", { id: $this.attr('data-id') })
         .done(function( data ) {
             KTApp.unblockPage();
             if(data.success){
-                $this.closest('.contributor-item').remove();
+                $this.closest('.contribution-item').remove();
             }
         })
         .fail(function() {
@@ -25,31 +25,31 @@ jQuery(document).ready(function($){
             if (searchRequest != null) {
                 searchRequest.abort();
             }
-            KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+            $this.parent().addClass('kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input');
             searchRequest = $.ajax({
                 type: "GET",
-                url: "/contributor/search",
+                url: "/contribution/search",
                 dataType: "json",
                 data: {search: value, project: $this.attr('data-project')},
                 cache: false,
                 success: function (data) {
-                    KTApp.unblockPage();
+                    $this.parent().removeClass('kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input');
                     $('#search-collaborator-results').html(data.html);
                 },
                 error: function (response) {
-                    KTApp.unblockPage();
+                    $this.parent().removeClass('kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input');
                 }
             });
         }
     });
     
-    $(document).on('click', '.add-contributor', function(e){
+    $(document).on('click', '.add-contribution', function(e){
         e.preventDefault();
         var $this = $(this);
         $this.hide();
         $('#search-collaborator-results').html('');
         KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
-        $.post("/contributor/add", { user_id: $this.attr('data-id'), project_id: $this.attr('data-project'), })
+        $.post("/contribution/add", { user_id: $this.attr('data-id'), project_id: $this.attr('data-project'), })
         .done(function( data ) {
             KTApp.unblockPage();
             if(data.success){

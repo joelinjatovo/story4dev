@@ -152,11 +152,16 @@ class ActivityController extends AbstractController
         $indicator = new Indicator();
         $form = $this->createForm(IndicatorType::class, $indicator);
         
+        $data =  $activity->getData();
+        
+        //dump($data); exit;
+        
         return $this->render('activity/show.html.twig', [
             'user'     => $user,
             'project'  => $project,
             'activity' => $activity, 
-            'form'     => $form->createView() 
+            'form'     => $form->createView(),
+            'data'    => json_encode($data)
         ]);
     }
     

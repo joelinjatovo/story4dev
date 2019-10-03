@@ -37661,3 +37661,7 @@ select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
   background-color: transparent !important;
 }
+/* */
+.kt-spinner::before{
+    z-index: 999;
+}

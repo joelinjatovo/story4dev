@@ -37,9 +37,9 @@
         <div class="kt-portlet__body">
             <div class="kt-widget__files">
                 <div class="kt-widget__media">
-                    <img class="kt-widget__img kt-hidden-" src="{{ asset(file.icone) }}" alt="image">
+                    <a href="{{ asset(file.icone) }}" data-toggle="lightbox" data-gallery="gallery"><img class="kt-widget__img kt-hidden-" src="{{ asset(file.icone) }}" alt="image"></a>
                 </div>
-                <a href="#" class="kt-widget__desc">
+                <a href="{{ asset(file.icone) }}" class="kt-widget__desc" data-toggle="lightbox" data-gallery="gallery">
                     {{ file.name }}
                 </a>
             </div>

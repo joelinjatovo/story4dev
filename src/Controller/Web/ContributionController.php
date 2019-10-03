@@ -16,15 +16,15 @@ use App\Entity\User;
 use App\Service\PaginatorService;
 
 /** 
- * @Route(name="contributor_") 
+ * @Route(name="contribution_") 
  *
  * @IsGranted("ROLE_ADMIN") 
  */
-class ContributorController extends AbstractController
+class ContributionController extends AbstractController
 {
     
     /**
-     * @Route("/{slug}/project/{project_id}/contributors", name="list", methods="GET", requirements={"project_id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/contributions", name="list", methods="GET", requirements={"project_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
@@ -36,7 +36,7 @@ class ContributorController extends AbstractController
         
         $contributions = $project->getContributions();
         
-        return $this->render('collaborator/list.html.twig', [
+        return $this->render('contribution/list.html.twig', [
             'user'    => $user, 
             'project' => $project, 
             'contributions' => $contributions, 
@@ -44,7 +44,7 @@ class ContributorController extends AbstractController
     }
     
     /**
-     * @Route("/contributor", name="role_change", methods="POST")
+     * @Route("/contribution", name="role_change", methods="POST")
      */
     public function roleChange(Request $request)
     {
@@ -81,7 +81,7 @@ class ContributorController extends AbstractController
     }
     
     /**
-     * @Route("/contributor/search", name="search", methods="GET")
+     * @Route("/contribution/search", name="search", methods="GET")
      */
     public function search(Request $request)
     {
@@ -95,7 +95,7 @@ class ContributorController extends AbstractController
                 $project = $entityManager->getRepository(Project::class)->find($project_id);
                 if($project){
                     $users = $entityManager->getRepository(User::class)->searchAllNotInProject($project, $search)->execute();
-                    $content = $this->renderView('collaborator/search.html.twig', [ 'search' => $search, 'project' => $project, 'users' => $users]);
+                    $content = $this->renderView('contribution/search.html.twig', [ 'search' => $search, 'project' => $project, 'users' => $users]);
                     return $this->json([
                         'success' => true,
                         'status'  => 'success',
@@ -115,7 +115,7 @@ class ContributorController extends AbstractController
     }
     
     /**
-     * @Route("/contributor/remove", name="remove", methods="POST")
+     * @Route("/contribution/remove", name="remove", methods="POST")
      */
     public function remove(Request $request)
     {
@@ -146,7 +146,7 @@ class ContributorController extends AbstractController
     }
     
     /**
-     * @Route("/contributor/add", name="add", methods="POST")
+     * @Route("/contribution/add", name="add", methods="POST")
      */
     public function add(Request $request)
     {

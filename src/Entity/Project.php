@@ -448,7 +448,26 @@ class Project
         return $this;
     }
 
-    public function getValue(Iteration $iteration)
+    public function getProgression()
+    {
+        if( $this->getGoalValue() != 0 ) {
+            return (int) ($this->getValue(null)/$this->getGoalValue() * 100);
+        }
+        return 0;
+    }
+
+    public function getGoalValue()
+    {
+        $value = 0;
+        foreach($this->getIterations() as $iteration){
+            foreach($iteration->getGoals() as $goal){
+                $value += $goal->getValue();
+            }
+        }
+        return $value;
+    }
+
+    public function getValue(?Iteration $iteration)
     {
         $value = 0;
         foreach($this->getActivities() as $activity){

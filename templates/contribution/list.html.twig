@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contributeurs - Project#{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block subheader %}
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Tous les contributeurs</h3>
+        </div>        
+        <div class="kt-subheader__toolbar">
+            <a href="{{ path('project_show', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+            <a href="{{ path('project_edit', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-label-brand btn-bold">Modifier le projet</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-xl-8 col-lg-12 order-lg-1 order-xl-1">
+		<div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
+            <div class="kt-portlet__body kt-portlet__body--fit">
+                <div class="kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--loaded" id="local_data" style="">
+                    <table class="kt-datatable__table" style="display: block;">
+                        <thead class="kt-datatable__head">
+                            <tr class="kt-datatable__row" style="left: 0px;">
+                                <th data-field="ID" class="kt-datatable__cell--center kt-datatable__cell kt-datatable__cell--check">
+                                    <span style="width: 40px;">
+                                        <label class="kt-checkbox kt-checkbox--single kt-checkbox--all kt-checkbox--solid"><input type="checkbox">&nbsp;<span></span></label>
+                                    </span>
+                                </th>
+                                <th data-field="ShipName" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">Utilisateurs</span>
+                                </th>
+                                <th data-field="Roles" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Roles</span>
+                                </th>
+                                <th data-field="Country" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 50px;">Pays</span>
+                                </th>
+                                <th data-field="Date" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Date</span>
+                                </th>
+                                <th data-field="Status" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Status</span>
+                                </th>
+                                <th data-field="Datas" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Data</span>
+                                </th>
+                                <th data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 80px;">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="kt-datatable__body">
+                            {% for contribution in contributions %}
+                                 <tr data-row="0" class="kt-datatable__row" style="left: 0px;">
+                                    <td class="kt-datatable__cell--center kt-datatable__cell kt-datatable__cell--check" data-field="ID">
+                                        <span style="width: 40px;">
+                                            <label class="kt-checkbox kt-checkbox--single kt-checkbox--solid"><input type="checkbox" value="11">&nbsp;<span></span></label>
+                                        </span>
+                                    </td>
+                                    <td data-field="User" data-autohide-disabled="false" class="kt-datatable__cell">
+                                        <span style="width: 222px;">
+                                            <div class="kt-user-card-v2">
+                                                <div class="kt-user-card-v2__pic">
+                                                    <img alt="avatar" src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') : default_avatar }}">
+                                                </div>
+                                                <div class="kt-user-card-v2__details">
+                                                    <a class="kt-user-card-v2__name" href="{{ url('admin_user_show', {'id': contribution.user.id}) }}">{{ contribution.user.fullname }}</a>
+                                                    <span class="kt-user-card-v2__email">{{ user.email }}</span>
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </td>
+                                    <td data-field="Roles" class="kt-datatable__cell">
+                                        <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.admin ? 'danger' : 'brand' }}">{{ contribution.admin ? 'admin' : 'contributeur' }}</span></span>
+                                    </td>
+                                    <td data-field="Country" class="kt-datatable__cell">
+                                        <span style="width: 50px;"><span class="kt-font-bold">{{ contribution.user.address is not null ? contribution.user.address.country : '' }}</span></span>
+                                    </td>
+                                    <td data-field="Date" class="kt-datatable__cell">
+                                        <span style="width: 100px;"><span class="kt-font-bold">{{ contribution.user.createdat|ago }}</span></span>
+                                    </td>
+                                    <td data-field="Status" class="kt-datatable__cell">
+                                        <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.user.statusClass }}">{{ contribution.user.status }}</span></span>
+                                    </td>
+                                    <td data-field="Data" class="kt-datatable__cell">
+                                        <span style="width: 100px;">{{ contribution.user.projectContributions.count }} projets / {{ contribution.user.reports.count }} rapports </span>
+                                    </td>
+                                    <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
+                                        <span style="overflow: visible; position: relative; width: 80px;">
+                                            <div class="dropdown">
+                                                <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                    <i class="flaticon-more-1"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <ul class="kt-nav">
+                                                        <li class="kt-nav__item">
+                                                            <a class="kt-nav__link" href="{{ url('admin_user_show', {'id': contribution.user.id}) }}">
+                                                                <i class="kt-nav__link-icon flaticon2-expand"></i>
+                                                                <span class="kt-nav__link-text">View</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="kt-nav__item">
+                                                            <a class="kt-nav__link" href="{{ url('admin_user_edit', {'id': contribution.user.id}) }}">
+                                                                <i class="kt-nav__link-icon flaticon2-contract"></i>
+                                                                <span class="kt-nav__link-text">Edit</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="kt-nav__item">
+                                                            <a class="kt-nav__link" href="#">
+                                                                <i class="kt-nav__link-icon flaticon2-trash"></i>
+                                                                <span class="kt-nav__link-text">Delete</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="kt-nav__item">
+                                                            <a class="kt-nav__link" href="{{ url('user_show', {'slug': contribution.user.slug}) }}">
+                                                                <i class="kt-nav__link-icon flaticon2-mail-1"></i>
+                                                                <span class="kt-nav__link-text">Statistique</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -342,7 +342,7 @@ class Activity
         return $this;
     }
 
-    public function getValue(Iteration $iteration)
+    public function getValue(?Iteration $iteration)
     {
         $value = 0;
         foreach($this->getIndicators() as $indicator){
@@ -362,13 +362,25 @@ class Activity
                 //$subdatas[] = $indicator->getData();
             }
             
+            $goalValue = 0;
+            foreach($iteration->getGoals() as $goal){
+                $goalValue += $goal->getValue();
+            }
+            
+            $progression = 0;
+            if($goalValue>0){
+                $progression = (int) ($value/$goalValue*100);
+            }
+            
             $data = [
-                "iteration" => $iteration->getTitle(),
-                "value"     => $value,
+                "iteration"   => $iteration->getTitle(),
+                "value"       => $value,
+                "goal"        => $goalValue,
+                "progression" => $progression,
                 //"subdata"   => $subdatas,
             ];
             
-            $datas[$iteration->getId()] = $data;
+            $datas[] = $data;
         }
         
         return $datas;

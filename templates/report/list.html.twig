@@ -29,6 +29,7 @@
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
+            <a href="{{ path('project_show', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
             <a href="" class="btn btn-label-brand btn-bold">New Report</a>
             <div class="kt-subheader__wrapper kt-hidden">
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">

@@ -137,11 +137,14 @@ class ReportController extends AbstractController
             throw $this->createNotFoundException('The activity does not match');
         }
         
+        $data =  $activity->getData();
+        
         return $this->render('report/show.html.twig', [
             'user'     => $user,
             'project'  => $project,
             'activity' => $activity,
-            'report'   => $report
+            'report'   => $report,
+            'data'     => json_encode($data)
         ]);
     }
     

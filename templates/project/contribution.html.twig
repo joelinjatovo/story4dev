@@ -1,4 +1,4 @@
-<div class="kt-widget__item contributor-item" >
+<div class="kt-widget__item contribution-item" >
     <span class="kt-media kt-media--circle"> 
         <img src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') : default_avatar }}" alt="avatar">
     </span>
@@ -14,11 +14,11 @@
         {% if contribution.isAdmin() %}
             <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-primary report-status">admin</span>
         {% else %}
-            <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-success report-status">contributor</span>
+            <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-success report-status">contributeur</span>
         {% endif %}
         <span class="kt-widget__date">{{ contribution.createdat|ago }}</span>
     </div>
     <div class="kt-widget__action" style="flex:0.2">
-        <a href="javascript:void;" class="btn-remove-contributor" data-id="{{ contribution.id }}"><i class="flaticon-delete"></i></a>
+        <a href="javascript:void;" class="btn-remove-contribution" data-id="{{ contribution.id }}"><i class="flaticon-delete"></i></a>
     </div>
 </div>

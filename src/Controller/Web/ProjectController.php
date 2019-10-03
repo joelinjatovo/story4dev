@@ -110,12 +110,29 @@ class ProjectController extends AbstractController
             
             // remove the relationship
             foreach ($originalIterations as $iteration) {
-                
-                if (false === $project->getIterations()->contains($iteration)) {
-                    if( $iteration->hasGoals() ) {
-                        $project->addIteration($iteration);
-                        $this->addFlash('error', 'Can not delete '.$iteration->getTitle());
+                $removed = true;
+                foreach($project->getIterations() as $updated_iteration){
+                    if ( ( $updated_iteration->getId() > 0 ) && ($updated_iteration->getId() === $iteration->getId()) ) {
+                        $removed = false;
+                        break;
                     }
+                }
+                
+                if($removed === true){
+                    if( ! $iteration->hasGoals() ) {
+                        $project->removeIteration($iteration);
+                        $entityManager->remove($iteration);
+                    }else{
+                        $project->addIteration($iteration);
+                        $this->addFlash('error', 'On ne peut pas supprimer l\'itération suivante: '.$iteration->getTitle());
+                    }
+                }
+            }
+            
+            // set author for new iteration
+            foreach($project->getIterations() as $updated_iteration){
+                if($updated_iteration->getAuthor()==null){
+                    $updated_iteration->setAuthor($this->getUser());
                 }
             }
 

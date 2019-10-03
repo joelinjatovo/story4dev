@@ -269,7 +269,11 @@ class File
             $type = array_search($this->getMimeType(), $this->getMimeTypes());
         }
         
-        if( in_array( $type, ['pdf', 'xml', 'csv', 'jpg', 'jpeg', 'html', 'javascript', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'zip', 'mp4'] ) ){
+        if( in_array( $type, ['jpg', 'jpeg', 'png', 'gif']) ) {
+             return '/uploads/file/'.$this->getName();
+        }
+        
+        if( in_array( $type, ['pdf', 'xml', 'csv', 'html', 'javascript', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'zip', 'mp4'] ) ){
             return 'images/'.$type.'.svg';
         }
            
