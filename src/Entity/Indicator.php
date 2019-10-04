@@ -234,33 +234,30 @@ class Indicator
         return $this;
     }
 
-    public function getProgression()
+    public function getProgression(?Iteration $iteration = null)
     {
-        if( $this->getGoalsTotal() != 0 ) {
-            return (int) ($this->getResultsTotal()/$this->getGoalsTotal() * 100);
+        if( $this->getGoalValue($iteration) != 0 ) {
+            return (int) ($this->getValue($iteration)/$this->getGoalValue($iteration) * 100);
         }
         return 0;
     }
 
-    public function getGoalsTotal()
+    public function getGoalValue(?Iteration $iteration = null)
     {
         $value = 0;
         foreach($this->getGoals() as $goal){
-            $value += $goal->getValue();
+            if($iteration){
+                if( $goal->getIteration()->getId() == $iteration->getId() ){
+                    $value += $goal->getValue();
+                }
+            }else{
+                $value += $goal->getValue();
+            }
         }
         return $value;
     }
 
-    public function getResultsTotal()
-    {
-        $value = 0;
-        foreach($this->getResults() as $result){
-            $value += $result->getValue();
-        }
-        return $value;
-    }
-
-    public function getValue(?Iteration $iteration)
+    public function getValue(?Iteration $iteration = null)
     {
         $value = 0;
         foreach($this->getResults() as $result){
@@ -273,20 +270,5 @@ class Indicator
             }
         }
         return $value;
-    }
-    
-    public function getData()
-    {
-        $datas = [];
-        foreach($this->getActivity()->getProject()->getIterations() as $iteration){
-            $data = (object) [
-                "iteration" => $iteration->getTitle(),
-                "value"     => $this->getValue($iteration),
-            ];
-            
-            $datas[] = $data;
-        }
-        
-        return $datas;
     }
 }

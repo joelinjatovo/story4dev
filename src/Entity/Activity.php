@@ -342,6 +342,26 @@ class Activity
         return $this;
     }
 
+    public function getProgression(?Iteration $iteration)
+    {
+        $goalValue = $this->getGoalValue($iteration);
+        $value     = $this->getValue($iteration);
+        $progression = 0;
+        if($goalValue>0){
+            $progression = (int) ($value/$goalValue*100);
+        }
+        return $progression;
+    }
+
+    public function getGoalValue(?Iteration $iteration)
+    {
+        $goalValue = 0;
+        foreach($iteration->getGoals() as $goal){
+            $goalValue += $goal->getValue();
+        }
+        return $goalValue;
+    }
+
     public function getValue(?Iteration $iteration)
     {
         $value = 0;
@@ -355,34 +375,32 @@ class Activity
     {
         $datas = [];
         foreach($this->getProject()->getIterations() as $iteration){
-            $value = 0;
-            $subdatas = [];
-            foreach($this->getIndicators() as $indicator){
-                $value += $indicator->getValue($iteration);
-                //$subdatas[] = $indicator->getData();
-            }
-            
-            $goalValue = 0;
-            foreach($iteration->getGoals() as $goal){
-                $goalValue += $goal->getValue();
-            }
-            
-            $progression = 0;
-            if($goalValue>0){
-                $progression = (int) ($value/$goalValue*100);
-            }
-            
             $data = [
                 "iteration"   => $iteration->getTitle(),
-                "value"       => $value,
-                "goal"        => $goalValue,
-                "progression" => $progression,
-                //"subdata"   => $subdatas,
+                "value"       => $this->getValue($iteration),
+                "goal"        => $this->getGoalValue($iteration),
+                "progression" => $this->getProgression($iteration),
             ];
+            
+            foreach($this->getIndicators() as $indicator){
+                $data['indicator_'.$indicator->getId()] = $indicator->getProgression($iteration);
+            }
             
             $datas[] = $data;
         }
         
         return $datas;
+    }
+    
+    public function getSerie()
+    {
+        $series = [];
+        foreach($this->getIndicators() as $indicator){
+            $series[] = [
+                'id'    => 'indicator_'.$indicator->getId(),
+                'title' => $indicator->getTitle(),
+            ];
+        }
+        return $series;
     }
 }

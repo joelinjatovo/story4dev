@@ -152,7 +152,9 @@ class ActivityController extends AbstractController
         $indicator = new Indicator();
         $form = $this->createForm(IndicatorType::class, $indicator);
         
-        $data =  $activity->getData();
+        $data   =  $activity->getData();
+        $series =  $activity->getSerie();
+        
         
         //dump($data); exit;
         
@@ -161,7 +163,8 @@ class ActivityController extends AbstractController
             'project'  => $project,
             'activity' => $activity, 
             'form'     => $form->createView(),
-            'data'    => json_encode($data)
+            'data'     => json_encode($data),
+            'series'   => json_encode($series),
         ]);
     }
     
