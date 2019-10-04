@@ -47,7 +47,8 @@ class ProjectController extends AbstractController
         $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
         $users = $entityManager->getRepository(User::class)->findAll();
         
-        $data =  $project->getData();
+        $data   =  $project->getData();
+        $series =  $project->getSerie();
         
         //dump($data); exit;
         
@@ -56,7 +57,8 @@ class ProjectController extends AbstractController
             'project' => $project, 
             'reports' => $reports, 
             'users'   => $users,
-            'data'    => json_encode($data)
+            'data'    => json_encode($data),
+            'series'   => json_encode($series),
         ]);
     }
     

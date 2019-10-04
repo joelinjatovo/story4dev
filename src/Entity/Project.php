@@ -448,30 +448,45 @@ class Project
         return $this;
     }
 
-    public function getProgression()
+    public function getProgression(?Iteration $iteration = null)
     {
-        if( $this->getGoalValue() != 0 ) {
-            return (int) ($this->getValue(null)/$this->getGoalValue() * 100);
+        if( $this->getGoalValue($iteration) != 0 ) {
+            return (int) ($this->getValue($iteration)/$this->getGoalValue($iteration) * 100);
         }
         return 0;
     }
 
-    public function getGoalValue()
+    public function getGoalValue(?Iteration $iteration = null)
     {
         $value = 0;
-        foreach($this->getIterations() as $iteration){
+        if($iteration){
             foreach($iteration->getGoals() as $goal){
                 $value += $goal->getValue();
+            }
+        }else{
+            foreach($this->getIterations() as $iteration){
+                foreach($iteration->getGoals() as $goal){
+                    $value += $goal->getValue();
+                }
             }
         }
         return $value;
     }
 
-    public function getValue(?Iteration $iteration)
+    public function getValue(?Iteration $iteration = null)
     {
         $value = 0;
         foreach($this->getActivities() as $activity){
             $value += $activity->getValue($iteration);
+        }
+        return $value;
+    }
+
+    public function getReportsCount(Iteration $iteration)
+    {
+        $value = 0;
+        foreach($this->getActivities() as $activity){
+            $value += $activity->getReportsCount($iteration);
         }
         return $value;
     }
@@ -480,28 +495,33 @@ class Project
     {
         $datas = [];
         foreach($this->getIterations() as $iteration){
-            $value = 0;
-            //$subdatas = [];
-            foreach($this->getActivities() as $activity){
-                $value += $activity->getValue($iteration);
-                //$subdatas[] = $activity->getData();
-            }
-            
-            $goalValue = 0;
-            foreach($iteration->getGoals() as $goal){
-                $goalValue += $goal->getValue();
-            }
-            
             $data = [
-                "iteration" => $iteration->getTitle(),
-                "value"     => $value,
-                "goal"      => $goalValue,
-                //"subdata"   => $subdata,
+                "iteration"   => $iteration->getTitle(),
+                "value"       => $this->getValue($iteration),
+                "goal"        => $this->getGoalValue($iteration),
+                "report"      => $this->getReportsCount($iteration),
+                "progression" => $this->getProgression($iteration),
             ];
+            
+            foreach($this->getActivities() as $activity){
+                $data['activity_'.$activity->getId()] = $activity->getProgression($iteration);
+            }
             
             $datas[] = $data;
         }
         
         return $datas;
+    }
+    
+    public function getSerie()
+    {
+        $series = [];
+        foreach($this->getActivities() as $activity){
+            $series[] = [
+                'id'    => 'activity_'.$activity->getId(),
+                'title' => $activity->getTitle(),
+            ];
+        }
+        return $series;
     }
 }
