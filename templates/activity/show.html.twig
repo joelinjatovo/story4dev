@@ -94,7 +94,6 @@
 {% block content %}
 <div class="row">
     <div class="col-xl-12">
-        <!--begin:: Widgets/Applications/User/Profile3-->
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__body">
                 <div class="kt-widget kt-widget--user-profile-3">
@@ -117,7 +116,23 @@
                 </div>
             </div>
         </div>
-        <!--end:: Widgets/Applications/User/Profile3-->
+    </div>
+</div>
+    
+<div class="row">
+    <div class="col-xl-6">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        Statistiques
+                    </h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body kt-portlet__body--fluid">
+                 <div id="chartdiv" style="width: 100%; height: 555px;"></div>
+            </div>
+        </div>
     </div>
 </div>
     
@@ -220,24 +235,6 @@
         </div>
     </div>
 </div>
-    
-<div class="row">
-    <div class="col-xl-6">
-        <div class="kt-portlet kt-portlet--height-fluid">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">
-                        Statistiques
-                    </h3>
-                </div>
-            </div>
-            <div class="kt-portlet__body kt-portlet__body--fluid">
-                 <div id="chartdiv" style="width: 100%; height: 555px;"></div>
-            </div>
-        </div>
-    </div>
-</div>
-    
 {% endblock %}
 
 
@@ -375,9 +372,10 @@ am4core.ready(function() {
     var series1 = chart.series.push(new am4charts.ColumnSeries());
         series1.dataFields.valueY = "value";
         series1.dataFields.categoryX = "iteration";
+        series1.dataFields.report = "report";
         series1.yAxis = valueAxis1;
-        series1.name = "Activity Result";
-        series1.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/]/unité";
+        series1.name = "Résultat";
+        series1.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] unités\n[bold font-size: 18]{report}[/] rapports";
         series1.fill = chart.colors.getIndex(0);
         series1.strokeWidth = 0;
         series1.clustered = false;
@@ -387,8 +385,8 @@ am4core.ready(function() {
         series2.dataFields.valueY = "goal";
         series2.dataFields.categoryX = "iteration";
         series2.yAxis = valueAxis1;
-        series2.name = "Activity Goal";
-        series2.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/]/unité";
+        series2.name = "Objectif";
+        series2.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] unités";
         series2.fill = chart.colors.getIndex(0).lighten(0.5);
         series2.strokeWidth = 0;
         series2.clustered = false;
@@ -408,7 +406,6 @@ am4core.ready(function() {
             bullet3.circle.strokeWidth = 2;
             bullet3.circle.fill = am4core.color("#fff");
 
-    /*
     var _series = {{ series|raw }};
     jQuery.each(_series, function(index, value) {
         var series4 = chart.series.push(new am4charts.LineSeries());
@@ -421,31 +418,32 @@ am4core.ready(function() {
         series4.tooltipText = "{name}\n[bold font-size: 20]{valueY}%[/]";
         //series4.stroke = chart.colors.getIndex(0).lighten(0.5);
         //series4.strokeDasharray = "3,3";
+        series4.hidden = true;
 
         var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
             bullet4.circle.radius = 3;
             bullet4.circle.strokeWidth = 2;
             bullet4.circle.fill = am4core.color("#fff");
     });
-    */
+    
     /*
-    var series4 = chart.series.push(new am4charts.LineSeries());
-        series4.dataFields.valueY = "market2";
-        series4.dataFields.categoryX = "iteration";
-        series4.name = "Market Days ALL";
-        series4.strokeWidth = 2;
-        series4.tensionX = 0.7;
-        series4.yAxis = valueAxis2;
-        series4.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/]";
-        series4.stroke = chart.colors.getIndex(0).lighten(0.5);
-        series4.strokeDasharray = "3,3";
+    var series5 = chart.series.push(new am4charts.LineSeries());
+        series5.dataFields.valueY = "report";
+        series5.dataFields.categoryX = "iteration";
+        series5.name = "Nombre de rapport";
+        series5.strokeWidth = 2;
+        series5.tensionX = 0.7;
+        series5.yAxis = valueAxis2;
+        series5.tooltipText = "{name}\n[bold font-size: 18]{valueY}[/]";
+        series5.stroke = chart.colors.getIndex(0).lighten(0.5);
+        series5.strokeDasharray = "3,3";
 
-        var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
-            bullet4.circle.radius = 3;
-            bullet4.circle.strokeWidth = 2;
-            bullet4.circle.fill = am4core.color("#fff");
+        var bullet5 = series5.bullets.push(new am4charts.CircleBullet());
+            bullet5.circle.radius = 3;
+            bullet5.circle.strokeWidth = 2;
+            bullet5.circle.fill = am4core.color("#fff");
     */
-
+    
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
 

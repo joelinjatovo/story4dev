@@ -370,6 +370,17 @@ class Activity
         }
         return $value;
     }
+
+    public function getReportsCount(Iteration $iteration)
+    {
+        $value = 0;
+        foreach($this->getReports() as $report){
+            if(($report->getCreatedAt() >= $iteration->getStartAt()) && ($report->getCreatedAt() < $iteration->getEndAt())){
+                $value += 1;
+            }
+        }
+        return $value;
+    }
     
     public function getData()
     {
@@ -379,6 +390,7 @@ class Activity
                 "iteration"   => $iteration->getTitle(),
                 "value"       => $this->getValue($iteration),
                 "goal"        => $this->getGoalValue($iteration),
+                "report"      => $this->getReportsCount($iteration),
                 "progression" => $this->getProgression($iteration),
             ];
             

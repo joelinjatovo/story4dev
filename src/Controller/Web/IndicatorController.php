@@ -170,12 +170,15 @@ class IndicatorController extends AbstractController
         $goal = new Goal();
         $form = $this->createForm(GoalType::class, $goal);
         
+        $data =  $indicator->getData();
+        
         return $this->render('indicator/show.html.twig', [
             'user'      => $user,
             'project'   => $project,
             'activity'  => $activity, 
             'indicator' => $indicator, 
-            'form'      => $form->createView()
+            'form'      => $form->createView(),
+            'data'     => json_encode($data),
         ]);
     }
     

@@ -271,4 +271,22 @@ class Indicator
         }
         return $value;
     }
+    
+    public function getData()
+    {
+        $datas = [];
+        foreach($this->getActivity()->getProject()->getIterations() as $iteration){
+            $data = [
+                "iteration"   => $iteration->getTitle(),
+                "unit"        => $this->getUnit()->getTitle(),
+                "value"       => $this->getValue($iteration),
+                "goal"        => $this->getGoalValue($iteration),
+                "progression" => $this->getProgression($iteration),
+            ];
+            
+            $datas[] = $data;
+        }
+        
+        return $datas;
+    }
 }

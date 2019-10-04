@@ -10,11 +10,11 @@
                 <div class="kt-widget31__content" style="width: 100%;">
                     <div class="kt-widget31__progress">
                         <a href="#" class="kt-widget31__stats">
-                            <span>63%</span>
+                            <span>{{ goal.indicator.progression(goal.iteration) }}%</span>
                             <span></span>						    							 
                         </a>
                         <div class="progress progress-sm">
-                            <div class="progress-bar bg-brand" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-brand" role="progressbar" style="width: {{ goal.indicator.progression(goal.iteration) }}%" aria-valuenow="{{ goal.indicator.progression(goal.iteration) }}" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>	
                 </div>						
