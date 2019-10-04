@@ -274,10 +274,10 @@ class File
         }
         
         if( in_array( $type, ['pdf', 'xml', 'csv', 'html', 'javascript', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'zip', 'mp4'] ) ){
-            return 'images/'.$type.'.svg';
+            return 'images/icon/'.$type.'.svg';
         }
            
-        return 'images/doc.svg';
+        return 'images/icon/file.svg';
     }
 
     public function getMimeType(): ?string
