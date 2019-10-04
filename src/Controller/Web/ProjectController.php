@@ -29,6 +29,35 @@ use App\Service\PaginatorService;
  */
 class ProjectController extends AbstractController
 {
+    /**
+     * @Route("/{slug}/project/{id}/dashboard", name="dashboard", methods="GET", requirements={"id"="\d+"})
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"id": "id"}})
+     */
+    public function dashboard(User $user, Project $project)
+    {
+        $this->denyAccessUnlessGranted('view', $project);
+        
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
+        $users = $entityManager->getRepository(User::class)->findAll();
+        
+        $data   =  $project->getData();
+        $series =  $project->getSerie();
+        
+        return $this->render('project/dashboard.html.twig', [
+            'user'    => $user, 
+            'project' => $project, 
+            'reports' => $reports, 
+            'users'   => $users,
+            'data'    => json_encode($data),
+            'series'   => json_encode($series),
+        ]);
+    }
     
     /**
      * @Route("/{slug}/project/{id}", name="show", methods="GET", requirements={"id"="\d+"})

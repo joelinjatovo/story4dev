@@ -25,7 +25,8 @@
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a href="{{ path('indicator_edit', { 'indicator_id' : indicator.activity.id, 'activity_id' : indicator.activity.id, 'project_id' : indicator.activity.project.id, 'slug': indicator.activity.project.author.slug } ) }}" class="btn kt-subheader__btn-primary">
+                   <a href="{{ url('activity_show', { 'slug' : indicator.activity.project.author.slug, 'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                <a href="{{ path('indicator_edit', { 'indicator_id' : indicator.id, 'activity_id' : indicator.activity.id, 'project_id' : indicator.activity.project.id, 'slug': indicator.activity.project.author.slug } ) }}" class="btn kt-subheader__btn-primary">
                     Modifier &nbsp;
                 </a>
             </div>
@@ -36,7 +37,7 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-xl-6">
+        <div class="col-xl-12">
             <div class="kt-portlet kt-portlet--height-fluid">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -46,7 +47,7 @@
                     </div>
                 </div>
                 <div class="kt-portlet__body kt-portlet__body--fluid">
-                     <div id="chartdiv" style="width: 100%; height: 555px;"></div>
+                     <div id="chartdiv" style="width: 100%; height: 400px;"></div>
                 </div>
             </div>
         </div>

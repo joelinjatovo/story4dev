@@ -12,7 +12,8 @@
             <h3 class="kt-subheader__title">Detail du projet</h3>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ path('project_edit', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-label-brand btn-bold">Modifier</a>
+            <a href="{{ path('project_edit', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn kt-subheader__btn-primary">Modifier</a>
+            <a href="{{ path('project_dashboard', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-label-brand btn-bold">Dashboard</a>
             <div class="kt-subheader__wrapper">
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
                     <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -186,9 +187,9 @@
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">
-                        Statistiques
-                    </h3>
+                    <a href="{{ path('project_dashboard', { 'id' : project.id, 'slug': project.author.slug } ) }}">
+                        <h3 class="kt-portlet__head-title">Statistiques</h3>
+                    </a>
                 </div>
             </div>
             <div class="kt-portlet__body kt-portlet__body--fluid">

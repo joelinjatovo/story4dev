@@ -20,10 +20,11 @@
                     {% endblock %}
 				</div>
 				<div class="kt-portlet__head-toolbar">
-					<a href="javascript:history.back();" class="btn btn-clean kt-margin-r-10">
-						<i class="la la-arrow-left"></i>
-						<span class="kt-hidden-mobile">Back</span>
-					</a>
+                    {% if activity is defined and activity is not null and (activity.id>0) %}
+					   <a href="{{ url('activity_show', { 'slug' : activity.project.author.slug, 'project_id' : activity.project.id, 'activity_id' : activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                    {% else %}
+                        <a href="{{ path('project_show', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-long-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                    {% endif %}
 					<div class="btn-group">
 						<button type="submit" form="activity" name="submit" value="save-default" class="btn btn-brand">
 							<i class="la la-check"></i> 
