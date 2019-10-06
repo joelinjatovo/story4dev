@@ -23,21 +23,31 @@ use App\Service\FormError;
 class UploadController extends AbstractController
 {
     /**
-     * @Rest\Post("/vich-upload")
+     * @Rest\Post("/upload")
      */
-    public function vichUpload(FileUploader $uploader, Request $request, FormError $formError)
+    public function upload(FileUploader $uploader, Request $request, FormError $formError)
     {
-        $file = new File();
-        
+        $file = new File();        
         $form = $this->createForm(UploadType::class, $file, ['csrf_protection' => false]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() ) {
+        if ($form->isSubmitted()) {
+            
+            if( ! $form->isValid() ) {
+                //
+                return $this->json([
+                    'status' => 'error', 
+                    'error'  => "bad_request",
+                    'errors' => $formError->getErrorMessages($form)
+                ], JsonResponse::HTTP_BAD_REQUEST, [], ['groups' => ['file']]);
+            }
+
             try{
                 $uploadedFile = $form['file']->getData();
+                $file->setAuthor($this->getUser());
                 $file->setMimeType($uploadedFile->getMimeType());
                 $file->setSize($uploadedFile->getSize());
-                $file->setAuthor($this->getUser());
+                $file->setDisplayName($uploadedFile->getClientOriginalName());
 
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($file);
@@ -52,7 +62,9 @@ class UploadController extends AbstractController
                 return $this->json([
                     'status' => 'error', 
                     'error'  => "bad_request",
-                    'errors' => []
+                    'errors' => [
+                        'exception' => $e->getMessage()
+                    ]
                 ], JsonResponse::HTTP_BAD_REQUEST);
             }
         }
@@ -60,7 +72,7 @@ class UploadController extends AbstractController
         return $this->json([
             'status' => 'error',
             'error'  => "form_not_submitted",
-            'errors' => $formError->getErrorMessages($form)
+            'errors' => []
         ], JsonResponse::HTTP_BAD_REQUEST);
         
     }

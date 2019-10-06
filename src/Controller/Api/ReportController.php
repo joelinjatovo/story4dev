@@ -43,6 +43,7 @@ class ReportController extends AbstractController
             try{
                 $report->setAuthor($this->getUser());
                 $report->setStatus(Report::STATUS_CLOSED);
+                $report->setIp($request->getClientIp());
 
                 $em = $this->getDoctrine()->getManager();
 

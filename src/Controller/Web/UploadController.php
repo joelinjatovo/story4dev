@@ -44,6 +44,7 @@ class UploadController extends AbstractController
             $file->setAuthor($this->getUser());
             $file->setMimeType($uploadedFile->getMimeType());
             $file->setSize($uploadedFile->getSize());
+            $file->setDisplayName($uploadedFile->getClientOriginalName());
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($file);

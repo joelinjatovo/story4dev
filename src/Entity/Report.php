@@ -115,6 +115,12 @@ class Report
      */
     private $isModified;
 
+    /**
+     * @ORM\Column(type="string", length=100)
+     * @Groups({"full", "report", "activity", "project"})
+     */
+    private $ip;
+
     public function __construct()
     {
         $this->isModified = false;
@@ -284,6 +290,18 @@ class Report
     public function setIsModified(bool $isModified): self
     {
         $this->isModified = $isModified;
+
+        return $this;
+    }
+
+    public function getIp(): ?string
+    {
+        return $this->ip;
+    }
+
+    public function setIp(string $ip): self
+    {
+        $this->ip = $ip;
 
         return $this;
     }

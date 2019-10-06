@@ -11,6 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+use App\Traits\TimestampableEntity;
+
 /**
  * @Vich\Uploadable
  * @ORM\Entity(repositoryClass="App\Repository\FileRepository")
@@ -18,6 +20,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class File
 {
+    
+    /**
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
+     */
+    use TimestampableEntity;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -95,14 +104,30 @@ class File
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"full", "raw", "file", "activity", "project", "report"})
      */
     private $displayName;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"full", "raw", "file", "activity", "project", "report"})
+     */
+    private $isInstantly;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $syncedAt;
 
     public function __construct()
     {
         $this->isExternal = false;
+        $this->isInstantly = false;
         $this->reportFiles = new ArrayCollection();
         $this->activityFiles = new ArrayCollection();
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
+        $this->setSyncedAt(new \DateTime());
     }
 
     public function getId(): ?int
@@ -324,6 +349,30 @@ class File
     public function setDisplayName(?string $displayName): self
     {
         $this->displayName = $displayName;
+
+        return $this;
+    }
+
+    public function getIsInstantly(): ?bool
+    {
+        return $this->isInstantly;
+    }
+
+    public function setIsInstantly(?bool $isInstantly): self
+    {
+        $this->isInstantly = $isInstantly;
+
+        return $this;
+    }
+
+    public function getSyncedAt(): ?\DateTimeInterface
+    {
+        return $this->syncedAt;
+    }
+
+    public function setSyncedAt(\DateTimeInterface $syncedAt): self
+    {
+        $this->syncedAt = $syncedAt;
 
         return $this;
     }

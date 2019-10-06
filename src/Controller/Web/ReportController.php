@@ -92,6 +92,7 @@ class ReportController extends AbstractController
                 
                 $report->setActivity($activity);
                 $report->setAuthor($this->getUser());
+                $report->setIp($request->getClientIp());
                 
                 foreach ($report->getResults() as $result) {
                     $result->setAuthor($this->getUser());
