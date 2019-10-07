@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 use App\Entity\User;
+use App\Entity\File;
 use App\Entity\Project;
 use App\Entity\Report;
 use App\Entity\Activity;
@@ -46,6 +47,10 @@ class ProjectController extends AbstractController
         $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
         $users = $entityManager->getRepository(User::class)->findAll();
         
+        $files = $entityManager->getRepository(File::class)->findByProject($project)->getResult();
+        $files_per_date = $entityManager->getRepository(File::class)->findByProjectPerMonth($project);
+        $files_per_activity = $entityManager->getRepository(File::class)->findByProjectPerActivity($project);
+        
         $data   =  $project->getData();
         $series =  $project->getSerie();
         
@@ -56,6 +61,9 @@ class ProjectController extends AbstractController
             'users'   => $users,
             'data'    => json_encode($data),
             'series'   => json_encode($series),
+            'filesCount'         => count($files),
+            'files'              => $files,
+            'files_per_activity' => $files_per_activity,
         ]);
     }
     

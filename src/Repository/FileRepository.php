@@ -34,18 +34,67 @@ class FileRepository extends ServiceEntityRepository
         ;
     }
     
-    public function findByProject(Project $project, User $user)
+    public function findByProject(Project $project, ?User $user = null)
     {
+        if ( $user ) {
+            return $this->createQueryBuilder('f')
+                ->innerJoin('f.activityFiles', 'af')
+                ->innerJoin('af.activity', 'a')
+                ->innerJoin('a.project', 'p')
+                ->innerJoin('p.contributions', 'c')
+                ->where('a.project = :project AND ( c.user = :user OR p.author = :user )')
+                ->setParameter('project', $project)
+                ->setParameter('user', $user)
+                ->orderBy('f.id', 'ASC')
+                ->getQuery()
+            ;
+        }
+        
         return $this->createQueryBuilder('f')
             ->innerJoin('f.activityFiles', 'af')
             ->innerJoin('af.activity', 'a')
             ->innerJoin('a.project', 'p')
             ->innerJoin('p.contributions', 'c')
-            ->where('a.project = :project AND ( c.user = :user OR p.author = :user )')
+            ->where('a.project = :project')
             ->setParameter('project', $project)
-            ->setParameter('user', $user)
             ->orderBy('f.id', 'ASC')
             ->getQuery()
+        ;
+    }
+    
+    public function findByProjectPerMonth(Project $project)
+    {
+
+        return $this->createQueryBuilder('f')
+             ->select("f.createdAt as dateAsMonth, count(f.id) as count")
+            ->leftJoin('f.activityFiles', 'af')
+            ->leftJoin('af.activity', 'a')
+            ->leftJoin('a.project', 'p')
+            ->leftJoin('p.contributions', 'c')
+            ->where('a.project = :project')
+            ->setParameter('project', $project)
+            ->orderBy('f.id', 'ASC')
+            ->groupBy("dateAsMonth")
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
+    public function findByProjectPerActivity(Project $project)
+    {
+
+        return $this->createQueryBuilder('f')
+             ->select("a.title, count(f.id) as count")
+            ->leftJoin('f.activityFiles', 'af')
+            ->leftJoin('af.activity', 'a')
+            ->leftJoin('a.project', 'p')
+            ->leftJoin('p.contributions', 'c')
+            ->where('a.project = :project')
+            ->setParameter('project', $project)
+            ->orderBy('f.id', 'ASC')
+            ->groupBy("a.id")
+            ->getQuery()
+            ->getResult()
         ;
     }
 
