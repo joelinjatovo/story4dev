@@ -22,10 +22,11 @@ class UploadType extends AbstractType
             ->add('name', TextType::class)
             ->add('file', FileType::class)
             ->add('isInstantly')
-            ->add('createdAt', DateType::class, [
+            /*->add('createdAt', DateType::class, [
                 'widget'     => 'single_text',
                 'html5'      => false,
             ])
+            */
             ->add('submit', SubmitType::class, [
                 'label' => 'Upload File'
             ])

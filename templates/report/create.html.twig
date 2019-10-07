@@ -1,11 +1,10 @@
 {% extends 'report/base.html.twig' %}
 
-{% block stylesheets %}
-{% endblock %}
+{% block title %}Nouveau rapport - Activity #{{ activity.id }} - Project #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
 
-{% block subheader %}
-<br>
-{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block subheader %}<br>{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -15,7 +14,7 @@
 			<div class="kt-portlet__head kt-portlet__head--lg">
 				<div class="kt-portlet__head-label">
                     {% block headtitle %}
-					   <h3 class="kt-portlet__head-title">Report your activities <small>report project activity here and save changes</small></h3>
+					   <h3 class="kt-portlet__head-title">Rapporter une activité <small>entrer les détails du rapport puis enregistrer</small></h3>
                     {% endblock %}
 				</div>
 				<div class="kt-portlet__head-toolbar">
@@ -40,14 +39,8 @@
 									</button>
 								</li>
 								<li class="kt-nav__item">
-									<button type="submit" form="report" name="submit" value="save-exit" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-power"></i>
-										<span class="kt-nav__link-text">Save &amp; exit</span>
-									</button>
-								</li>
-								<li class="kt-nav__item">
 									<button type="submit" form="report" name="submit" value="save-edit" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-edit-interface-symbol-of-pencil-tool"></i>
+										<i class="kt-nav__link-icon flaticon2-edit"></i>
 										<span class="kt-nav__link-text">Save &amp; edit</span>
 									</button>
 								</li>
@@ -55,6 +48,12 @@
 									<button type="submit" form="report" name="submit" value="save-create" class="kt-nav__link">
 										<i class="kt-nav__link-icon flaticon2-add-1"></i>
 										<span class="kt-nav__link-text">Save &amp; add new</span>
+									</button>
+								</li>
+								<li class="kt-nav__item">
+									<button type="submit" form="report" name="submit" value="save-exit" class="kt-nav__link">
+										<i class="kt-nav__link-icon flaticon-close"></i>
+										<span class="kt-nav__link-text">Save &amp; exit</span>
 									</button>
 								</li>
 							</ul>
@@ -112,6 +111,7 @@
                                                         {% for result in form.results %}
                                                             <div data-repeater-item="" class="kt-margin-b-10">
                                                                 <div class="input-group">
+                                                                    {{ form_widget( result.id ) }}
                                                                     {{ form_widget( result.indicator, { 'attr' : { 'form' : 'report', 'class' : 'form-control' } } ) }}
                                                                     {{ form_widget( result.value, { 'attr' : { 'form' : 'report', 'class' : 'form-control' } } ) }}
                                                                     <div class="input-group-append">

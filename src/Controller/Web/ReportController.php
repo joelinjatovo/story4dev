@@ -102,9 +102,41 @@ class ReportController extends AbstractController
                 $entityManager->persist($report);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Report Created! Knowledge is power!');
+                $this->addFlash('success', 'Votre rapport a été bien enregistré.');
+                
+                $action = strtolower( $request->request->get('submit') );
+                switch($action){
+                    case 'save-exit':
+                        return $this->redirectToRoute('activity_show', [
+                            'slug'        => $user->getSlug(),
+                            'project_id'  => $project->getId(), 
+                            'activity_id' => $activity->getId(), 
+                        ]);
+                    case 'save-continue':
+                        return $this->redirectToRoute('report_show', [
+                            'slug'        => $user->getSlug(),
+                            'project_id'  => $project->getId(), 
+                            'activity_id' => $activity->getId(), 
+                            'report_id'   => $report->getId(), 
+                        ]);
+                    case 'save-edit':
+                        return $this->redirectToRoute('report_edit', [
+                            'slug'        => $user->getSlug(),
+                            'project_id'  => $project->getId(), 
+                            'activity_id' => $activity->getId(), 
+                            'report_id'   => $report->getId(), 
+                        ]);
+                    case 'save-create':
+                    case 'save-default':
+                    default:
+                        return $this->redirectToRoute('report_index', [
+                            'slug'        => $user->getSlug(), 
+                            'project_id'  => $project->getId(), 
+                            'activity_id' => $activity->getId(), 
+                        ]);
+                }
             }else{
-                $this->addFlash('error', 'Report Not Created! Request not valide!');
+                $this->addFlash('error', "Votre rapport n'a pas été bien enregistré.");
             }
         }
         
@@ -221,15 +253,69 @@ class ReportController extends AbstractController
                 
                 $report->setActivity($activity);
                 
+                // remove the relationship
+                foreach ($originalResults as $result) {
+                    $removed = true;
+                    foreach($report->getResults() as $updated_result){
+                        if ( ( $updated_result->getId() > 0 ) && ($updated_result->getId() === $result->getId()) ) {
+                            $removed = false;
+                            break;
+                        }
+                    }
+
+                    if($removed === true){
+                        $report->removeResult($result);
+                        $entityManager->remove($result);
+                    }
+                }
+            
+                // set author for new iteration
+                foreach($report->getResults() as $updated_result){
+                    if($updated_result->getAuthor()==null){
+                        $updated_result->setAuthor($this->getUser());
+                    }
+                }
+                
                 $entityManager->persist($report);
                 
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Report Updated! Knowledge is power!');
+                $this->addFlash('success', 'Votre rapport a été bien modifié avec succès.');
+                
+                $action = strtolower( $request->request->get('submit') );
+                switch($action){
+                    case 'save-exit':
+                        return $this->redirectToRoute('activity_show', [
+                            'slug'        => $user->getSlug(),
+                            'project_id'  => $project->getId(), 
+                            'activity_id' => $activity->getId(), 
+                        ]);
+                    case 'save-continue':
+                    case 'save-edit':
+                        return $this->redirectToRoute('report_edit', [
+                            'slug'        => $user->getSlug(),
+                            'project_id'  => $project->getId(), 
+                            'activity_id' => $activity->getId(), 
+                            'report_id'   => $report->getId(), 
+                        ]);
+                    case 'save-create':
+                        return $this->redirectToRoute('report_index', [
+                            'slug'        => $user->getSlug(), 
+                            'project_id'  => $project->getId(), 
+                            'activity_id' => $activity->getId(), 
+                        ]);
+                    case 'save-default':
+                    default:
+                        return $this->redirectToRoute('report_show', [
+                            'slug'        => $user->getSlug(),
+                            'project_id'  => $project->getId(), 
+                            'activity_id' => $activity->getId(), 
+                            'report_id'   => $report->getId(), 
+                        ]);
+                }
             }else{
-                $this->addFlash('error', 'Report Not Updated! Request not valide!');
+                $this->addFlash('error', "Votre rapport n'a pas été modifié. Une erreur s'est produite.");
             }
-            
         }
         
         return $this->redirectToRoute('report_edit', [

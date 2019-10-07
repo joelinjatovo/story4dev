@@ -71,7 +71,7 @@ class Goal
         $this->setUpdatedAt(new \DateTime());
     }
 
-    public function setId(int $id): ?self
+    public function setId(?int $id): ?self
     {
         $this->id = $id;
         
