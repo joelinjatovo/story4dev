@@ -1,12 +1,11 @@
 {% extends 'indicator/create.html.twig' %}
 
-{% block stylesheets %}
-{% endblock %}
+{% block title %}Modification d'un indicateur #{{ indicator.id }} - Activity #{{ activity.id }} - Project #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
 
-{% block subheader %}
-<br>
-{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block subheader %}<br>{% endblock %}
 
 {% block headtitle %}
-   <h3 class="kt-portlet__head-title">Edit Indicator <small>update indicator detail and save change</small></h3>
+   <h3 class="kt-portlet__head-title">Modifier un indicateur <small>modifier les détails de l'indicateur puis enregistrer</small></h3>
 {% endblock %}

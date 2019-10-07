@@ -1,12 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-<link href="{{ asset('css/wizard-4.css') }}" rel="stylesheet" type="text/css"/>
-{% endblock %}
+{% block title %}Nouvel indicateur - Activity #{{ activity.id }} - Project #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
 
-{% block subheader %}
-<br>
-{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block subheader %}<br>{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -16,7 +14,7 @@
 			<div class="kt-portlet__head kt-portlet__head--lg" style="">
 				<div class="kt-portlet__head-label">
                     {% block headtitle %}
-					   <h3 class="kt-portlet__head-title">New Indicator <small>enter indicator detail and save change</small></h3>
+					   <h3 class="kt-portlet__head-title">Nouvel Indicateur <small>entrer les détails de l'indicator puis enregister</small></h3>
                     {% endblock %}
 				</div>
 				<div class="kt-portlet__head-toolbar">
