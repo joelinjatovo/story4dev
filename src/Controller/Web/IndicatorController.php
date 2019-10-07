@@ -92,6 +92,10 @@ class IndicatorController extends AbstractController
         if ( $form->isSubmitted() && $form->isValid() ) {
             $indicator->setAuthor($this->getUser());
             
+            foreach($indicator->getGoals() as $goal){
+                $goal->setAuthor($this->getUser());
+            }
+            
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($indicator);
 
