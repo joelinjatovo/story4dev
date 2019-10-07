@@ -49,6 +49,13 @@ class IndicatorController extends AbstractController
         }
 
         $indicator = new Indicator();
+        foreach($project->getIterations() as $iteration){
+            $goal = new Goal();
+            $goal->setAuthor($this->getUser());
+            $goal->setIteration($iteration);
+            $indicator->addGoal($goal);
+        }
+
         $form = $this->createForm(IndicatorType::class, $indicator);
 
         return $this->render('indicator/create.html.twig', [
@@ -66,7 +73,7 @@ class IndicatorController extends AbstractController
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function create(User $user, Project $project, Activity $activity, Request $request)
+    public function create(User $user, Project $project, Activity $activity, Request $request, FormError $formError)
     {
         $this->denyAccessUnlessGranted('edit', $activity);
         
@@ -88,21 +95,6 @@ class IndicatorController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($indicator);
 
-            $repository_iteration = $entityManager->getRepository(Iteration::class);
-            $repository_goal = $entityManager->getRepository(Goal::class);
-            $goals = $request->request->get('goals');
-            foreach( $goals as $goal ) {
-                $iteration = $repository_iteration->find($goal['iteration']);
-                
-                $entity = new Goal();
-                $entity->setAuthor($this->getUser());
-                $entity->setIteration($iteration);
-                $entity->setIndicator($indicator);
-                $entity->setValue($goal['value']);
-
-                $entityManager->persist($entity);
-            }
-
             $entityManager->flush();
             
             if ( $request->isXmlHttpRequest() ) {
@@ -117,11 +109,27 @@ class IndicatorController extends AbstractController
         
             $this->addFlash('success', 'Indicator created succesfully.');
 
-            return $this->redirectToRoute('indicator_index', [
+            $args = [
                 'slug'        => $user->getSlug(),
                 'project_id'  => $project->getId(),
                 'activity_id' => $activity->getId(),
-            ]);
+            ];
+            
+            $action = strtolower( $request->request->get('submit') );
+            switch($action){
+                case 'save-continue':
+                    $args['indicator_id'] = $indicator->getId();
+                    return $this->redirectToRoute('indicator_show', $args);
+                case 'save-edit':
+                    $args['indicator_id'] = $indicator->getId();
+                    return $this->redirectToRoute('indicator_edit', $args);
+                case 'save-exit':
+                    return $this->redirectToRoute('activity_show', $args);
+                case 'save-create':
+                case 'save-default':
+                default:
+                    return $this->redirectToRoute('indicator_index', $args);
+            }
             
         }
         
@@ -137,7 +145,7 @@ class IndicatorController extends AbstractController
         
         $this->addFlash('error', 'Something went wrong.');
 
-        return $this->redirectToRoute('activity_index', [
+        return $this->redirectToRoute('indicator_index', [
             'slug'        => $user->getSlug(),
             'project_id'  => $project->getId(),
             'activity_id' => $activity->getId(), 
@@ -246,26 +254,6 @@ class IndicatorController extends AbstractController
         if ( $form->isSubmitted() && $form->isValid() ) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($indicator);
-
-            $repository_iteration = $entityManager->getRepository(Iteration::class);
-            $repository_goal = $entityManager->getRepository(Goal::class);
-            $goals = $request->request->get('goals');
-            foreach( $goals as $goal ) {
-                $iteration = $repository_iteration->find($goal['iteration']);
-                $entity    = $repository_goal->findOneBy(['indicator' => $indicator, 'iteration' => $iteration]);
-                if($entity){
-                    $entity->setValue($goal['value']);
-                }else{
-                    $entity = new Goal();
-                    $entity->setAuthor($this->getUser());
-                    $entity->setIteration($iteration);
-                    $entity->setIndicator($indicator);
-                    $entity->setValue($goal['value']);
-                }
-
-                $entityManager->persist($entity);
-            }
-            
             $entityManager->flush();
             
             if ( $request->isXmlHttpRequest() ) {
@@ -278,13 +266,29 @@ class IndicatorController extends AbstractController
             }
         
             $this->addFlash('success', 'Indicator updated succesfully.');
-
-            return $this->redirectToRoute('indicator_edit', [
+            
+            $args = [
                 'slug'        => $user->getSlug(),
                 'project_id'  => $project->getId(),
                 'activity_id' => $activity->getId(),
                 'indicator_id' => $indicator->getId()
-            ]);
+            ];
+            
+            $action = strtolower( $request->request->get('submit') );
+            switch($action){
+                case 'save-continue':
+                    return $this->redirectToRoute('indicator_show', $args);
+                case 'save-exit':
+                    return $this->redirectToRoute('activity_show', $args);
+                case 'save-create':
+                    return $this->redirectToRoute('indicator_index', $args);
+                case 'save-edit':
+                case 'save-default':
+                default:
+                    return $this->redirectToRoute('indicator_edit', $args);
+            }
+            
+            return $this->redirectToRoute('indicator_edit', $args);
         }
         
         if ( $request->isXmlHttpRequest() ) {

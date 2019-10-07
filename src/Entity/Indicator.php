@@ -73,7 +73,7 @@ class Indicator
     private $unit;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="indicator", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="indicator", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      * @Groups({"full", "indicator", "project", "activity"})
      */
     private $goals;

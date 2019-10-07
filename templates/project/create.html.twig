@@ -43,14 +43,8 @@
 									</button>
 								</li>
 								<li class="kt-nav__item">
-									<button type="submit" form="project" name="submit" value="save-exit" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-power"></i>
-										<span class="kt-nav__link-text">Save &amp; exit</span>
-									</button>
-								</li>
-								<li class="kt-nav__item">
 									<button type="submit" form="project" name="submit" value="save-edit" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-edit-interface-symbol-of-pencil-tool"></i>
+										<i class="kt-nav__link-icon flaticon2-edit"></i>
 										<span class="kt-nav__link-text">Save &amp; edit</span>
 									</button>
 								</li>
@@ -58,6 +52,12 @@
 									<button type="submit" form="project" name="submit" value="save-create" class="kt-nav__link">
 										<i class="kt-nav__link-icon flaticon2-add-1"></i>
 										<span class="kt-nav__link-text">Save &amp; add new</span>
+									</button>
+								</li>
+								<li class="kt-nav__item">
+									<button type="submit" form="project" name="submit" value="save-exit" class="kt-nav__link">
+										<i class="kt-nav__link-icon flaticon-close"></i>
+										<span class="kt-nav__link-text">Save &amp; exit</span>
 									</button>
 								</li>
 							</ul>
@@ -114,7 +114,7 @@
 									<h3 class="kt-section__title kt-section__title-lg">Project Details:</h3>
 									{% if not project.id > 0 %}
 										<div class="form-group row">
-											{{ form_label( form.author, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+											{{ form_label( form.author, "Propriétaire", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
 											<div class="col-lg-9 col-xl-6">
 												{{ form_widget( form.author, { 'attr' : { 'form' : 'project', 'class' : 'form-control' } } ) }}
 											</div>
@@ -124,7 +124,7 @@
                                         {{ form_label( form.start_at, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                         <div class="col-lg-9 col-xl-6">
                                             <div class="input-group date">
-                                                {{ form_widget( form.start_at, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker' } } ) }}
+                                                {{ form_widget( form.start_at, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i class="la la-calendar-check-o"></i>
@@ -137,7 +137,7 @@
                                         {{ form_label( form.end_at, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                         <div class="col-lg-9 col-xl-6">
                                             <div class="input-group date">
-                                                {{ form_widget( form.end_at, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker' } } ) }}
+                                                {{ form_widget( form.end_at, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i class="la la-calendar-check-o"></i>
@@ -167,12 +167,12 @@
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
-                                                                    {{ form_widget( form.iterations.vars.prototype.startAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker' } } ) }}
+                                                                    {{ form_widget( form.iterations.vars.prototype.startAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
-                                                                    {{ form_widget( form.iterations.vars.prototype.endAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker' } } ) }}
+                                                                    {{ form_widget( form.iterations.vars.prototype.endAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
@@ -196,12 +196,12 @@
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
-                                                                    {{ form_widget( iteration.startAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker' } } ) }}
+                                                                    {{ form_widget( iteration.startAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
-                                                                    {{ form_widget( iteration.endAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker' } } ) }}
+                                                                    {{ form_widget( iteration.endAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">

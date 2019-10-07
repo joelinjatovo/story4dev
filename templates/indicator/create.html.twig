@@ -41,14 +41,8 @@
 									</button>
 								</li>
 								<li class="kt-nav__item">
-									<button type="submit" form="indicator" name="submit" value="save-exit" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-power"></i>
-										<span class="kt-nav__link-text">Save &amp; exit</span>
-									</button>
-								</li>
-								<li class="kt-nav__item">
 									<button type="submit" form="indicator" name="submit" value="save-edit" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-edit-interface-symbol-of-pencil-tool"></i>
+										<i class="kt-nav__link-icon flaticon2-edit"></i>
 										<span class="kt-nav__link-text">Save &amp; edit</span>
 									</button>
 								</li>
@@ -56,6 +50,12 @@
 									<button type="submit" form="indicator" name="submit" value="save-create" class="kt-nav__link">
 										<i class="kt-nav__link-icon flaticon2-add-1"></i>
 										<span class="kt-nav__link-text">Save &amp; add new</span>
+									</button>
+								</li>
+								<li class="kt-nav__item">
+									<button type="submit" form="indicator" name="submit" value="save-exit" class="kt-nav__link">
+										<i class="kt-nav__link-icon flaticon-close"></i>
+										<span class="kt-nav__link-text">Save &amp; exit</span>
 									</button>
 								</li>
 							</ul>
@@ -101,13 +101,13 @@
 								<div class="kt-section__body">
 									<h3 class="kt-section__title kt-section__title-lg">Indicator Goals:</h3>
 									{%- set i = 0 -%}
-									{% for iteration in project.iterations %}
+									{% for goal in form.goals %}
 										<div class="form-group row">
-											<label class="col-3 col-form-label">{{ iteration.title }}</label>
+											<label class="col-3 col-form-label">{{ goal.vars.data.iteration.title }}</label>
 											<div class="col-9">
-												<input class="form-control" name="goals[{{i}}][indicator]" value="{{indicator.id}}" type="hidden">
-												<input class="form-control" name="goals[{{i}}][iteration]" value="{{iteration.id}}" type="hidden">
-												<input class="form-control" name="goals[{{i}}][value]" type="number" required>
+                                                {{ form_widget( goal.id ) }}
+                                                <input type="hidden" id="indicator_goals_{{i}}_iteration" name="indicator[goals][{{i}}][iteration]" value="{{ goal.vars.data.iteration.id }}">
+                                                {{ form_widget( goal.value, { 'attr' : { 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
 											</div>
 										</div>
 										{%- set i = i + 1 -%}

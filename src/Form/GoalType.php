@@ -11,19 +11,15 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class GoalType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('id', HiddenType::class)
             ->add('value', NumberType::class)
-            ->add('indicator', EntityType::class, [
-                'class' => Indicator::class,
-                'choice_label' => function ($indicator) {
-                    return $indicator->getTitle();
-                }
-            ])
             ->add('iteration', EntityType::class, [
                 'class' => Iteration::class,
                 'choice_label' => function ($iteration) {

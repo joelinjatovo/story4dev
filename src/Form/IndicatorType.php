@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class IndicatorType extends AbstractType
 {
@@ -29,6 +30,15 @@ class IndicatorType extends AbstractType
                 'choice_label' => function ($unit) {
                     return $unit->getTitle();
                 }
+            ])
+            ->add('goals', CollectionType::class, [
+                'entry_type' => GoalType::class,
+                'entry_options' => [
+                    'label' => false
+                ],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Save indicator'

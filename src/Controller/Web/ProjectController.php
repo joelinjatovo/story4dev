@@ -171,11 +171,26 @@ class ProjectController extends AbstractController
             $entityManager->flush();
         
             $this->addFlash('success', 'Project updated succesfully.');
-
-            return $this->redirectToRoute('project_edit', [
+            
+            $args = [
                 'slug' => $user->getSlug(),
                 'id'   => $project->getId()
-            ]);
+            ];
+
+            $action = strtolower( $request->request->get('submit') );
+            switch($action){
+                case 'save-create':
+                    return $this->redirectToRoute('admin_project_create');
+                case 'save-continue':
+                case 'save-edit':
+                    return $this->redirectToRoute('project_edit', $args);
+                case 'save-exit':
+                case 'save-default':
+                default:
+                    return $this->redirectToRoute('project_show', $args);
+            }
+            
+            return $this->redirectToRoute('project_edit', );
             
         }
         

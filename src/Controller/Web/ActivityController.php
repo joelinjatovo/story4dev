@@ -86,6 +86,11 @@ class ActivityController extends AbstractController
 
             $action = strtolower( $request->request->get('submit') );
             switch($action){
+                case 'save-exit':
+                    return $this->redirectToRoute('project_show', [
+                        'slug' => $user->getSlug(),
+                        'id'   => $project->getId(), 
+                    ]);
                 case 'save-continue':
                     return $this->redirectToRoute('activity_show', [
                         'slug'        => $user->getSlug(),
@@ -98,11 +103,7 @@ class ActivityController extends AbstractController
                         'project_id'  => $project->getId(), 
                         'activity_id' => $activity->getId(), 
                     ]);
-                case 'save-exit':
-                    return $this->redirectToRoute('project_show', [
-                        'slug' => $user->getSlug(),
-                        'id'   => $project->getId(), 
-                    ]);
+                case 'save-create':
                 case 'save-default':
                 default:
                     return $this->redirectToRoute('activity_index', [
@@ -236,6 +237,16 @@ class ActivityController extends AbstractController
 
             $action = strtolower( $request->request->get('submit') );
             switch($action){
+                case 'save-exit':
+                    return $this->redirectToRoute('project_show', [
+                        'slug' => $user->getSlug(),
+                        'id'   => $project->getId(), 
+                    ]);
+                case 'save-create':
+                    return $this->redirectToRoute('activity_create', [
+                        'slug'        => $user->getSlug(),
+                        'project_id'  => $project->getId(), 
+                    ]);
                 case 'save-continue':
                     return $this->redirectToRoute('activity_show', [
                         'slug'        => $user->getSlug(),
@@ -243,16 +254,6 @@ class ActivityController extends AbstractController
                         'activity_id' => $activity->getId(), 
                     ]);
                 case 'save-edit':
-                    return $this->redirectToRoute('activity_edit', [
-                        'slug'        => $user->getSlug(),
-                        'project_id'  => $project->getId(), 
-                        'activity_id' => $activity->getId(), 
-                    ]);
-                case 'save-exit':
-                    return $this->redirectToRoute('project_show', [
-                        'slug' => $user->getSlug(),
-                        'id'   => $project->getId(), 
-                    ]);
                 case 'save-default':
                 default:
                     return $this->redirectToRoute('activity_edit', [

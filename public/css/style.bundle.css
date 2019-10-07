@@ -37665,3 +37665,9 @@ select:-webkit-autofill:focus {
 .kt-spinner::before{
     z-index: 999;
 }
+button.kt-nav__link {
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
