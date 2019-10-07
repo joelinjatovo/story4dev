@@ -37567,12 +37567,12 @@ div.dropzone-container
     background-color: rgba(0,0,0,0.7);
     transition: visibility 175ms, opacity 175ms;
 }
-div.dropzone-container > .dropzone-inner {
+div.dropzone-container > .file-selector-inner {
     display: -ms-flexbox;
     display: -webkit-box;
     display: flex;
 }
-div.dropzone-container > .dropzone-inner > .dropzone {
+div.dropzone-container > .file-selector-inner > .kt-portlet {
     position: absolute;
     height: calc( 100% - 100px);
     top: 0;
