@@ -49,32 +49,11 @@ class LoginFormController extends AbstractController
             'active_form' => 'signin',
         ]);
     }
-    
-    /**
-     * @Route("/login2", name="app_login2")
-     */
-    public function login2(AuthenticationUtils $authenticationUtils): Response
-    {
-        // if ($this->getUser()) {
-        //    $this->redirectToRoute('target_path');
-        // }
-
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('security/login2.html.twig', [
-            'last_username' => $lastUsername, 
-            'error' => $error, 
-            'active_form' => 'signin',
-        ]);
-    }
  
     /**
      * @Route("/register", name="app_register", methods="GET|POST")
      */
-    public function register(Request $request, TokenGenerator $tokenGenerator, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator): Response
+    public function register(Request $request, TokenGenerator $tokenGenerator, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, \Swift_Mailer $mailer): Response
     {
         if ( $request->isXmlHttpRequest() ) {
             $user = new User();
@@ -105,25 +84,26 @@ class LoginFormController extends AbstractController
             $user->setConfirmedAt( new \DateTime() );
             $user->setStatus(User::STATUS_PING);
             $user->setActive(false);
+            $user->setRoles(['ROLE_USER']);
  
             $url = $this->generateUrl('app_confirm', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
 
-            /*
             $message = (new \Swift_Message('Nouveau compte - Confirmation'))
                 ->setFrom(array('joelinjatovo@gmail.com'=> 'Admin'))
-                ->setTo($user->getEmail())
-                ->setBody(
+                ->setTo($user->getEmail());
+            
+            $message->setBody(
                     $this->renderView(
                         'security/emails/confirm.html.twig',
                         [
-                            'user'=>$user,
-                            'url'=>$url
+                            'user' => $user,
+                            'url'  => $url,
+                            //'logo' => $message->embed(\Swift_Image::fromPath(public_path().'/images/logo.png'))
                         ]
                     ),
                     'text/html'
                 );
             $mailer->send($message);
-            */
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -158,8 +138,8 @@ class LoginFormController extends AbstractController
         }
 
         try{
-            $user->setStatus(User::STATUS_ACTIVE);
-            $user->setActive(true);
+            //$user->setStatus(User::STATUS_ACTIVE);
+            //$user->setActive(true);
             $user->setConfirmToken(null);
             $entityManager->flush();
         } catch (\Exception $e) {
@@ -190,7 +170,7 @@ class LoginFormController extends AbstractController
                 if ( $request->isXmlHttpRequest() ) {
                     return $this->json(array( 
                         'success'  => false,
-                        'error' => 'Email Inconnu, recommence !'
+                        'error'    => 'Email Inconnu, recommence !'
                     ));
                 }
                 
@@ -219,22 +199,22 @@ class LoginFormController extends AbstractController
  
             $url = $this->generateUrl('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
  
-            /*
-            $message = (new \Swift_Message('Oubli de mot de passe - Réinisialisation'))
-                ->setFrom(array('joelinjatovo@gmail.com'=> 'Admin'))
-                ->setTo($user->getEmail())
-                ->setBody(
+            $message = (new \Swift_Message('Oubli de mot de passe - Réinitialisation'))
+                ->setFrom(array('joelinjatovo@gmail.com' => 'Admin'))
+                ->setTo($user->getEmail());
+            
+            $message->setBody(
                     $this->renderView(
                         'security/emails/forgot.html.twig',
                         [
-                            'user'=>$user,
-                            'url'=>$url
+                            'user' => $user,
+                            'url'  => $url,
+                            //'logo' => $message->embed(\Swift_Image::fromPath(public_path().'/images/logo.png'))
                         ]
                     ),
                     'text/html'
                 );
             $mailer->send($message);
-            */
             
             if ( $request->isXmlHttpRequest() ) {
                 return $this->json(array( 
