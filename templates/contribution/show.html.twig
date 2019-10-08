@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contributeur #{{ contribution.id }} - Project#{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block subheader %}
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">{{ contribution.user.fullname }}</h3>
+        </div>        
+        <div class="kt-subheader__toolbar">
+            <a href="{{ path('project_show', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+            <a href="{{ path('project_edit', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-label-brand btn-bold">Modifier le projet</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+    <!--Begin:: App Aside Mobile Toggle-->
+    <button class="kt-app__aside-close" id="kt_contact_aside_close">
+        <i class="la la-close"></i>
+    </button>
+    <!--End:: App Aside Mobile Toggle-->
+    <div class="kt-grid__item kt-app__toggle kt-app__aside" id="kt_contact_aside">
+        <!--begin:: Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <!--begin::Widget -->
+                <div class="kt-widget kt-widget--user-profile-4">
+                    <div class="kt-widget__head">
+                        <div class="kt-widget__media">
+                            <img class="kt-widget__img" src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') : default_avatar }}" alt="image">
+                            <div class="kt-widget__pic kt-widget__pic--success kt-font-success kt-font-boldest kt-font-light kt-hidden">
+                                MP
+                            </div>
+                        </div>       
+                        <div class="kt-widget__content">
+                            <div class="kt-widget__section">
+                                <a href="#" class="kt-widget__username">
+                                    {{ contribution.user.fullname }}
+                                </a>
+                                <div class="kt-widget__button">
+                                    <button type="button" class="btn btn-label-warning btn-sm">{{ contribution.user.status }}</button>
+                                </div>
+
+                                <div class="kt-widget__action kt-hidden">                             
+                                    <a href="#" class="btn btn-icon btn-circle btn-label-facebook">
+                                        <i class="socicon-facebook"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-icon btn-circle btn-label-google">
+                                        <i class="socicon-google"></i>
+                                    </a>                            
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+                <!--end::Widget -->
+            </div>
+        </div>
+        <!--end:: Portlet-->
+
+        <!--begin:: Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <div class="kt-widget1 kt-widget1--fit">
+                    <div class="kt-widget1__item">
+                        <div class="kt-widget1__info">
+                            <h3 class="kt-widget1__title">Rapports</h3>
+                            <span class="kt-widget1__desc">Nombre total de rapport effectué</span>
+                        </div> 
+                        <span class="kt-widget1__number kt-font-brand">{{ contribution.user.reports.count }}</span>
+                    </div>
+                    <div class="kt-widget1__item">
+                        <div class="kt-widget1__info">
+                            <h3 class="kt-widget1__title">Contributions</h3>
+                            <span class="kt-widget1__desc">Nombre de projet contribué</span>
+                        </div>			
+                        <span class="kt-widget1__number kt-font-danger">{{ contribution.user.projectContributions.count }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end:: Portlet-->
+    </div>
+    
+    <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+        <!--Begin::Section-->
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="kt-section">
+                    <div class="kt-section__body">
+                        <h3 class="kt-section__title kt-section__title-lg">Contact Details:</h3>
+                        <div class="form-group form-group-last row">
+                            <label class="col-3 col-form-label">Communication</label>
+                            <div class="col-9">
+                                <div class="kt-checkbox-inline">
+                                    <label class="kt-checkbox">
+                                    <input type="checkbox" checked=""> Email 
+                                    <span></span>
+                                    </label>
+                                    <label class="kt-checkbox">
+                                    <input type="checkbox" checked=""> SMS 
+                                    <span></span>
+                                    </label>
+                                    <label class="kt-checkbox">
+                                    <input type="checkbox"> Phone 
+                                    <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End::Section-->
+    </div>
+    
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

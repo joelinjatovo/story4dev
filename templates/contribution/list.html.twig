@@ -10,6 +10,29 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Tous les contributeurs</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <div class="kt-subheader__group" id="kt_subheader_search">
+                <span class="kt-subheader__desc" id="kt_subheader_total">{{ contributions.count }} Total</span>
+                <form class="kt-margin-l-20" id="kt_subheader_search_form">
+                    <div class="kt-input-icon kt-input-icon--right kt-subheader__search" style="width: 256px;">
+                        <input type="text" class="form-control" data-project="{{ project.id }}" id="search-collaborator" placeholder="Ajouter un contributeur" id="generalSearch">
+                        <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect id="bound" x="0" y="0" width="24" height="24"></rect>
+                                        <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" id="Path-2" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                        <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" id="Path" fill="#000000" fill-rule="nonzero"></path>
+                                    </g>
+                                </svg>
+                                <!--<i class="flaticon2-search-1"></i>-->
+                            </span>
+                        </span>
+                        <div id="search-collaborator-results" class="kt-notification-v2 search-results">
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>        
         <div class="kt-subheader__toolbar">
             <a href="{{ path('project_show', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
@@ -28,16 +51,11 @@
                     <table class="kt-datatable__table" style="display: block;">
                         <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="ID" class="kt-datatable__cell--center kt-datatable__cell kt-datatable__cell--check">
-                                    <span style="width: 40px;">
-                                        <label class="kt-checkbox kt-checkbox--single kt-checkbox--all kt-checkbox--solid"><input type="checkbox">&nbsp;<span></span></label>
-                                    </span>
-                                </th>
                                 <th data-field="ShipName" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
                                     <span style="width: 222px;">Utilisateurs</span>
                                 </th>
                                 <th data-field="Roles" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Roles</span>
+                                    <span style="width: 120px;">Roles</span>
                                 </th>
                                 <th data-field="Country" class="kt-datatable__cell kt-datatable__cell--sort">
                                     <span style="width: 50px;">Pays</span>
@@ -56,80 +74,9 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="kt-datatable__body">
+                        <tbody class="kt-datatable__body" id="project-contributions">
                             {% for contribution in contributions %}
-                                 <tr data-row="0" class="kt-datatable__row" style="left: 0px;">
-                                    <td class="kt-datatable__cell--center kt-datatable__cell kt-datatable__cell--check" data-field="ID">
-                                        <span style="width: 40px;">
-                                            <label class="kt-checkbox kt-checkbox--single kt-checkbox--solid"><input type="checkbox" value="11">&nbsp;<span></span></label>
-                                        </span>
-                                    </td>
-                                    <td data-field="User" data-autohide-disabled="false" class="kt-datatable__cell">
-                                        <span style="width: 222px;">
-                                            <div class="kt-user-card-v2">
-                                                <div class="kt-user-card-v2__pic">
-                                                    <img alt="avatar" src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') : default_avatar }}">
-                                                </div>
-                                                <div class="kt-user-card-v2__details">
-                                                    <a class="kt-user-card-v2__name" href="{{ url('admin_user_show', {'id': contribution.user.id}) }}">{{ contribution.user.fullname }}</a>
-                                                    <span class="kt-user-card-v2__email">{{ user.email }}</span>
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </td>
-                                    <td data-field="Roles" class="kt-datatable__cell">
-                                        <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.admin ? 'danger' : 'brand' }}">{{ contribution.admin ? 'admin' : 'contributeur' }}</span></span>
-                                    </td>
-                                    <td data-field="Country" class="kt-datatable__cell">
-                                        <span style="width: 50px;"><span class="kt-font-bold">{{ contribution.user.address is not null ? contribution.user.address.country : '' }}</span></span>
-                                    </td>
-                                    <td data-field="Date" class="kt-datatable__cell">
-                                        <span style="width: 100px;"><span class="kt-font-bold">{{ contribution.user.createdat|ago }}</span></span>
-                                    </td>
-                                    <td data-field="Status" class="kt-datatable__cell">
-                                        <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.user.statusClass }}">{{ contribution.user.status }}</span></span>
-                                    </td>
-                                    <td data-field="Data" class="kt-datatable__cell">
-                                        <span style="width: 100px;">{{ contribution.user.projectContributions.count }} projets / {{ contribution.user.reports.count }} rapports </span>
-                                    </td>
-                                    <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
-                                        <span style="overflow: visible; position: relative; width: 80px;">
-                                            <div class="dropdown">
-                                                <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
-                                                    <i class="flaticon-more-1"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <ul class="kt-nav">
-                                                        <li class="kt-nav__item">
-                                                            <a class="kt-nav__link" href="{{ url('admin_user_show', {'id': contribution.user.id}) }}">
-                                                                <i class="kt-nav__link-icon flaticon2-expand"></i>
-                                                                <span class="kt-nav__link-text">View</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="kt-nav__item">
-                                                            <a class="kt-nav__link" href="{{ url('admin_user_edit', {'id': contribution.user.id}) }}">
-                                                                <i class="kt-nav__link-icon flaticon2-contract"></i>
-                                                                <span class="kt-nav__link-text">Edit</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="kt-nav__item">
-                                                            <a class="kt-nav__link" href="#">
-                                                                <i class="kt-nav__link-icon flaticon2-trash"></i>
-                                                                <span class="kt-nav__link-text">Delete</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="kt-nav__item">
-                                                            <a class="kt-nav__link" href="{{ url('user_show', {'slug': contribution.user.slug}) }}">
-                                                                <i class="kt-nav__link-icon flaticon2-mail-1"></i>
-                                                                <span class="kt-nav__link-text">Statistique</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </td>
-                                </tr>
+                                {{ include('contribution/list_item.html.twig', {'contribution': contribution}) }}
                             {% endfor %}
                         </tbody>
                     </table>
@@ -141,4 +88,87 @@
 {% endblock %}
 
 {% block javascripts %}
+<script type="text/javascript">
+jQuery(document).ready(function($){
+    $(document).on('click', '.change-contribution-role', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        KTApp.block($this.closest('tr'), {overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+        $.post("/contribution", { id: $this.attr('data-id') })
+        .done(function( data ) {
+            KTApp.unblock($this.closest('tr'));
+            if(data.success){
+                $this.prop('checked', true);
+            }
+        })
+        .fail(function() {
+            KTApp.unblock($this.closest('tr'));
+        });
+    });
+    $(document).on('click', '.btn-remove-contribution', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+        $.post("/contribution/remove", { id: $this.attr('data-id') })
+        .done(function( data ) {
+            KTApp.unblockPage();
+            if(data.success){
+                $this.closest('tr').remove();
+            }
+        })
+        .fail(function() {
+            KTApp.unblockPage();
+        });
+    });
+    
+    var searchRequest = null;
+    $("#search-collaborator").on('keyup',function(){
+        var $this = $(this);
+        var minlength = 3;
+        var value = $(this).val();
+        if (value.length >= minlength ) {
+            $('#search-collaborator-results').html('');
+            if (searchRequest != null) {
+                searchRequest.abort();
+            }
+            $this.parent().addClass('kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input');
+            searchRequest = $.ajax({
+                type: "GET",
+                url: "/contribution/search",
+                dataType: "json",
+                data: {search: value, project: $this.attr('data-project')},
+                cache: false,
+                success: function (data) {
+                    $this.parent().removeClass('kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input');
+                    $('#search-collaborator-results').html(data.html);
+                },
+                error: function (response) {
+                    $this.parent().removeClass('kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input');
+                }
+            });
+        }
+    });
+    
+    $(document).on('click', '.add-contribution', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        $this.hide();
+        $('#search-collaborator-results').html('');
+        KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+        $.post("/contribution/add", { user_id: $this.attr('data-id'), project_id: $this.attr('data-project'), })
+        .done(function( data ) {
+            KTApp.unblockPage();
+            if(data.success){
+                $this.remove();
+                $("#project-contributions").append(data.table);
+            }else{
+                $this.show();
+            }
+        })
+        .fail(function() {
+            KTApp.unblockPage();
+        });
+    });
+});
+</script>
 {% endblock %}

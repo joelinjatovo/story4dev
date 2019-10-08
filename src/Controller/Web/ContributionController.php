@@ -44,32 +44,61 @@ class ContributionController extends AbstractController
     }
     
     /**
+     * @Route("/{slug}/project/{project_id}/contribution/{contribution_id}", name="show", methods="GET", requirements={"project_id"="\d+","contribution_id"="\d+"})
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("projectcontribution", options={"mapping": {"contribution_id": "id"}})
+     */
+    public function show(User $user, Project $project, ProjectContribution $contribution)
+    {
+        $this->denyAccessUnlessGranted('edit', $project);
+        
+        if($project->getAuthor() != $user ){
+            throw $this->createNotFoundException('The author does not match');
+        }
+        
+        if($contribution->getProject() != $project ){
+            throw $this->createNotFoundException('The project does not match');
+        }
+        
+        return $this->render('contribution/show.html.twig', [
+            'user'         => $user,
+            'project'      => $project,
+            'contribution' => $contribution, 
+        ]);
+    }
+    
+    /**
      * @Route("/contribution", name="role_change", methods="POST")
      */
     public function roleChange(Request $request)
     {
         if ( $request->isXmlHttpRequest() ) {
-            $status = $request->request->get('status');
             $id = $request->request->get('id');
             
-            $entityManager = $this->getDoctrine()->getManager();
-            $report = $entityManager->getRepository(Report::class)->find($id);
-            if( $report ){
-                if( $status == 'closed' ){
-                    $report->setStatus('closed');
-                }else{
-                    $status = 'opened';
-                    $report->setStatus('opened');
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $contribution = $entityManager->getRepository(ProjectContribution::class)->find($id);
+                if( $contribution ){
+                    $this->denyAccessUnlessGranted('edit', $contribution->getProject());
+
+                    if($contribution->getUser() != $contribution->getProject()->getAuthor()){
+                        if($contribution->isAdmin()){
+                            $contribution->setRoles(['ROLE_CONTRIBUTOR']);
+                        }else{
+                            $contribution->setRoles(['ROLE_ADMIN', 'ROLE_CONTRIBUTOR']);
+                        }
+
+                        $entityManager->persist($contribution);
+                        $entityManager->flush();
+
+                        return $this->json([
+                            'success' => true,
+                            'status'  => $contribution->isAdmin()?'admin':'contributor',
+                            'message' => 'Role changed',
+                        ]);
+                    }
                 }
-                $entityManager->persist($report);
-                $entityManager->flush();
-                
-                return $this->json([
-                    'success' => true,
-                    'status'  => $status,
-                    'class'  => $status=='opened'?'success':'danger',
-                    'message' => 'Status changed',
-                ]);
             }
             
             return $this->json([
@@ -181,6 +210,7 @@ class ContributionController extends AbstractController
                         'success' => true,
                         'status'  => 'success',
                         'html'    => $this->renderView('project/contribution.html.twig', [ 'contribution' => $contribution]),
+                        'table'   => $this->renderView('contribution/list_item.html.twig', [ 'contribution' => $contribution]),
                     ]);
                 }
             }
