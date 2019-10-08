@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\ProjectContribution;
 use App\Entity\Project;
 use App\Entity\User;
+use App\Entity\Report;
 use App\Service\PaginatorService;
 
 /** 
@@ -61,10 +62,14 @@ class ContributionController extends AbstractController
             throw $this->createNotFoundException('The project does not match');
         }
         
+        $entityManager = $this->getDoctrine()->getManager();
+        $reports = $entityManager->getRepository(Report::class)->findByContribution($project, $contribution->getUser())->getResult();
+        
         return $this->render('contribution/show.html.twig', [
             'user'         => $user,
             'project'      => $project,
             'contribution' => $contribution, 
+            'reports'      => $reports, 
         ]);
     }
     

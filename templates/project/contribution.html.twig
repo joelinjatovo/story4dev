@@ -4,7 +4,7 @@
     </span>
     <div class="kt-widget__info">
         <div class="kt-widget__section">
-            <a href="#" class="kt-widget__username">{{ contribution.user.fullname }}</a>
+            <a href="{{ path('contribution_show', { 'project_id' : contribution.project.id, 'slug': contribution.project.author.slug, 'contribution_id': contribution.id } ) }}" class="kt-widget__username">{{ contribution.user.fullname }}</a>
         </div>
         <span class="kt-widget__desc">
             {{ (contribution.user.title is null) or (contribution.user.title is empty) ? contribution.user.email : contribution.user.title }}
@@ -17,8 +17,5 @@
             <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-success report-status">contributeur</span>
         {% endif %}
         <span class="kt-widget__date">{{ contribution.createdat|ago }}</span>
-    </div>
-    <div class="kt-widget__action" style="flex:0.2">
-        <a href="javascript:void;" class="btn-remove-contribution" data-id="{{ contribution.id }}"><i class="flaticon-delete"></i></a>
     </div>
 </div>

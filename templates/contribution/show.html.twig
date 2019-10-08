@@ -92,28 +92,27 @@
     <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
         <!--Begin::Section-->
         <div class="row">
-            <div class="col-xl-4">
-                <div class="kt-section">
-                    <div class="kt-section__body">
-                        <h3 class="kt-section__title kt-section__title-lg">Contact Details:</h3>
-                        <div class="form-group form-group-last row">
-                            <label class="col-3 col-form-label">Communication</label>
-                            <div class="col-9">
-                                <div class="kt-checkbox-inline">
-                                    <label class="kt-checkbox">
-                                    <input type="checkbox" checked=""> Email 
-                                    <span></span>
-                                    </label>
-                                    <label class="kt-checkbox">
-                                    <input type="checkbox" checked=""> SMS 
-                                    <span></span>
-                                    </label>
-                                    <label class="kt-checkbox">
-                                    <input type="checkbox"> Phone 
-                                    <span></span>
-                                    </label>
-                                </div>
-                            </div>
+            <div class="col-lg-12">
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <a href="{{ path('report_list', { 'project_id' : contribution.project.id, 'slug': contribution.project.author.slug } ) }}">
+                                <h3 class="kt-portlet__head-title">Rapports</h3>
+                            </a>
+                        </div>
+                        <div class="kt-portlet__head-toolbar">
+                            <a href="{{ path('report_list', { 'project_id' : contribution.project.id, 'slug': contribution.project.author.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
+                                Tous
+                            </a>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__body">
+                        <div class="kt-widget5">
+                            {% for report in reports %}
+                                {{ include('contribution/report.html.twig', { 'report' : report } ) }}
+                            {% else %}
+                                Il n'y a pas encore de rapports dans ce projet.
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

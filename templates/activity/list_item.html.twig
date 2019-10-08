@@ -17,13 +17,13 @@
                                         <li class="kt-nav__item">
                                             <a href="{{ path('activity_show', { 'slug': activity.project.author.slug, 'project_id': activity.project.id, 'activity_id': activity.id }) }}" class="kt-nav__link">
                                                 <i class="kt-nav__link-icon flaticon2-line-chart"></i>
-                                                <span class="kt-nav__link-text">Details</span>
+                                                <span class="kt-nav__link-text">Détails</span>
                                             </a>
                                         </li>
                                         <li class="kt-nav__item">
                                             <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
                                                 <i class="kt-nav__link-icon flaticon2-settings"></i>
-                                                <span class="kt-nav__link-text">Edit</span>
+                                                <span class="kt-nav__link-text">Modifier</span>
                                             </a>
                                         </li>
                                         <li class="kt-nav__item">
@@ -35,13 +35,7 @@
                                         <li class="kt-nav__item">
                                             <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
                                                 <i class="kt-nav__link-icon flaticon2-avatar"></i>
-                                                <span class="kt-nav__link-text">Rapporter vos activités</span>
-                                            </a>
-                                        </li>
-                                        <li class="kt-nav__item">
-                                            <a href="#" class="kt-nav__link">
-                                                <i class="kt-nav__link-icon flaticon2-settings"></i>
-                                                <span class="kt-nav__link-text">Settings</span>
+                                                <span class="kt-nav__link-text">Créer un rapport</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -57,6 +51,57 @@
                     </div>
                     {% endif  %}
                 </div>    
+            </div>
+            <div class="kt-widget__bottom">
+                <div class="kt-widget__item">
+                    <div class="kt-widget__icon">
+                        <i class="flaticon-piggy-bank"></i>
+                    </div>
+                    <div class="kt-widget__details">
+                        <span class="kt-widget__title">Budget</span>
+                        <span class="kt-widget__value">{{ activity.budget }}</span>
+                    </div>
+                </div>
+
+                <div class="kt-widget__item">
+                    <div class="kt-widget__icon">
+                        <i class="flaticon-file-2"></i>
+                    </div>
+                    <div class="kt-widget__details">
+                        <span class="kt-widget__title">{{ activity.reports.count }} Rapports</span>
+                        <a href="{{ path('report_list2', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-widget__value kt-font-brand">View</a>
+                    </div>
+                </div>
+
+                <div class="kt-widget__item">
+                    <div class="kt-widget__icon">
+                        <i class="flaticon-confetti"></i>
+                    </div>
+                    <div class="kt-widget__details">
+                        <span class="kt-widget__title">{{ activity.indicators.count }} Indicateurs</span>
+                        <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-widget__value kt-font-brand">View</a>
+                    </div>
+                </div>
+                <div class="kt-widget__item">
+                    <div class="kt-widget__icon">
+                        <i class="flaticon-pie-chart"></i>
+                    </div>
+                    <div class="kt-widget__details">
+                        <div class="kt-section__content kt-section__content--solid">
+                            <div class="kt-media-group">
+                                {% for activityFile in activity.activityFiles %}
+                                    {% if activityFile.file %}
+                                        <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Attached File">
+                                            <img src="{{ activityFile.file.name ? vich_uploader_asset(activityFile.file, 'file') : default_picture }}" alt="image">
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    No file attached
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

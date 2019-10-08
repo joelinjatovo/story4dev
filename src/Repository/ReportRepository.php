@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Activity;
 use App\Entity\Report;
 use App\Entity\Project;
+use App\Entity\User;
+use App\Entity\ProjectContribution;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -35,6 +37,17 @@ class ReportRepository extends ServiceEntityRepository
             ->innerJoin('r.activity', 'a')
             ->where('a.project = :project')
             ->setParameter('project', $project)
+            ->getQuery();
+    }
+    
+    public function findByContribution(Project $project, User $user)
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.activity', 'a')
+            ->leftJoin('a.project', 'p')
+            ->where('a.project = :project AND r.author = :user')
+            ->setParameter('project', $project)
+            ->setParameter('user', $user)
             ->getQuery();
     }
 }

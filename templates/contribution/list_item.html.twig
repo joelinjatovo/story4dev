@@ -6,7 +6,7 @@
                     <img alt="avatar" src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') : default_avatar }}">
                 </div>
                 <div class="kt-user-card-v2__details">
-                    <a class="kt-user-card-v2__name" href="{{ url('admin_user_show', {'id': contribution.user.id}) }}">{{ contribution.user.fullname }}</a>
+                    <a class="kt-user-card-v2__name" href="{{ path('contribution_show', { 'project_id' : contribution.project.id, 'slug': contribution.project.author.slug, 'contribution_id': contribution.id } ) }}">{{ contribution.user.fullname }}</a>
                     <span class="kt-user-card-v2__email">{{ contribution.user.email }}</span>
                 </div>
             </div>
