@@ -98,7 +98,7 @@ jQuery(document).ready(function($){
         .done(function( data ) {
             KTApp.unblock($this.closest('tr'));
             if(data.success){
-                $this.prop('checked', true);
+                $this.prop('checked', data.admin);
             }
         })
         .fail(function() {

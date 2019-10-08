@@ -94,7 +94,7 @@ class ContributionController extends AbstractController
 
                         return $this->json([
                             'success' => true,
-                            'status'  => $contribution->isAdmin()?'admin':'contributor',
+                            'admin'   => $contribution->isAdmin(),
                             'message' => 'Role changed',
                         ]);
                     }
