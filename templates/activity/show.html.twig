@@ -22,7 +22,7 @@
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-            <a href="{{ path('project_show', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+                <a href="{{ path('project_show', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
                 <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="btn kt-subheader__btn-primary">Modifier &nbsp;</a>
                                 
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip" title="" data-placement="left" data-original-title="Quick actions">

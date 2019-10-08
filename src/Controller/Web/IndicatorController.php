@@ -354,7 +354,7 @@ class IndicatorController extends AbstractController
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function list(User $user, Project $project, Activity $activity, $page = 1, PaginatorService $paginator)
+    public function list(User $user, Project $project, Activity $activity, $page = 1, PaginatorService $paginator, Request $request)
     {
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -366,7 +366,12 @@ class IndicatorController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
         
-        $query = $entityManager->getRepository(Indicator::class)->findByActivity($activity);
+        $search = $request->query->get('s');
+        if( strlen($search) > 20 ) {
+            $search = substr($search, 0, 20);
+        }
+        
+        $query = $entityManager->getRepository(Indicator::class)->findByActivity($activity, $search);
         
         $indicators = $paginator->paginate($query, 10);
         
@@ -374,7 +379,8 @@ class IndicatorController extends AbstractController
             'user'       => $user,
             'project'    => $project,
             'activity'   => $activity,
-            'indicators' => $indicators
+            'indicators' => $indicators,
+            'search' => $search,
         ]);
     }
 }
