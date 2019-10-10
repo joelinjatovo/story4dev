@@ -81,8 +81,12 @@ class ProjectController extends AbstractController
         }
 
         $entityManager = $this->getDoctrine()->getManager();
-        $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
-        $users = $entityManager->getRepository(User::class)->findAll();
+        
+        if ($this->isGranted('edit', $project)) {
+            $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
+        }else{
+            $reports = $entityManager->getRepository(Report::class)->findByProject($project, $this->getUser())->execute();
+        }
         
         $data   =  $project->getData();
         $series =  $project->getSerie();
@@ -93,7 +97,6 @@ class ProjectController extends AbstractController
             'user'    => $user, 
             'project' => $project, 
             'reports' => $reports, 
-            'users'   => $users,
             'data'    => json_encode($data),
             'series'   => json_encode($series),
         ]);

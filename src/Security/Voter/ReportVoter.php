@@ -77,24 +77,6 @@ class ReportVoter extends Voter
         if ($this->canEdit($report, $user)) {
             return true;
         }
-        
-        $activity = $report->getActivity();
-        if( ! $activity ){
-            return false;
-        }
-        
-        $project = $activity->getProject();
-        if( ! $project ){
-            return false;
-        }
-        
-        $contribution = $this->em
-            ->getRepository(ProjectContribution::class)
-            ->findBy(['project' => $project, 'user' => $user]);
-        
-        if($contribution){
-            return true;
-        }
 
         // the Project object could have, for example, a method isPrivate()
         // that checks a boolean $private property
@@ -117,9 +99,13 @@ class ReportVoter extends Voter
             return false;
         }
         
+        if($report->getAuthor()==$user){
+            return true;
+        }
+        
         $contribution = $this->em
             ->getRepository(ProjectContribution::class)
-            ->findBy(['project' => $project, 'user' => $user]);
+            ->findOneBy(['project' => $project, 'user' => $user]);
         
         if($contribution){
             return $contribution->isAdmin();

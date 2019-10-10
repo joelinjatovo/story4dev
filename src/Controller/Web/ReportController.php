@@ -38,7 +38,7 @@ class ReportController extends AbstractController
      */
     public function index(User $user, Project $project, Activity $activity)
     {
-        $this->denyAccessUnlessGranted('edit', $activity);
+        $this->denyAccessUnlessGranted('view', $activity);
         
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -71,7 +71,7 @@ class ReportController extends AbstractController
      */
     public function create(User $user, Project $project, Activity $activity, Request $request): Response
     {
-        $this->denyAccessUnlessGranted('edit', $activity);
+        $this->denyAccessUnlessGranted('view', $activity);
         
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -392,9 +392,22 @@ class ReportController extends AbstractController
                 throw $this->createNotFoundException('The project does not match');
             }
             
-            $query = $entityManager->getRepository(Report::class)->findByActivity($activity);
+            $this->denyAccessUnlessGranted('view', $activity);
+            
+            if ($this->isGranted('edit', $activity)) {
+                $query = $entityManager->getRepository(Report::class)->findByActivity($activity);
+            }else{
+                $query = $entityManager->getRepository(Report::class)->findByActivity($activity, $this->getUser());
+            }
+            
         }else{
-            $query = $entityManager->getRepository(Report::class)->findByProject($project);
+            $this->denyAccessUnlessGranted('view', $project);
+            
+            if ($this->isGranted('edit', $project)) {
+                $query = $entityManager->getRepository(Report::class)->findByProject($project);
+            }else{
+                $query = $entityManager->getRepository(Report::class)->findByProject($project, $this->getUser());
+            }
         }
         
         $reports = $paginator->paginate($query, 10);

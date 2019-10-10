@@ -23,18 +23,34 @@ class ReportRepository extends ServiceEntityRepository
         parent::__construct($registry, Report::class);
     }
     
-    public function findByActivity(Activity $activity)
+    public function findByActivity(Activity $activity, ?User $user = null)
     {
+        if($user){
+            return $this->createQueryBuilder('r')
+                ->where('r.activity = :activity AND r.author = :user')
+                ->setParameter('activity', $activity)
+                ->setParameter('user', $user)
+                ->getQuery();
+        }
         return $this->createQueryBuilder('r')
             ->where('r.activity = :activity')
             ->setParameter('activity', $activity)
             ->getQuery();
     }
     
-    public function findByProject(Project $project)
+    public function findByProject(Project $project, ?User $user = null)
     {
+        if($user){
+            return $this->createQueryBuilder('r')
+                ->leftJoin('r.activity', 'a')
+                ->where('a.project = :project AND r.author = :user')
+                ->setParameter('project', $project)
+                ->setParameter('user', $user)
+                ->getQuery();
+        }
+        
         return $this->createQueryBuilder('r')
-            ->innerJoin('r.activity', 'a')
+            ->leftJoin('r.activity', 'a')
             ->where('a.project = :project')
             ->setParameter('project', $project)
             ->getQuery();

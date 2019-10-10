@@ -14,6 +14,7 @@ use App\Entity\User;
 use App\Entity\Project;
 use App\Entity\Activity;
 use App\Entity\Indicator;
+use App\Entity\Report;
 use App\Form\ActivityType;
 use App\Form\IndicatorType;
 use App\Service\FormError;
@@ -150,6 +151,13 @@ class ActivityController extends AbstractController
             throw $this->createNotFoundException('The project does not match');
         }
         
+        $entityManager = $this->getDoctrine()->getManager();
+        if ($this->isGranted('edit', $activity)) {
+            $reports = $entityManager->getRepository(Report::class)->findByActivity($activity)->execute();
+        }else{
+            $reports = $entityManager->getRepository(Report::class)->findByActivity($activity, $this->getUser())->execute();
+        }
+        
         $indicator = new Indicator();
         $form = $this->createForm(IndicatorType::class, $indicator);
         
@@ -163,6 +171,7 @@ class ActivityController extends AbstractController
             'user'     => $user,
             'project'  => $project,
             'activity' => $activity, 
+            'reports' => $reports, 
             'form'     => $form->createView(),
             'data'     => json_encode($data),
             'series'   => json_encode($series),

@@ -79,7 +79,7 @@ class ProjectVoter extends Voter
         
         $contribution = $this->em
             ->getRepository(ProjectContribution::class)
-            ->findBy(['project'=>$project, 'user' => $user]);
+            ->findOneBy(['project'=>$project, 'user' => $user]);
         
         if($contribution){
             return true;
@@ -100,7 +100,7 @@ class ProjectVoter extends Voter
         
         $contribution = $this->em
             ->getRepository(ProjectContribution::class)
-            ->findBy(['project'=>$project, 'user' => $user]);
+            ->findOneBy(['project'=>$project, 'user' => $user]);
         
         if($contribution){
             return $contribution->isAdmin();

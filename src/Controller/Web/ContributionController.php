@@ -18,8 +18,6 @@ use App\Service\PaginatorService;
 
 /** 
  * @Route(name="contribution_") 
- *
- * @IsGranted("ROLE_ADMIN") 
  */
 class ContributionController extends AbstractController
 {
@@ -31,6 +29,8 @@ class ContributionController extends AbstractController
      */
     public function list(User $user, Project $project)
     {
+        //$this->denyAccessUnlessGranted('edit', $project);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
@@ -161,6 +161,8 @@ class ContributionController extends AbstractController
                 $contribution  = $entityManager->getRepository(ProjectContribution::class)->find($id);
 
                 if( $contribution && ! $contribution->getUser()->isAdmin()){
+                    $this->denyAccessUnlessGranted('edit', $contribution->getProject());
+                    
                     $entityManager->remove($contribution);
                     $entityManager->flush();
 
@@ -203,6 +205,8 @@ class ContributionController extends AbstractController
                 }
 
                 if( $project && $user){
+                    $this->denyAccessUnlessGranted('edit', $project);
+                    
                     $contribution = new ProjectContribution();
                     $contribution->setUser($user);
                     $contribution->setProject($project);

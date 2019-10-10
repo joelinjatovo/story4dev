@@ -13,14 +13,18 @@
         </span>
     </td>
     <td data-field="Roles" class="kt-datatable__cell">
-        <div class="form-group form-group-last" style="width: 120px;">
-            <div class="kt-checkbox-inline">
-                <label class="kt-checkbox">
-                    <input class="change-contribution-role" data-id="{{ contribution.id }}" type="checkbox" {{ contribution.admin ? 'checked=""' : '' }}> Admin
-                    <span></span>
-                </label>
+        {% if is_granted('edit', contribution.project) %}
+            <div class="form-group form-group-last" style="width: 120px;">
+                <div class="kt-checkbox-inline">
+                    <label class="kt-checkbox">
+                        <input class="change-contribution-role" data-id="{{ contribution.id }}" type="checkbox" {{ contribution.admin ? 'checked=""' : '' }}> Admin
+                        <span></span>
+                    </label>
+                </div>
             </div>
-        </div>
+        {% else %}
+            <span style="width: 120px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.admin?'danger':'success' }}">{{ contribution.admin?'Admin':'Contributeur' }}</span></span>
+        {% endif %}
     </td>
     <td data-field="Country" class="kt-datatable__cell">
         <span style="width: 50px;"><span class="kt-font-bold">{{ contribution.user.address is not null ? contribution.user.address.country : '' }}</span></span>
@@ -36,9 +40,13 @@
     </td>
     <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 50px;">
-            <a title="Supprimer ce contributeur" data-id="{{ contribution.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove-contribution">
-                <i class="la la-trash"></i>
-            </a>
+            {% if is_granted('edit', contribution.project) %}
+                <a title="Supprimer ce contributeur" data-id="{{ contribution.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove-contribution">
+                    <i class="la la-trash"></i>
+                </a>
+            {% else %}
+                -
+            {% endif %}
         </span>
     </td>
 </tr>
