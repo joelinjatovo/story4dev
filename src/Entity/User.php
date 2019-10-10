@@ -594,6 +594,12 @@ class User implements UserInterface, \Serializable
     {
         $this->status = $status;
         
+        if( $status == self::STATUS_ACTIVE){
+            $this->setIsActive(true);
+        }else{
+            $this->setIsActive(false);
+        }
+        
         return $this;
     }
     
@@ -615,6 +621,13 @@ class User implements UserInterface, \Serializable
     public function isActive()
     {
         return $this->isActive;
+    }
+
+    public function setIsActive(bool $active): self
+    {
+        $this->isActive = $active;
+
+        return $this;
     }
 
     public function setActive(bool $active): self

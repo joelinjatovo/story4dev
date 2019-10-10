@@ -83,7 +83,6 @@ class LoginFormController extends AbstractController
             $user->setConfirmToken( $token );
             $user->setConfirmedAt( new \DateTime() );
             $user->setStatus(User::STATUS_PING);
-            $user->setActive(false);
             $user->setRoles(['ROLE_USER']);
  
             $url = $this->generateUrl('app_confirm', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
@@ -138,8 +137,6 @@ class LoginFormController extends AbstractController
         }
 
         try{
-            //$user->setStatus(User::STATUS_ACTIVE);
-            //$user->setActive(true);
             $user->setConfirmToken(null);
             $entityManager->flush();
         } catch (\Exception $e) {
@@ -264,7 +261,6 @@ class LoginFormController extends AbstractController
                 $newEncodedPassword = $passwordEncoder->encodePassword($user, $new_password);
 
                 $user->setPassword($newEncodedPassword);
-                $user->setStatus(User::STATUS_ACTIVE);
                 $user->setResetToken(null);
 
                 $entityManager = $this->getDoctrine()->getManager();

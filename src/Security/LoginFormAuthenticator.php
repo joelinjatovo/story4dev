@@ -3,6 +3,11 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Exception\AccountDeletedException;
+use App\Exception\AccountPingedException;
+use App\Exception\AccountBlockedException;
+use App\Exception\AccountCanceledException;
+use App\Exception\EmailNotConfirmedException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -108,6 +113,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         if ( $request->isXmlHttpRequest() ) {
             $array = array( 'success' => false, 'message' => $exception->getMessage() );
+            if( ( $exception instanceof AccountDeletedException )
+                || ( $exception instanceof AccountPingedException )
+                || ( $exception instanceof AccountBlockedException )
+                || ( $exception instanceof AccountCanceledException )
+                || ( $exception instanceof EmailNotConfirmedException ) ){
+                $array['status_error'] = true;
+            }else{
+                $array['message'] = 'Incorrect username or password. Please try again.';
+            }
             $response = new Response( json_encode( $array ) );
             $response->headers->set( 'Content-Type', 'application/json' );
 

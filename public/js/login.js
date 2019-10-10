@@ -76,7 +76,7 @@ jQuery(document).ready(function($){
                             window.location.replace(t.redirect);
                         },2e3)
                     }else{
-                        i("danger", "Error!", "Incorrect username or password. Please try again.")
+                        i("danger", "Error!", t.message)
                     }
                 }
             })
