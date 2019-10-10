@@ -629,6 +629,11 @@ class User implements UserInterface, \Serializable
         return $this->isVerified;
     }
 
+    public function setIsVerified(bool $verified): self
+    {
+        return $this->setVerified($verified);
+    }
+
     public function setVerified(bool $verified): self
     {
         $this->isVerified = $verified;

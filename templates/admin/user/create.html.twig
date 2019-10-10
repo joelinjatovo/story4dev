@@ -14,18 +14,18 @@
 			<div class="kt-portlet__head kt-portlet__head--lg" style="">
 				<div class="kt-portlet__head-label">
                     {% block headtitle %}
-                        <h3 class="kt-portlet__head-title">Ajouter un utilisateur <small>enter user detail and save change</small></h3>
+                        <h3 class="kt-portlet__head-title">Ajouter un utilisateur <small>Entrer les informations du compte puis enregistrer</small></h3>
                     {% endblock %}
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<a href="javascript:history.back();" class="btn btn-clean kt-margin-r-10">
 						<i class="la la-arrow-left"></i>
-						<span class="kt-hidden-mobile">Back</span>
+						<span class="kt-hidden-mobile">Retours</span>
 					</a>
 					<div class="btn-group">
 						<button type="submit" form="user" name="submit" value="save-default" class="btn btn-brand">
 							<i class="la la-check"></i> 
-							<span class="kt-hidden-mobile">Save</span>
+							<span class="kt-hidden-mobile">Enregister</span>
 						</button>
 						<button type="button" class="btn btn-brand dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						</button>
@@ -68,7 +68,33 @@
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Information du compte:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">Informations:</h3>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-xl-3 col-lg-3 col-form-label"></label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <div class="kt-checkbox-list">
+                                        <label class="kt-checkbox kt-checkbox--bold kt-checkbox--danger label-danger">
+                                            {{ form_widget( form.isVerified ) }} Marquez comme vérifié
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-xl-3 col-lg-3 col-form-label">Avatar</label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <div class="kt-avatar kt-avatar--outline" id="kt_user_avatar">
+                                        <div class="kt-avatar__holder" style="background-image: url('{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') : default_avatar }}');"></div>
+                                        <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Change avatar">
+                                            <i class="fa fa-pen"></i>
+                                            <input type="file" id="user_avatarFile_file" name="user[avatarFile][file]" accept=".jpeg, .png, .jpg, .gif">
+                                        </label>
+                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -89,6 +115,12 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                {{ form_label( form.fullname, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                <div class="col-lg-9 col-xl-6">
+                                    {{ form_widget( form.fullname, { 'attr' : { 'class' : 'form-control' } } ) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 {{ form_label( form.status, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
@@ -101,7 +133,7 @@
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="kt-checkbox-inline">
                                         <label class="kt-checkbox">
-                                            <input type="checkbox" id="user_roles_1" name="user[roles][]" value="ROLE_USER" class="changed-input" checked>Client
+                                            <input type="checkbox" id="user_roles_1" name="user[roles][]" value="ROLE_USER" class="changed-input" checked disabled>Client
                                             <span></span>
                                         </label>
                                         <label class="kt-checkbox">
@@ -111,32 +143,10 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Information de l'utilisateur:</h3>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Avatar</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <div class="kt-avatar kt-avatar--outline" id="kt_user_avatar">
-                                        <div class="kt-avatar__holder" style="background-image: url('{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') : default_avatar }}');"></div>
-                                        <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Change avatar">
-                                            <i class="fa fa-pen"></i>
-                                            <input type="file" id="user_avatarFile_file" name="user[avatarFile][file]" accept=".jpeg, .png, .jpg, .gif">
-                                        </label>
-                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
-                                            <i class="fa fa-times"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                {{ form_label( form.fullname, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
-                                <div class="col-lg-9 col-xl-6">
-                                    {{ form_widget( form.fullname, { 'attr' : { 'class' : 'form-control' } } ) }}
+                                    <h3 class="kt-section__title kt-section__title-sm">Contacts et autres:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -144,13 +154,6 @@
                                 <div class="col-lg-9 col-xl-6">
                                     {{ form_widget( form.company, { 'attr' : { 'class' : 'form-control' } } ) }}
                                     <span class="form-text text-muted"></span>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <label class="col-xl-3"></label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Contact:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">

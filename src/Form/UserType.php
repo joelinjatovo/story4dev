@@ -28,6 +28,7 @@ class UserType extends AbstractType
             ->add('company')
             ->add('phone')
             ->add('website')
+            ->add('isVerified')
             ->add('status', ChoiceType::class, [
                 'choices'  => [
                     'En cours de validation' => User::STATUS_PING,

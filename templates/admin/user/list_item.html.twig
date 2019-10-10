@@ -1,12 +1,4 @@
  <tr data-row="0" class="kt-datatable__row" style="left: 0px;">
-     <td class="kt-datatable__cell kt-datatable__toggle-detail">
-         <a class="kt-datatable__toggle-detail" href="#"><i class="fa fa-caret-right"></i></a>
-     </td>
-    <td class="kt-datatable__cell--center kt-datatable__cell kt-datatable__cell--check" data-field="ID">
-        <span style="width: 40px;">
-            <label class="kt-checkbox kt-checkbox--single kt-checkbox--solid"><input type="checkbox" value="11">&nbsp;<span></span></label>
-        </span>
-    </td>
     <td data-field="User" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="width: 222px;">
             <div class="kt-user-card-v2">
@@ -16,6 +8,9 @@
                 <div class="kt-user-card-v2__details">
                     <a class="kt-user-card-v2__name" href="{{ url('admin_user_show', {'id': user.id}) }}">{{ user.fullname }}</a>
                     <span class="kt-user-card-v2__email">{{ user.email }}</span>
+                    {% if user.verified %}
+                        <i class="flaticon2-correct"></i>    
+                    {% endif %}   
                 </div>
             </div>
         </span>
@@ -46,25 +41,25 @@
                         <li class="kt-nav__item">
                             <a class="kt-nav__link" href="{{ url('admin_user_show', {'id': user.id}) }}">
                                 <i class="kt-nav__link-icon flaticon2-expand"></i>
-                                <span class="kt-nav__link-text">View</span>
+                                <span class="kt-nav__link-text">Afficher</span>
                             </a>
                         </li>
                         <li class="kt-nav__item">
                             <a class="kt-nav__link" href="{{ url('admin_user_edit', {'id': user.id}) }}">
                                 <i class="kt-nav__link-icon flaticon2-contract"></i>
-                                <span class="kt-nav__link-text">Edit</span>
+                                <span class="kt-nav__link-text">Modifier</span>
                             </a>
                         </li>
                         <li class="kt-nav__item">
                             <a class="kt-nav__link" href="#">
                                 <i class="kt-nav__link-icon flaticon2-trash"></i>
-                                <span class="kt-nav__link-text">Delete</span>
+                                <span class="kt-nav__link-text">Supprimer</span>
                             </a>
                         </li>
                         <li class="kt-nav__item">
                             <a class="kt-nav__link" href="{{ url('user_show', {'slug': user.slug}) }}">
                                 <i class="kt-nav__link-icon flaticon2-mail-1"></i>
-                                <span class="kt-nav__link-text">Statistique</span>
+                                <span class="kt-nav__link-text">Ouvrir</span>
                             </a>
                         </li>
                     </ul>

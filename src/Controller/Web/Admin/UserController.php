@@ -130,10 +130,9 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("/users/{page<\d+>?1}", name="grid", methods="GET")
-     * @Route("/users/{display}/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/users/{page<\d+>?1}", name="list", methods="GET")
      */
-    public function list(string $display = 'grid', PaginatorService $paginator, $page = 1, Request $request)
+    public function list(PaginatorService $paginator, $page = 1, Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
         
@@ -150,10 +149,6 @@ class UserController extends AbstractController
         
         $params = ['users' => $users, 'search' => $search];
         
-        if($display == 'list') {
-            return $this->render('admin/user/list.html.twig', $params);
-        }
-        
-        return $this->render('admin/user/grid.html.twig', $params);
+        return $this->render('admin/user/list.html.twig', $params);
     }
 }
