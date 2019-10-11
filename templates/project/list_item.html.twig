@@ -94,14 +94,14 @@
                 </div>
 
                 <span class="kt-widget__text">
-                    {{ project.description|html|raw }}                       
+                    {{ project.description|excerpt }}                       
                 </span>
 
                 <div class="kt-widget__content">
                     {% if project.budget > 0 %}
                     <div class="kt-widget__details">
                         <span class="kt-widget__subtitle">Budget</span>
-                        <span class="kt-widget__value"><span>$</span>{{ project.budget }}</span>
+                        <span class="kt-widget__value"><span></span>{{ project.budget }}</span>
                     </div>
                     {% endif %}
 
@@ -110,7 +110,7 @@
                         <div class="kt-media-group">
                             {% for contribution in project.contributions.slice(0, 7) %}
                             <a href="{{ path('user_show', { 'slug': contribution.user.slug }) }}" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{{ contribution.user.fullname ?? contribution.user.email }}">
-                                <img src="{{ contribution.user.avatar is null ? default_avatar : contribution.user.avatar }}" alt="avatar">
+                                <img src="{{ contribution.user.avatar is null ? default_avatar : vich_uploader_asset(contribution.user, 'avatarFile') }}" alt="avatar">
                             </a>
                             {% endfor %}
                             {% if project.contributions.count > 7 %}
