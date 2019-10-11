@@ -27,24 +27,26 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
         parent::__construct($registry, User::class);
     }
     
-    public function getAll($search = null)
+    public function getAll($search = null, $role = null, $status = null)
     {
-        if( empty($search) ){
-            return $this->createQueryBuilder('u')
-                ->getQuery();
+        $qb = $this->createQueryBuilder('u');
+        if( ! empty( $role ) ){
+            $qb->andWhere('u.roles LIKE :roles')
+                ->setParameter('roles', '%'.$role.'%');
+            
         }
         
-        return $this->createQueryBuilder('u')
-            ->orWhere('u.fullName LIKE :search')
-            ->orWhere('u.email LIKE :search')
-            ->orWhere('u.username LIKE :search')
-            ->orWhere('u.phone LIKE :search')
-            ->orWhere('u.website LIKE :search')
-            ->orWhere('u.title LIKE :search')
-            ->orWhere('u.company LIKE :search')
-            ->orWhere('u.presentation LIKE :search')
-            ->setParameter('search', '%'.$search.'%')
-            ->getQuery();
+        if( ! empty( $status ) ){
+            $qb->andWhere('u.status LIKE :status')
+                ->setParameter('status', $status);
+        }
+        
+        if( ! empty( $search ) ){
+            $qb->andWhere(' ( (u.fullName LIKE :search) OR (u.email LIKE :search) OR (u.username LIKE :search) OR (u.phone LIKE :search) OR (u.website LIKE :search) OR (u.title LIKE :search) OR (u.company LIKE :search) OR (u.presentation LIKE :search) )')
+                ->setParameter('search', '%'.$search.'%');
+        }
+        
+        return $qb->getQuery();
     }
     
     public function getRecent($limit = 10)

@@ -131,8 +131,10 @@ class UserController extends AbstractController
     
     /**
      * @Route("/users/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/users/role/{role}/{page<\d+>?1}", name="list_role", methods="GET")
+     * @Route("/users/status/{status}/{page<\d+>?1}", name="list_status", methods="GET")
      */
-    public function list(PaginatorService $paginator, $page = 1, Request $request)
+    public function list(PaginatorService $paginator, $role = null, $status = null, $page = 1, Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
         
@@ -143,11 +145,37 @@ class UserController extends AbstractController
             $search = substr($search, 0, 20);
         }
         
-        $query = $entityManager->getRepository(User::class)->getAll($search);
+        $roleParam = null;
+        switch($role){
+            case "admin":
+                $roleParam = "ROLE_ADMIN";
+            break;
+            case "user":
+                $roleParam = "ROLE_USER";
+            break;
+            default:
+                $role = null;
+            break;
+        }
+        
+        $statusParam = null;
+        switch($status){
+            case User::STATUS_ACTIVE:
+            case User::STATUS_PING:
+            case User::STATUS_BLOCKED:
+            case User::STATUS_CANCELED:
+                $statusParam = $status;
+            break;
+            default:
+                $status = null;
+            break;
+        }
+        
+        $query = $entityManager->getRepository(User::class)->getAll($search, $roleParam, $statusParam);
 
         $users = $paginator->paginate($query, 10);
         
-        $params = ['users' => $users, 'search' => $search];
+        $params = ['users' => $users, 'search' => $search, 'role' => $role, 'status' => $status];
         
         return $this->render('admin/user/list.html.twig', $params);
     }
