@@ -26,7 +26,7 @@
 					<div class="btn-group">
 						<button type="submit" form="indicator" name="submit" value="save-default" class="btn btn-brand">
 							<i class="la la-check"></i> 
-							<span class="kt-hidden-mobile">Save</span>
+							<span class="kt-hidden-mobile">Enregistrer</span>
 						</button>
 						<button type="button" class="btn btn-brand dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						</button>
@@ -35,25 +35,25 @@
 								<li class="kt-nav__item">
 									<button type="submit" form="indicator" name="submit" value="save-continue" class="kt-nav__link">
 										<i class="kt-nav__link-icon flaticon2-reload"></i>
-										<span class="kt-nav__link-text">Save &amp; continue</span>
+										<span class="kt-nav__link-text">Enregistrer &amp; Continuer</span>
 									</button>
 								</li>
 								<li class="kt-nav__item">
 									<button type="submit" form="indicator" name="submit" value="save-edit" class="kt-nav__link">
 										<i class="kt-nav__link-icon flaticon2-edit"></i>
-										<span class="kt-nav__link-text">Save &amp; edit</span>
+										<span class="kt-nav__link-text">Enregistrer &amp; Modifier</span>
 									</button>
 								</li>
 								<li class="kt-nav__item">
 									<button type="submit" form="indicator" name="submit" value="save-create" class="kt-nav__link">
 										<i class="kt-nav__link-icon flaticon2-add-1"></i>
-										<span class="kt-nav__link-text">Save &amp; add new</span>
+										<span class="kt-nav__link-text">Enregistrer &amp; Ajouter</span>
 									</button>
 								</li>
 								<li class="kt-nav__item">
 									<button type="submit" form="indicator" name="submit" value="save-exit" class="kt-nav__link">
 										<i class="kt-nav__link-icon flaticon-close"></i>
-										<span class="kt-nav__link-text">Save &amp; exit</span>
+										<span class="kt-nav__link-text">Enregistrer &amp; Quitter</span>
 									</button>
 								</li>
 							</ul>
@@ -68,25 +68,25 @@
 						<div class="col-xl-8">
 							<div class="kt-section kt-section--first">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Indicator Info:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">Info:</h3>
 									<div class="form-group row">
-                    					{{ form_label( form.title, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.title, "Nom de l'indicateur", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											{{ form_widget( form.title, { 'attr' : { 'class' : 'form-control', 'required':'true' } } ) }}
 										</div>
 									</div>
 									<div class="form-group row">
-                    					{{ form_label( form.unit, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.unit, "Unité de l'indicateur", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											{{ form_widget( form.unit, { 'attr' : { 'class' : 'form-control', 'required':'true' } } ) }}
 										</div>
 									</div>
 									<div class="form-group form-group-last row">
-										<label class="col-3 col-form-label">Calcul</label>
+										<label class="col-3 col-form-label">Méthode de calcul</label>
 										<div class="col-9">
 											<div class="kt-checkbox-inline">
 												<label class="kt-checkbox">
-												<input type="checkbox" checked=""> Cummule 
+												<input type="checkbox" checked=""> Cumulé 
 												<span></span>
 												</label>
 											</div>
@@ -97,7 +97,7 @@
 							<div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
 							<div class="kt-section kt-section--first">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Indicator Goals:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">Objectifs:</h3>
 									{%- set i = 0 -%}
 									{% for goal in form.goals %}
 										<div class="form-group row">
@@ -105,7 +105,7 @@
 											<div class="col-9">
                                                 {{ form_widget( goal.id ) }}
                                                 <input type="hidden" id="indicator_goals_{{i}}_iteration" name="indicator[goals][{{i}}][iteration]" value="{{ goal.vars.data.iteration.id }}">
-                                                {{ form_widget( goal.value, { 'attr' : { 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
+                                                {{ form_widget( goal.value, { 'attr' : { 'class' : 'form-control', 'placeholder' : "Valeur de l'objectif de ce suivi", 'autocomplete':'off' } } ) }}
 											</div>
 										</div>
 										{%- set i = i + 1 -%}

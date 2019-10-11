@@ -26,7 +26,7 @@
 					<div class="btn-group">
 						<button type="submit" form="report" name="submit" value="save-default" class="btn btn-brand">
 							<i class="la la-check"></i> 
-							<span class="kt-hidden-mobile">Save</span>
+							<span class="kt-hidden-mobile">Enregistrer</span>
 						</button>
 						<button type="button" class="btn btn-brand dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						</button>
@@ -35,25 +35,25 @@
 								<li class="kt-nav__item">
 									<button type="submit" form="report" name="submit" value="save-continue" class="kt-nav__link">
 										<i class="kt-nav__link-icon flaticon2-reload"></i>
-										<span class="kt-nav__link-text">Save &amp; continue</span>
+										<span class="kt-nav__link-text">Enregistrer &amp; Continuer</span>
 									</button>
 								</li>
 								<li class="kt-nav__item">
 									<button type="submit" form="report" name="submit" value="save-edit" class="kt-nav__link">
 										<i class="kt-nav__link-icon flaticon2-edit"></i>
-										<span class="kt-nav__link-text">Save &amp; edit</span>
+										<span class="kt-nav__link-text">Enregistrer &amp; Modifier</span>
 									</button>
 								</li>
 								<li class="kt-nav__item">
 									<button type="submit" form="report" name="submit" value="save-create" class="kt-nav__link">
 										<i class="kt-nav__link-icon flaticon2-add-1"></i>
-										<span class="kt-nav__link-text">Save &amp; add new</span>
+										<span class="kt-nav__link-text">Enregistrer &amp; Ajouter</span>
 									</button>
 								</li>
 								<li class="kt-nav__item">
 									<button type="submit" form="report" name="submit" value="save-exit" class="kt-nav__link">
 										<i class="kt-nav__link-icon flaticon-close"></i>
-										<span class="kt-nav__link-text">Save &amp; exit</span>
+										<span class="kt-nav__link-text">Enregistrer &amp; Quitter</span>
 									</button>
 								</li>
 							</ul>
@@ -68,15 +68,15 @@
 						<div class="col-xl-8">
 							<div class="kt-section kt-section--first">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Report Info:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">Info:</h3>
 									<div class="form-group row">
-                    					{{ form_label( form.title, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.title, "Titre du rapport", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
                                             {{ form_widget( form.title, { 'attr' : { 'class' : 'form-control' } } ) }}
 										</div>
 									</div>
 									<div class="form-group row">
-                    					{{ form_label( form.description, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.description, "Description du rapport", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
                                             {{ form_widget( form.description, { 'attr' : { 'class' : 'form-control' } } ) }}
 										</div>
@@ -86,9 +86,9 @@
 							<div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
 							<div class="kt-section">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Add result:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">Ajouter le résultat:</h3>
 									<div class="form-group row">
-										<label class="col-3 col-form-label">Result</label>
+										<label class="col-3 col-form-label">Résultat</label>
 										<div class="col-9">
                                             <div id="kt_repeater">
                                                 <div class="form-group row">
@@ -125,12 +125,11 @@
                                                     </div>                 
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-lg-3"></div>
                                                     <div class="col">
                                                         <div data-repeater-create="" class="btn btn btn-warning">
                                                             <span>
                                                                 <i class="la la-plus"></i>
-                                                                <span>Add</span>
+                                                                <span>Ajouter un résultat</span>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -144,7 +143,7 @@
                             <div class="kt-section kt-section--last">
 								<div class="kt-section__body">
 									<h3 class="kt-section__title kt-section__title-lg">Attacher des fichiers:</h3>
-                                    <button class="btn btn-label-success btn-bold btn-sm btn-upload">Upload file</button>
+                                    <button class="btn btn-label-success btn-bold btn-sm btn-upload">Téléverser un fichier</button>
 									<div class="kt-notification-v2" id="file-list" data-name="report[reportFiles]" data-count="{{ report.reportFiles.count }}">
                                         {% set i = 0 %}
                                         {% for reportFile in report.reportFiles %}

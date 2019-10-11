@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create Projet - Admin {% endblock %}
+{% block title %}Nouveau Projet - Admin - {{ app.user.fullname }} {% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -17,7 +17,7 @@
 			<div class="kt-portlet__head kt-portlet__head--lg" style="">
 				<div class="kt-portlet__head-label">
                     {% block headtitle %}
-					   <h3 class="kt-portlet__head-title">New Project <small>enter project detail and save change</small></h3>
+					   <h3 class="kt-portlet__head-title">Nouveau Projet <small>entrer les informations à-propos du projet puis enregister</small></h3>
                     {% endblock %}
 				</div>
 				<div class="kt-portlet__head-toolbar">
@@ -30,7 +30,7 @@
 					<div class="btn-group">
 						<button type="submit" form="project" name="submit" value="save-default" class="btn btn-brand">
 							<i class="la la-check"></i> 
-							<span class="kt-hidden-mobile">Save</span>
+							<span class="kt-hidden-mobile">Enregistrer</span>
 						</button>
 						<button type="button" class="btn btn-brand dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						</button>
@@ -72,9 +72,9 @@
 						<div class="col-xl-8">
 							<div class="kt-section kt-section--first">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Project Info:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">Info:</h3>
                                     <div class="form-group row">
-                                        <label class="col-xl-3 col-lg-3 col-form-label">Project Logo</label>
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Logo du projet</label>
                                         <div class="col-lg-9 col-xl-6">
                                             <div class="kt-avatar kt-avatar--outline" id="kt_user_avatar">
                                                 <div class="kt-avatar__holder" style="background-image: url('{{ project.picture ? vich_uploader_asset(project, 'pictureFile') : default_picture }}');"></div>
@@ -89,19 +89,19 @@
                                         </div>
                                     </div>
 									<div class="form-group row">
-                    					{{ form_label( form.title, 'Project Name', { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.title, 'Nom du projet', { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											{{ form_widget( form.title, { 'attr' : { 'class' : 'form-control' } } ) }}
 										</div>
 									</div>
 									<div class="form-group row">
-                    					{{ form_label( form.description, 'Project Description', { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.description, 'Description du projet', { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											{{ form_widget( form.description, { 'attr' : { 'class' : 'form-control' } } ) }}
 										</div>
 									</div>
 									<div class="form-group row">
-                    					{{ form_label( form.budget, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.budget, "Budget du projet", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											{{ form_widget( form.budget, { 'attr' : { 'class' : 'form-control' } } ) }}
 										</div>
@@ -111,17 +111,18 @@
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                             <div class="kt-section">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Project Details:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">Détails:</h3>
 									{% if not project.id > 0 %}
 										<div class="form-group row">
 											{{ form_label( form.author, "Propriétaire", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
 											<div class="col-lg-9 col-xl-6">
 												{{ form_widget( form.author, { 'attr' : { 'form' : 'project', 'class' : 'form-control' } } ) }}
+                                                <span class="form-text text-muted">Celui-ci va être le propriétaire du projet ainsi que son administrateur.</span>
 											</div>
 										</div>
 									{% endif %}
                                     <div class="form-group row">
-                                        {{ form_label( form.start_at, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                        {{ form_label( form.start_at, "Date de début du projet", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                         <div class="col-lg-9 col-xl-6">
                                             <div class="input-group date">
                                                 {{ form_widget( form.start_at, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
@@ -134,7 +135,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {{ form_label( form.end_at, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                        {{ form_label( form.end_at, "Date du fin du projet", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                         <div class="col-lg-9 col-xl-6">
                                             <div class="input-group date">
                                                 {{ form_widget( form.end_at, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
@@ -147,7 +148,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {{ form_label( form.periodicity, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                        {{ form_label( form.periodicity, "Périodicité", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                         <div class="col-lg-9 col-xl-6">
                                             {{ form_widget( form.periodicity, { 'attr' : { 'form' : 'project', 'class' : 'form-control' } } ) }}
                                         </div>
@@ -162,23 +163,23 @@
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
                                                                     {{ form_widget(form.iterations.vars.prototype.id ) }}
-                                                                    {{ form_widget(form.iterations.vars.prototype.title, { 'attr' : { 'form' : 'project', 'class' : 'form-control' } } ) }}
+                                                                    {{ form_widget(form.iterations.vars.prototype.title, { 'attr' : { 'form' : 'project', 'placeholder' : 'Label du suivi', 'class' : 'form-control' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
-                                                                    {{ form_widget( form.iterations.vars.prototype.startAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
+                                                                    {{ form_widget( form.iterations.vars.prototype.startAt, { 'attr' : { 'form' : 'project', 'placeholder' : 'Début du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
-                                                                    {{ form_widget( form.iterations.vars.prototype.endAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
+                                                                    {{ form_widget( form.iterations.vars.prototype.endAt, { 'attr' : { 'form' : 'project', 'placeholder' : 'Fin du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold">
                                                                     <i class="la la-trash-o"></i>
-                                                                    Delete
+                                                                    Supprimer
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -191,23 +192,23 @@
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
                                                                     {{ form_widget( iteration.id ) }}
-                                                                    {{ form_widget( iteration.title, { 'attr' : { 'form' : 'project', 'class' : 'form-control' } } ) }}
+                                                                    {{ form_widget( iteration.title, { 'attr' : { 'form' : 'project', 'placeholder' : 'Label du suivi', 'class' : 'form-control' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
-                                                                    {{ form_widget( iteration.startAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
+                                                                    {{ form_widget( iteration.startAt, { 'attr' : { 'form' : 'project', 'placeholder' : 'Début du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
-                                                                    {{ form_widget( iteration.endAt, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
+                                                                    {{ form_widget( iteration.endAt, { 'attr' : { 'form' : 'project', 'placeholder' : 'Fin du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold">
                                                                     <i class="la la-trash-o"></i>
-                                                                    Delete
+                                                                    Supprimer
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -221,7 +222,7 @@
                                                 <div data-repeater-create="" class="btn btn btn-warning">
                                                     <span>
                                                         <i class="la la-plus"></i>
-                                                        <span>Add</span>
+                                                        <span>Ajouter un suivi</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -232,52 +233,31 @@
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                             <div class="kt-section">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Contact Details:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">Détails du contact:</h3>
                                     <div class="form-group row">
-										{{ form_label( form.contactemail, "Contact Email", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+										{{ form_label( form.contactemail, "Email du contact", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											<div class="input-group">
 												<div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
                                                 {{ form_widget( form.contactemail, { 'attr' : { 'class' : 'form-control', 'aria-describedby':'basic-addon1' } } ) }}
 											</div>
-											<span class="form-text text-muted">We'll never share your email with anyone else.</span>
 										</div>
 									</div>
                                     <div class="form-group row">
-										{{ form_label( form.contactphone,  "Contact Phone", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+										{{ form_label( form.contactphone,  "Téléphone du contact", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											<div class="input-group">
 												<div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                                 {{ form_widget( form.contactphone, { 'attr' : { 'class' : 'form-control', 'aria-describedby':'basic-addon1' } } ) }}
 											</div>
-											<span class="form-text text-muted">We'll never share your phone number with anyone else.</span>
 										</div>
 									</div>
                                     <div class="form-group row">
-										{{ form_label( form.contactaddress,  "Contact Address", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+										{{ form_label( form.contactaddress,  "Adresse du contact", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											<div class="input-group">
 												<div class="input-group-prepend"><span class="input-group-text"><i class="la la-map"></i></span></div>
                                                 {{ form_widget( form.contactaddress, { 'attr' : { 'class' : 'form-control', 'aria-describedby':'basic-addon1' } } ) }}
-											</div>
-										</div>
-									</div>
-									<div class="form-group form-group-last row">
-										<label class="col-3 col-form-label">Communication</label>
-										<div class="col-9">
-											<div class="kt-checkbox-inline">
-												<label class="kt-checkbox">
-												<input type="checkbox" checked=""> Email 
-												<span></span>
-												</label>
-												<label class="kt-checkbox">
-												<input type="checkbox" checked=""> SMS 
-												<span></span>
-												</label>
-												<label class="kt-checkbox">
-												<input type="checkbox"> Phone 
-												<span></span>
-												</label>
 											</div>
 										</div>
 									</div>
