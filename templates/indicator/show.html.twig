@@ -25,10 +25,12 @@
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                    <a href="{{ url('activity_show', { 'slug' : indicator.activity.project.author.slug, 'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                <a href="{{ url('activity_show', { 'slug' : indicator.activity.project.author.slug, 'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                {% if is_granted('edit', indicator) %}
                     <a href="{{ path('indicator_edit', { 'indicator_id' : indicator.id, 'activity_id' : indicator.activity.id, 'project_id' : indicator.activity.project.id, 'slug': indicator.activity.project.author.slug } ) }}" class="btn kt-subheader__btn-primary">
                         Modifier &nbsp;
                     </a>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -37,7 +37,7 @@ class ProjectController extends AbstractController
      */
     public function dashboard(User $user, Project $project)
     {
-        $this->denyAccessUnlessGranted('view', $project);
+        $this->denyAccessUnlessGranted('edit', $project);
         
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -243,7 +243,11 @@ class ProjectController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        $query = $entityManager->getRepository(Project::class)->findProjectsAndContributions($user);
+        if($this->isGranted('ROLE_ADMIN') || ($user == $this->getUser()) ){
+            $query = $entityManager->getRepository(Project::class)->findProjectsAndContributions($user);
+        }else{
+            $query = $entityManager->getRepository(Project::class)->findProjectsAndContributions($user, $this->getUser());
+        }
 
         $projects = $paginator->paginate($query, 2);
         

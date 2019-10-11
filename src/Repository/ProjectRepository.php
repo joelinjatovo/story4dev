@@ -44,10 +44,20 @@ class ProjectRepository extends AppRepository
             ->getQuery();
     }
     
-    public function findProjectsAndContributions(User $user)
+    public function findProjectsAndContributions(User $user, ?User $currentUser = null)
     {
+        if($currentUser){
+            return $this->createQueryBuilder('p')
+                ->leftJoin('p.contributions', 'c1')
+                ->leftJoin('p.contributions', 'c2')
+                ->where('c1.user = :user AND c2.user = :current')
+                ->setParameter('user', $user)
+                ->setParameter('current', $currentUser)
+                ->getQuery();
+        }
+        
         return $this->createQueryBuilder('p')
-            ->join('p.contributions', 'c')
+            ->leftJoin('p.contributions', 'c')
             ->where('c.user = :user')
             ->setParameter('user', $user)
             ->getQuery();

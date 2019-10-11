@@ -44,18 +44,20 @@
                                 <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                             </li>
                             <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__item">
-                                <a href="{{ path('activity_index', { 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Activité</span>
-                                </a>
-                            </li>                        
-                            <li class="kt-nav__item">
-                                <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Indicateur</span>
-                                </a>
-                            </li>                        
+                            {% if is_granted('edit', project) %}
+                                <li class="kt-nav__item">
+                                    <a href="{{ path('activity_index', { 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-drop"></i>
+                                        <span class="kt-nav__link-text">Activité</span>
+                                    </a>
+                                </li>                        
+                                <li class="kt-nav__item">
+                                    <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-new-email"></i>
+                                        <span class="kt-nav__link-text">Indicateur</span>
+                                    </a>
+                                </li> 
+                            {% endif %}
                             <li class="kt-nav__item">
                                 <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-new-email"></i>
@@ -81,36 +83,38 @@
                         <div class="kt-widget__user">
                             <a href="#" class="kt-widget__username" style="margin-right: 10px;">{{ report.title }}</a>
                             <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-success report-status">{{ report.status }}</span>
-                            <div class="dropdown dropdown-inline kt-margin-l-5" data-toggle="kt-tooltip-" title="Change label" data-placement="right">
-                                <a href="#" class="btn btn-clean btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-caret-down"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-md dropdown-menu-fit dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-227px, 33px, 0px);">
-                                    <ul class="kt-nav">
-                                        <li class="kt-nav__head">
-                                            Changer le statut:
-                                            <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
-                                        </li>
-                                        <li class="kt-nav__separator">
-                                        </li>
-                                        <li class="kt-nav__item">
-                                            <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="opened">
-                                                <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-success kt-badge--inline kt-badge--lg kt-badge--bold">Ouvert</span></span>
-                                            </a>
-                                        </li>
-                                        <li class="kt-nav__item">
-                                            <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="closed">
-                                                <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-warning kt-badge--inline kt-badge--lg kt-badge--bold">Férmé</span></span>
-                                            </a>
-                                        </li>
-                                        <li class="kt-nav__item">
-                                            <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="terminated">
-                                                <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-danger kt-badge--inline kt-badge--lg kt-badge--bold">Términé</span></span>
-                                            </a>
-                                        </li>
-                                    </ul>
+                            {% if is_granted('edit', report) %}
+                                <div class="dropdown dropdown-inline kt-margin-l-5" data-toggle="kt-tooltip-" title="Change label" data-placement="right">
+                                    <a href="#" class="btn btn-clean btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-caret-down"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-md dropdown-menu-fit dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-227px, 33px, 0px);">
+                                        <ul class="kt-nav">
+                                            <li class="kt-nav__head">
+                                                Changer le statut:
+                                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                            </li>
+                                            <li class="kt-nav__separator">
+                                            </li>
+                                            <li class="kt-nav__item">
+                                                <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="opened">
+                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-success kt-badge--inline kt-badge--lg kt-badge--bold">Ouvert</span></span>
+                                                </a>
+                                            </li>
+                                            <li class="kt-nav__item">
+                                                <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="closed">
+                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-warning kt-badge--inline kt-badge--lg kt-badge--bold">Férmé</span></span>
+                                                </a>
+                                            </li>
+                                            <li class="kt-nav__item">
+                                                <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="terminated">
+                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-danger kt-badge--inline kt-badge--lg kt-badge--bold">Términé</span></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="kt-widget__subhead"></div>

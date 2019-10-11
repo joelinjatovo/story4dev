@@ -28,15 +28,17 @@
                             <li class="kt-nav__item">
                                 <a href="{{ path('report_show', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-line-chart"></i>
-                                    <span class="kt-nav__link-text">Details</span>
+                                    <span class="kt-nav__link-text">Détails</span>
                                 </a>
                             </li>
-                            <li class="kt-nav__item">
-                                <a href="{{ path('report_edit', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-settings"></i>
-                                    <span class="kt-nav__link-text">Edit</span>
-                                </a>
-                            </li>
+                            {% if is_granted('edit', report) %}
+                                <li class="kt-nav__item">
+                                    <a href="{{ path('report_edit', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                        <span class="kt-nav__link-text">Modifier</span>
+                                    </a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>

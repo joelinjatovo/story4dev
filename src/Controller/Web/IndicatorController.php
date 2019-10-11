@@ -356,6 +356,8 @@ class IndicatorController extends AbstractController
      */
     public function list(User $user, Project $project, Activity $activity, $page = 1, PaginatorService $paginator, Request $request)
     {
+        $this->denyAccessUnlessGranted('view', $activity);
+        
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
         }
