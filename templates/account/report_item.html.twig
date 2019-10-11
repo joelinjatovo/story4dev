@@ -1,0 +1,97 @@
+<!--begin:: Portlet-->
+<div class="kt-portlet kt-portlet--height-fluid">
+    <div class="kt-portlet__body kt-portlet__body--fit">
+        <!--begin::Widget -->
+        <div class="kt-widget kt-widget--project-1">
+            <div class="kt-widget__head">
+                <div class="kt-widget__label">
+                    <div class="kt-widget__media">
+                        <span class="kt-media kt-media--lg kt-media--circle"> 
+                            <img src="{{ report.author.avatar ? vich_uploader_asset(report.author, 'avatarFile') : default_avatar }}" alt="image">
+                        </span>
+                    </div>
+                    <div class="kt-widget__info kt-margin-t-5">
+                        <a href="{{ path('report_show', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-widget__title">
+                            {{ report.title }}                                                
+                        </a>
+                        <span class="kt-widget__desc">
+                            {{ report.author.fullname }}
+                        </span>
+                    </div>
+                </div>
+                <div class="kt-portlet__head-toolbar">
+                    <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                        <i class="flaticon-more-1"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+                        <ul class="kt-nav">
+                            <li class="kt-nav__item">
+                                <a href="{{ path('report_show', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                    <span class="kt-nav__link-text">Détails</span>
+                                </a>
+                            </li>
+                            {% if is_granted('edit', report) %}
+                                <li class="kt-nav__item">
+                                    <a href="{{ path('report_edit', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                        <span class="kt-nav__link-text">Modifier</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kt-widget__body">
+                <div class="kt-widget__stats">
+                    <div class="kt-widget__item">
+                        <span class="kt-widget__date">
+                            Date de creation
+                        </span>
+                        <div class="kt-widget__label">
+                            <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="kt-widget__item">
+                        <span class="kt-widget__date">
+                            Date de synchronisation
+                        </span>
+                        <div class="kt-widget__label">
+                            <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ report.syncedat is empty ? "" : report.syncedat | date('Y-m-d') }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <span class="kt-widget__text">
+                    {{ report.description|excerpt }}                         
+                </span>
+
+                <div class="kt-widget__content">
+                    <div class="kt-widget__details">
+                        <span class="kt-widget__subtitle">Résultat</span>
+                        <span class="kt-widget__value">{{ report.results.count }}</span>
+                    </div>
+                    <div class="kt-widget__details">
+                        <span class="kt-widget__subtitle">Files</span>
+                        <div class="kt-media-group">
+                            {% for reportFile in report.reportFiles %}
+                                {% if reportFile.file %}
+                                    <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Attached File">
+                                        <img src="{{ reportFile.file.name ? vich_uploader_asset(reportFile.file, 'file') : default_picture }}" alt="image">
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                            No file attached
+                            {% endfor %}
+                        </div>                                 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end::Widget -->
+    </div>
+</div>
+<!--end:: Portlet-->

@@ -365,7 +365,6 @@ class ReportController extends AbstractController
         }
     }
     
-    
     /**
      * @Route("/{slug}/project/{project_id}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
      * @Route("/{slug}/project/{project_id}/reports/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})

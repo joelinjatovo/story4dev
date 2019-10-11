@@ -66,4 +66,12 @@ class ReportRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->getQuery();
     }
+    
+    public function findByUser(User $user)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.author = :user')
+            ->setParameter('user', $user)
+            ->getQuery();
+    }
 }

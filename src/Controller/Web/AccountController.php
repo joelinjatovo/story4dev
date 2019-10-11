@@ -2,17 +2,22 @@
 
 namespace App\Controller\Web;
 
-use App\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+use App\Entity\User;
+use App\Entity\Report;
 use App\Form\AccountProfileType;
 use App\Form\AccountInfoType;
 use App\Form\AccountPasswordType;
 use App\Form\AccountNotificationType;
+use App\Form\UserType;
+use App\Service\PaginatorService;
+
 /** 
  * @Route(name="account_")
  *
@@ -169,6 +174,27 @@ class AccountController extends AbstractController
         */
 
         return $response;
+    }
+    
+    /**
+     * @Route("/{slug}/reports/{page<\d+>?1}", name="reports", methods="GET")
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     */
+    public function reports(User $user, $page = 1, PaginatorService $paginator)
+    {
+        if($this->getUser() != $user ){
+            throw $this->createNotFoundException('The current user does not match');
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $query = $entityManager->getRepository(Report::class)->findByUser($this->getUser());
+        
+        $reports = $paginator->paginate($query, 10);
+        
+        return $this->render('account/reports.html.twig', [
+            'user'     => $user,
+            'reports'  => $reports
+        ]);
     }
     
     
