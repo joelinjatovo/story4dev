@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Controller\Web;
+namespace App\Controller\Web\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /** 
- * @Route(name="setting_")
+ * @Route(name="admin_settings_")
  *
- * @IsGranted("ROLE_USER") 
+ * @IsGranted("ROLE_ADMIN") 
  */
-class SettingController extends AbstractController
+class SettingsController extends AbstractController
 {
     /**
-     * @Route("/setting/{tab?}", defaults={"tab":"general"}, name="index")
+     * @Route("/admin/settings/{tab?}", defaults={"tab":"general"}, name="index")
      */
     public function index($tab)
     {
-        return $this->render('setting/index.html.twig', [
+        return $this->render('admin/settings/index.html.twig', [
             'tab' => $tab,
             'user' => $this->getUser(),
         ]);
