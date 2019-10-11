@@ -32,6 +32,6 @@ class ProjectController extends AbstractFOSRestController
             'status'  => 'success', 
             'message' => 'project_found', 
             'data'    => $project
-        ], 200, [], ['groups' => ['project']]);
+        ], 200, [], ['groups' => ['project', 'date']]);
     }
 }
