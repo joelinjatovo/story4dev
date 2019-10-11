@@ -47,6 +47,15 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->getQuery();
     }
     
+    public function getRecent($limit = 10)
+    {
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+    
     public function findOneByConfirmToken($token)
     {
         return $this->createQueryBuilder('u')
