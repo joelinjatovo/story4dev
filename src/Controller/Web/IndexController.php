@@ -45,4 +45,20 @@ class IndexController extends AbstractController
         }
         return $this->redirectToRoute('app_login');
     }
+    
+    /**
+    * @Route("/faq", name="faq")
+    */
+    public function faq(Request $request)
+    {
+        return $this->render('faq/index.html.twig');
+    }
+    
+    /**
+    * @Route("/feedback", name="feedback")
+    */
+    public function feedback(Request $request)
+    {
+        return $this->render('feedback/index.html.twig');
+    }
 }
