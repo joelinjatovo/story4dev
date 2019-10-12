@@ -18,6 +18,9 @@ use App\Entity\User;
  */
 class ProjectContribution
 {
+    const STATUS_PING     = 'ping';
+    const STATUS_ACTIVE   = 'active';
+
     /**
      * Hook timestampable behavior
      * updates createdAt, updatedAt fields
@@ -40,6 +43,12 @@ class ProjectContribution
      * @Groups({"user", "project", "activity"})
      */
     private $roles = [];
+    
+    /**
+     * @ORM\Column(name="status", type="string", length=10, nullable=true)
+     * @Groups({"user", "project", "activity"})
+     */
+    private $status;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projectContributions")
@@ -85,7 +94,29 @@ class ProjectContribution
     public function isAdmin()
     {
         return in_array('ROLE_ADMIN', $this->getRoles());
+    }    
+
+    public function getStatus(): ?string
+    {
+        return (string) $this->status;
     }
+    
+    public function setStatus(?string $status): self
+    {
+        $this->status = $status;
+        
+        return $this;
+    }
+    
+    public function isPinged()
+    {
+        return $this->getStatus() == self::STATUS_PING;
+    }    
+
+    public function getStatusClass(): ?string
+    {
+        return  $this->isPinged() ? 'danger' : 'success' ;
+    }    
 
     public function getUser(): ?User
     {

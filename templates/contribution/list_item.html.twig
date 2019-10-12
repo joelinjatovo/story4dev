@@ -33,7 +33,18 @@
         <span style="width: 100px;"><span class="kt-font-bold">{{ contribution.user.createdat|ago }}</span></span>
     </td>
     <td data-field="Status" class="kt-datatable__cell">
-        <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.user.statusClass }}">{{ contribution.user.status }}</span></span>
+        {% if is_granted('accept', contribution) %}
+            <div class="form-group form-group-last" style="width: 100px;">
+                <div class="kt-checkbox-inline">
+                    <label class="kt-checkbox">
+                        <input class="change-contribution-status" data-id="{{ contribution.id }}" type="checkbox" {{ not contribution.pinged ? 'checked="checked"' : '' }}> Accepter
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+        {% else %}
+            <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.statusClass }}">{{ contribution.pinged ? 'unaccepted' : 'accepted' }}</span></span>
+        {% endif %}
     </td>
     <td data-field="Data" class="kt-datatable__cell">
         <span style="width: 100px;">{{ contribution.user.projectContributions.count }} contributions / {{ contribution.user.reports.count }} rapports </span>

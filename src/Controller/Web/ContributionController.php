@@ -52,7 +52,7 @@ class ContributionController extends AbstractController
      */
     public function show(User $user, Project $project, ProjectContribution $contribution)
     {
-        $this->denyAccessUnlessGranted('edit', $project);
+        $this->denyAccessUnlessGranted('view', $project);
         
         if($project->getAuthor() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -149,6 +149,45 @@ class ContributionController extends AbstractController
     }
     
     /**
+     * @Route("/contribution/status", name="status", methods="POST")
+     */
+    public function status(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $id = $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $contribution  = $entityManager->getRepository(ProjectContribution::class)->find($id);
+
+                if( $contribution){
+                    $this->denyAccessUnlessGranted('accept', $contribution);
+
+                    if($contribution->isPinged()){
+                        $contribution->setStatus(ProjectContribution::STATUS_ACTIVE);
+                    }else{
+                        $contribution->setStatus(ProjectContribution::STATUS_PING);
+                    }
+                    $entityManager->persist($contribution);
+                    $entityManager->flush();
+
+                    return $this->json([
+                        'success' => true,
+                        'accept'  => ! $contribution->isPinged(),
+                        'message' => 'Role changed',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
+    }
+    
+    /**
      * @Route("/contribution/remove", name="remove", methods="POST")
      */
     public function remove(Request $request)
@@ -210,6 +249,7 @@ class ContributionController extends AbstractController
                     $contribution = new ProjectContribution();
                     $contribution->setUser($user);
                     $contribution->setProject($project);
+                    $contribution->setStatus( ProjectContribution::STATUS_PING );
                     $contribution->setRoles(['ROLE_CONTRIBUTOR']);
                     
                     $entityManager->persist($contribution);

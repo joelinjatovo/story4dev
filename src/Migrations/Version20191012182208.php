@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20191007094311 extends AbstractMigration
+final class Version20191012182208 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,6 +22,7 @@ final class Version20191007094311 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->addSql('CREATE TABLE project_contributions (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, project_id INT DEFAULT NULL, roles JSON NOT NULL, status VARCHAR(10) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, INDEX IDX_A2A889F8A76ED395 (user_id), INDEX IDX_A2A889F8166D1F9C (project_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE activities (id INT AUTO_INCREMENT NOT NULL, address_id INT DEFAULT NULL, author_id INT DEFAULT NULL, project_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, budget DOUBLE PRECISION DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, contact_email VARCHAR(255) DEFAULT NULL, contact_phone VARCHAR(255) DEFAULT NULL, contact_address VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_B5F1AFE5F5B7AF75 (address_id), INDEX IDX_B5F1AFE5F675F31B (author_id), INDEX IDX_B5F1AFE5166D1F9C (project_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE activity_contributions (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, activity_id INT DEFAULT NULL, roles JSON NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, INDEX IDX_77EBD73AA76ED395 (user_id), INDEX IDX_77EBD73A81C06096 (activity_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE activities_files (id INT AUTO_INCREMENT NOT NULL, file_id INT NOT NULL, activity_id INT NOT NULL, type VARCHAR(255) NOT NULL, INDEX IDX_C5BC638A93CB796C (file_id), INDEX IDX_C5BC638A81C06096 (activity_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
@@ -34,7 +35,6 @@ final class Version20191007094311 extends AbstractMigration
         $this->addSql('CREATE TABLE options (id INT AUTO_INCREMENT NOT NULL, option_key VARCHAR(255) NOT NULL, option_value VARCHAR(255) NOT NULL, autoload TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, option_type VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE periodicities (id INT AUTO_INCREMENT NOT NULL, author_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, delay INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, INDEX IDX_2F071C5CF675F31B (author_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE projects (id INT AUTO_INCREMENT NOT NULL, address_id INT DEFAULT NULL, author_id INT NOT NULL, periodicity_id INT DEFAULT NULL, picture LONGTEXT DEFAULT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, budget DOUBLE PRECISION DEFAULT NULL, start_at DATETIME DEFAULT NULL, end_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, contact_email VARCHAR(255) DEFAULT NULL, contact_phone VARCHAR(255) DEFAULT NULL, contact_address VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_5C93B3A4F5B7AF75 (address_id), INDEX IDX_5C93B3A4F675F31B (author_id), INDEX IDX_5C93B3A433E79D0D (periodicity_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE project_contributions (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, project_id INT DEFAULT NULL, roles JSON NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, INDEX IDX_A2A889F8A76ED395 (user_id), INDEX IDX_A2A889F8166D1F9C (project_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE reports (id INT AUTO_INCREMENT NOT NULL, author_id INT DEFAULT NULL, activity_id INT DEFAULT NULL, title VARCHAR(255) DEFAULT NULL, description LONGTEXT DEFAULT NULL, synced_at DATETIME DEFAULT NULL, status VARCHAR(10) DEFAULT NULL, is_modified TINYINT(1) NOT NULL, ip VARCHAR(100) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deleted_at DATETIME DEFAULT NULL, longitude VARCHAR(255) DEFAULT NULL, latitude VARCHAR(255) DEFAULT NULL, altitude VARCHAR(255) DEFAULT NULL, location_title VARCHAR(255) DEFAULT NULL, INDEX IDX_F11FA745F675F31B (author_id), INDEX IDX_F11FA74581C06096 (activity_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE reports_files (id INT AUTO_INCREMENT NOT NULL, file_id INT NOT NULL, activity_id INT DEFAULT NULL, report_id INT NOT NULL, type VARCHAR(255) NOT NULL, INDEX IDX_ADE32AB293CB796C (file_id), INDEX IDX_ADE32AB281C06096 (activity_id), INDEX IDX_ADE32AB24BD2A4C0 (report_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE results (id INT AUTO_INCREMENT NOT NULL, author_id INT DEFAULT NULL, report_id INT DEFAULT NULL, indicator_id INT DEFAULT NULL, title VARCHAR(255) DEFAULT NULL, description VARCHAR(255) DEFAULT NULL, value INT NOT NULL, longitude VARCHAR(255) DEFAULT NULL, latitude VARCHAR(255) DEFAULT NULL, altitude VARCHAR(255) DEFAULT NULL, location_title VARCHAR(255) DEFAULT NULL, INDEX IDX_9FA3E414F675F31B (author_id), INDEX IDX_9FA3E4144BD2A4C0 (report_id), INDEX IDX_9FA3E4144402854A (indicator_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
@@ -44,6 +44,8 @@ final class Version20191007094311 extends AbstractMigration
         $this->addSql('CREATE TABLE ext_translations (id INT AUTO_INCREMENT NOT NULL, locale VARCHAR(8) NOT NULL, object_class VARCHAR(255) NOT NULL, field VARCHAR(32) NOT NULL, foreign_key VARCHAR(64) NOT NULL, content LONGTEXT DEFAULT NULL, INDEX translations_lookup_idx (locale, object_class, foreign_key), UNIQUE INDEX lookup_unique_idx (locale, object_class, field, foreign_key), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC');
         $this->addSql('CREATE TABLE ext_log_entries (id INT AUTO_INCREMENT NOT NULL, action VARCHAR(8) NOT NULL, logged_at DATETIME NOT NULL, object_id VARCHAR(64) DEFAULT NULL, object_class VARCHAR(255) NOT NULL, version INT NOT NULL, data LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\', username VARCHAR(255) DEFAULT NULL, INDEX log_class_lookup_idx (object_class), INDEX log_date_lookup_idx (logged_at), INDEX log_user_lookup_idx (username), INDEX log_version_lookup_idx (object_id, object_class, version), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC');
         $this->addSql('CREATE TABLE refresh_tokens (id INT AUTO_INCREMENT NOT NULL, refresh_token VARCHAR(128) NOT NULL, username VARCHAR(255) NOT NULL, valid DATETIME NOT NULL, UNIQUE INDEX UNIQ_9BACE7E1C74F2195 (refresh_token), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE project_contributions ADD CONSTRAINT FK_A2A889F8A76ED395 FOREIGN KEY (user_id) REFERENCES users (id)');
+        $this->addSql('ALTER TABLE project_contributions ADD CONSTRAINT FK_A2A889F8166D1F9C FOREIGN KEY (project_id) REFERENCES projects (id)');
         $this->addSql('ALTER TABLE activities ADD CONSTRAINT FK_B5F1AFE5F5B7AF75 FOREIGN KEY (address_id) REFERENCES addresses (id)');
         $this->addSql('ALTER TABLE activities ADD CONSTRAINT FK_B5F1AFE5F675F31B FOREIGN KEY (author_id) REFERENCES users (id)');
         $this->addSql('ALTER TABLE activities ADD CONSTRAINT FK_B5F1AFE5166D1F9C FOREIGN KEY (project_id) REFERENCES projects (id)');
@@ -64,8 +66,6 @@ final class Version20191007094311 extends AbstractMigration
         $this->addSql('ALTER TABLE projects ADD CONSTRAINT FK_5C93B3A4F5B7AF75 FOREIGN KEY (address_id) REFERENCES addresses (id)');
         $this->addSql('ALTER TABLE projects ADD CONSTRAINT FK_5C93B3A4F675F31B FOREIGN KEY (author_id) REFERENCES users (id)');
         $this->addSql('ALTER TABLE projects ADD CONSTRAINT FK_5C93B3A433E79D0D FOREIGN KEY (periodicity_id) REFERENCES periodicities (id)');
-        $this->addSql('ALTER TABLE project_contributions ADD CONSTRAINT FK_A2A889F8A76ED395 FOREIGN KEY (user_id) REFERENCES users (id)');
-        $this->addSql('ALTER TABLE project_contributions ADD CONSTRAINT FK_A2A889F8166D1F9C FOREIGN KEY (project_id) REFERENCES projects (id)');
         $this->addSql('ALTER TABLE reports ADD CONSTRAINT FK_F11FA745F675F31B FOREIGN KEY (author_id) REFERENCES users (id)');
         $this->addSql('ALTER TABLE reports ADD CONSTRAINT FK_F11FA74581C06096 FOREIGN KEY (activity_id) REFERENCES activities (id)');
         $this->addSql('ALTER TABLE reports_files ADD CONSTRAINT FK_ADE32AB293CB796C FOREIGN KEY (file_id) REFERENCES files (id)');
@@ -99,13 +99,14 @@ final class Version20191007094311 extends AbstractMigration
         $this->addSql('ALTER TABLE results DROP FOREIGN KEY FK_9FA3E4144402854A');
         $this->addSql('ALTER TABLE goals DROP FOREIGN KEY FK_C7241E2F1B48E3E1');
         $this->addSql('ALTER TABLE projects DROP FOREIGN KEY FK_5C93B3A433E79D0D');
+        $this->addSql('ALTER TABLE project_contributions DROP FOREIGN KEY FK_A2A889F8166D1F9C');
         $this->addSql('ALTER TABLE activities DROP FOREIGN KEY FK_B5F1AFE5166D1F9C');
         $this->addSql('ALTER TABLE iterations DROP FOREIGN KEY FK_78E67203166D1F9C');
-        $this->addSql('ALTER TABLE project_contributions DROP FOREIGN KEY FK_A2A889F8166D1F9C');
         $this->addSql('ALTER TABLE units DROP FOREIGN KEY FK_E9B07449166D1F9C');
         $this->addSql('ALTER TABLE reports_files DROP FOREIGN KEY FK_ADE32AB24BD2A4C0');
         $this->addSql('ALTER TABLE results DROP FOREIGN KEY FK_9FA3E4144BD2A4C0');
         $this->addSql('ALTER TABLE indicators DROP FOREIGN KEY FK_49B719A0F8BD700D');
+        $this->addSql('ALTER TABLE project_contributions DROP FOREIGN KEY FK_A2A889F8A76ED395');
         $this->addSql('ALTER TABLE activities DROP FOREIGN KEY FK_B5F1AFE5F675F31B');
         $this->addSql('ALTER TABLE activity_contributions DROP FOREIGN KEY FK_77EBD73AA76ED395');
         $this->addSql('ALTER TABLE files DROP FOREIGN KEY FK_6354059F675F31B');
@@ -114,11 +115,11 @@ final class Version20191007094311 extends AbstractMigration
         $this->addSql('ALTER TABLE iterations DROP FOREIGN KEY FK_78E67203F675F31B');
         $this->addSql('ALTER TABLE periodicities DROP FOREIGN KEY FK_2F071C5CF675F31B');
         $this->addSql('ALTER TABLE projects DROP FOREIGN KEY FK_5C93B3A4F675F31B');
-        $this->addSql('ALTER TABLE project_contributions DROP FOREIGN KEY FK_A2A889F8A76ED395');
         $this->addSql('ALTER TABLE reports DROP FOREIGN KEY FK_F11FA745F675F31B');
         $this->addSql('ALTER TABLE results DROP FOREIGN KEY FK_9FA3E414F675F31B');
         $this->addSql('ALTER TABLE tokens DROP FOREIGN KEY FK_AA5A118EA76ED395');
         $this->addSql('ALTER TABLE units DROP FOREIGN KEY FK_E9B07449F675F31B');
+        $this->addSql('DROP TABLE project_contributions');
         $this->addSql('DROP TABLE activities');
         $this->addSql('DROP TABLE activity_contributions');
         $this->addSql('DROP TABLE activities_files');
@@ -131,7 +132,6 @@ final class Version20191007094311 extends AbstractMigration
         $this->addSql('DROP TABLE options');
         $this->addSql('DROP TABLE periodicities');
         $this->addSql('DROP TABLE projects');
-        $this->addSql('DROP TABLE project_contributions');
         $this->addSql('DROP TABLE reports');
         $this->addSql('DROP TABLE reports_files');
         $this->addSql('DROP TABLE results');

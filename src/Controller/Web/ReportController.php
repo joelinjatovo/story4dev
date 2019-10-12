@@ -84,6 +84,7 @@ class ReportController extends AbstractController
         $report = new Report();
         
         $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity ));
+        $form->remove('createdAt');
         
         $form->handleRequest($request);
         if ( $form->isSubmitted() ) {

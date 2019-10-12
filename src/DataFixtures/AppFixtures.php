@@ -198,24 +198,28 @@ class AppFixtures extends Fixture
             if ( $project->getAuthor() == $admin ){
                 $contribution = new ProjectContribution();
                 $contribution->setUser( $admin );
+                $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
                 $contribution->setProject( $project );
                 $contribution->setRoles(['ROLE_ADMIN']);
                 $manager->persist( $contribution );
 
                 $contribution = new ProjectContribution();
                 $contribution->setUser( $user );
+                $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
                 $contribution->setProject( $project );
                 $contribution->setRoles(['ROLE_CONTRIBUTOR']);
                 $manager->persist( $contribution );
             }else{
                 $contribution = new ProjectContribution();
                 $contribution->setUser( $user );
+                $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
                 $contribution->setProject( $project );
                 $contribution->setRoles(['ROLE_ADMIN']);
                 $manager->persist( $contribution );
 
                 $contribution = new ProjectContribution();
                 $contribution->setUser( $admin );
+                $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
                 $contribution->setProject( $project );
                 $contribution->setRoles(['ROLE_CONTRIBUTOR']);
                 $manager->persist( $contribution );

@@ -105,6 +105,21 @@ jQuery(document).ready(function($){
             KTApp.unblock($this.closest('tr'));
         });
     });
+    $(document).on('click', '.change-contribution-status', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        KTApp.block($this.closest('tr'), {overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+        $.post("/contribution/status", { id: $this.attr('data-id') })
+        .done(function( data ) {
+            KTApp.unblock($this.closest('tr'));
+            if(data.success){
+                $this.prop('checked', data.accept);
+            }
+        })
+        .fail(function() {
+            KTApp.unblock($this.closest('tr'));
+        });
+    });
     $(document).on('click', '.btn-remove-contribution', function(e){
         e.preventDefault();
         var $this = $(this);
