@@ -72,7 +72,7 @@ class ReportController extends AbstractController
         return $this->json([
             'status' => 'error', 
             'error'  => "invalid_form",
-            'errors' => $formError->getErrorMessages($form)
+            'errors' => $formError->getApiErrorMessages($form)
         ], JsonResponse::HTTP_BAD_REQUEST);
     }
 

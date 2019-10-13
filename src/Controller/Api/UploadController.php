@@ -38,7 +38,7 @@ class UploadController extends AbstractController
                 return $this->json([
                     'status' => 'error', 
                     'error'  => "bad_request",
-                    'errors' => $formError->getErrorMessages($form)
+                    'errors' => $formError->getApiErrorMessages($form)
                 ], JsonResponse::HTTP_BAD_REQUEST, [], ['groups' => ['file']]);
             }
 
