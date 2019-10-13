@@ -15,6 +15,7 @@ class FileVoter extends Voter
     const VIEW   = 'view';
     const EDIT   = 'edit';
     const REMOVE = 'remove';
+    const DOWNLOAD = 'download';
 
     private $security;
     private $em;
@@ -28,7 +29,7 @@ class FileVoter extends Voter
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::VIEW, self::EDIT, self::REMOVE])) {
+        if (!in_array($attribute, [self::VIEW, self::EDIT, self::DOWNLOAD, self::REMOVE])) {
             return false;
         }
 
@@ -54,8 +55,8 @@ class FileVoter extends Voter
             return false;
         }
 
-        // you know $subject is a Report object, thanks to supports
-        /** @var Report $report */
+        // you know $subject is a File object, thanks to supports
+        /** @var File $file */
         $file = $subject;
 
         switch ($attribute) {
@@ -63,6 +64,8 @@ class FileVoter extends Voter
                 return $this->canView($file, $user);
             case self::EDIT:
                 return $this->canEdit($file, $user);
+            case self::DOWNLOAD:
+                return $this->canDownload($file, $user);
             case self::REMOVE:
                 return $this->canRemove($file, $user);
         }
@@ -76,10 +79,17 @@ class FileVoter extends Voter
         if ($this->canEdit($file, $user)) {
             return true;
         }
+        
+        return false;
+    }
 
-        // the Project object could have, for example, a method isPrivate()
-        // that checks a boolean $private property
-        return false; //!$report->isPrivate();
+    private function canDownload(File $file, User $user)
+    {
+        if( $user === $file->getAuthor() ) {
+            return true;
+        }
+        
+        return true;
     }
 
     private function canEdit(File $file, User $user)

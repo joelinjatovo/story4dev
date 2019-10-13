@@ -153,6 +153,11 @@ class Project
      */
     private $units;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Tag", mappedBy="project")
+     */
+    private $tags;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -162,6 +167,7 @@ class Project
         $this->contributions = new ArrayCollection();
         $this->metas = new ArrayCollection();
         $this->units = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -450,9 +456,16 @@ class Project
 
     public function getProgression(?Iteration $iteration = null)
     {
-        if( $this->getGoalValue($iteration) != 0 ) {
-            return (int) ($this->getValue($iteration)/$this->getGoalValue($iteration) * 100);
+        $progression = 0;
+        $activities = $this->getActivities();
+        foreach($activities as $activity){
+            $progression += $activity->getProgression($iteration);
         }
+
+        if(count($activities)>0){
+            return (int) ( $progression / count($activities) );
+        }
+        
         return 0;
     }
 
@@ -523,5 +536,36 @@ class Project
             ];
         }
         return $series;
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+            $tag->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+            // set the owning side to null (unless already changed)
+            if ($tag->getProject() === $this) {
+                $tag->setProject(null);
+            }
+        }
+
+        return $this;
     }
 }

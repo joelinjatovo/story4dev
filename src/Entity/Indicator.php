@@ -260,12 +260,15 @@ class Indicator
     public function getValue(?Iteration $iteration = null)
     {
         $value = 0;
-        foreach($this->getResults() as $result){
-            if($iteration){
-                if(($result->getReport()->getCreatedAt() >= $iteration->getStartAt()) && ($result->getReport()->getCreatedAt() < $iteration->getEndAt())){
+        if($iteration){
+            foreach($this->getResults() as $result){
+                if(($result->getReport()->getCreatedAt() >= $iteration->getStartAt()) && 
+                        ($result->getReport()->getCreatedAt() < $iteration->getEndAt())){
                     $value += $result->getValue();
                 }
-            }else{
+            }
+        }else{
+            foreach($this->getResults() as $result){
                 $value += $result->getValue();
             }
         }

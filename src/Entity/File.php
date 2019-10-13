@@ -5,7 +5,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File as SysFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -119,6 +118,16 @@ class File
      */
     private $syncedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Download", mappedBy="file")
+     */
+    private $downloads;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\FileTag", mappedBy="file")
+     */
+    private $fileTags;
+
     public function __construct()
     {
         $this->isExternal = false;
@@ -128,6 +137,8 @@ class File
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->setSyncedAt(new \DateTime());
+        $this->downloads = new ArrayCollection();
+        $this->fileTags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -373,6 +384,68 @@ class File
     public function setSyncedAt(\DateTimeInterface $syncedAt): self
     {
         $this->syncedAt = $syncedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Download[]
+     */
+    public function getDownloads(): Collection
+    {
+        return $this->downloads;
+    }
+
+    public function addDownload(Download $download): self
+    {
+        if (!$this->downloads->contains($download)) {
+            $this->downloads[] = $download;
+            $download->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDownload(Download $download): self
+    {
+        if ($this->downloads->contains($download)) {
+            $this->downloads->removeElement($download);
+            // set the owning side to null (unless already changed)
+            if ($download->getFile() === $this) {
+                $download->setFile(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FileTag[]
+     */
+    public function getFileTags(): Collection
+    {
+        return $this->fileTags;
+    }
+
+    public function addFileTag(FileTag $fileTag): self
+    {
+        if (!$this->fileTags->contains($fileTag)) {
+            $this->fileTags[] = $fileTag;
+            $fileTag->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFileTag(FileTag $fileTag): self
+    {
+        if ($this->fileTags->contains($fileTag)) {
+            $this->fileTags->removeElement($fileTag);
+            // set the owning side to null (unless already changed)
+            if ($fileTag->getFile() === $this) {
+                $fileTag->setFile(null);
+            }
+        }
 
         return $this;
     }

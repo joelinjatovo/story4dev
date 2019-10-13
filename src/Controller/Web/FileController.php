@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Vich\UploaderBundle\Handler\DownloadHandler;
 
 use App\Entity\File;
-use App\Entity\ActivityFile;
+use App\Entity\Download;
 use App\Entity\Activity;
 use App\Entity\User;
 use App\Entity\Project;
@@ -76,8 +76,19 @@ class FileController extends AbstractController
      * @Route("/download/{id}", name="download", methods="GET", requirements={"id"="\d+"})
      * @Entity("file", options={"mapping": {"id": "id"}})
      */
-    public function download(File $file, DownloadHandler $downloadHandler)
+    public function download(File $file, DownloadHandler $downloadHandler, Request $request)
     {
+        $this->denyAccessUnlessGranted('download', $file);
+
+        $download = new Download();
+        $download->setUser($this->getUser());
+        $download->setFile($file);
+        $download->setIp($request->getClientIp());
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($download);
+        $entityManager->flush();
+
         return $downloadHandler->downloadObject($file, 'file');
     }
 }

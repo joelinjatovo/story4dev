@@ -316,6 +316,11 @@ class User implements UserInterface, \Serializable
      */
     private $files;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Download", mappedBy="user", orphanRemoval=true)
+     */
+    private $downloads;
+
     public function __construct()
     {
         $this->agree = true;
@@ -334,6 +339,7 @@ class User implements UserInterface, \Serializable
         $this->projectContributions = new ArrayCollection();
         $this->activityContributions = new ArrayCollection();
         $this->files = new ArrayCollection();
+        $this->downloads = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -1110,6 +1116,37 @@ class User implements UserInterface, \Serializable
             // set the owning side to null (unless already changed)
             if ($file->getAuthor() === $this) {
                 $file->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Download[]
+     */
+    public function getDownloads(): Collection
+    {
+        return $this->downloads;
+    }
+
+    public function addDownload(Download $download): self
+    {
+        if (!$this->downloads->contains($download)) {
+            $this->downloads[] = $download;
+            $download->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDownload(Download $download): self
+    {
+        if ($this->downloads->contains($download)) {
+            $this->downloads->removeElement($download);
+            // set the owning side to null (unless already changed)
+            if ($download->getUser() === $this) {
+                $download->setUser(null);
             }
         }
 

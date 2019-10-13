@@ -344,20 +344,32 @@ class Activity
 
     public function getProgression(?Iteration $iteration)
     {
-        $goalValue = $this->getGoalValue($iteration);
-        $value     = $this->getValue($iteration);
         $progression = 0;
-        if($goalValue>0){
-            $progression = (int) ($value/$goalValue*100);
+        $indicators = $this->getIndicators();
+        foreach($indicators as $indicator){
+            $progression += $indicator->getProgression($iteration);
         }
-        return $progression;
+
+        if(count($indicators)>0){
+            return (int) ( $progression / count($indicators) );
+        }
+        
+        return 0;
     }
 
     public function getGoalValue(?Iteration $iteration)
     {
         $goalValue = 0;
-        foreach($iteration->getGoals() as $goal){
-            $goalValue += $goal->getValue();
+        if($iteration){
+            foreach($iteration->getGoals() as $goal){
+                $goalValue += $goal->getValue();
+            }
+        }else{
+            foreach($this->getProject()->getIterations() as $iteration){
+                foreach($iteration->getGoals() as $goal){
+                    $goalValue += $goal->getValue();
+                }
+            }
         }
         return $goalValue;
     }
