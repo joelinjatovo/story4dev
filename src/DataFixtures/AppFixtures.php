@@ -40,6 +40,11 @@ class AppFixtures extends Fixture
         $madagascar->setAddressLine1("Madagascar");
         $manager->persist($madagascar);
         
+        $madagascar2 = new Address();
+        $madagascar2->setCountry("MG");
+        $madagascar2->setAddressLine1("Madagascar");
+        $manager->persist($madagascar2);
+        
         $france = new Address();
         $france->setCountry("FR");
         $france->setAddressLine1("France");
@@ -59,8 +64,20 @@ class AppFixtures extends Fixture
         $admin->setUsername('joelinjatovo');
         $admin->setEmail('joelinjatovo@gmail.com');
         $admin->setPassword($this->passwordEncoder->encodePassword($admin, 'admin'));
-        $admin->setRoles(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN']);
+        $admin->setRoles(['ROLE_ADMIN']);
         $manager->persist($admin);
+        
+        $admin2 = new User();
+        $admin2->setActive(true);
+        $admin2->setStatus(User::STATUS_ACTIVE);
+        $admin2->setActivedAt(new \DateTime());
+        $admin2->setAddress($madagascar2);
+        $admin2->setFullname('Andrianjafy Rasoanindrainy');
+        $admin2->setUsername('andrian');
+        $admin2->setEmail('andrian.raso@gmail.com');
+        $admin2->setPassword($this->passwordEncoder->encodePassword($admin, 'admin'));
+        $admin2->setRoles(['ROLE_ADMIN']);
+        $manager->persist($admin2);
 
         $user = new User();
         $user->setActive(true);
@@ -202,6 +219,13 @@ class AppFixtures extends Fixture
                 $contribution->setProject( $project );
                 $contribution->setRoles(['ROLE_ADMIN']);
                 $manager->persist( $contribution );
+                
+                $contribution = new ProjectContribution();
+                $contribution->setUser( $admin2 );
+                $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
+                $contribution->setProject( $project );
+                $contribution->setRoles(['ROLE_ADMIN']);
+                $manager->persist( $contribution );
 
                 $contribution = new ProjectContribution();
                 $contribution->setUser( $user );
@@ -230,27 +254,17 @@ class AppFixtures extends Fixture
                     [
                         'title' => 'Activity 1.0',
                         'contactEmail' => 'joelinjatovo@gmail.com',
-                        'contactPhone' => '+261 331377768',
+                        'contactPhone' => '+261331377768',
                     ],
                     [
                         'title' => 'Activity 1.1',
-                        'contactEmail' => 'joelinjatovo@yahoo.com',
-                        'contactPhone' => '+261 341377768',
+                        'contactEmail' => 'andrian.raso@yahoo.com',
+                        'contactPhone' => '+261341377768',
                     ],
                     [
                         'title' => 'Activity 1.2',
                         'contactEmail' => 'haja.joelinjatovo@gmail.com',
-                        'contactPhone' => '+261 321377768',
-                    ],
-                    [
-                        'title' => 'Activity 1.3',
-                        'contactEmail' => 'haja.joelinjatovo@gmail.com',
-                        'contactPhone' => '+261 321377768',
-                    ],
-                    [
-                        'title' => 'Activity 1.4',
-                        'contactEmail' => 'haja.joelinjatovo@gmail.com',
-                        'contactPhone' => '+261 321377768',
+                        'contactPhone' => '+261321377768',
                     ]
                 ];
                 
