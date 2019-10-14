@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>{% block title %}Login / Signin Form{% endblock %}</title>
+        <title>{% block title %}Connecion / Souscription - SaaSProject{% endblock %}</title>
         <meta name="description" content="Latest updates and statistic charts"> 
 
         <link href="{{ asset('css/fonts/poppins/poppins.css') }}" rel="stylesheet">
@@ -22,50 +22,50 @@
         <div class="container {{ active_form == 'signup' ? 'right-panel-active' : '' }} {{ active_form == 'forgot' ? 'forgot-panel-active' : '' }}" id="container">
             <div class="form-container sign-up-container">
                 <form action="/register" method="post" id="sign-up-form">
-                    <h1>Create Account</h1>
-                    <p>Enter your personal details</p>
+                    <h1>Souscription</h1>
+                    <p>Entrer les accès pour votre compte</p>
                     <div class="input-group f_row">
                         <label>Email *</label>
                         <input type="text" class="input-field" name="email" autocomplete="off">
                         <u></u>
                     </div>
                     <div class="input-group f_row">
-                        <label>Password *</label>
+                        <label>Mot de passe *</label>
                         <input type="password" class="input-field" id="password" name="password">
                         <u></u>
                     </div>
                     <div class="input-group f_row last">
-                        <label>Confirm Password *</label>
+                        <label>Confirmation *</label>
                         <input type="password" class="input-field" name="password_confirm">
                         <u></u>
                     </div>
                     <div class="row kt-login__extra">
                         <div class="col kt-align-left">
                             <label class="kt-checkbox">
-                                <input type="checkbox" name="agree">I Agree the <a href="#" class="kt-link kt-login__link kt-font-bold" style="margin:0; padding:0;">terms and conditions</a>.
+                                <input type="checkbox" name="agree">J'accepte <a href="#" class="kt-link kt-login__link kt-font-bold" style="margin:0; padding:0;">les termes and conditions</a>.
                                 <span></span>
                             </label>
                             <span class="form-text text-muted"></span>
                         </div>
                     </div>
-                    <button>Sign Up</button>
+                    <button>S'inscrire</button>
                 </form>
             </div>
             <div class="form-container sign-in-container">
                 <form action="/login" method="post" id="sign-in-form">
-                    <h1>Sign in</h1>
+                    <h1>Connexion</h1>
                     <div class="social-container">
                         <a href="#" class="social" onclick="fb_login();"><i class="fab fa-facebook-f"></i></a>
                         <a href="{{ path('connect_google_start') }}" class="social"><i class="fab fa-google-plus-g"></i></a>
                     </div>
-                    <p style="margin-top: 0;">ou use your account</p>
+                    <p style="margin-top: 0;">ou utiliser votre compte existant</p>
                     <div class="input-group f_row {{ last_username is null ? '' : 'focus' }}">
                         <label>Email</label>
                         <input value="{{ last_username }}" class="input-field" type="text" name="email"  autocomplete="off" />
                         <u></u>
                     </div>
                     <div class="input-group f_row last">
-                        <label>Password</label>
+                        <label>Mot de passe</label>
                         <input type="password" class="input-field" name="password" />
                         <u></u>
                     </div>
@@ -75,49 +75,47 @@
                         <span></span>
                     </label>
                     -->
-                    <a href="javascript:;" id="forgot">Forgot your password?</a>
-                    <button>Sign In</button>
+                    <a href="javascript:;" id="forgot">Mot de passe oublié?</a>
+                    <button>Se connecter</button>
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" >
                 </form>
             </div>
             <div class="form-container forgot-container">
                 <form action="/forgot" method="post" id="forgot-form">
-                    <h1>Reset Password</h1>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+                    <h1>Réinitialiser le mot de passe</h1>
+                    <p>Un email sera envoyé dans votre boite email avec un lien permettant de réinitialiser votre mot de passe.</p>
                     <div class="input-group f_row last">
                         <label>Email</label>
                         <input class="input-field" type="text" name="email" autocomplete="off" />
                         <u></u>
                     </div>
-                    <button>Request</button>
-                    <a href="javascript:;" id="cancelForgot">Cancel</a>
+                    <button>Envoyer</button>
+                    <a href="javascript:;" id="cancelForgot">Annuler</a>
                 </form>
             </div>
             <div class="form-container message-container">
                 <div class="message">
-                    <h1 id="message-title">Error Message</h1>
-                    <p id="message-content">
-                        To keep connected with us please login with your personal info
-                    </p>
+                    <h1 id="message-title"></h1>
+                    <p id="message-content"></p>
                     <button class="ghost" id="btnOk">OK</button>
                 </div>
             </div>
             <div class="overlay-container">
                 <div class="overlay">
                     <div class="overlay-panel overlay-left">
-                        <h1 class="hidden-mobile">Welcome Back!</h1>
-                        <p class="hidden-mobile">To keep connected with us please login with your personal info</p>
-                        <button class="ghost" id="signIn">Sign In</button>
-                        <p class="hidden-mobile">or use social for registration</p>
+                        <h1 class="hidden-mobile">Bienvenu!</h1>
+                        <p class="hidden-mobile">Pour se connecter à l'application, utiliser les informations de votre compte existant.</p>
+                        <button class="ghost" id="signIn">Se connecter</button>
+                        <p class="hidden-mobile">ou pour s'inscrire, utiliser</p>
                         <div class="social-container hidden-mobile">
                             <a href="javascript:;" class="social"><i class="fab fa-facebook-f"></i></a>
                             <a href="javascript:;" class="social"><i class="fab fa-google-plus-g"></i></a>
                         </div>
                     </div>
                     <div class="overlay-panel overlay-right">
-                        <h1 class="hidden-mobile">Hello, Friend!</h1>
-                        <p class="hidden-mobile">Enter your personal details and start journey with us</p>
-                        <button class="ghost" id="signUp">Sign Up</button>
+                        <h1 class="hidden-mobile">Bonjour!</h1>
+                        <p class="hidden-mobile">Enregistrer les informations de votre compte pour commencer votre journée avec nous</p>
+                        <button class="ghost" id="signUp">S'inscrire</button>
                     </div>
                 </div>
             </div>
@@ -125,7 +123,7 @@
 
         {% block javascripts %}
             <script>
-                var KTAppMessages = {"waiting": "Please wait one minute..."};
+                var KTAppMessages = {"waiting": "Veuillez patientez s'il vous plaît..."};
                 var KTAppOptions = {"colors":{"state":{"brand":"#22b9ff","light":"#ffffff","dark":"#282a3c","primary":"#5867dd","success":"#34bfa3","info":"#36a3f7","warning":"#ffb822","danger":"#fd3995"},"base":{"label":["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape":["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};
             </script>
         

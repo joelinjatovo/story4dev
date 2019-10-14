@@ -77,7 +77,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Email could not be found.');
+            throw new CustomUserMessageAuthenticationException('Le compte que vous demandez n\'existe pas.');
         }
 
         return $user;
@@ -120,7 +120,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
                 || ( $exception instanceof EmailNotConfirmedException ) ){
                 $array['status_error'] = true;
             }else{
-                $array['message'] = 'Incorrect username or password. Please try again.';
+                $array['message'] = 'Mot de passe ou login invalide. Veuillez réessayer, s\'il vous plaît';
             }
             $response = new Response( json_encode( $array ) );
             $response->headers->set( 'Content-Type', 'application/json' );
