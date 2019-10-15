@@ -110,7 +110,7 @@ class LoginFormController extends AbstractController
             
             return $this->json([
                 'success' => true,
-                'message' => 'Merci. Pour terminer votre inscription; veuillez vérifier votre boîte email pour confirmet votre compte.',
+                'message' => 'Merci. Pour terminer votre inscription, veuillez vérifier votre boîte email pour confirmer votre compte.',
                 'confirm_url' => $url
             ]);
         }
