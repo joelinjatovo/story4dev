@@ -136,7 +136,7 @@ class UserController extends AbstractController
      */
     public function list(PaginatorService $paginator, $role = null, $status = null, $page = 1, Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         
         $entityManager = $this->getDoctrine()->getManager();
         
