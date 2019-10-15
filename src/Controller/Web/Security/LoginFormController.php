@@ -110,7 +110,7 @@ class LoginFormController extends AbstractController
             
             return $this->json([
                 'success' => true,
-                'message' => 'Thank you. To complete your registration please check your email.',
+                'message' => 'Merci. Pour terminer votre inscription; veuillez vérifier votre boîte email pour confirmet votre compte.',
                 'confirm_url' => $url
             ]);
         }
@@ -132,7 +132,7 @@ class LoginFormController extends AbstractController
         $user = $entityManager->getRepository(User::class)->findOneByConfirmToken($token);
 
         if ($user === null) {
-            $this->addFlash('danger', 'Mot de passe non reconnu');
+            $this->addFlash('danger', 'Ce lien n\'est plus valide.');
             return $this->redirectToRoute('app_index');
         }
 
@@ -144,7 +144,7 @@ class LoginFormController extends AbstractController
             return $this->redirectToRoute('app_index');
         }
         
-        $this->addFlash('notice', 'Mot de passe mis à jour !');
+        $this->addFlash('notice', 'Mot de passe mis à jour!');
         
         return $this->redirectToRoute('app_login');
     }
@@ -167,11 +167,11 @@ class LoginFormController extends AbstractController
                 if ( $request->isXmlHttpRequest() ) {
                     return $this->json(array( 
                         'success'  => false,
-                        'error'    => 'Email Inconnu, recommence !'
+                        'error'    => 'Ce compte n\'existe pas, veuillez recommencer!'
                     ));
                 }
                 
-                $this->addFlash('danger', 'Email Inconnu, recommence !');
+                $this->addFlash('danger', 'Ce compte n\'existe pas, veuillez recommencer!');
             
                 return $this->redirectToRoute('app_forgot_password');
             }
@@ -216,12 +216,12 @@ class LoginFormController extends AbstractController
             if ( $request->isXmlHttpRequest() ) {
                 return $this->json(array( 
                     'success'  => true,
-                    'message' => 'Cool! Password recovery instruction has been sent to your email.',
+                    'message' => 'Super! L\'instruction de réinitialisation de votre mot de passe a été bien envoyé dans votre boîte email. Merci de le vérifier.',
                     'reset_url' => $url
                 ));
             }
  
-            $this->addFlash('notice', 'Cool! Password recovery instruction has been sent to your email.');
+            $this->addFlash('notice', 'Super! L\'instruction de réinitialisation de votre mot de passe a été bien envoyé dans votre boîte email. Merci de le vérifier.');
             
             return $this->redirectToRoute('app_login');
         }
@@ -267,7 +267,7 @@ class LoginFormController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Votre mot de passe à bien été changé !');
+                $this->addFlash('success', 'Votre mot de passe à bien été modifié!');
 
                 return $this->render($this->view, [
                     'last_username' => '',
@@ -276,7 +276,7 @@ class LoginFormController extends AbstractController
                 ]);
                 
             }else{
-                $this->addFlash('error', 'Invalid request. Try again!');
+                $this->addFlash('error', 'Votre demande est invalide, veuillez réessayer!');
             }
         }
         

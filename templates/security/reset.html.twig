@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>{% block title %}Login / Signin Form{% endblock %}</title>
+        <title>{% block title %}Connecion / Souscription - SaaSProject{% endblock %}</title>
         <meta name="description" content="Latest updates and statistic charts"> 
 
         <link href="{{ asset('css/fonts/poppins/poppins.css') }}" rel="stylesheet">
@@ -22,15 +22,15 @@
         <div class="container {{ active_form == 'signup' ? 'right-panel-active' : '' }} {{ active_form == 'forgot' ? 'forgot-panel-active' : '' }}" id="container">
             <div class="form-container sign-up-container">
                 <form method="post">
-                    <h1>Reset Password</h1>
-                    <p>Create your new password here</p>
+                    <h1>Mot de passe</h1>
+                    <p>Créer votre nouveau mot de passe dans ce formulaire.</p>
                     
                     <div class="form-errors">
                         {{ form_errors(form) }}
                     </div>
                     
                     <div class="input-group f_row">
-                        {{ form_label( form.newpassword.first, "New Password *" ) }}
+                        {{ form_label( form.newpassword.first, "Nouveau mot de passe *" ) }}
                         {{ form_widget( form.newpassword.first, { 'attr' : { 'class' : 'input-field', 'autocomplete':'off' } } ) }}
                         <u></u>
                         <div class="form-error">
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="input-group f_row last">
-                        {{ form_label( form.newpassword.second, "Confirm New Password *" ) }}
+                        {{ form_label( form.newpassword.second, "Confirmation *" ) }}
                         {{ form_widget( form.newpassword.second, { 'attr' : { 'class' : 'input-field', 'autocomplete':'off' } } ) }}
                         <u></u>
                         <div class="form-error">
@@ -52,9 +52,9 @@
             <div class="overlay-container">
                 <div class="overlay">
                     <div class="overlay-panel overlay-left">
-                        <h1 class="hidden-mobile">Welcome Back!</h1>
-                        <p class="hidden-mobile">To keep connected with us please login with your personal info</p>
-                        <a href="{{ path('app_login') }}" class="button ghost">Sign In</a>
+                        <h1 class="hidden-mobile">Bienvenu!</h1>
+                        <p class="hidden-mobile">Pour se connecter à l'application, utiliser les informations de votre compte existant.</p>
+                        <a href="{{ path('app_login') }}" class="button ghost">Se connecter</a>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
 
         {% block javascripts %}
             <script>
-                var KTAppMessages = {"waiting": "Please wait one minute..."};
+                var KTAppMessages = {"waiting": "Veuillez patientez s'il vous plaît..."};
                 var KTAppOptions = {"colors":{"state":{"brand":"#22b9ff","light":"#ffffff","dark":"#282a3c","primary":"#5867dd","success":"#34bfa3","info":"#36a3f7","warning":"#ffb822","danger":"#fd3995"},"base":{"label":["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape":["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};
             </script>
         

@@ -63,20 +63,20 @@ jQuery(document).ready(function($){
                 error:function(d){
                     console.error(d);
                     KTApp.unblock(form);
-                    i("danger", "Error!", "Something was wrong.");
+                    i("danger", "Erreur!", "Une erreur s'est produite.");
                 },
                 success:function(t,s,r,a){
                     console.log(t);
                     KTApp.unblock(form);
     ;               if(t.success===true){
-                        i("success", "Success", "You will be redirect in few secondes.");
+                        i("success", "Succès", "Vous allez être redirigé dans quelques secondes.");
                         KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
                         $('.overlay-container').css('z-index', 0);
                         setTimeout(function(){
                             window.location.replace(t.redirect);
                         },2e3)
                     }else{
-                        i("danger", "Error!", t.message)
+                        i("danger", "Erreur!", t.message)
                     }
                 }
             })
@@ -105,17 +105,17 @@ jQuery(document).ready(function($){
                 error:function(d){
                     console.error(d);
                     KTApp.unblock(form);
-                    i("danger", "Error!", "Something was wrong.");
+                    i("danger", "Erreur!", "Une erreur s'est produite.");
                 },
                 success:function(t,s,r,a){
                     console.log(t);
                     KTApp.unblock(form);
     ;               if(t.success===true){
-                        i("success", "Success", t.message);
+                        i("success", "Succès", t.message);
                         form.clearForm();
                         form.validate().resetForm();
                     }else{
-                        i("danger", "Error!", t.error);
+                        i("danger", "Erreur!", t.error);
                     }
                 }
             })
@@ -144,17 +144,17 @@ jQuery(document).ready(function($){
                 error:function(d){
                     console.error(d);
                     KTApp.unblock(form);
-                    i("danger", "Error!", "Something was wrong.");
+                    i("danger", "Erreur!", "Une erreur s'est produite.");
                 },
                 success:function(t,s,r,a){
                     console.log(t);
                     KTApp.unblock(form);
     ;               if(t.success===true){
-                        i("success", "Success", t.message);
+                        i("success", "Succès", t.message);
                         form.clearForm();
                         form.validate().resetForm();
                     }else{
-                        i("danger", "Error!", t.error);
+                        i("danger", "Erreur!", t.error);
                     }
                 }
             })
