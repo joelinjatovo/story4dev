@@ -15,11 +15,19 @@
                             {{ project.title }}                                                 
                         </a>
                         <span class="kt-widget__desc">
-                            Subtitle
+                            {% if project.contactemail %}
+                                <a href="mailto:{{project.contactemail}}" style="color: #666;"><i class="flaticon2-new-email"></i> {{ project.contactemail }}</a>
+                            {% endif %}
+                            {% if project.contactphone %}
+                                <a href="tel:{{project.contactphone}}" style="color: #666;"><i class="flaticon2-calendar-3"></i> {{ project.contactphone }}</a>
+                            {% endif %}
+                            {% if project.contactaddress %}
+                                <a href="#" style="color: #666;"><i class="flaticon2-placeholder" ></i> {{ project.contactaddress }}</a>
+                            {% endif %}
                         </span>
                     </div>
                 </div>
-                <div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-toolbar kt-hidden">
                     <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
                         <i class="flaticon-more-1"></i>
                     </a>
@@ -131,14 +139,14 @@
                             <a href="{{ path( 'activity_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">{{ project.activities.count }}  Activities</a>
                         </div>
 
-                        <div class="kt-widget__blog">
+                        <div class="kt-widget__blog kt-hidden">
                             <i class="flaticon2-talk"></i>
                             <a href="{{ path( 'report_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">--- Reports</a>
                         </div>
                     </div>
 
                     <div class="kt-widget__section">
-                        <a href="{{ path('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="btn btn-brand btn-sm btn-upper btn-bold">details</a>                                 
+                        <a href="{{ path('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="btn btn-brand btn-sm btn-upper btn-bold">détails</a>                                 
                     </div>
                 </div>
             </div>

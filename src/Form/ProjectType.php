@@ -47,7 +47,7 @@ class ProjectType extends AbstractType
             ->add('contactemail')
             ->add('contactphone')
             ->add('contactaddress')
-            ->add('address', AddressType::class)
+            //->add('address', AddressType::class)
             ->add('periodicity', EntityType::class, [
                 'class' => Periodicity::class,
                 'choice_label' => function ($periodicty) {
