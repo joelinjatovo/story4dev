@@ -201,7 +201,7 @@ class ProjectController extends AbstractController
                     return $this->redirectToRoute('project_show', $args);
             }
             
-            return $this->redirectToRoute('project_edit', );
+            return $this->redirectToRoute('project_edit', $args);
             
         }
         
