@@ -168,26 +168,11 @@
                 $(this).addClass('changed-input');
             });
             $(window).on('beforeunload', function () {
+                /*
                 if ($('.changed-input').length) {
-                    /*
-                    return swal.fire({
-                        title: 'Are you sure?',
-                        text: "You haven\'t saved your changes.",
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, quit this page!'
-                    }).then(function(result) {
-                        if (result.value) {
-                            swal.fire(
-                                'Deleted!',
-                                'Your file has been deleted.',
-                                'success'
-                            )
-                        }
-                    });
-                    */
                     return "You haven\'t saved your changes.";
                 }
+                */
             });
             
             window.addEventListener("dragenter", function(e)

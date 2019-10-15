@@ -21,13 +21,15 @@ class ActivityType extends AbstractType
     {
         $builder
             ->add('title')
+            /*
             ->add('budget', FloatType::class, [
                 'required'   => false,
             ])
+            */
             ->add('contactemail')
             ->add('contactphone')
             ->add('contactaddress')
-            ->add('address', AddressType::class)
+            //->add('address', AddressType::class)
             ->add('project', EntityType::class, [
                 'class' => Project::class,
                 'choice_label' => function ($project) {
