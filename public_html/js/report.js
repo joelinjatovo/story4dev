@@ -8,6 +8,7 @@ jQuery(document).ready(function($){
             KTApp.unblockPage();
             badge.removeClass('kt-badge--unified-success');
             badge.removeClass('kt-badge--unified-danger');
+            badge.removeClass('kt-badge--unified-warning');
             if(data.success){
                 badge.addClass('kt-badge--unified-'+data.class);
                 badge.html(data.status);

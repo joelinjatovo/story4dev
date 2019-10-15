@@ -69,7 +69,7 @@
                     </div>
                     <div class="kt-widget__details">
                         <span class="kt-widget__title">{{ activity.reports.count }} Rapports</span>
-                        <a href="{{ path('report_list2', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-widget__value kt-font-brand">View</a>
+                        <a href="{{ path('report_list2', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-widget__value kt-font-brand">Lister</a>
                     </div>
                 </div>
 
@@ -79,7 +79,7 @@
                     </div>
                     <div class="kt-widget__details">
                         <span class="kt-widget__title">{{ activity.indicators.count }} Indicateurs</span>
-                        <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-widget__value kt-font-brand">View</a>
+                        <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-widget__value kt-font-brand">Lister</a>
                     </div>
                 </div>
                 <div class="kt-widget__item">
@@ -96,7 +96,7 @@
                                         </a>
                                     {% endif %}
                                 {% else %}
-                                    No file attached
+                                    Aucun fichier attaché avec cette activité.
                                 {% endfor %}
                             </div>
                         </div>

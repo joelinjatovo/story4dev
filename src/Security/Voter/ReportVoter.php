@@ -77,10 +77,26 @@ class ReportVoter extends Voter
         if ($this->canEdit($report, $user)) {
             return true;
         }
+        
+        $activity = $report->getActivity();
+        if( ! $activity ){
+            return false;
+        }
+        
+        $project = $activity->getProject();
+        if( ! $project ){
+            return false;
+        }
+        
+        $contribution = $this->em
+            ->getRepository(ProjectContribution::class)
+            ->findOneBy(['project' => $project, 'user' => $user]);
+        
+        if($contribution){
+            return true;
+        }
 
-        // the Project object could have, for example, a method isPrivate()
-        // that checks a boolean $private property
-        return false; //!$report->isPrivate();
+        return false;
     }
 
     private function canEdit(Report $report, User $user)

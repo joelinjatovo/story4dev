@@ -28,7 +28,7 @@ class ResultType extends AbstractType
                 'required'   => true,
             ])
             ->add('indicator', EntityType::class, [
-                'placeholder' => 'Choose an indicator',
+                'placeholder' => 'Sélectionner un indicateur',
                 'required' => true,
                 'class' => Indicator::class,
                 'query_builder' => function (IndicatorRepository $er) use ($activity) {

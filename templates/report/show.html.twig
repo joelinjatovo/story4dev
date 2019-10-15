@@ -9,7 +9,7 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Detail du rapport</h3>
+            <h3 class="kt-subheader__title">Détail du rapport</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__breadcrumbs">
                 <a href="{{ path('admin_index') }}" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
@@ -82,9 +82,9 @@
                     <div class="kt-widget__head">
                         <div class="kt-widget__user">
                             <a href="#" class="kt-widget__username" style="margin-right: 10px;">{{ report.title }}</a>
-                            <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-success report-status">{{ report.status }}</span>
+                            <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-{{ report.statusClass }} report-status">{{ report.statuslabel }}</span>
                             {% if is_granted('edit', report) %}
-                                <div class="dropdown dropdown-inline kt-margin-l-5" data-toggle="kt-tooltip-" title="Change label" data-placement="right">
+                                <div class="dropdown dropdown-inline kt-margin-l-5" data-toggle="kt-tooltip-" title="Changer label" data-placement="right">
                                     <a href="#" class="btn btn-clean btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fa fa-caret-down"></i>
                                     </a>
@@ -92,18 +92,18 @@
                                         <ul class="kt-nav">
                                             <li class="kt-nav__head">
                                                 Changer le statut:
-                                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Cliquer pour changer le statut..."></i>
                                             </li>
                                             <li class="kt-nav__separator">
                                             </li>
                                             <li class="kt-nav__item">
                                                 <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="opened">
-                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-success kt-badge--inline kt-badge--lg kt-badge--bold">Ouvert</span></span>
+                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-success kt-badge--inline kt-badge--lg kt-badge--bold">Editable</span></span>
                                                 </a>
                                             </li>
                                             <li class="kt-nav__item">
                                                 <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="closed">
-                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-warning kt-badge--inline kt-badge--lg kt-badge--bold">Férmé</span></span>
+                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-warning kt-badge--inline kt-badge--lg kt-badge--bold">Clôturé</span></span>
                                                 </a>
                                             </li>
                                             <li class="kt-nav__item">
@@ -125,7 +125,7 @@
                         <div class="kt-widget__stats d-flex align-items-center flex-fill">
                             <div class="kt-widget__item">
                                 <span class="kt-widget__date">
-                                    Date de creation
+                                    Date de création
                                 </span>
                                 <div class="kt-widget__label">
                                     <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d') }}</span>
@@ -155,7 +155,7 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title">
-                        Results
+                        Résultats
                     </h3>
                 </div>
             </div>
@@ -163,7 +163,9 @@
                 <div class="kt-widget31">
                     {% for result in report.results %}
                         {{ include('report/result.html.twig', { 'result' : result } ) }}
-                    {% endfor %}	
+                    {% else %}
+                        Ce rapport n'a pas encore de résultat.
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -180,6 +182,8 @@
                 <div class="kt-widget4">
                     {% for reportFile in report.reportFiles %}
                         {{ include('report/reportFile.html.twig', { 'reportFile' : reportFile } ) }}
+                    {% else %}
+                        Aucun fichier attaché à ce rapport.
                     {% endfor %}
                 </div>
             </div>
@@ -197,7 +201,6 @@
                 </div>
             </div>
             <div class="kt-portlet__body kt-portlet__body--fluid">
-            <!--https://www.latlong.net/c/?lat=0.000000&long=0.000000-->
                 <iframe src="https://maps.google.com/maps?q={{ report.latitude }},{{ report.longitude }}&hl=fr;z=14&output=embed" width="100%" height="450" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
             </div>
         </div>

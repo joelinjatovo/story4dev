@@ -341,19 +341,21 @@ class ReportController extends AbstractController
             if( $report ){
                 $this->denyAccessUnlessGranted('edit', $report);
                 
-                if( $status == 'closed' ){
-                    $report->setStatus('closed');
+                if( $status == Report::STATUS_CLOSED ){
+                    $report->setStatus( Report::STATUS_CLOSED );
+                }else if( $status == Report::STATUS_TERMINATED ) {
+                    $report->setStatus( Report::STATUS_TERMINATED );
                 }else{
-                    $status = 'opened';
-                    $report->setStatus('opened');
+                    $status = Report::STATUS_OPENED;
+                    $report->setStatus( Report::STATUS_OPENED );
                 }
                 $entityManager->persist($report);
                 $entityManager->flush();
                 
                 return $this->json([
                     'success' => true,
-                    'status'  => $status,
-                    'class'  => $status=='opened'?'success':'danger',
+                    'status'  => $report->getStatusLabel(),
+                    'class'   => $report->getStatusClass(),
                     'message' => 'Status changed',
                 ]);
             }
@@ -394,20 +396,12 @@ class ReportController extends AbstractController
             
             $this->denyAccessUnlessGranted('view', $activity);
             
-            if ($this->isGranted('edit', $activity)) {
-                $query = $entityManager->getRepository(Report::class)->findByActivity($activity);
-            }else{
-                $query = $entityManager->getRepository(Report::class)->findByActivity($activity, $this->getUser());
-            }
+            $query = $entityManager->getRepository(Report::class)->findByActivity($activity);
             
         }else{
             $this->denyAccessUnlessGranted('view', $project);
             
-            if ($this->isGranted('edit', $project)) {
-                $query = $entityManager->getRepository(Report::class)->findByProject($project);
-            }else{
-                $query = $entityManager->getRepository(Report::class)->findByProject($project, $this->getUser());
-            }
+            $query = $entityManager->getRepository(Report::class)->findByProject($project);
         }
         
         $reports = $paginator->paginate($query, 10);

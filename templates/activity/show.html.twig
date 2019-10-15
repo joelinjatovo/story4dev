@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Activity #{{ activity.id }} - Project #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}Activité #{{ activity.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,7 +9,7 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Detail de l'activite</h3>
+            <h3 class="kt-subheader__title">Détail de l'activité</h3>
             <div class="kt-subheader__breadcrumbs">
                 <a href="{{ path('admin_index') }}" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
@@ -51,7 +51,7 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                        <span class="kt-nav__link-text">Indicator</span>
+                                        <span class="kt-nav__link-text">Indicateur</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -146,7 +146,7 @@
 		<div class="kt-portlet kt-portlet--height-fluid">
 			<div class="kt-portlet__head">
 				<div class="kt-portlet__head-label">
-					<a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}"><h3 class="kt-portlet__head-title">Indicators</h3></a>
+					<a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}"><h3 class="kt-portlet__head-title">Indicateurs</h3></a>
 				</div>
                 <div class="kt-portlet__head-toolbar">
                     <a href="{{ path('indicator_list', { activity_id : activity.id, project_id : activity.project.id, slug: activity.project.author.slug } ) }}" class="btn btn-label-brand btn-bold btn-sm">
@@ -170,7 +170,7 @@
 					{% for indicator in activity.indicators.slice(0, 5) %}
 						{{ include('activity/indicator.html.twig', { 'indicator' : indicator } ) }}
 					{% else %}
-                    Il n'y a pas encore des indicators
+                    Il n'y a pas encore des indicateurs.
 					{% endfor %}
 				</div>
 			</div>
@@ -196,7 +196,7 @@
 					{% for activityFile in activity.activityFiles.slice(0, 5) %}
 						{{ include('activity/activity-file.html.twig', { 'activityFile' : activityFile } ) }}
 					{% else %}
-                    Il n'y a pas encore de document
+                    Il n'y a pas encore de document sur cette activité.
 					{% endfor %}
                 </div>
             </div>
@@ -234,7 +234,7 @@
 					{% for report in reports %}
 						{{ include('activity/report.html.twig', { 'report' : report } ) }}
 					{% else %}
-                        Il n'y a pas encore des rapports sur cette activités
+                        Il n'y a pas encore des rapports sur cette activité.
 					{% endfor %}
                 </div>            
             </div>

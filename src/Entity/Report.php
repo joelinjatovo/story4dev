@@ -21,9 +21,10 @@ use App\Traits\SoftDeleteableEntity;
  */
 class Report
 {
-    const STATUS_DRAFT  = 'draft';
-    const STATUS_OPENED = 'opened';
-    const STATUS_CLOSED = 'closed';
+    const STATUS_DRAFT      = 'draft';
+    const STATUS_OPENED     = 'opened';
+    const STATUS_CLOSED     = 'closed';
+    const STATUS_TERMINATED = 'terminated';
     
     /**
      * Hook timestampable behavior
@@ -184,6 +185,31 @@ class Report
         $this->status = $status;
         
         return $this;
+    }    
+
+    public function getStatusClass(): ?string
+    {
+        return $this->isClosed() ? 'warning' : ( $this->isTerminated() ? 'danger' : 'success' );
+    }      
+
+    public function getStatusLabel(): ?string
+    {
+        return $this->isClosed() ? 'Clôturé' : ( $this->isTerminated() ? 'Términé' : 'Editable' );
+    }  
+    
+    public function isOpened()
+    {
+        return $this->getStatus() == self::STATUS_OPENED;
+    }
+    
+    public function isClosed()
+    {
+        return $this->getStatus() == self::STATUS_CLOSED;
+    }
+    
+    public function isTerminated()
+    {
+        return $this->getStatus() == self::STATUS_TERMINATED;
     }
     
     public function open(): self
