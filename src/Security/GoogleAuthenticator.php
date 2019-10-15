@@ -51,7 +51,6 @@ class GoogleAuthenticator extends SocialAuthenticator
             $user = new User();
             $user->setEmail($googleUser->getEmail());
             $user->setFullname($googleUser->getName());
-            $user->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
         }
         
         $user->setGoogleId($googleUser->getId());

@@ -35,13 +35,6 @@ class FacebookAuthenticator extends SocialAuthenticator
 
     public function getCredentials(Request $request)
     {
-        // this method is only called if supports() returns true
-
-        // For Symfony lower than 3.4 the supports method need to be called manually here:
-        // if (!$this->supports($request)) {
-        //     return null;
-        // }
-
         return $this->fetchAccessToken($this->getFacebookClient());
     }
 
@@ -67,7 +60,6 @@ class FacebookAuthenticator extends SocialAuthenticator
         if (!$user) {
             $user = new User();
             $user->setEmail($facebookUser->getEmail());
-            $user->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
         }
         
         // 3) Maybe you just want to "register" them by creating
