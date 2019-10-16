@@ -3,14 +3,26 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Service\TokenGenerator;
+use App\Exception\AccountDeletedException;
+use App\Exception\AccountPingedException;
+use App\Exception\AccountBlockedException;
+use App\Exception\AccountCanceledException;
+use App\Exception\EmailNotConfirmedException;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
 use League\OAuth2\Client\Provider\GoogleUser;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 class GoogleAuthenticator extends SocialAuthenticator
@@ -18,12 +30,22 @@ class GoogleAuthenticator extends SocialAuthenticator
     private $clientRegistry;
     private $em;
     private $router;
+    private $mailer;
+    private $passwordEncoder;
+    private $tokenGenerator;
+    private $templating;
+    private $session;
 
-    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router)
+    public function __construct(SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating)
     {
         $this->clientRegistry = $clientRegistry;
         $this->em = $em;
         $this->router = $router;
+        $this->passwordEncoder = $passwordEncoder;
+        $this->mailer = $mailer;
+        $this->tokenGenerator = $tokenGenerator;
+        $this->templating = $templating;
+        $this->session = $session;
     }
 
     public function supports(Request $request)
@@ -47,15 +69,54 @@ class GoogleAuthenticator extends SocialAuthenticator
         $user = $this->em->getRepository(User::class)
             ->findOneBy(['email' => $email]);
         
+        $newAccount = false;
         if (!$user) {
+            $picture_url = $googleUser->getPicture();
+
+            $plain_password = random_bytes(10);
+            $username = str_replace('@', '', $email);
+            $username = str_replace('.', '-', $username);
+
             $user = new User();
             $user->setEmail($googleUser->getEmail());
             $user->setFullname($googleUser->getName());
+            $user->setPassword( $this->passwordEncoder->encodePassword($user, $plain_password) );
+            $user->setUsername( $username );
+            $user->setRoles( ['ROLE_USER'] );
+            $user->setStatus( User::STATUS_PING );
+
+            $user->setConfirmToken(null);
+            $user->setConfirmedAt( new \DateTime() );
+            
+            $token = $this->tokenGenerator->generateToken();
+            $user->setResetToken($token);
+            $user->setResetedAt(new \DateTime());
+            $newAccount = true;
         }
         
         $user->setGoogleId($googleUser->getId());
         $this->em->persist($user);
         $this->em->flush();
+
+        if($newAccount){
+            $url = $this->router->generate('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
+ 
+            $message = (new \Swift_Message('Nouveau compte'))
+                ->setFrom(array('joelinjatovo@gmail.com' => 'Admin'))
+                ->setTo($user->getEmail());
+            
+            $message->setBody(
+                $this->templating->render(
+                    'security/emails/forgot.html.twig',
+                    [
+                        'user' => $user,
+                        'url'  => $url,
+                    ]
+                ),
+                'text/html'
+            );
+            $this->mailer->send($message);
+        }
 
         return $user;
     }
@@ -108,7 +169,21 @@ class GoogleAuthenticator extends SocialAuthenticator
      */
     public function onAuthenticationFailure(Request $request, \Symfony\Component\Security\Core\Exception\AuthenticationException $exception)
     {
-        // TODO: Implement onAuthenticationFailure() method.
+        if( ( $exception instanceof AccountDeletedException )
+            || ( $exception instanceof AccountPingedException )
+            || ( $exception instanceof AccountBlockedException )
+            || ( $exception instanceof AccountCanceledException )
+            || ( $exception instanceof EmailNotConfirmedException ) ){
+            $message = $exception->getMessage();
+        }else{
+            $message = 'Une erreur s\'est produite. Veuillez réessayer, s\'il vous plaît';
+        }
+
+        $this->session->getFlashBag()->add('error', $message);
+
+        $targetUrl = $this->router->generate('app_login');
+
+        return new RedirectResponse($targetUrl);
     }
 
     /**

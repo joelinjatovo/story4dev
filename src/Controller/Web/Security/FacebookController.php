@@ -2,11 +2,18 @@
 
 namespace App\Controller\Web\Security;
 
+use App\Entity\User;
+use App\Exception\AccountDeletedException;
+use App\Exception\AccountPingedException;
+use App\Exception\AccountBlockedException;
+use App\Exception\AccountCanceledException;
+use App\Exception\EmailNotConfirmedException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class FacebookController extends AbstractController
 {
@@ -49,14 +56,12 @@ class FacebookController extends AbstractController
             /** @var \League\OAuth2\Client\Provider\FacebookUser $user */
             $user = $client->fetchUser();
 
-            // do something with all this new power!
-	        // e.g. $name = $user->getFirstName();
-            var_dump($user); die;
+            return $this->redirectToRoute('app_index');
             
         } catch (IdentityProviderException $e) {
-            // something went wrong!
-            // probably you should return the reason to the user
-            var_dump($e->getMessage()); die;
+            $this->addFlash('error', 'Une erreur s\'est produite! ' . $e->getMessage());
+
+            return $this->redirectToRoute('app_login');
         }
     }
 }

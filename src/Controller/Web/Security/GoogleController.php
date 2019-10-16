@@ -31,9 +31,10 @@ class GoogleController extends AbstractController
     public function connectCheck(Request $request)
     {
         if (!$this->getUser()) {
-            return new JsonResponse(array('status' => false, 'message' => "User not found!"));
+            $this->addFlash('error', 'Authentificaton non términée. Veuillez réessayer, s\'il vous plaît');
+            return $this->redirectToRoute('app_login');
         } else {
-            return $this->redirectToRoute('default');
+            return $this->redirectToRoute('app_index');
         }
 
     }

@@ -19,6 +19,9 @@
         
     </head>
     <body>
+        {% block alert %}
+            {{ include('_common/alert.html.twig') }}
+        {% endblock %}
         <div class="container {{ active_form == 'signup' ? 'right-panel-active' : '' }} {{ active_form == 'forgot' ? 'forgot-panel-active' : '' }}" id="container">
             <div class="form-container sign-up-container">
                 <form method="post">
