@@ -4,11 +4,16 @@ namespace App\Controller\Web\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 use App\Entity\Periodicity;
+use App\Form\PeriodicityType;
+use App\Service\FormError;
+
 
 /** 
  * @Route(name="admin_periodicity_")
@@ -18,66 +23,101 @@ use App\Entity\Periodicity;
 class PeriodicityController extends AbstractController
 {
     /**
-     * @Route("/periodicity", name="index", methods="GET")
+     * @Route("/admin/periodicity", name="index", methods="GET")
      */
     public function index()
     {
-        return $this->render('periodicity/create.html.twig');
-    }
-    
-    /**
-     * @Route("/periodicity", name="create", methods="POST")
-     */
-    public function create(ValidatorInterface $validator): Response
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-
         $periodicity = new Periodicity();
         
-        $errors = $validator->validate($periodicity);
-        if (count($errors) > 0) {
-            return new Response((string) $errors, 400);
+        $form = $this->createForm(PeriodicityType::class, $periodicity);
+        
+        return $this->render('admin/periodicity/create.html.twig', [
+            'periodicity' => $periodicity,
+            'form' => $form->createView()
+        ]);
+    }
+    
+    /**
+     * @Route("/admin/periodicity", name="create", methods="POST")
+     */
+    public function create(Request $request): Response
+    {
+        $periodicity = new Periodicity();
+        
+        $form = $this->createForm(PeriodicityType::class, $periodicity);
+        
+        $form->handleRequest($request);
+        
+        if ( $form->isSubmitted() && $form->isValid() ) {
+            if( $periodicity->getAuthor() == null ) {
+                $periodicity->setAuthor( $this->getUser() );
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($periodicity);
+            $entityManager->flush();
+        
+            $this->addFlash('success', 'Periodicity created succesfully.');
+
+            return $this->redirectToRoute('admin_periodicity_edit', [
+                'id'   => $periodicity->getId()
+            ]);
         }
-
-        $entityManager->persist($periodicity);
-
-        $entityManager->flush();
-
-        return new Response('Saved new periodicity with id '.$periodicity->getId());
-    }
-    
-    /**
-     * @Route("/periodicity/{id}", name="show", methods="GET", requirements={"id"="\d+"})
-     */
-    public function show(Periodicity $periodicity)
-    {
-        return $this->render('periodicity/show.html.twig', ['periodicity' => $periodicity]);
-    }
-    
-    /**
-     * @Route("/periodicity/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
-     */
-    public function edit(Periodicity $periodicity)
-    {
-        return $this->render('periodicity/edit.html.twig', ['periodicity' => $periodicity]);
-    }
-    
-    /**
-     * @Route("/periodicity/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
-     */
-    public function update(Periodicity $periodicity)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
         
-        $periodicity->setTitle('New periodicity name!');
-        
-        $entityManager->flush();
+        $this->addFlash('error', 'Something went wrong.');
 
-        return $this->redirectToRoute('periodicity_show', ['id' => $periodicity->getId()]);
+        return $this->redirectToRoute('admin_periodicity_create');
     }
     
     /**
-     * @Route("/periodicity/remove/{id}", name="remove", methods="POST")
+     * @Route("/admin/periodicity/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
+     * @Entity("periodicity", options={"mapping": {"id": "id"}})
+     */
+    public function edit(Periodicity $periodicity, Request $request, FormError $formError)
+    {
+        $form = $this->createForm(PeriodicityType::class, $periodicity);
+        
+        return $this->render('admin/periodicity/edit.html.twig', [
+            'periodicity' => $periodicity,
+            'form' => $form->createView(),
+        ]);
+    }
+    
+    /**
+     * @Route("/admin/periodicity/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
+     * @Entity("periodicity", options={"mapping": {"id": "id"}})
+     */
+    public function update(Periodicity $periodicity, Request $request, FormError $formError)
+    {
+        $form = $this->createForm(PeriodicityType::class, $periodicity);
+        
+        $form->handleRequest($request);
+        
+        if ( $form->isSubmitted() ) {
+            if( $form->isValid() ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($periodicity);
+                $entityManager->flush();
+        
+                $this->addFlash('success', 'Periodicity successfully updated.');
+
+                return $this->redirectToRoute('admin_periodicity_edit', [
+                    'id' => $periodicity->getId()
+                ]);
+            }else{
+                $this->addFlash('error', 'Invalid request. Try again!' . $form->getErrors() );
+            }
+        }
+        
+        return $this->render('admin/periodicity/edit.html.twig', [
+            'unit' => $periodicity,
+            'form' => $form->createView(),
+        ]);
+    }
+    
+    /**
+     * @Route("/admin/periodicity/remove/{id}", name="remove", methods="POST")
+     * @Entity("periodicity", options={"mapping": {"id": "id"}})
      */
     public function remove(Periodicity $periodicity)
     {
@@ -91,7 +131,7 @@ class PeriodicityController extends AbstractController
     }
     
     /**
-     * @Route("/periodicities/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/admin/periodicities/{page<\d+>?1}", name="list", methods="GET")
      */
     public function list($page = 1)
     {
@@ -99,6 +139,6 @@ class PeriodicityController extends AbstractController
         
         $periodicities = $entityManager->getRepository(Periodicity::class)->findAll();
         
-        return $this->render('periodicity/list.html.twig', ['periodicities' => $periodicities]);
+        return $this->render('admin/periodicity/list.html.twig', ['periodicities' => $periodicities]);
     }
 }

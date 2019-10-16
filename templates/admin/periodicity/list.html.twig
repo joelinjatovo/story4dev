@@ -1,0 +1,105 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Toutes les periodicités - Admin - {{ app.user.fullname }}{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block subheader %}
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Liste d'periodicité</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <div class="kt-subheader__group" id="kt_subheader_search">
+                <span class="kt-subheader__desc" id="kt_subheader_total">5 Total</span>
+            </div>
+        </div>        
+        <div class="kt-subheader__toolbar">
+            <a href="{{ path( 'admin_periodicity_index' ) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
+            <div class="kt-subheader__wrapper">
+                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
+                    <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+                                <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
+                            </g>
+                        </svg>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
+                        <ul class="kt-nav">
+                            <li class="kt-nav__head">
+                                Nouveau:                                    
+                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                            </li>
+                            <li class="kt-nav__separator"></li>
+                            <li class="kt-nav__item">
+                                <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
+                                    <span class="kt-nav__link-text">Project</span>
+                                </a>
+                            </li>                        
+                            <li class="kt-nav__item">
+                                <a href="{{ path( 'admin_unit_index' ) }}" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
+                                    <span class="kt-nav__link-text">Unité de mesure</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-xl-8 col-lg-12 order-lg-1 order-xl-1">
+		<div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
+            <div class="kt-portlet__body kt-portlet__body--fit">
+                <!--begin: Datatable -->
+                <div class="kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--loaded" id="local_data" style="">
+                    <table class="kt-datatable__table" style="display: block;">
+                        <thead class="kt-datatable__head">
+                            <tr class="kt-datatable__row" style="left: 0px;">
+                                <th data-field="Unit" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">Periodicité</span>
+                                </th>
+                                <th data-field="Unit" class="kt-datatable__cell">
+                                    <span style="width: 80px;">Durée</span>
+                                </th>
+                                <th data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 80px;">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="kt-datatable__body">
+                            {% for periodicity in periodicities %}
+                             <tr data-row="0" class="kt-datatable__row" style="left: 0px;">
+                                <td data-field="Unit" class="kt-datatable__cell">
+                                    <span style="width: 222px;"><span class="kt-font-bold">{{ periodicity.title }}</span></span>
+                                </td>
+                                <td data-field="Date" class="kt-datatable__cell">
+                                    <span style="width: 80px;"><span class="kt-font-bold">{{ periodicity.delay }} jours</span></span>
+                                </td>
+                                <td data-field="Status" class="kt-datatable__cell">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!--end: Datatable -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block javascripts %}
+{% endblock %}
