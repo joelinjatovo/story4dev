@@ -7,84 +7,15 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Account Edit</h3>
-            <span class="kt-subheader__separator kt-hidden"></span>
-            <div class="kt-subheader__breadcrumbs">
-                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
-                <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="" class="kt-subheader__breadcrumbs-link">Crud</a>
-                <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="" class="kt-subheader__breadcrumbs-link">Forms &amp; Controls                        </a>
-                <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="" class="kt-subheader__breadcrumbs-link">Form Layouts</a>
-                <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="" class="kt-subheader__breadcrumbs-link">Sticky Action Bar</a>
-                <!-- <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Active link</span> -->
+            <h3 class="kt-subheader__title">Profil</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <div class="kt-subheader__group" id="kt_subheader_search">
+                <span class="kt-subheader__desc" id="kt_subheader_total">{{ user.fullname }}</span>
             </div>
-                    
-        </div>
+        </div>        
         <div class="kt-subheader__toolbar">
-            <div class="kt-subheader__wrapper">
-                <a href="#" class="btn kt-subheader__btn-primary">
-                    Actions &nbsp;
-                    <!--<i class="flaticon2-calendar-1"></i>-->
-                </a>
-                                
-                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip" title="" data-placement="left" data-original-title="Quick actions">
-                    <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-                                <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
-                            </g>
-                        </svg>
-                        <!--<i class="flaticon2-plus"></i>-->
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(35px, 35px, 0px);">
-                        <!--begin::Nav-->
-                        <ul class="kt-nav">
-                            <li class="kt-nav__head">
-                                Add anything or jump to:                                   
-                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
-                            </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Order</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">Ticket</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-link"></i>
-                                    <span class="kt-nav__link-text">Goal</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Support Case</span>
-                                    <span class="kt-nav__link-badge">
-                                        <span class="kt-badge kt-badge--success">5</span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__foot">
-                                <a class="btn btn-label-brand btn-bold btn-sm" href="#">Upgrade plan</a>                                    
-                                <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
-                            </li>
-                        </ul>
-                        <!--end::Nav-->
-                    </div>
-                </div>
+            <div class="btn-group">
+                <button form="account_info" type="submit" class="btn btn-brand btn-bold">Enregistrer</button>
             </div>
         </div>
     </div>
@@ -97,107 +28,43 @@
         <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Account Information <small>change your account settings</small></h3>
-                </div>
-                <div class="kt-portlet__head-toolbar">
-                    <div class="kt-portlet__head-wrapper">
-                        <div class="dropdown dropdown-inline">
-                            <button type="button" class="btn btn-label-brand btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="flaticon2-console"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(32px, 33px, 0px);">
-                                <ul class="kt-nav">
-                                    <li class="kt-nav__section kt-nav__section--first">
-                                        <span class="kt-nav__section-text">Export Tools</span>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-print"></i>
-                                            <span class="kt-nav__link-text">Print</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-copy"></i>
-                                            <span class="kt-nav__link-text">Copy</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-file-excel-o"></i>
-                                            <span class="kt-nav__link-text">Excel</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-file-text-o"></i>
-                                            <span class="kt-nav__link-text">CSV</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-file-pdf-o"></i>
-                                            <span class="kt-nav__link-text">PDF</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <h3 class="kt-portlet__head-title">Détails du compte <small>modifier les informations de votre compte</small></h3>
                 </div>
             </div>
             
-            {{ form_start( form, { 'method' : 'POST', 'attr' : {'class' : 'kt-form kt-form--label-right' } } ) }}
+            {{ form_start( form, { 'method' : 'POST', 'attr' : {'id': 'account_info', 'class' : 'kt-form kt-form--label-right' } } ) }}
                 <div class="kt-portlet__body">
                     <div class="kt-section kt-section--first">
                         <div class="kt-section__body">
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Account:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">Compte:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.username, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.username, "Nom d'utilisateur", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         {{ form_widget( form.username, { 'attr' : { 'class' : 'form-control' } } ) }}
                                     </div>
+                                    <span class="form-text text-muted">Vous allez être déconnecter si vous modifier ce champ</span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.username, "Email Address", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.username, "Adresse email", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
                                         {{ form_widget( form.email, { 'attr' : { 'class' : 'form-control' } } ) }}
                                     </div>
-                                    <span class="form-text text-muted">Email will not be publicly displayed. <a href="#" class="kt-link">Learn more</a>.</span>
+                                    <span class="form-text text-muted">Vous allez être déconnecter si vous modifier ce champ</span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.language, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.language, "Langage", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     {{ form_widget( form.language, { 'attr' : { 'class' : 'form-control' } } ) }}
-                                </div>
-                            </div>
-                            <div class="form-group form-group-last row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Communication</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <div class="kt-checkbox-inline">
-                                        <label class="kt-checkbox">
-                                            <input type="checkbox" checked=""> Email
-                                            <span></span>
-                                        </label>
-                                        <label class="kt-checkbox">
-                                            <input type="checkbox" checked=""> SMS
-                                            <span></span>
-                                        </label>
-                                        <label class="kt-checkbox">
-                                            <input type="checkbox"> Phone
-                                            <span></span>
-                                        </label>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -209,8 +76,8 @@
                             <div class="col-lg-3 col-xl-3">
                             </div>
                             <div class="col-lg-9 col-xl-9">
-                                <button type="submit" class="btn btn-success">Submit</button>&nbsp;
-                                <button type="reset" class="btn btn-secondary">Cancel</button>
+                                <button type="submit" class="btn btn-success">Enregistrer</button>&nbsp;
+                                <button type="reset" class="btn btn-secondary">Annuler</button>
                             </div>
                         </div>
                     </div>

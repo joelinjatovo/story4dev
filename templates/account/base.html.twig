@@ -15,63 +15,6 @@
                     <h3 class="kt-portlet__head-title">
                     </h3>
                 </div>
-                <div class="kt-portlet__head-toolbar">
-                    <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
-                        <i class="flaticon-more-1"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-md">
-                        <!--begin::Nav-->
-                        <ul class="kt-nav">
-                            <li class="kt-nav__head">
-                                Export Options                                    
-                                <span data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--brand kt-svg-icon--md1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <rect id="bound" x="0" y="0" width="24" height="24"></rect>
-                                            <circle id="Oval-5" fill="#000000" opacity="0.3" cx="12" cy="12" r="10"></circle>
-                                            <rect id="Rectangle-9" fill="#000000" x="11" y="10" width="2" height="7" rx="1"></rect>
-                                            <rect id="Rectangle-9-Copy" fill="#000000" x="11" y="7" width="2" height="2" rx="1"></rect>
-                                        </g>
-                                    </svg>
-                                </span>
-                           </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Activity</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">FAQ</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-telegram-logo"></i>
-                                    <span class="kt-nav__link-text">Settings</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Support</span>
-                                    <span class="kt-nav__link-badge">
-                                        <span class="kt-badge kt-badge--success kt-badge--rounded">5</span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__foot">
-                                <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>                                    
-                                <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
-                            </li>
-                        </ul>
-                        <!--end::Nav-->
-                    </div>
-                </div>
             </div>
             <div class="kt-portlet__body kt-portlet__body--fit-y">
                 <!--begin::Widget -->
@@ -89,13 +32,8 @@
                                     {% endif %}
                                 </a>
                                 <span class="kt-widget__subtitle">
-                                    {{ user.title ?? 'Inconnu' }}             
+                                    {{ user.createdat|ago }}             
                                 </span>
-                            </div>
-
-                            <div class="kt-widget__action kt-hidden">
-                                <button type="button" class="btn btn-info btn-sm">chat</button>&nbsp;
-                                <button type="button" class="btn btn-success btn-sm">follow</button>                         
                             </div>
                         </div>
                     </div>
@@ -163,23 +101,6 @@
                                         Mot de passe
                                     </span>
                                 </span> 
-                                <span class="kt-badge kt-badge--unified-danger kt-badge--sm kt-badge--rounded kt-badge--bolder">5</span>                                         
-                            </a>
-                            <a href="{{ path('account_notification') }}" class="kt-widget__item {{ app.request.get('_route') == 'account_notification' ? 'kt-widget__item--active' : '' }}">
-                                <span class="kt-widget__section">
-                                    <span class="kt-widget__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <rect id="bound" x="0" y="0" width="24" height="24"></rect>
-                                                <path d="M6,2 L18,2 C18.5522847,2 19,2.44771525 19,3 L19,12 C19,12.5522847 18.5522847,13 18,13 L6,13 C5.44771525,13 5,12.5522847 5,12 L5,3 C5,2.44771525 5.44771525,2 6,2 Z M7.5,5 C7.22385763,5 7,5.22385763 7,5.5 C7,5.77614237 7.22385763,6 7.5,6 L13.5,6 C13.7761424,6 14,5.77614237 14,5.5 C14,5.22385763 13.7761424,5 13.5,5 L7.5,5 Z M7.5,7 C7.22385763,7 7,7.22385763 7,7.5 C7,7.77614237 7.22385763,8 7.5,8 L10.5,8 C10.7761424,8 11,7.77614237 11,7.5 C11,7.22385763 10.7761424,7 10.5,7 L7.5,7 Z" id="Combined-Shape" fill="#000000" opacity="0.3"></path>
-                                                <path d="M3.79274528,6.57253826 L12,12.5 L20.2072547,6.57253826 C20.4311176,6.4108595 20.7436609,6.46126971 20.9053396,6.68513259 C20.9668779,6.77033951 21,6.87277228 21,6.97787787 L21,17 C21,18.1045695 20.1045695,19 19,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,6.97787787 C3,6.70173549 3.22385763,6.47787787 3.5,6.47787787 C3.60510559,6.47787787 3.70753836,6.51099993 3.79274528,6.57253826 Z" id="Combined-Shape" fill="#000000"></path>
-                                            </g>
-                                        </svg>
-                                    </span>
-                                    <span class="kt-widget__desc">
-                                        Notification                                                     
-                                    </span>
-                                </span>    
                             </a>
                         </div>
                     </div>
@@ -188,6 +109,29 @@
             </div>
         </div>
         <!--end:: Widgets/Applications/User/Profile1-->
+
+        <!--begin:: Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <div class="kt-widget1 kt-widget1--fit">
+                    <div class="kt-widget1__item">
+                        <div class="kt-widget1__info">
+                            <h3 class="kt-widget1__title">Rapports</h3>
+                            <span class="kt-widget1__desc">Nombre total de rapport effectué</span>
+                        </div> 
+                        <span class="kt-widget1__number kt-font-brand">{{ user.reports.count }}</span>
+                    </div>
+                    <div class="kt-widget1__item">
+                        <div class="kt-widget1__info">
+                            <h3 class="kt-widget1__title">Contributions</h3>
+                            <span class="kt-widget1__desc">Nombre de projet contribué</span>
+                        </div>			
+                        <span class="kt-widget1__number kt-font-danger">{{ user.projectContributions.count }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end:: Portlet-->
 
      </div>
     <!--End:: App Aside-->

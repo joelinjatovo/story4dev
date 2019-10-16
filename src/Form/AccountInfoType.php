@@ -18,11 +18,11 @@ class AccountInfoType extends AbstractType
             ->add('email')
             ->add('language', ChoiceType::class, [
                 'choices' => [
-                    'English' => 'en',
-                    'French'  => 'fr',
+                    'English'   => 'en',
+                    'Français'  => 'fr',
                 ],
                 'required' => true,
-                'placeholder' => 'Choose a language',
+                'placeholder' => 'Sélectionnez votre langue',
                 //'preferred_choices' => ['fr'],
             ])
         ;

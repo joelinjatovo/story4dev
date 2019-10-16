@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Entity\User;
 use App\Entity\Report;
@@ -17,6 +18,7 @@ use App\Form\AccountPasswordType;
 use App\Form\AccountNotificationType;
 use App\Form\UserType;
 use App\Service\PaginatorService;
+use App\Service\TokenGenerator;
 
 /** 
  * @Route(name="account_")
@@ -42,9 +44,9 @@ class AccountController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
         
-                $this->addFlash('success', 'Account profile successfully updated.');
+                $this->addFlash('success', 'Votre compte a été bien mis à jour.');
             }else{
-                $this->addFlash('error', 'Invalid request. Try again!');
+                $this->addFlash('error', 'Votre demande est invalide! ' . $form->getErrors(true, true));
             }
         }
         
@@ -57,10 +59,13 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/info", name="info")
      */
-    public function info(Request $request)
+    public function info(Request $request, TokenGenerator $tokenGenerator, \Swift_Mailer $mailer)
     {
         $errors = [];
+
         $user = $this->getUser();
+
+        $oldEmail = $user->getEmail();
         
         $form = $this->createForm(AccountInfoType::class, $user);
         
@@ -69,12 +74,44 @@ class AccountController extends AbstractController
         if ( $form->isSubmitted() ) {
             if( $form->isValid() ) {
                 $entityManager = $this->getDoctrine()->getManager();
+
+                if($user->getEmail() != $oldEmail){
+                    // send confirm email
+                    $token = $tokenGenerator->generateToken();
+                    $user->setConfirmToken( $token );
+                    $user->setConfirmedAt( new \DateTime() );
+                    $user->setFacebookId( null );
+                    $user->setGoogleId( null );
+
+                    $url = $this->generateUrl('app_confirm', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
+
+                    $message = (new \Swift_Message('Modification adresse email - Confirmation'))
+                        ->setFrom(array('joelinjatovo@gmail.com'=> 'Admin'))
+                        ->setTo($user->getEmail());
+                    
+                    $message->setBody(
+                            $this->renderView(
+                                'security/emails/confirm.html.twig',
+                                [
+                                    'user' => $user,
+                                    'url'  => $url,
+                                ]
+                            ),
+                            'text/html'
+                        );
+                    $mailer->send($message);
+                }
+
                 $entityManager->persist($user);
                 $entityManager->flush();
         
-                $this->addFlash('success', 'Account info successfully updated.');
+                $this->addFlash('success', 'Votre compte a été bien mis à jour.');
+                
+                if($user->getEmail() != $oldEmail){
+                    return $this->redirectToRoute('app_logout');
+                }
             }else{
-                $this->addFlash('error', 'Invalid request. Try again!');
+                $this->addFlash('error', 'Votre demande est invalide! ' . $form->getErrors(true, true));
             }
         }
         
@@ -111,38 +148,18 @@ class AccountController extends AbstractController
                     $entityManager->persist($user);
                     $entityManager->flush();
 
-                    $this->addFlash('success', 'Votre mot de passe à bien été changé !');
-
+                    $this->addFlash('success', 'Votre compte a été bien changé.');
                 } else {
-                    $this->addFlash('error', 'Ancien mot de passe incorrect');
+                    $this->addFlash('error', 'Ancien mot de passe incorrect.');
                 }
-                
+        
+                $this->addFlash('success', 'Votre compte a été bien mis à jour.');
             }else{
-                $this->addFlash('error', 'Invalid request. Try again!');
+                $this->addFlash('error', 'Votre demande est invalide! ' . $form->getErrors(true, true));
             }
         }
         
         return $this->render('account/password.html.twig', [
-            'user'   => $user,
-            'form'   => $form->createView(),
-        ]);
-    }
-    
-    /**
-     * @Route("/account/notification", name="notification")
-     */
-    public function notification(Request $request)
-    {
-        $user = $this->getUser();
-        
-        $form = $this->createForm(AccountInfoType::class);
-        $form->handleRequest($request);
-        if ( $form->isSubmitted() ) {
-            if( $form->isValid()) {
-                
-            }
-        }
-        return $this->render('account/notification.html.twig', [
             'user'   => $user,
             'form'   => $form->createView(),
         ]);
@@ -161,17 +178,6 @@ class AccountController extends AbstractController
 
         // Redirecting user to login page in the end.
         $response = $this->redirectToRoute('app_forgot_password');
-
-        // Clearing the cookies.
-        /*
-        $cookieNames = [
-            $this->container->getParameter('session.name'),
-            $this->container->getParameter('session.remember_me.name'),
-        ];
-        foreach ($cookieNames as $cookieName) {
-            $response->headers->clearCookie($cookieName);
-        }
-        */
 
         return $response;
     }
