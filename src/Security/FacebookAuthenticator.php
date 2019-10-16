@@ -80,6 +80,9 @@ class FacebookAuthenticator extends SocialAuthenticator
         $token = "";
         if (!$user) {
             $picture_url = $facebookUser->getPictureUrl();
+            $contents = file_get_contents($picture_url);
+            $name = substr($picture_url, strrpos($picture_url, '/') + 1);
+            //\Symfony\Component\Templating\Storage\Storage::put($name, $contents);
 
             $plain_password = random_bytes(10);
             $username = str_replace('@', '', $email);
