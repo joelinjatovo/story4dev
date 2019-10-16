@@ -58,8 +58,16 @@ class FacebookAuthenticator extends SocialAuthenticator
                     ->findOneBy(['email' => $email]);
         
         if (!$user) {
+            $username = str_replace('@', '', $email);
+            $username = str_replace('.', '-', $username);
+
             $user = new User();
-            $user->setEmail($facebookUser->getEmail());
+            $user->setEmail( $email );
+            $user->setUsername( $username );
+            $user->setRoles( ['ROLE_USER'] );
+            $user->setStatus( User::STATUS_PING );
+            $user->setConfirmToken(null);
+            $user->setConfirmedAt( new \DateTime() );
         }
         
         // 3) Maybe you just want to "register" them by creating
