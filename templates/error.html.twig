@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Erreur{% endblock %} - Story4Dev</title>
+        <link href="{{ asset('css/fonts/poppins/poppins.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/fonts/roboto/roboto.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('css/error.css') }}" rel="stylesheet" type="text/css"/>
+        {% block stylesheets %}{% endblock %}
+        <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
+    </head>
+    <body id="page-body">
+        <div class="kt-sc" style="background-image: url('/images/bg-error.jpg')">
+            <div class="kt-container ">
+                <div class="kt-sc__bottom">
+                    <h3 class="kt-sc__heading kt-heading kt-heading--center kt-heading--xxl kt-heading--medium">
+                        {% block content %}{% endblock %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web;
+namespace App\Controller\Web\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,9 +11,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\Periodicity;
 
 /** 
- * @Route(name="periodicity_")
+ * @Route(name="admin_periodicity_")
  *
- * @IsGranted("ROLE_USER") 
+ * @IsGranted("ROLE_ADMIN") 
  */
 class PeriodicityController extends AbstractController
 {

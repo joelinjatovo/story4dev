@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web;
+namespace App\Controller\Web\Admin;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,9 +11,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Unit;
 
 /** 
- * @Route(name="unit_")
+ * @Route(name="qdmin_unit_")
  *
- * @IsGranted("ROLE_USER") 
+ * @IsGranted("ROLE_ADMIN") 
  */
 class UnitController extends AbstractController
 {
@@ -22,7 +22,7 @@ class UnitController extends AbstractController
      */
     public function index()
     {
-        return $this->render('unit/create.html.twig');
+        return $this->render('admin/unit/create.html.twig');
     }
     
     /**
@@ -99,6 +99,6 @@ class UnitController extends AbstractController
         
         $units = $entityManager->getRepository(Unit::class)->findAll();
         
-        return $this->render('unit/list.html.twig', ['units' => $units]);
+        return $this->render('admin/unit/list.html.twig', ['units' => $units]);
     }
 }
