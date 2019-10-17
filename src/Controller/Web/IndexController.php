@@ -27,7 +27,7 @@ class IndexController extends AbstractController
             ->setTo('haja@emediaplace.com')
             ->setBody(
                 $this->renderView(
-                    'emails/test.html.twig'
+                    'security/emails/test.html.twig'
                 ),
                 'text/html'
             )
