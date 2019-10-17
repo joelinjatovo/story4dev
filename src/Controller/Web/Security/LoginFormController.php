@@ -88,7 +88,7 @@ class LoginFormController extends AbstractController
             $url = $this->generateUrl('app_confirm', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
 
             $message = (new \Swift_Message('Nouveau compte - Confirmation'))
-                ->setFrom(array('joelinjatovo@gmail.com'=> 'Admin'))
+                ->setFrom(array('admin@story4dev.com'=> 'Admin - Story4Dev'))
                 ->setTo($user->getEmail());
             
             $message->setBody(
@@ -197,7 +197,7 @@ class LoginFormController extends AbstractController
             $url = $this->generateUrl('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
  
             $message = (new \Swift_Message('Oubli de mot de passe - Réinitialisation'))
-                ->setFrom(array('joelinjatovo@gmail.com' => 'Admin'))
+                ->setFrom(array('admin@story4dev.com'=> 'Admin - Story4Dev'))
                 ->setTo($user->getEmail());
             
             $message->setBody(

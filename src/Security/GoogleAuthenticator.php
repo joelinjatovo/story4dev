@@ -102,7 +102,7 @@ class GoogleAuthenticator extends SocialAuthenticator
             $url = $this->router->generate('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
  
             $message = (new \Swift_Message('Nouveau compte'))
-                ->setFrom(array('joelinjatovo@gmail.com' => 'Admin'))
+                ->setFrom(array('admin@story4dev.com'=> 'Admin - Story4Dev'))
                 ->setTo($user->getEmail());
             
             $message->setBody(
