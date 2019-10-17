@@ -18,6 +18,27 @@ use App\Entity\Project;
 class IndexController extends AbstractController
 {
     /**
+    * @Route("/mail", name="mail")
+    */
+    public function mail(\Swift_Mailer $mailer)
+    {
+        $message = (new \Swift_Message('Hello Email'))
+            ->setFrom('admin@story4dev.com')
+            ->setTo('haja@emediaplace.com')
+            ->setBody(
+                $this->renderView(
+                    'emails/test.html.twig'
+                ),
+                'text/html'
+            )
+        ;
+
+        $mailer->send($message);
+
+        return $this->render('faq/index.html.twig');
+    }
+
+    /**
     * @Route("/", name="index")
     */
     public function index(Request $request)
