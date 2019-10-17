@@ -4,4 +4,18 @@
 
 {% block stylesheets %}{% endblock %}
 
-{% block subheader %}{% endblock %}
+{% block subheader %}
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Modification de l'unité de mesure</h3>
+        </div>        
+        <div class="kt-subheader__toolbar">
+            <div class="btn-group">
+                <a href="{{ path('admin_unit_list') }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+                <button form="unit" type="submit" class="btn btn-brand btn-bold">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

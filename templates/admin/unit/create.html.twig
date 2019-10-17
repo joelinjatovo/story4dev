@@ -3,19 +3,18 @@
 {% block stylesheets %}
 {% endblock %}
 
+{% block title %}Nouvelle unité - {{ app.user.fullname }} {% endblock %}
+
 {% block subheader %}
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Unit</h3>
-            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <div class="kt-subheader__group" id="kt_subheader_search">
-                <span class="kt-subheader__desc" id="kt_subheader_total">Create unit</span>
-            </div>
+            <h3 class="kt-subheader__title">Nouvelle unité de mesure</h3>
         </div>        
         <div class="kt-subheader__toolbar">
             <div class="btn-group">
-                <button form="account_info" type="submit" class="btn btn-brand btn-bold">Enregistrer</button>
+                <a href="{{ path('admin_unit_list') }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+                <button form="unit" type="submit" class="btn btn-brand btn-bold">Enregistrer</button>
             </div>
         </div>
     </div>

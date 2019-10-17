@@ -82,11 +82,10 @@
                             <span class="kt-menu__arrow"></span>
                             <ul class="kt-menu__subnav">
                                 <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true" ><span class="kt-menu__link"><span class="kt-menu__link-text">Ajouter</span></span></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/admin/user" class="kt-menu__link "><i class="kt-menu__link-icon la la-user"></i><span class="kt-menu__link-text">Utilisateur</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/admin/project" class="kt-menu__link "><i class="kt-menu__link-icon la la-commenting"></i><span class="kt-menu__link-text">Projet</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/admin/project" class="kt-menu__link "><i class="kt-menu__link-icon la la-cart-arrow-down"></i><span class="kt-menu__link-text">Fichier</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/admin/project" class="kt-menu__link "><i class="kt-menu__link-icon la la-coffee"></i><span class="kt-menu__link-text">Unité de mesure</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="/admin/project" class="kt-menu__link "><i class="kt-menu__link-icon la la-coffee"></i><span class="kt-menu__link-text">Périodicité</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-user"></i><span class="kt-menu__link-text">Utilisateur</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_project_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-commenting"></i><span class="kt-menu__link-text">Projet</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_unit_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-coffee"></i><span class="kt-menu__link-text">Unité de mesure</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_periodicity_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-coffee"></i><span class="kt-menu__link-text">Périodicité</span></a></li>
                             </ul>
                         </div>
                     </li>

@@ -55,7 +55,7 @@ class UnitController extends AbstractController
             $entityManager->persist($unit);
             $entityManager->flush();
         
-            $this->addFlash('success', 'Unit created succesfully.');
+            $this->addFlash('success', 'Une nouvelle unité de mesure a été créée.');
 
             return $this->redirectToRoute('admin_unit_edit', [
                 'id'   => $unit->getId()
@@ -97,13 +97,13 @@ class UnitController extends AbstractController
                 $entityManager->persist($unit);
                 $entityManager->flush();
         
-                $this->addFlash('success', 'Unit successfully updated.');
+                $this->addFlash('success', "L'unité de mesure a été bien modifiée avec succès.");
 
                 return $this->redirectToRoute('admin_unit_edit', [
                     'id' => $unit->getId()
                 ]);
             }else{
-                $this->addFlash('error', 'Invalid request. Try again!' . $form->getErrors() );
+                $this->addFlash('error', 'Votre demande est invalide! Veuillez réessayer! ' . $form->getErrors() );
             }
         }
         
@@ -125,7 +125,7 @@ class UnitController extends AbstractController
         
         $entityManager->flush();
         
-        return new Response('unit removed successfully');
+        return new Response("L'unité de mesure a été supprimée.");
     }
     
     /**

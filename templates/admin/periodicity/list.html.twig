@@ -9,11 +9,7 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Liste d'periodicité</h3>
-            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <div class="kt-subheader__group" id="kt_subheader_search">
-                <span class="kt-subheader__desc" id="kt_subheader_total">5 Total</span>
-            </div>
+            <h3 class="kt-subheader__title">Liste de periodicité</h3>
         </div>        
         <div class="kt-subheader__toolbar">
             <a href="{{ path( 'admin_periodicity_index' ) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
@@ -38,7 +34,7 @@
                             <li class="kt-nav__item">
                                 <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Project</span>
+                                    <span class="kt-nav__link-text">Projet</span>
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
@@ -73,7 +69,7 @@
                                     <span style="width: 80px;">Durée</span>
                                 </th>
                                 <th data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 80px;">Actions</span>
+                                    <span style="width: 110px;">Actions</span>
                                 </th>
                             </tr>
                         </thead>
@@ -87,6 +83,14 @@
                                     <span style="width: 80px;"><span class="kt-font-bold">{{ periodicity.delay }} jours</span></span>
                                 </td>
                                 <td data-field="Status" class="kt-datatable__cell">
+                                    <span style="overflow: visible; position: relative; width: 110px;">
+                                        <a href="{{ path('admin_periodicity_edit', {id: periodicity.id} ) }}" title="Modifier détails" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                            <i class="la la-edit"></i>
+                                        </a>
+                                        <a title="Supprimer" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                            <i class="la la-trash"></i>
+                                        </a>
+                                    </span>
                                 </td>
                             </tr>
                             {% endfor %}

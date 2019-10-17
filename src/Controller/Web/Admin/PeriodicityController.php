@@ -57,14 +57,14 @@ class PeriodicityController extends AbstractController
             $entityManager->persist($periodicity);
             $entityManager->flush();
         
-            $this->addFlash('success', 'Periodicity created succesfully.');
+            $this->addFlash('success', 'Une nouvelle périodicité a été bien créée avec succès.');
 
             return $this->redirectToRoute('admin_periodicity_edit', [
                 'id'   => $periodicity->getId()
             ]);
         }
         
-        $this->addFlash('error', 'Something went wrong.');
+        $this->addFlash('error', 'Votre demande est invalide! Veuillez réessayer!');
 
         return $this->redirectToRoute('admin_periodicity_create');
     }
@@ -99,18 +99,18 @@ class PeriodicityController extends AbstractController
                 $entityManager->persist($periodicity);
                 $entityManager->flush();
         
-                $this->addFlash('success', 'Periodicity successfully updated.');
+                $this->addFlash('success', "La périodicité a été bien modifiée avec succès.");
 
                 return $this->redirectToRoute('admin_periodicity_edit', [
                     'id' => $periodicity->getId()
                 ]);
             }else{
-                $this->addFlash('error', 'Invalid request. Try again!' . $form->getErrors() );
+                $this->addFlash('error', 'Votre demande est invalide! Veuillez réessayer! ' . $form->getErrors() );
             }
         }
         
         return $this->render('admin/periodicity/edit.html.twig', [
-            'unit' => $periodicity,
+            'periodicity' => $periodicity,
             'form' => $form->createView(),
         ]);
     }
@@ -127,7 +127,7 @@ class PeriodicityController extends AbstractController
         
         $entityManager->flush();
         
-        return new Response('Periodicity removed successfully');
+        return new Response("La périodicité a été supprimée.");
     }
     
     /**
