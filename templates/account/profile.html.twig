@@ -46,11 +46,11 @@
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="kt-avatar kt-avatar--outline" id="kt_user_avatar">
                                         <div class="kt-avatar__holder" style="background-image: url('{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') : default_avatar }}');"></div>
-                                        <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Change avatar">
+                                        <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Sélectionner avatar">
                                             <i class="fa fa-pen"></i>
                                             <input type="file" id="account_profile_avatarFile_file" name="account_profile[avatarFile][file]" accept=".jpeg, .png, .jpg, .gif">
                                         </label>
-                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Supprimer avatar">
                                             <i class="fa fa-times"></i>
                                         </span>
                                     </div>
@@ -127,33 +127,6 @@
 </div>  
 {% endblock %}
 
-
 {% block javascripts %}
 <script src="{{ asset('js/profile.js') }}" type="text/javascript" ></script>
-<script type="text/javascript">
-function readURL(input) {
-    
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            $('.kt-avatar__holder').css({ 'background-image' : 'url("' + e.target.result + '")', 'background-size' : 'cover', 'background-repeat' : 'no-repeat', 'background-position' : 'center center'  });
-        }
-        
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-    
-$("#avatar-img").change(function(){
-    readURL(this);
-});
-
-function ajax_formData(image) {
-    var path = "/";
-    alert(image);
-    $.post(path, {image: image}, function (data) {
-        alert(data.message);
-    }, "json");
-}
-</script>
 {% endblock %}
