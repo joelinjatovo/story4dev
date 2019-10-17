@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Project;
+use App\Form\FeedbackType;
 
 /** 
  * @Route(name="app_")
@@ -78,8 +79,41 @@ class IndexController extends AbstractController
     /**
     * @Route("/feedback", name="feedback")
     */
-    public function feedback(Request $request)
+    public function feedback(Request $request, \Swift_Mailer $mailer)
     {
-        return $this->render('feedback/index.html.twig');
+        
+        $form = $this->createForm(FeedbackType::class);
+        
+        $form->handleRequest($request);
+        
+        if ( $form->isSubmitted() && $form->isValid() ) {
+            $name    = $form->get('name')->getData();
+            $phone   = $form->get('phone')->getData();
+            $email   = $form->get('email')->getData();
+            $message = $form->get('message')->getData();
+            
+            $message = (new \Swift_Message('Feedback - Story4Dev'))
+                ->setFrom('admin@story4dev.com')
+                ->setTo('admin@story4dev.com')
+                ->setBody(
+                    $this->renderView(
+                        'index/emails/feedback.html.twig',[
+                            'name'    => $name,
+                            'phone'   => $phone,
+                            'email'   => $email,
+                            'message' => $message,
+                        ]
+                    ),
+                    'text/html'
+                )
+            ;
+
+            $mailer->send($message);
+        }
+        
+        return $this->render('feedback/index.html.twig', [
+            'user'    => $this->getUser(), 
+            'form'    => $form->createView()
+        ]);
     }
 }
