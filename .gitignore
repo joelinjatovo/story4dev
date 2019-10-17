@@ -2,7 +2,7 @@
 /.env.local
 /.env.local.php
 /.env.*.local
-/public_html/uploads/*
+/public_html/uploads/
 /public_html/bundles/
 /var/
 /vendor/
