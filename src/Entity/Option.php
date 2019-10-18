@@ -43,6 +43,20 @@ class Option
      */
     private $autoload;
 
+    public function __construct()
+    {
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
+        $this->setAutoload(true);
+    }
+
+    public function setId(?int $id): ?self
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
