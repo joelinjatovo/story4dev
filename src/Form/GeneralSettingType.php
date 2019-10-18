@@ -2,26 +2,27 @@
 
 namespace App\Form;
 
-use App\Entity\Option;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class OptionType extends AbstractType
+use App\Entity\Option;
+use App\Form\OptionType;
+
+class GeneralSettingType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('option_key')
-            ->add('option_value')
-            ->add('autoload')
+            ->add('app_name', OptionType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Option::class,
+            // Configure your form options here
         ]);
     }
 }

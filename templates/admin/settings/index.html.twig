@@ -80,6 +80,7 @@
             <!--Begin:: Tab Content-->
             {% if( tab == 'general' ) %}
                 <div class="tab-pane {{ tab == 'general' ? 'active' : '' }}">
+                    {{ form( form ) }}
                     <form method="post" class="kt-form kt-form--label-right">
                         <div class="kt-form__body">
                             <div class="kt-section kt-section--first">

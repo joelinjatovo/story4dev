@@ -8,7 +8,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repositor\OptionRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\OptionRepository")
  * @ORM\Table(name="options")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
