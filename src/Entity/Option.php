@@ -8,15 +8,11 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repositor\OptionRepository")
  * @ORM\Table(name="options")
- * @ORM\MappedSuperclass
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="option_type", type="string")
- * @ORM\DiscriminatorMap({"general" = "GeneralOption"})
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
-abstract class Base
+class Option
 {
     /**
      * Hook timestampable behavior
