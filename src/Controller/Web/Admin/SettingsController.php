@@ -39,14 +39,13 @@ class SettingsController extends AbstractController
                 }
                 $em->flush();
         
-                $this->addFlash('success', "La périodicité a été bien modifiée avec succès.");
+                $this->addFlash('success', "Les paramètres sont bien enregistrés.");
             }else{
                 $this->addFlash('error', 'Votre demande est invalide! Veuillez réessayer! ' . $form->getErrors() );
             }
         }
         
         return $this->render('admin/settings/index.html.twig', [
-            'tab'  => "general",
             'user' => $this->getUser(),
             'form' => $form->createView()
         ]);

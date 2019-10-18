@@ -152,26 +152,19 @@ class ActivityController extends AbstractController
         }
         
         $entityManager = $this->getDoctrine()->getManager();
-        if ($this->isGranted('edit', $activity)) {
-            $reports = $entityManager->getRepository(Report::class)->findByActivity($activity)->execute();
-        }else{
-            $reports = $entityManager->getRepository(Report::class)->findByActivity($activity, $this->getUser())->execute();
-        }
-        
+        $reports = $entityManager->getRepository(Report::class)->findByActivity($activity)->execute();
+
         $indicator = new Indicator();
         $form = $this->createForm(IndicatorType::class, $indicator);
         
         $data   =  $activity->getData();
         $series =  $activity->getSerie();
         
-        
-        //dump($data); exit;
-        
         return $this->render('activity/show.html.twig', [
             'user'     => $user,
             'project'  => $project,
             'activity' => $activity, 
-            'reports' => $reports, 
+            'reports'  => $reports, 
             'form'     => $form->createView(),
             'data'     => json_encode($data),
             'series'   => json_encode($series),

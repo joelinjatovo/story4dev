@@ -15,6 +15,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Entity\User;
 use App\Service\TokenGenerator;
+use App\Service\OptionService;
+use App\Helper\MessageHelper;
 use App\Form\AccountPasswordType;
 
 class LoginFormController extends AbstractController
@@ -53,7 +55,7 @@ class LoginFormController extends AbstractController
     /**
      * @Route("/register", name="app_register", methods="GET|POST")
      */
-    public function register(Request $request, TokenGenerator $tokenGenerator, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, \Swift_Mailer $mailer): Response
+    public function register(OptionService $optionService, Request $request, TokenGenerator $tokenGenerator, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, \Swift_Mailer $mailer): Response
     {
         if ( $request->isXmlHttpRequest() ) {
             $user = new User();
@@ -87,8 +89,7 @@ class LoginFormController extends AbstractController
  
             $url = $this->generateUrl('app_confirm', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
 
-            $message = (new \Swift_Message('Nouveau compte - Confirmation'))
-                ->setFrom(array('admin@story4dev.com'=> 'Admin - Story4Dev'))
+            $message = MessageHelper::getMessage($optionService, 'Nouveau compte')
                 ->setTo($user->getEmail());
             
             $message->setBody(
@@ -152,7 +153,7 @@ class LoginFormController extends AbstractController
     /**
      * @Route("/forgot", name="app_forgot_password", methods="GET|POST")
      */
-    public function forgot(Request $request, TokenGenerator $tokenGenerator, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer): Response
+    public function forgot(OptionService $optionService, Request $request, TokenGenerator $tokenGenerator, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer): Response
     {
         if ($request->isMethod('post')) {
  
@@ -196,11 +197,9 @@ class LoginFormController extends AbstractController
  
             $url = $this->generateUrl('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
  
-            $message = (new \Swift_Message('Oubli de mot de passe - Réinitialisation'))
-                ->setFrom(array('admin@story4dev.com'=> 'Admin - Story4Dev'))
-                ->setTo($user->getEmail());
-            
-            $message->setBody(
+            $message = MessageHelper::getMessage($optionService, 'Nouveau mot de passe')
+                ->setTo($user->getEmail())
+                ->setBody(
                     $this->renderView(
                         'security/emails/forgot.html.twig',
                         [

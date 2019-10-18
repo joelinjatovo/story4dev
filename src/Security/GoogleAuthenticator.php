@@ -3,7 +3,9 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Helper\MessageHelper;
 use App\Service\TokenGenerator;
+use App\Service\OptionService;
 use App\Exception\AccountDeletedException;
 use App\Exception\AccountPingedException;
 use App\Exception\AccountBlockedException;
@@ -19,8 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -35,8 +35,9 @@ class GoogleAuthenticator extends SocialAuthenticator
     private $tokenGenerator;
     private $templating;
     private $session;
+    private $optionService;
 
-    public function __construct(SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating)
+    public function __construct(OptionService $optionService, SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating)
     {
         $this->clientRegistry = $clientRegistry;
         $this->em = $em;
@@ -46,6 +47,7 @@ class GoogleAuthenticator extends SocialAuthenticator
         $this->tokenGenerator = $tokenGenerator;
         $this->templating = $templating;
         $this->session = $session;
+        $this->optionService = $optionService;
     }
 
     public function supports(Request $request)
@@ -101,20 +103,18 @@ class GoogleAuthenticator extends SocialAuthenticator
         if($newAccount){
             $url = $this->router->generate('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
  
-            $message = (new \Swift_Message('Nouveau compte'))
-                ->setFrom(array('admin@story4dev.com'=> 'Admin - Story4Dev'))
-                ->setTo($user->getEmail());
-            
-            $message->setBody(
-                $this->templating->render(
-                    'security/emails/forgot.html.twig',
-                    [
-                        'user' => $user,
-                        'url'  => $url,
-                    ]
-                ),
-                'text/html'
-            );
+            $message = MessageHelper::getMessage($this->optionService, 'Nouvelle inscription')
+                ->setTo($user->getEmail())
+                ->setBody(
+                    $this->templating->render(
+                        'security/emails/forgot.html.twig',
+                        [
+                            'user' => $user,
+                            'url'  => $url,
+                        ]
+                    ),
+                    'text/html'
+                );
             $this->mailer->send($message);
         }
 

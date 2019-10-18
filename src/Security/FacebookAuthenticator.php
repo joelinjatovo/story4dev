@@ -2,8 +2,10 @@
 
 namespace App\Security;
 
-use App\Entity\User; // your user entity
+use App\Entity\User;
+use App\Helper\MessageHelper;
 use App\Service\TokenGenerator;
+use App\Service\OptionService;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Exception\AccountDeletedException;
 use App\Exception\AccountPingedException;
@@ -34,8 +36,9 @@ class FacebookAuthenticator extends SocialAuthenticator
     private $tokenGenerator;
     private $templating;
     private $session;
+    private $optionService;
 
-    public function __construct(SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating)
+    public function __construct(OptionService $optionService, SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating)
     {
         $this->em = $em;
         $this->clientRegistry = $clientRegistry;
@@ -45,6 +48,7 @@ class FacebookAuthenticator extends SocialAuthenticator
         $this->tokenGenerator = $tokenGenerator;
         $this->templating = $templating;
         $this->session = $session;
+        $this->optionService = $optionService;
     }
 
     public function supports(Request $request)
@@ -115,20 +119,18 @@ class FacebookAuthenticator extends SocialAuthenticator
         if($newAccount){
             $url = $this->router->generate('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
  
-            $message = (new \Swift_Message('Nouveau compte'))
-                ->setFrom(array('admin@story4dev.com'=> 'Admin - Story4Dev'))
-                ->setTo($user->getEmail());
-            
-            $message->setBody(
-                $this->templating->render(
-                    'security/emails/forgot.html.twig',
-                    [
-                        'user' => $user,
-                        'url'  => $url,
-                    ]
-                ),
-                'text/html'
-            );
+            $message = MessageHelper::getMessage($this->optionService, 'Nouvelle inscription')
+                ->setTo($user->getEmail())
+                ->setBody(
+                    $this->templating->render(
+                        'security/emails/forgot.html.twig',
+                        [
+                            'user' => $user,
+                            'url'  => $url,
+                        ]
+                    ),
+                    'text/html'
+                );
             $this->mailer->send($message);
         }
 

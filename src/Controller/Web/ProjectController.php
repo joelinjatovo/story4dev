@@ -81,24 +81,16 @@ class ProjectController extends AbstractController
         }
 
         $entityManager = $this->getDoctrine()->getManager();
-        
-        if ($this->isGranted('edit', $project)) {
-            $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
-        }else{
-            $reports = $entityManager->getRepository(Report::class)->findByProject($project, $this->getUser())->execute();
-        }
-        
+        $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
         $data   =  $project->getData();
         $series =  $project->getSerie();
-        
-        //dump($data); exit;
         
         return $this->render('project/show.html.twig', [
             'user'    => $user, 
             'project' => $project, 
             'reports' => $reports, 
             'data'    => json_encode($data),
-            'series'   => json_encode($series),
+            'series'  => json_encode($series),
         ]);
     }
     
