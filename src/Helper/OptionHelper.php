@@ -13,7 +13,10 @@ class OptionHelper {
         $keys = [
             'app_name' => [
                 'label' => "Nom de l'application",
-                'group' => 'Application'
+                'group' => [
+                    'id' => '__row_group_app',
+                    'label' => 'Application',
+                ]
             ],
             'app_admin_name' => [
                 'label' => "Nom de l'admin"
@@ -24,7 +27,10 @@ class OptionHelper {
             ],
             'seo_title' => [
                 'label' => "Meta Titre",
-                'group' => 'Seo'
+                'group' => [
+                    'id' => '__row_group_seo',
+                    'label' => 'SEO',
+                ]
             ],
             'seo_description' => [
                 'label' => "Meta Description",

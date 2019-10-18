@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use App\Form\OptionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class GeneralSettingType extends AbstractType
 {
@@ -16,12 +17,16 @@ class GeneralSettingType extends AbstractType
 
         if( is_array( $settings ) ) {
             foreach($settings as $key => $setting){
+                if(isset($setting['group'])){
+                    $builder->add($setting['group']['id'], HiddenType::class, [
+                        'label' => $setting['group']['label'],
+                    ]);
+                }
                 $builder->add($key, OptionType::class, [
                         'data'  => $setting['data'],
                         'label' => $setting['label'],
                         'type'  => isset($setting['type'])?$setting['type']:null,
                         'help'  => isset($setting['help'])?$setting['help']:null,
-                        'group'  => isset($setting['group'])?$setting['group']:null
                     ]);
             }
         }

@@ -37,7 +37,14 @@
                         <div class="kt-section kt-section--first">
                             <div class="kt-section__body">
                                 {% for form_child in form %}
-                                    {% if form_child.vars.name != '_token' %}
+                                    {% if '__row_group' in form_child.vars.name %}
+                                        <div class="row">
+                                            <label class="col-xl-3"></label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <h3 class="kt-section__title kt-section__title-sm">{{ form_child.vars.label }} :</h3>
+                                            </div>
+                                        </div>
+                                    {% elseif form_child.vars.name != '_token' %}
                                         <div class="form-group row">
                                             {{ form_label( form_child, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                             <div class="col-lg-9 col-xl-6">

@@ -13,12 +13,6 @@ class OptionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $type = isset($options['type'])?$options['type']:null;
-        $group = isset($options['group'])?$options['group']:null;
-
-        if($group){
-            $builder->add('group', HiddenType::class, ['mapped' => false, 'required' => false ]);
-        }
-
         $builder
             ->add('id', HiddenType::class)
             ->add('option_key', HiddenType::class);
@@ -37,7 +31,6 @@ class OptionType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Option::class,
             'type' => null,
-            'group' => null
         ]);
     }
 }
