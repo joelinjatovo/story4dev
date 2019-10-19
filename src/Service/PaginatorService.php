@@ -7,16 +7,18 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use InvalidArgumentException;
-use App\Entity\Option\GeneralOption;
+use App\Service\OptionService;
 
 class PaginatorService
 {
     private $request;
+    private $optionService;
     private $em;
 
-    public function __construct(RequestStack $requestStack, EntityManagerInterface $em)
+    public function __construct(RequestStack $requestStack, EntityManagerInterface $em, OptionService $optionService)
     {
         $this->request = $requestStack->getCurrentRequest();
+        $this->optionService = $optionService;
         $this->em = $em;
     }
     
@@ -34,13 +36,8 @@ class PaginatorService
         }
         
         if($limit===false){
-            $option = $this->em
-                ->getRepository(GeneralOption::class)
-                ->findOneBy(['option_key' => 'paginator_limit']);
-
-            if($option){
-                $limit = $option->getOptionValue();
-            }else{
+            $option = $this->optionService->get('paginator_limit');
+            if( ! $option ){
                 $limit = 5;
             }
         }

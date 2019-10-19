@@ -3,9 +3,7 @@
 namespace App\Controller\Web;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -42,7 +40,7 @@ class FileController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
         
-        $projects = $entityManager->getRepository(Project::class)->findAll();
+        $projects = $entityManager->getRepository(Project::class)->findProjectsAndContributions($user)->execute();
             
         if( $project != null ) {
             
@@ -69,6 +67,32 @@ class FileController extends AbstractController
             'user'     => $user,
             'project'  => null,
             'projects' => $projects,
+        ]);
+    }
+    
+    /**
+     * @Route("/{slug}/file/{file_id}", name="show", methods="GET")
+     * @Route("/{slug}/project/{project_id}/file/{file_id}", name="show_project", methods="GET")
+     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/file/{file_id}", name="show_activity", methods="GET")
+     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
+     * @Entity("file", options={"mapping": {"file_id": "id"}})
+     */
+    public function show(File $file, User $user, Project $project = null, Activity $activity = null)
+    {
+        $this->denyAccessUnlessGranted('view', $file);
+        
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $projects = $entityManager->getRepository(Project::class)->findProjectsAndContributions($user)->execute();
+        
+        return $this->render('file/show.html.twig', [
+            'file'    => $file,
+            'user'     => $user,
+            'project'  => $project,
+            'projects' => $projects,
+            'activity' => $activity,
         ]);
     }
     

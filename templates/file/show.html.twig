@@ -26,8 +26,5 @@
 
 {% block subcontent %}
 <div class="row" id="files-list">
-    {% for file in files %}
-        {{ include('file/list_item.html.twig', {'file': file}) }}
-    {% endfor %}    
 </div>
 {% endblock %}

@@ -2,9 +2,7 @@
     <div class="kt-portlet">
         <div class="kt-portlet__head kt-portlet__head--noborder">
             <div class="kt-portlet__head-label">
-                <h3 class="kt-portlet__head-title">
-
-                </h3>
+                <h3 class="kt-portlet__head-title"></h3>
             </div>
             <div class="kt-portlet__head-toolbar">
                 <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
@@ -13,9 +11,9 @@
                 <div class="dropdown-menu dropdown-menu-right">
                     <ul class="kt-nav">
                         <li class="kt-nav__item">
-                            <a href="#" class="kt-nav__link">
+                            <a href="{{ path( 'file_show', { file_id: file.id, slug: app.user.slug } ) }}" class="kt-nav__link">
                             <i class="kt-nav__link-icon flaticon2-line-chart"></i>
-                            <span class="kt-nav__link-text">Open</span>
+                            <span class="kt-nav__link-text">Ouvrir</span>
                             </a>
                         </li>
                         <li class="kt-nav__item">
