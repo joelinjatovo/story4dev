@@ -45,12 +45,12 @@ class ContributionController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/contribution/{contribution_id}", name="show", methods="GET", requirements={"project_id"="\d+","contribution_id"="\d+"})
+     * @Route("/{slug}/project/{project_id}/contribution/{contribution_id}/{page<\d+>?1}", name="show", methods="GET", requirements={"project_id"="\d+","contribution_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("projectcontribution", options={"mapping": {"contribution_id": "id"}})
      */
-    public function show(User $user, Project $project, ProjectContribution $contribution)
+    public function show(User $user, Project $project, ProjectContribution $contribution, $page = 1, PaginatorService $paginator)
     {
         $this->denyAccessUnlessGranted('view', $project);
         
@@ -63,7 +63,10 @@ class ContributionController extends AbstractController
         }
         
         $entityManager = $this->getDoctrine()->getManager();
-        $reports = $entityManager->getRepository(Report::class)->findByContribution($project, $contribution->getUser())->getResult();
+        $query = $entityManager->getRepository(Report::class)
+                        ->findByContribution($project, $contribution->getUser());
+        
+        $reports = $paginator->paginate($query, 10);
         
         return $this->render('contribution/show.html.twig', [
             'user'         => $user,

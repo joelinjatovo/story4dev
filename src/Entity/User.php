@@ -591,6 +591,24 @@ class User implements UserInterface, \Serializable
         return $this->isCanceled() ? 'warning': ( $this->isBlocked() ? 'danger' : ( $this->isPinged() ? 'brand' : 'success' ) );
     }    
 
+    public function getStatusLabel(): ?string
+    {
+        if( $this->isDeleted() ){
+            return "Supprimé";
+        }
+        if( $this->isCanceled() ){
+            return "Réfusé";
+        }
+        if( $this->isBlocked() ){
+            return "Bloqué";
+        }
+        if( $this->isPinged() ){
+            return "En attennte de validation";
+        }
+
+        return "Actif";
+    }
+
     public function getStatus(): ?string
     {
         return (string) $this->status;

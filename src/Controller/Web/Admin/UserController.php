@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 use App\Entity\User;
+use App\Entity\Report;
 use App\Form\UserType;
 use App\Service\PaginatorService;
 use App\Service\FormError;
@@ -75,12 +76,21 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("/user/{id}", name="show", methods="GET", requirements={"id"="\d+"})
+     * @Route("/user/{id}/{page<\d+>?1}", name="show", methods="GET", requirements={"id"="\d+"})
      * @Entity("user", options={"mapping": {"id": "id"}})
      */
-    public function show(User $user)
+    public function show(User $user, $page = 1, PaginatorService $paginator)
     {
-        return $this->render('admin/user/show.html.twig', ['user' => $user]);
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $query = $entityManager->getRepository(Report::class)->findByUser($user);
+        
+        $reports = $paginator->paginate($query, 10);
+
+        return $this->render('admin/user/show.html.twig', [
+                'user' => $user,
+            'reports' => $reports
+            ]);
     }
     
     /**

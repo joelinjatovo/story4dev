@@ -15,7 +15,7 @@
                             {{ report.title }}                                                
                         </a>
                         <span class="kt-widget__desc">
-                            {{ report.author.fullname }}
+                            {{ report.activity.title }}
                         </span>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                 <div class="kt-widget__stats">
                     <div class="kt-widget__item">
                         <span class="kt-widget__date">
-                            Date de creation
+                            Date de création
                         </span>
                         <div class="kt-widget__label">
                             <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d') }}</span>
@@ -71,11 +71,11 @@
 
                 <div class="kt-widget__content">
                     <div class="kt-widget__details">
-                        <span class="kt-widget__subtitle">Résultat</span>
+                        <span class="kt-widget__subtitle">Résultats</span>
                         <span class="kt-widget__value">{{ report.results.count }}</span>
                     </div>
                     <div class="kt-widget__details">
-                        <span class="kt-widget__subtitle">Files</span>
+                        <span class="kt-widget__subtitle">Documents</span>
                         <div class="kt-media-group">
                             {% for reportFile in report.reportFiles %}
                                 {% if reportFile.file %}

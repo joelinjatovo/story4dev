@@ -23,6 +23,24 @@ class ReportRepository extends ServiceEntityRepository
         parent::__construct($registry, Report::class);
     }
     
+    public function findByAuthor(User $user)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.author = :user')
+            ->setParameter('user', $user)
+            ->orderBy('r.createdAt', 'DESC')
+            ->getQuery();
+    }
+        
+    public function findByUser(User $user)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.author = :user')
+            ->setParameter('user', $user)
+            ->orderBy('r.createdAt', 'DESC')
+            ->getQuery();
+    }
+    
     public function findByActivity(Activity $activity, ?User $user = null)
     {
         if($user){
@@ -30,11 +48,13 @@ class ReportRepository extends ServiceEntityRepository
                 ->where('r.activity = :activity AND r.author = :user')
                 ->setParameter('activity', $activity)
                 ->setParameter('user', $user)
+                ->orderBy('r.createdAt', 'DESC')
                 ->getQuery();
         }
         return $this->createQueryBuilder('r')
             ->where('r.activity = :activity')
             ->setParameter('activity', $activity)
+            ->orderBy('r.createdAt', 'DESC')
             ->getQuery();
     }
     
@@ -46,6 +66,7 @@ class ReportRepository extends ServiceEntityRepository
                 ->where('a.project = :project AND r.author = :user')
                 ->setParameter('project', $project)
                 ->setParameter('user', $user)
+                ->orderBy('r.createdAt', 'DESC')
                 ->getQuery();
         }
         
@@ -53,6 +74,7 @@ class ReportRepository extends ServiceEntityRepository
             ->leftJoin('r.activity', 'a')
             ->where('a.project = :project')
             ->setParameter('project', $project)
+            ->orderBy('r.createdAt', 'DESC')
             ->getQuery();
     }
     
@@ -64,14 +86,7 @@ class ReportRepository extends ServiceEntityRepository
             ->where('a.project = :project AND r.author = :user')
             ->setParameter('project', $project)
             ->setParameter('user', $user)
-            ->getQuery();
-    }
-    
-    public function findByUser(User $user)
-    {
-        return $this->createQueryBuilder('r')
-            ->where('r.author = :user')
-            ->setParameter('user', $user)
+            ->orderBy('r.createdAt', 'DESC')
             ->getQuery();
     }
 }

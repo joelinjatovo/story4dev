@@ -4,19 +4,11 @@ namespace App\Controller\Web;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-use Doctrine\Common\Collections\ArrayCollection;
 
 use App\Entity\User;
-use App\Entity\Project;
-use App\Entity\Activity;
-use App\Entity\Iteration;
-use App\Form\ActivityType;
-use App\Form\ProjectType;
+use App\Entity\Report;
 use App\Service\PaginatorService;
 
 /**
@@ -27,11 +19,20 @@ use App\Service\PaginatorService;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/{slug}", name="show", methods="GET")
+     * @Route("/{slug}/{page<\d+>?1}", name="show", methods="GET")
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      */
-    public function show(User $user)
+    public function show(User $user, $page = 1, PaginatorService $paginator)
     {
-        return $this->render('user/show.html.twig');
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $query = $entityManager->getRepository(Report::class)->findByUser($user);
+        
+        $reports = $paginator->paginate($query, 10);
+
+        return $this->render('user/show.html.twig', [
+            'user'    => $user,
+            'reports' => $reports
+        ]);
     }
 }

@@ -1,4 +1,6 @@
-{% extends 'user/base.html.twig' %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateur #{{ user.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -7,809 +9,131 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            
-            <h3 class="kt-subheader__title">Profile 3</h3>
-            
-            <span class="kt-subheader__separator kt-hidden"></span>
-                <div class="kt-subheader__breadcrumbs">
-                    <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
-                                            <span class="kt-subheader__breadcrumbs-separator"></span>
-                        <a href="" class="kt-subheader__breadcrumbs-link">
-                            Apps                        </a>
-                                            <span class="kt-subheader__breadcrumbs-separator"></span>
-                        <a href="" class="kt-subheader__breadcrumbs-link">
-                            Users                        </a>
-                                            <span class="kt-subheader__breadcrumbs-separator"></span>
-                        <a href="" class="kt-subheader__breadcrumbs-link">
-                            Profile 3                        </a>
-                                        <!-- <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Active link</span> -->
-                </div>
-                    
-        </div>
+            <h3 class="kt-subheader__title">{{ user.fullname }}</h3>
+        </div>        
         <div class="kt-subheader__toolbar">
-            <div class="kt-subheader__wrapper">
-                                    <a href="#" class="btn kt-subheader__btn-primary">
-                        Actions &nbsp;
-                        <!--<i class="flaticon2-calendar-1"></i>-->
-                    </a>
-                                
-                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip" title="" data-placement="left" data-original-title="Quick actions">
-                    <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-        <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-        <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
-    </g>
-</svg>                        <!--<i class="flaticon2-plus"></i>-->
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
-                        <!--begin::Nav-->
-                        <ul class="kt-nav">
-                            <li class="kt-nav__head">
-                                Add anything or jump to:                                   
-                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
-                            </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Order</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">Ticket</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-link"></i>
-                                    <span class="kt-nav__link-text">Goal</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="#" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Support Case</span>
-                                    <span class="kt-nav__link-badge">
-                                        <span class="kt-badge kt-badge--success">5</span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__foot">
-                                <a class="btn btn-label-brand btn-bold btn-sm" href="#">Upgrade plan</a>                                    
-                                <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
-                            </li>
-                        </ul>
-                        <!--end::Nav-->
-                    </div>
-                </div>
-            </div>
+            <a href="{{ path('project_list', { 'slug': user.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-xl-12">
-        <!--begin:: Widgets/Applications/User/Profile3-->
-<div class="kt-portlet kt-portlet--height-fluid">
-    <div class="kt-portlet__body">
-        <div class="kt-widget kt-widget--user-profile-3">
-            <div class="kt-widget__top">
-                <div class="kt-widget__media kt-hidden-">
-                    <img src="./assets/media/users/100_1.jpg" alt="image">
-                </div>
-                <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-boldest kt-font-light kt-hidden">
-                    JM
-                </div>
-                <div class="kt-widget__content">
+<div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+    <!--Begin:: App Aside Mobile Toggle-->
+    <button class="kt-app__aside-close" id="kt_contact_aside_close">
+        <i class="la la-close"></i>
+    </button>
+    <!--End:: App Aside Mobile Toggle-->
+    <div class="kt-grid__item kt-app__toggle kt-app__aside" id="kt_contact_aside">
+        <!--begin:: Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <!--begin::Widget -->
+                <div class="kt-widget kt-widget--user-profile-4">
                     <div class="kt-widget__head">
-                        <a href="#" class="kt-widget__username">
-                            Jason Muller    
-                            <i class="flaticon2-correct"></i>                       
-                        </a>
+                        <div class="kt-widget__media">
+                            <img class="kt-widget__img" src="{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') : default_avatar }}" alt="image">
+                            <div class="kt-widget__pic kt-widget__pic--success kt-font-success kt-font-boldest kt-font-light kt-hidden">
+                                MP
+                            </div>
+                        </div>       
+                        <div class="kt-widget__content">
+                            <div class="kt-widget__section">
+                                <a href="#" class="kt-widget__username">
+                                    {{ user.fullname }}
+                                </a>
+                                <div class="kt-widget__button">
+                                    <button type="button" class="btn btn-label-{{ user.statusClass }} btn-sm">{{ user.statusLabel }}</button>
+                                </div>
 
-                        <div class="kt-widget__action">
-                            <button type="button" class="btn btn-label-success btn-sm btn-upper">ask</button>&nbsp;
-                            <button type="button" class="btn btn-brand btn-sm btn-upper">hire</button>
-                        </div>
+                                <div class="kt-widget__action kt-hidden">                             
+                                    <a href="#" class="btn btn-icon btn-circle btn-label-facebook">
+                                        <i class="socicon-facebook"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-icon btn-circle btn-label-google">
+                                        <i class="socicon-google"></i>
+                                    </a>                            
+                                </div>
+                            </div>
+                        </div>  
                     </div>
+                </div>
+                <!--end::Widget -->
+            </div>
+        </div>
+        <!--end:: Portlet-->
 
-                    <div class="kt-widget__subhead">
-                        <a href="#"><i class="flaticon2-new-email"></i>jason@siastudio.com</a>
-                        <a href="#"><i class="flaticon2-calendar-3"></i>PR Manager </a>
-                        <a href="#"><i class="flaticon2-placeholder"></i>Melbourne</a>
+        <!--begin:: Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <div class="kt-widget1 kt-widget1--fit">
+                    <div class="kt-widget1__item">
+                        <div class="kt-widget1__info">
+                            <h3 class="kt-widget1__title">Rapports</h3>
+                            <span class="kt-widget1__desc">Nombre total de rapport effectué</span>
+                        </div> 
+                        <span class="kt-widget1__number kt-font-brand">{{ user.reports.count }}</span>
                     </div>
-
-                    <div class="kt-widget__info">
-                        <div class="kt-widget__desc">
-                            I distinguish three main text objektive could be merely to inform people.
-                            <br> A second could be persuade people.You want people to bay objective
-                        </div>
-                        <div class="kt-widget__progress">
-                            <div class="kt-widget__text">
-                                Progress
-                            </div>
-                            <div class="progress" style="height: 5px;width: 100%;">
-                                <div class="progress-bar kt-bg-success" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <div class="kt-widget__stats">
-                                78%
-                            </div>
-                        </div>
+                    <div class="kt-widget1__item">
+                        <div class="kt-widget1__info">
+                            <h3 class="kt-widget1__title">Contributions</h3>
+                            <span class="kt-widget1__desc">Nombre de projet contribué</span>
+                        </div>			
+                        <span class="kt-widget1__number kt-font-danger">{{ user.projectContributions.count }}</span>
                     </div>
                 </div>
             </div>
-            <div class="kt-widget__bottom">
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-piggy-bank"></i>
+        </div>
+        <!--end:: Portlet-->
+    </div>
+    
+    <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+        <!--Begin::Section-->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <a href="{{ path('account_reports', { 'slug': user.slug } ) }}">
+                                <h3 class="kt-portlet__head-title">Rapports</h3>
+                            </a>
+                        </div>
+                        <div class="kt-portlet__head-toolbar">
+                            <a href="{{ path('account_reports', { 'slug': user.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
+                                Tous
+                            </a>
+                        </div>
                     </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">Earnings</span>
-                        <span class="kt-widget__value"><span>$</span>249,500</span>
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-confetti"></i>
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">Expances</span>
-                        <span class="kt-widget__value"><span>$</span>164,700</span>
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-pie-chart"></i>
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">Net</span>
-                        <span class="kt-widget__value"><span>$</span>164,700</span>
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-file-2"></i>
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">73 Tasks</span>
-                        <a href="#" class="kt-widget__value kt-font-brand">View</a>
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-chat-1"></i>
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">648 Comments</span>
-                        <a href="#" class="kt-widget__value kt-font-brand">View</a>
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-network"></i>
-                    </div>
-                    <div class="kt-widget__details">
-                        <div class="kt-section__content kt-section__content--solid">
-                            <div class="kt-badge kt-badge__pics">
-                                <a href="#" class="kt-badge__pic" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-                                    <img src="./assets/media/users/100_7.jpg" alt="image">
-                                </a>
-                                <a href="#" class="kt-badge__pic" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
-                                    <img src="./assets/media/users/100_3.jpg" alt="image">
-                                </a>
-                                <a href="#" class="kt-badge__pic" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
-                                    <img src="./assets/media/users/100_2.jpg" alt="image">
-                                </a>
-                                <a href="#" class="kt-badge__pic" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
-                                    <img src="./assets/media/users/100_13.jpg" alt="image">
-                                </a>
-                                <a href="#" class="kt-badge__pic" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
-                                    <img src="./assets/media/users/100_4.jpg" alt="image">
-                                </a>
-                                <a href="#" class="kt-badge__pic kt-badge__pic--last kt-font-brand">
-                                    +7
-                                </a>
-                            </div>
+                    <div class="kt-portlet__body">
+                        <div class="kt-widget5">
+                            {% for report in reports %}
+                                {{ include('user/report.html.twig', { 'report' : report } ) }}
+                            {% else %}
+                                Il n'a pas encore effectué de rapport.
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<!--end:: Widgets/Applications/User/Profile3-->    </div>
-</div>
-    
-<div class="row">
-    <div class="kt-portlet">
-        <div class="kt-portlet__body  kt-portlet__body--fit">
-            <div class="row row-no-padding row-col-separator-xl">
-                <div class="col-xl-4">
-                    <!--begin:: Widgets/Daily Sales-->
-<div class="kt-portlet kt-portlet--height-fluid">
-	<div class="kt-widget14">
-		<div class="kt-widget14__header kt-margin-b-30">
-			<h3 class="kt-widget14__title">
-				Daily Sales              
-			</h3>
-			<span class="kt-widget14__desc">
-				Check out each collumn for more details
-			</span>
-		</div>
-		<div class="kt-widget14__chart" style="height:120px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-			<canvas id="kt_chart_daily_sales" style="display: block; width: 1153px; height: 120px;" width="1153" height="120" class="chartjs-render-monitor"></canvas>
-		</div>
-	</div>
-</div>	
-<!--end:: Widgets/Daily Sales-->                </div>
-                <div class="col-xl-4">
-                    <!--begin:: Widgets/Profit Share-->
-<div class="kt-portlet kt-portlet--height-fluid">
-	<div class="kt-widget14">
-		<div class="kt-widget14__header">
-			<h3 class="kt-widget14__title">
-				Profit Share            
-			</h3>
-			<span class="kt-widget14__desc">
-				Profit Share between customers
-			</span>
-		</div>	 
-		<div class="kt-widget14__content">	
-			<div class="kt-widget14__chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-				<div class="kt-widget14__stat">45</div>
-				<canvas id="kt_chart_profit_share" style="height: 140px; width: 140px; display: block;" width="140" height="140" class="chartjs-render-monitor"></canvas>
-			</div> 
-			<div class="kt-widget14__legends">
-				<div class="kt-widget14__legend">
-					<span class="kt-widget14__bullet kt-bg-success"></span>
-					<span class="kt-widget14__stats">37% Sport Tickets</span>
-				</div>
-				<div class="kt-widget14__legend">
-					<span class="kt-widget14__bullet kt-bg-warning"></span>
-					<span class="kt-widget14__stats">47% Business Events</span>
-				</div>
-				<div class="kt-widget14__legend">
-					<span class="kt-widget14__bullet kt-bg-brand"></span>
-					<span class="kt-widget14__stats">19% Others</span>
-				</div>
-			</div>			
-		</div> 
-	</div>
-</div>		
-<!--end:: Widgets/Profit Share-->                </div>
-                <div class="col-xl-4">
-                    <!--begin:: Widgets/Revenue Change-->
-<div class="kt-portlet kt-portlet--height-fluid">
-	<div class="kt-widget14">
-		<div class="kt-widget14__header">
-			<h3 class="kt-widget14__title">
-				Revenue Change            
-			</h3>
-			<span class="kt-widget14__desc">
-				Revenue change breakdown by cities
-			</span>
-		</div>
-		<div class="kt-widget14__content">
-			<div class="kt-widget14__chart">
-				<div id="kt_chart_revenue_change" style="height: 150px; width: 150px;"><svg height="150" version="1.1" width="150" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="overflow: hidden; position: relative; top: -0.359375px;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.2.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="none" stroke="#34bfa3" d="M75,118.33333333333334A43.333333333333336,43.333333333333336,0,0,0,117.85251574201737,68.56263467263734" stroke-width="2" opacity="0" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></path><path fill="#34bfa3" stroke="#ffffff" d="M75,121.33333333333334A46.333333333333336,46.333333333333336,0,0,0,120.8192283703109,68.11697091920455L134.3342525658702,66.08672493134401A60,60,0,0,1,75,135Z" stroke-width="3" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><path fill="none" stroke="#fd3995" d="M117.85251574201737,68.56263467263734A43.333333333333336,43.333333333333336,0,0,0,82.89188458674082,32.39136313554092" stroke-width="2" opacity="0" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></path><path fill="#fd3995" stroke="#ffffff" d="M120.8192283703109,68.11697091920455A46.333333333333336,46.333333333333336,0,0,0,83.43824582736133,29.441534429539914L85.92722481241034,16.003425879979744A60,60,0,0,1,134.3342525658702,66.08672493134401Z" stroke-width="3" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><path fill="none" stroke="#22b9ff" d="M82.89188458674082,32.39136313554092A43.333333333333336,43.333333333333336,0,1,0,74.98638643205842,118.33333119491907" stroke-width="2" opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 1;"></path><path fill="#22b9ff" stroke="#ffffff" d="M83.43824582736133,29.441534429539914A46.333333333333336,46.333333333333336,0,1,0,74.98544395427786,121.333331046875L74.97957964808764,139.9999967923786A65,65,0,1,1,86.83782688011121,11.087044703311392Z" stroke-width="3" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="75" y="65" text-anchor="middle" font-family="&quot;Arial&quot;" font-size="15px" stroke="none" fill="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: Arial; font-size: 15px; font-weight: 800;" font-weight="800" transform="matrix(0.9848,0,0,0.9848,1.1364,1.1515)" stroke-width="1.0153846153846153"><tspan dy="6" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Paris</tspan></text><text x="75" y="85" text-anchor="middle" font-family="&quot;Arial&quot;" font-size="14px" stroke="none" fill="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: Arial; font-size: 14px;" transform="matrix(0.9028,0,0,0.9028,7.3015,7.4861)" stroke-width="1.1076923076923078"><tspan dy="5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">20</tspan></text></svg></div>
-			</div>  		 
-			<div class="kt-widget14__legends">
-				<div class="kt-widget14__legend">
-					<span class="kt-widget14__bullet kt-bg-success"></span>
-					<span class="kt-widget14__stats">+10% New York</span>
-				</div>
-				<div class="kt-widget14__legend">
-					<span class="kt-widget14__bullet kt-bg-warning"></span>
-					<span class="kt-widget14__stats">-7% London</span>
-				</div>
-				<div class="kt-widget14__legend">
-					<span class="kt-widget14__bullet kt-bg-brand"></span>
-					<span class="kt-widget14__stats">+20% California</span>
-				</div>
-			</div>		 
-		</div> 	 
-	</div>
-</div>	
-<!--end:: Widgets/Revenue Change-->                </div>
-            </div>
+        <!--End::Section-->
+        
+        <div class="row">
+            <div class="col-xl-12">       
+                <div class="kt-portlet">
+                    <div class="kt-portlet__body">
+                        <div class="kt-pagination kt-pagination--brand">
+                            {{ include('_common/pagination.html.twig', {'pagination': reports}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>           
         </div>
     </div>
-</div>
     
-<div class="row">
-    <div class="col-xl-6">
-        <!--begin:: Widgets/Download Files-->
-<div class="kt-portlet kt-portlet--height-fluid">
-	<div class="kt-portlet__head">
-		<div class="kt-portlet__head-label">
-			<h3 class="kt-portlet__head-title">
-				Download Files
-			</h3>
-		</div>
-		<div class="kt-portlet__head-toolbar">
-			<a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
-				Latest
-			</a>
-			<div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
-				<!--begin::Nav-->
-<ul class="kt-nav">
-    <li class="kt-nav__head">
-        Export Options                                    
-        <span data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--brand kt-svg-icon--md1">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="bound" x="0" y="0" width="24" height="24"></rect>
-        <circle id="Oval-5" fill="#000000" opacity="0.3" cx="12" cy="12" r="10"></circle>
-        <rect id="Rectangle-9" fill="#000000" x="11" y="10" width="2" height="7" rx="1"></rect>
-        <rect id="Rectangle-9-Copy" fill="#000000" x="11" y="7" width="2" height="2" rx="1"></rect>
-    </g>
-</svg>        </span>
-   </li>
-    <li class="kt-nav__separator"></li>
-    <li class="kt-nav__item">
-        <a href="#" class="kt-nav__link">
-            <i class="kt-nav__link-icon flaticon2-drop"></i>
-            <span class="kt-nav__link-text">Activity</span>
-        </a>
-    </li>
-    <li class="kt-nav__item">
-        <a href="#" class="kt-nav__link">
-            <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-            <span class="kt-nav__link-text">FAQ</span>
-        </a>
-    </li>
-    <li class="kt-nav__item">
-        <a href="#" class="kt-nav__link">
-            <i class="kt-nav__link-icon flaticon2-link"></i>
-            <span class="kt-nav__link-text">Settings</span>
-        </a>
-    </li>
-    <li class="kt-nav__item">
-        <a href="#" class="kt-nav__link">
-            <i class="kt-nav__link-icon flaticon2-new-email"></i>
-            <span class="kt-nav__link-text">Support</span>
-            <span class="kt-nav__link-badge">
-                <span class="kt-badge kt-badge--success kt-badge--rounded">5</span>
-            </span>
-        </a>
-    </li>
-    <li class="kt-nav__separator"></li>
-    <li class="kt-nav__foot">
-        <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>                                    
-        <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
-    </li>
-</ul>
-<!--end::Nav-->			</div>
-		</div>
-	</div>
-	<div class="kt-portlet__body">
-		<!--begin::k-widget4-->
-		<div class="kt-widget4">
-			<div class="kt-widget4__item">
-				<div class="kt-widget4__pic kt-widget4__pic--icon">
-					<img src="./assets/media/files/doc.svg" alt="">  
-				</div>				
-				<a href="#" class="kt-widget4__title">
-					Metronic Documentation
-				</a>						
-				<div class="kt-widget4__tools">
-					<a href="#" class="btn btn-clean btn-icon btn-sm">
-						<i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
-					</a>
-				</div>				
-			</div>
-
-			<div class="kt-widget4__item">
-				<div class="kt-widget4__pic kt-widget4__pic--icon">
-					<img src="./assets/media/files/jpg.svg" alt=""> 
-				</div>				 
-				<a href="#" class="kt-widget4__title">
-					Project Launch Event
-				</a>
-				<div class="kt-widget4__tools">
-					<a href="#" class="btn btn-clean btn-icon btn-sm">
-						<i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
-					</a>
-				</div>				
-			</div>
-
-			<div class="kt-widget4__item">
-				<div class="kt-widget4__pic kt-widget4__pic--icon">
-					<img src="./assets/media/files/pdf.svg" alt="">   
-				</div>
-				<a href="#" class="kt-widget4__title">
-					Full Developer Manual For 4.7											 	 
-				</a>				
-				<div class="kt-widget4__tools">
-					<a href="#" class="btn btn-clean btn-icon btn-sm">
-						<i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
-					</a>
-				</div>				
-			</div>
-
-			<div class="kt-widget4__item">
-				<div class="kt-widget4__pic kt-widget4__pic--icon">
-					<img src="./assets/media/files/javascript.svg" alt=""> 
-				</div>
-				<a href="#" class="kt-widget4__title">
-					Make JS Great Again												 
-				</a>
-				<div class="kt-widget4__tools">
-					<a href="#" class="btn btn-clean btn-icon btn-sm">
-						<i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
-					</a>
-				</div>				
-			</div>
-
-			<div class="kt-widget4__item">
-				<div class="kt-widget4__pic kt-widget4__pic--icon">
-					<img src="./assets/media/files/zip.svg" alt=""> 
-				</div>
-				<a href="#" class="kt-widget4__title">
-					Download Ziped version OF 5.0 													 
-				</a>				
-				<div class="kt-widget4__tools">
-					<a href="#" class="btn btn-clean btn-icon btn-sm">
-						<i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
-					</a>
-				</div>				
-			</div>
-
-			<div class="kt-widget4__item">
-				<div class="kt-widget4__pic kt-widget4__pic--icon">
-					<img src="./assets/media/files/pdf.svg" alt=""> 
-				</div>
-				<a href="#" class="kt-widget4__title">
-					Finance Report 2016/2017 											 
-				</a>				
-				<div class="kt-widget4__tools">
-					<a href="#" class="btn btn-clean btn-icon btn-sm">
-						<i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
-					</a>
-				</div>				
-			</div>
-		</div>
-		<!--end::Widget 9-->
-	</div>
 </div>
-<!--end:: Widgets/Download Files-->
-    </div>
-    <div class="col-xl-6">
-        <!--begin:: Widgets/User Progress -->
-<div class="kt-portlet kt-portlet--height-fluid">
-	<div class="kt-portlet__head">
-		<div class="kt-portlet__head-label">
-			<h3 class="kt-portlet__head-title">
-				User Progress
-			</h3>
-		</div>
-		<div class="kt-portlet__head-toolbar">
-			<ul class="nav nav-pills nav-pills-sm nav-pills-label nav-pills-bold" role="tablist">
-				<li class="nav-item">					
-					<a class="nav-link active" data-toggle="tab" href="#kt_widget31_tab1_content" role="tab">					
-						Today
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" data-toggle="tab" href="#kt_widget31_tab2_content" role="tab">					
-						Week
-					</a>
-				</li>
-			</ul>
-		</div>
-	</div>
-	<div class="kt-portlet__body">
-		<div class="tab-content">
-			<div class="tab-pane active" id="kt_widget31_tab1_content">
-				<div class="kt-widget31">
-					<div class="kt-widget31__item">
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__pic">
-								<img src="./assets/media/users/100_4.jpg" alt="">   
-							</div>
-							<div class="kt-widget31__info">
-								<a href="#" class="kt-widget31__username">
-									Anna Strong
-								</a>
-								<p class="kt-widget31__text">
-									Visual Designer,Google Inc 
-								</p>							 		 
-							</div>					 
-						</div>
-
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__progress">
-								<a href="#" class="kt-widget31__stats">
-									<span>63%</span>
-									<span>London</span>						    							 
-								</a>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-brand" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
-							</div>	
-							<a href="#" class="btn-label-brand btn btn-sm btn-bold">Follow</a>													
-						</div>						
-					</div>
-
-					<div class="kt-widget31__item">
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__pic">
-								<img src="./assets/media/users/100_14.jpg" alt="">      
-							</div>
-							<div class="kt-widget31__info">
-								<a href="#" class="kt-widget31__username">
-									Milano Esco
-								</a>
-								<p class="kt-widget31__text">
-									Product Designer, Apple Inc 
-								</p>							 		 
-							</div>
-						</div>
-
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__progress">
-								<a href="#" class="kt-widget31__stats">
-									<span>33%</span>
-									<span>Paris</span>						    							 
-								</a>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-warning" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
-							</div>	
-							<a href="#" class="btn-label-brand btn btn-sm btn-bold">Follow</a>													
-						</div>							 
-					</div>
-
-					<div class="kt-widget31__item">
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__pic kt-widget4__pic--pic">
-								<img src="./assets/media/users/100_11.jpg" alt="">    
-							</div>
-							<div class="kt-widget31__info">
-								<a href="#" class="kt-widget31__username">
-									Nick Bold
-								</a>
-								<p class="kt-widget31__text">
-									Web Developer, Facebook Inc 
-								</p>							 		 
-							</div>
-						</div>
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__progress">
-								<a href="#" class="kt-widget31__stats">
-									<span>13%</span>
-									<span>London</span>						    							 
-								</a>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-info" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
-							</div>	
-							<a href="#" class="btn-label-brand btn btn-sm btn-bold">Follow</a>													
-						</div>						
-					</div>
-
-					<div class="kt-widget31__item">
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__pic kt-widget4__pic--pic">
-								<img src="./assets/media/users/100_1.jpg" alt="">    
-							</div>
-							<div class="kt-widget31__info">
-								<a href="#" class="kt-widget31__username">
-									Wiltor Delton
-								</a>
-								<p class="kt-widget31__text">
-									Project Manager, Amazon Inc 
-								</p>							 		 
-							</div>
-						</div>	
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__progress">
-								<div class="kt-widget31__stats">
-									<span>93%</span>
-									<span>New York</span>						    							 
-								</div>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
-							</div>	
-							<a href="#" class="btn-label-brand btn btn-sm btn-bold">Follow</a>													
-						</div>						
-					</div>	
-
-					<div class="kt-widget31__item">
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__pic">
-								<img src="./assets/media/users/100_6.jpg" alt="">    
-							</div>
-							<div class="kt-widget31__info">
-								<a href="#" class="kt-widget31__username">
-									Sam Stone
-								</a>
-								<p class="kt-widget31__text">
-									Project Manager, Kilpo Inc 
-								</p>							 		 
-							</div>
-						</div>
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__progress">
-								<div class="kt-widget31__stats">
-									<span>50%</span>
-									<span>New York</span>						    							 
-								</div>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
-							</div>	
-							<a href="#" class="btn-label-brand btn btn-sm btn-bold">Follow</a>													
-						</div>													 
-					</div>	
-				</div>            
-			</div>
-			<div class="tab-pane" id="kt_widget31_tab2_content">
-				<div class="kt-widget31">
-					<div class="kt-widget31__item">
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__pic kt-widget4__pic--pic">
-								<img src="./assets/media/users/100_11.jpg" alt="">    
-							</div>
-							<div class="kt-widget31__info">
-								<a href="#" class="kt-widget31__username">
-									Nick Bold
-								</a>
-								<p class="kt-widget31__text">
-									Web Developer, Facebook Inc 
-								</p>							 		 
-							</div>
-						</div>
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__progress">
-								<a href="#" class="kt-widget31__stats">
-									<span>13%</span>
-									<span>London</span>						    							 
-								</a>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-info" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
-							</div>	
-							<a href="#" class="btn-label-brand btn btn-sm btn-bold">Follow</a>													
-						</div>						
-					</div>
-
-					<div class="kt-widget31__item">
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__pic kt-widget4__pic--pic">
-								<img src="./assets/media/users/100_1.jpg" alt="">    
-							</div>
-							<div class="kt-widget31__info">
-								<a href="#" class="kt-widget31__username">
-									Wiltor Delton
-								</a>
-								<p class="kt-widget31__text">
-									Project Manager, Amazon Inc 
-								</p>							 		 
-							</div>
-						</div>	
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__progress">
-								<div class="kt-widget31__stats">
-									<span>93%</span>
-									<span>New York</span>						    							 
-								</div>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-danger" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
-							</div>	
-							<a href="#" class="btn-label-brand btn btn-sm btn-bold">Follow</a>													
-						</div>						
-					</div>	
-
-					<div class="kt-widget31__item">
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__pic">
-								<img src="./assets/media/users/100_14.jpg" alt="">      
-							</div>
-							<div class="kt-widget31__info">
-								<a href="#" class="kt-widget31__username">
-									Milano Esco
-								</a>
-								<p class="kt-widget31__text">
-									Product Designer, Apple Inc 
-								</p>							 		 
-							</div>
-						</div>
-
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__progress">
-								<a href="#" class="kt-widget31__stats">
-									<span>33%</span>
-									<span>Paris</span>						    							 
-								</a>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-warning" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
-							</div>	
-							<a href="#" class="btn-label-brand btn btn-sm btn-bold">Follow</a>													
-						</div>							 
-					</div>	
-					
-					<div class="kt-widget31__item">
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__pic">
-								<img src="./assets/media/users/100_6.jpg" alt="">    
-							</div>
-							<div class="kt-widget31__info">
-								<a href="#" class="kt-widget31__username">
-									Sam Stone
-								</a>
-								<p class="kt-widget31__text">
-									Project Manager, Kilpo Inc 
-								</p>							 		 
-							</div>
-						</div>
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__progress">
-								<div class="kt-widget31__stats">
-									<span>50%</span>
-									<span>New York</span>						    							 
-								</div>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
-							</div>	
-							<a href="#" class="btn-label-brand btn btn-sm btn-bold">Follow</a>													
-						</div>													 
-					</div>
-
-					<div class="kt-widget31__item">
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__pic">
-								<img src="./assets/media/users/100_4.jpg" alt="">   
-							</div>
-							<div class="kt-widget31__info">
-								<a href="#" class="kt-widget31__username">
-									Anna Strong
-								</a>
-								<p class="kt-widget31__text">
-									Visual Designer,Google Inc 
-								</p>							 		 
-							</div>					 
-						</div>
-
-						<div class="kt-widget31__content">
-							<div class="kt-widget31__progress">
-								<a href="#" class="kt-widget31__stats">
-									<span>63%</span>
-									<span>London</span>						    							 
-								</a>
-								<div class="progress progress-sm">
-									<div class="progress-bar bg-brand" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
-							</div>	
-							<a href="#" class="btn-label-brand btn btn-sm btn-bold">Follow</a>													
-						</div>						
-					</div>											
-				</div>  		
-			</div>
-		</div>
-	</div>
-</div>
-<!--end:: Widgets/User Progress -->    </div>
-</div>
-    
 {% endblock %}
-
 
 {% block javascripts %}
 {% endblock %}

@@ -15,8 +15,6 @@ use App\Entity\Report;
 use App\Form\AccountProfileType;
 use App\Form\AccountInfoType;
 use App\Form\AccountPasswordType;
-use App\Form\AccountNotificationType;
-use App\Form\UserType;
 use App\Service\PaginatorService;
 use App\Service\TokenGenerator;
 
