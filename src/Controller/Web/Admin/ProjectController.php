@@ -63,6 +63,7 @@ class ProjectController extends AbstractController
             $contribution = new ProjectContribution();
             $contribution->setUser( $project->getAuthor() );
             $contribution->setProject( $project );
+            $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
             $contribution->setRoles(['ROLE_ADMIN']);
             $entityManager->persist( $contribution );
 

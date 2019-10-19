@@ -138,7 +138,11 @@
                                             <span></span>
                                         </label>
                                         <label class="kt-checkbox">
-                                            <input type="checkbox" id="user_roles_1" name="user[roles][]" value="ROLE_ADMIN" class="changed-input" {{ user.admin? 'checked' : '' }} >Admin
+                                            <input type="checkbox" id="user_roles_2" name="user[roles][]" value="ROLE_ADMIN" class="changed-input" {{ user.admin? 'checked' : '' }} >Admin
+                                            <span></span>
+                                        </label>
+                                        <label class="kt-checkbox">
+                                            <input type="checkbox" id="user_roles_3" name="user[roles][]" value="ROLE_SUPER_ADMIN" class="changed-input" {{ user.superadmin? 'checked' : '' }} >SuperAdmin
                                             <span></span>
                                         </label>
                                     </div>
