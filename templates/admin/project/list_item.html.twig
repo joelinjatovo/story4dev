@@ -1,0 +1,45 @@
+ <tr data-row="0" class="kt-datatable__row" style="left: 0px;">
+    <td data-field="User" data-autohide-disabled="false" class="kt-datatable__cell">
+        <span style="width: 222px;">
+            <div class="kt-user-card-v2">
+                <div class="kt-user-card-v2__pic">
+                    <img alt="avatar" src="{{ project.picture ? vich_uploader_asset(project, 'pictureFile') : default_picture }}">
+                </div>
+                <div class="kt-user-card-v2__details">
+                    {% if is_granted('view', project) %}
+                        <a class="kt-user-card-v2__name" href="{{ url('project_show', {slug : project.author.slug, id : project.id}) }}">{{ project.title }}</a>
+                    {% else %}
+                        <a class="kt-user-card-v2__name" href="#">{{ project.title }}</a>
+                    {% endif %}
+                    <span class="kt-user-card-v2__email">{{ project.author.email }}</span>
+                </div>
+            </div>
+        </span>
+    </td>
+    <td data-field="Responsable" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="kt-font-bold">{{ project.author.fullname }}</span></span>
+    </td>
+    <td data-field="Début" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">{{ project.startat|date("Y-m-d") }}</span></span>
+    </td>
+    <td data-field="Fin" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">{{ project.endat|date("Y-m-d") }}</span></span>
+    </td>
+    <td data-field="Data" class="kt-datatable__cell">
+        <span style="width: 100px;">{{ project.contributions.count }} contributeurs / {{ project.activities.count }} activités </span>
+    </td>
+</tr>
+<tr class="kt-datatable__row-detail kt-hidden">
+    <td class="kt-datatable__detail" colspan="9">
+        <table>
+            <tr class="kt-datatable__row">
+                <td class="kt-datatable__cell"><span>Status</span></td>
+                <td data-field="Status" class="kt-datatable__cell" style="">
+                    <span style="width: 100px;">
+                        <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Processing</span>
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>

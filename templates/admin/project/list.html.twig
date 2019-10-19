@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Tous les utilisateurs - Admin - {{ app.user.fullname }}{% endblock %}
+{% block title %}Tous les projets - Admin - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -12,7 +12,7 @@
             <h3 class="kt-subheader__title">{% if search is not empty %} Résultat de recherche : {{ search }} {% else %}Liste d'utilisateur{% endif %}</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__group" id="kt_subheader_search">
-                <span class="kt-subheader__desc" id="kt_subheader_total">{{ users.count }} Total</span>
+                <span class="kt-subheader__desc" id="kt_subheader_total">{{ projects.count }} Total</span>
                 <form class="kt-margin-l-20" id="kt_subheader_search_form" method="GET">
                     <div class="kt-input-icon kt-input-icon--right kt-subheader__search">
                         <input type="text" name="s" value="{{ search }}" maxlength="20" class="form-control" placeholder="Rechercher..." id="generalSearch">
@@ -32,7 +32,7 @@
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ path( 'admin_user_index' ) }}" class="btn btn-label-brand btn-bold">Ajouter un utilisateur</a>
+            <a href="{{ path( 'admin_project_index' ) }}" class="btn btn-label-brand btn-bold">Ajouter un projet</a>
             <div class="kt-subheader__wrapper">
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
                     <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -54,9 +54,9 @@
                             </li>
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__item">
-                                <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
+                                <a href="{{ path( 'admin_user_index' ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Project</span>
+                                    <span class="kt-nav__link-text">Utilisateur</span>
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
@@ -91,32 +91,26 @@
                     <table class="kt-datatable__table" style="display: block;">
                         <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="ShipName" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Utilisateurs</span>
+                                <th data-field="Owner" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">Projets</span>
                                 </th>
-                                <th data-field="Country" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 50px;">Pays</span>
+                                <th data-field="Responsable" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Responsable</span>
                                 </th>
-                                <th data-field="Date" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Date</span>
+                                <th data-field="Owner" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Début</span>
                                 </th>
-                                <th data-field="Status" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Status</span>
-                                </th>
-                                <th data-field="Roles" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Roles</span>
+                                <th data-field="Owner" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Fin</span>
                                 </th>
                                 <th data-field="Datas" class="kt-datatable__cell kt-datatable__cell--sort">
                                     <span style="width: 100px;">Data</span>
                                 </th>
-                                <th data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 150px;">Actions</span>
-                                </th>
                             </tr>
                         </thead>
                         <tbody class="kt-datatable__body">
-                            {% for _user in users %}
-                                {{ include('admin/user/list_item.html.twig', {'user': _user}) }}
+                            {% for project in projects %}
+                                {{ include('admin/project/list_item.html.twig', {project: project}) }}
                             {% endfor %}
                         </tbody>
                     </table>
@@ -133,7 +127,7 @@
             <div class="kt-portlet__body">
                 <!--begin: Pagination-->
                 <div class="kt-pagination kt-pagination--brand">
-                    {{ include('_common/pagination.html.twig', {'pagination': users}) }}
+                    {{ include('_common/pagination.html.twig', {'pagination': projects}) }}
                 </div>
                 <!--end: Pagination-->
             </div>

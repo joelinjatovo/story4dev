@@ -5,16 +5,12 @@ namespace App\Controller\Web\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Doctrine\Common\Collections\ArrayCollection;
 
-use App\Entity\User;
 use App\Entity\Project;
 use App\Form\ProjectType;
-use App\Service\FormError;
+use App\Service\PaginatorService;
 use App\Entity\ProjectContribution;
 
 /** 
@@ -102,5 +98,27 @@ class ProjectController extends AbstractController
         $this->addFlash('error', 'Something went wrong.');
 
         return $this->redirectToRoute('admin_project_create');
+    }
+    
+    /**
+     * @Route("/admin/projects/{page<\d+>?1}", name="list", methods="GET")
+     */
+    public function list(PaginatorService $paginator, int $page, Request $request)
+    {
+        $search = $request->query->get('s');
+        if( strlen($search) > 20 ) {
+            $search = substr($search, 0, 20);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $query = $entityManager->getRepository(Project::class)->getAll();
+
+        $projects = $paginator->paginate($query);
+        
+        return $this->render('admin/project/list.html.twig', [
+            'projects' => $projects, 
+            'search'   => $search, 
+        ]);
     }
 }

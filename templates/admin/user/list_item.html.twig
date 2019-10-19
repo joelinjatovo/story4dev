@@ -31,40 +31,19 @@
         <span style="width: 100px;">{{ user.projectContributions.count }} projets / {{ user.reports.count }} rapports </span>
     </td>
     <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
-        <span style="overflow: visible; position: relative; width: 80px;">
-            <div class="dropdown">
-                <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
-                    <i class="flaticon-more-1"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <ul class="kt-nav">
-                        <li class="kt-nav__item">
-                            <a class="kt-nav__link" href="{{ url('admin_user_show', {'id': user.id}) }}">
-                                <i class="kt-nav__link-icon flaticon2-expand"></i>
-                                <span class="kt-nav__link-text">Afficher</span>
-                            </a>
-                        </li>
-                        <li class="kt-nav__item">
-                            <a class="kt-nav__link" href="{{ url('admin_user_edit', {'id': user.id}) }}">
-                                <i class="kt-nav__link-icon flaticon2-contract"></i>
-                                <span class="kt-nav__link-text">Modifier</span>
-                            </a>
-                        </li>
-                        <li class="kt-nav__item">
-                            <a class="kt-nav__link" href="#">
-                                <i class="kt-nav__link-icon flaticon2-trash"></i>
-                                <span class="kt-nav__link-text">Supprimer</span>
-                            </a>
-                        </li>
-                        <li class="kt-nav__item">
-                            <a class="kt-nav__link" href="{{ url('user_show', {'slug': user.slug}) }}">
-                                <i class="kt-nav__link-icon flaticon2-mail-1"></i>
-                                <span class="kt-nav__link-text">Ouvrir</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <span style="overflow: visible; position: relative; width: 150px;">
+            <a href="{{ path('admin_user_edit', {id: user.id} ) }}" title="Modifier détails" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                <i class="la la-edit"></i>
+            </a>
+            <a href="{{ path('admin_user_show', {id: user.id} ) }}" title="Afficher détails" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                <i class="la la-eye"></i>
+            </a>
+            <a href="{{ path('user_show', {slug: user.slug} ) }}" title="Afficher détails" class="btn btn-sm btn-clean btn-icon btn-icon-md kt-hidden">
+                <i class="la la-desktop"></i>
+            </a>
+            <a title="Supprimer" class="btn btn-sm btn-clean btn-icon btn-icon-md kt-hidden">
+                <i class="la la-trash"></i>
+            </a>
         </span>
     </td>
 </tr>
