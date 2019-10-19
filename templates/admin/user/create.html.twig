@@ -115,13 +115,13 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.fullname, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.fullname, "Nom complet", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     {{ form_widget( form.fullname, { 'attr' : { 'class' : 'form-control' } } ) }}
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.status, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.status, "Statut", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         {{ form_widget( form.status, { 'attr' : { 'class' : 'form-control' } } ) }}
@@ -155,14 +155,14 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.company, "Company Name", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.company, "Entreprise", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     {{ form_widget( form.company, { 'attr' : { 'class' : 'form-control' } } ) }}
                                     <span class="form-text text-muted"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.phone, "Contact Phone", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.phone, "Télephone", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
@@ -172,7 +172,7 @@
                                 </div>
                             </div>
                             <div class="form-group form-group-last row">
-                                {{ form_label( form.website, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.website, "Site web" , { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
@@ -189,7 +189,6 @@
     </div>  
 </div>  
 {% endblock %}
-
 
 {% block javascripts %}
     <script src="{{ asset('js/add-user.js') }}" type="text/javascript" ></script>
