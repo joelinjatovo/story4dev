@@ -309,7 +309,7 @@ class File
              return '/uploads/file/'.$this->getName();
         }
         
-        if( in_array( $type, ['pdf', 'xml', 'csv', 'html', 'javascript', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'zip', 'mp4'] ) ){
+        if( in_array( $type, ['pdf', 'xml', 'csv', 'html', 'javascript', 'doc', 'docx', 'ppt', 'pptx', 'txt', 'mp3', 'zip', 'mp4'] ) ){
             return 'images/icon/'.$type.'.svg';
         }
            
