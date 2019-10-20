@@ -78,11 +78,11 @@
                                         <div class="col-lg-9 col-xl-6">
                                             <div class="kt-avatar kt-avatar--outline" id="kt_project_piture">
                                                 <div class="kt-avatar__holder" style="background-image: url('{{ project.picture ? vich_uploader_asset(project, 'pictureFile') : default_picture }}');"></div>
-                                                <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Changer picture">
+                                                <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Changer le logo du projet">
                                                     <i class="fa fa-pen"></i>
                                                     <input type="file" name="project[pictureFile][file]" accept=".png, .jpg, .jpeg">
                                                 </label>
-                                                <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Supprimer picture">
+                                                <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Supprimer le logo du projet">
                                                     <i class="fa fa-times"></i>
                                                 </span>
                                             </div>
@@ -114,10 +114,10 @@
 									<h3 class="kt-section__title kt-section__title-lg">Détails:</h3>
 									{% if not project.id > 0 %}
 										<div class="form-group row">
-											{{ form_label( form.author, "Propriétaire", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+											{{ form_label( form.author, "Administrateur", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
 											<div class="col-lg-9 col-xl-6">
 												{{ form_widget( form.author, { 'attr' : { 'form' : 'project', 'class' : 'form-control' } } ) }}
-                                                <span class="form-text text-muted">Celui-ci va être le propriétaire du projet ainsi que son administrateur.</span>
+                                                <span class="form-text text-muted">Celui-ci va être l'administrateur principal du projet.</span>
 											</div>
 										</div>
 									{% endif %}
@@ -135,7 +135,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {{ form_label( form.end_at, "Date du fin du projet", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                        {{ form_label( form.end_at, "Date de fin du projet", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                         <div class="col-lg-9 col-xl-6">
                                             <div class="input-group date">
                                                 {{ form_widget( form.end_at, { 'attr' : { 'form' : 'project', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
@@ -148,7 +148,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {{ form_label( form.periodicity, "Périodicité", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                        {{ form_label( form.periodicity, "Périodicité suivi indicateurs", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                         <div class="col-lg-9 col-xl-6">
                                             {{ form_widget( form.periodicity, { 'attr' : { 'form' : 'project', 'class' : 'form-control' } } ) }}
                                         </div>
@@ -163,7 +163,7 @@
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
                                                                     {{ form_widget(form.iterations.vars.prototype.id ) }}
-                                                                    {{ form_widget(form.iterations.vars.prototype.title, { 'attr' : { 'form' : 'project', 'placeholder' : 'Label du suivi', 'class' : 'form-control' } } ) }}
+                                                                    {{ form_widget(form.iterations.vars.prototype.title, { 'attr' : { 'form' : 'project', 'placeholder' : 'Période suivie', 'class' : 'form-control' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
@@ -230,8 +230,8 @@
                                     </div>
 								</div>
 							</div>
-                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
-                            <div class="kt-section">
+                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-hidden"></div>
+                            <div class="kt-section kt-hidden">
 								<div class="kt-section__body">
 									<h3 class="kt-section__title kt-section__title-lg">Détails du contact:</h3>
                                     <div class="form-group row">
