@@ -38,9 +38,15 @@
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__item">
                                 <a href="{{ path('activity_index', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
+                                    <i class="kt-nav__link-icon flaticon-map"></i>
                                     <span class="kt-nav__link-text">Activité</span>
                                 </a>
+                            </li>
+                            <li class="kt-nav__item">
+                                <button class="kt-nav__link" data-toggle="modal" data-target="#kt_modal_activities">
+                                    <i class="kt-nav__link-icon flaticon2-checking"></i>
+                                    <span class="kt-nav__link-text">Rapport</span>
+                                </button>
                             </li>
                             <li class="kt-nav__separator"></li>
                             {% endif %}
@@ -51,19 +57,19 @@
                             <li class="kt-nav__separator"></li>                        
                             <li class="kt-nav__item">
                                 <a href="{{ path('activity_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
+                                    <i class="kt-nav__link-icon flaticon-map"></i>
                                     <span class="kt-nav__link-text">Les activités</span>
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
                                 <a href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
+                                    <i class="kt-nav__link-icon flaticon2-list"></i>
                                     <span class="kt-nav__link-text">Les rapports</span>
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
                                 <a href="{{ path('contribution_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
+                                    <i class="kt-nav__link-icon flaticon2-group"></i>
                                     <span class="kt-nav__link-text">Les contributeurs</span>
                                 </a>
                             </li>
@@ -89,7 +95,7 @@
                 </div>
                 <div class="kt-widget__content">
                     <div class="kt-widget__head">
-                        <a href="#" class="kt-widget__title">{{ project.title }}</a>
+                        <a href="#" class="kt-widget__title" style="font-size: 2.0rem;">{{ project.title }}</a>
                     </div>
 
                     <div class="kt-widget__subhead">
@@ -105,33 +111,74 @@
                     </div>
                 </div>
             </div>
+
+            <div class="kt-widget__bottom">
+                <div class="kt-widget__item">
+                    <div class="kt-widget__icon">
+                        <i class="flaticon-event-calendar-symbol"></i>
+                    </div>
+                    <div class="kt-widget__details">
+                        <span class="kt-widget__title">Date de début</span>
+                        <span class="kt-widget__value"><span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ project.startat is empty ? "" : project.startat | date('Y-m-d') }}</span></span>
+                    </div>
+                </div>
+
+                <div class="kt-widget__item">
+                    <div class="kt-widget__icon">
+                        <i class="flaticon-event-calendar-symbol"></i>
+                    </div>
+                    <div class="kt-widget__details">
+                        <span class="kt-widget__title">Date de fin</span>
+                        <span class="kt-widget__value"><span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ project.endat is empty ? "" : project.endat | date('Y-m-d') }}</span></span>
+                    </div>
+                </div>
+
+                <div class="kt-widget__item">
+                    <div class="kt-widget__icon">
+                        <i class="flaticon-map"></i>
+                    </div>
+                    <div class="kt-widget__details">
+                        <span class="kt-widget__title">{{ project.activities.count }} Activités</span>
+                        <a href="#activities" class="kt-widget__value kt-font-brand">Voir la liste</a>
+                    </div>
+                </div>
+
+                <div class="kt-widget__item">
+                    <div class="kt-widget__icon">
+                        <i class="flaticon-chat-1"></i>
+                    </div>
+                    <div class="kt-widget__details">
+                        <span class="kt-widget__title">Rapports</span>
+                        <a href="#reports" class="kt-widget__value kt-font-brand">Voir la liste</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-        
+</div>
+<!--end:: Portlet-->
+
+<!--begin:: Portlet-->
+<div class="kt-portlet ">
+    <div class="kt-portlet__body kt-portlet__body--fit">
+        <div class="kt-widget kt-widget--project-1">
+            <div class="kt-widget__body">
+                <span class="kt-widget__text">
+                    {{ project.description|html|raw }}                       
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end:: Portlet-->
+<!--begin:: Portlet-->
+<div class="kt-portlet ">
     <div class="kt-portlet__body kt-portlet__body--fit">
         <div class="kt-widget kt-widget--project-1">
             <div class="kt-widget__body">
                 <div class="kt-widget__stats">
-                    <div class="kt-widget__item">
-                        <span class="kt-widget__date">
-                            Date de début
-                        </span>
-                        <div class="kt-widget__label">
-                            <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ project.startat is empty ? "" : project.startat | date('Y-m-d') }}</span>
-                        </div>
-                    </div>
-
-                    <div class="kt-widget__item">
-                        <span class="kt-widget__date">
-                            Date de fin
-                        </span>
-                        <div class="kt-widget__label">
-                            <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ project.endat is empty ? "" : project.endat | date('Y-m-d') }}</span>
-                        </div>
-                    </div>
-
                     <div class="kt-widget__item flex-fill">
-                        <span class="kt-widget__subtitel">Progression</span>
+                        <span class="kt-widget__subtitel">Situation d’avancement</span>
                         <div class="kt-widget__progress d-flex  align-items-center">
                             <div class="progress" style="height: 5px;width: 100%;">
                                 <div class="progress-bar kt-bg-warning" role="progressbar" style="width: {{ project.progression }}%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
@@ -142,9 +189,6 @@
                         </div>
                     </div>
                 </div>
-                <span class="kt-widget__text">
-                    {{ project.description|html|raw }}                       
-                </span>
             </div>
         </div>
     </div>
@@ -204,7 +248,44 @@
 </div>
     
 <div class="row">
-    <div class="col-xl-6">
+    <div class="col-xl-6" id="reports">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <a href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}">
+                        <h3 class="kt-portlet__head-title">Rapports</h3>
+                    </a>
+                </div>
+                <div class="kt-portlet__head-toolbar">
+                    <a href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
+                        Tous
+                    </a>
+                    <button class="btn btn-icon" data-toggle="modal" data-target="#kt_modal_activities">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+                                <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <div class="kt-widget5">
+                    {% for report in reports %}
+                        {{ include('project/report.html.twig', { 'report' : report } ) }}
+                    {% else %}
+                        Il n'y a pas encore de rapports dans ce projet.
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<div class="row">
+    <div class="col-xl-6" id="activities">
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
@@ -240,49 +321,12 @@
             </div>
         </div>
     </div>
-</div>
-    
-<div class="row">
-    <div class="col-xl-6">
-        <div class="kt-portlet kt-portlet--height-fluid">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label">
-                    <a href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}">
-                        <h3 class="kt-portlet__head-title">Rapports</h3>
-                    </a>
-                </div>
-                <div class="kt-portlet__head-toolbar">
-                    <a href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
-                        Tous
-                    </a>
-                    <button class="btn btn-icon" data-toggle="modal" data-target="#kt_modal_activities">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-                                <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
-                            </g>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="kt-portlet__body">
-                <div class="kt-widget5">
-                    {% for report in reports %}
-                        {{ include('project/report.html.twig', { 'report' : report } ) }}
-                    {% else %}
-                        Il n'y a pas encore de rapports dans ce projet.
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="col-xl-6">
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <a href="{{ path('contribution_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}">
-                        <h3 class="kt-portlet__head-title">Contributeurs</h3>
+                        <h3 class="kt-portlet__head-title">Equipe projet</h3>
                     </a>
                 </div>
                 <div class="kt-portlet__head-toolbar">
