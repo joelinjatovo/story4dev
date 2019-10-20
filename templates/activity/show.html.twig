@@ -102,7 +102,7 @@
             <div class="kt-portlet__body">
                 <div class="kt-widget kt-widget--user-profile-3">
                     <div class="kt-widget__top">
-                        <div class="kt-widget__content">
+                        <div class="kt-widget__content" style="padding-left:0px;">
                             <div class="kt-widget__head">
                                 <a href="#" class="kt-widget__username">
                                     {{ activity.title }}    
@@ -118,6 +118,54 @@
                             <span class="kt-widget__text">
                                 {{ activity.description|html|raw }}                       
                             </span>
+                        </div>
+                    </div>
+
+                    <div class="kt-widget__bottom">
+                        <div class="kt-widget__item">
+                            <div class="kt-widget__progress-" style="width: 90%;">
+                                <div class="kt-widget__text">
+                                    Avancement
+                                </div>
+                                <div class="progress" style="height: 5px;width: 100%;">
+                                    <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ activity.progression }}%;" aria-valuenow="{{ activity.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div class="kt-widget__stats">
+                                    {{ activity.progression }}%
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if activity.budget > 0 %}
+                            <div class="kt-widget__item">
+                                <div class="kt-widget__icon">
+                                    <i class="flaticon-piggy-bank"></i>
+                                </div>
+                                <div class="kt-widget__details">
+                                    <span class="kt-widget__title">Budget</span>
+                                    <span class="kt-widget__value">{{ activity.budget }}</span>
+                                </div>
+                            </div>
+                        {% endif  %}
+
+                        <div class="kt-widget__item">
+                            <div class="kt-widget__icon">
+                                <i class="flaticon-file-2"></i>
+                            </div>
+                            <div class="kt-widget__details">
+                                <span class="kt-widget__title">{{ activity.reports.count }} Rapports</span>
+                                <a href="#reports" class="kt-widget__value kt-font-brand">Voir la liste</a>
+                            </div>
+                        </div>
+
+                        <div class="kt-widget__item">
+                            <div class="kt-widget__icon">
+                                <i class="flaticon-confetti"></i>
+                            </div>
+                            <div class="kt-widget__details">
+                                <span class="kt-widget__title">{{ activity.indicators.count }} Indicateurs</span>
+                                <a href="#indicators" class="kt-widget__value kt-font-brand">Voir la liste</a>
+                            </div>
                         </div>
                     </div>
                 </div>
