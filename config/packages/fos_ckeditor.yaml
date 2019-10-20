@@ -3,3 +3,15 @@
 twig:
     form_themes:
         - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+fos_ck_editor:
+    configs:
+        my_config:
+            toolbar: "standard"
+    toolbars:
+        configs:
+            my_toolbar_1: [ "@document", "/", "@link" , "/", "@text" ]
+            my_toolbar_2: [ "@document", "/", "@text" ]
+        items:
+            document: [ "Source", "-", "Cut", "-", "Copy", "-", "Paste", "-", "PasteText", "-", "PasteFromWord", "-", "Undo", "-", "Redo" ]
+            link:     [ "Anchor" ]
+            text:     [ 'Bold','Italic','Underline','Strike', 'Blockquote','Subscript','Superscript','-','RemoveFormat' ]

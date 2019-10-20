@@ -86,7 +86,7 @@
 							<div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
 							<div class="kt-section">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Ajouter le résultat:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">Suivi des résultats avec indicateur:</h3>
 									<div class="form-group row">
 										<label class="col-3 col-form-label">Résultat</label>
 										<div class="col-9">
@@ -98,7 +98,7 @@
                                                             <div data-repeater-item="" class="kt-margin-b-10">
                                                                 <div class="input-group">
                                                                     {{ form_widget(form.results.vars.prototype.indicator, { 'attr' : { 'form' : 'report', 'class' : 'form-control' } } ) }}
-                                                                    {{ form_widget(form.results.vars.prototype.value, { 'attr' : { 'form' : 'report', 'class' : 'form-control' } } ) }}
+                                                                    {{ form_widget(form.results.vars.prototype.value, { 'attr' : { placeholder: 'Saisissez la valeur ici', 'form' : 'report', 'class' : 'form-control' } } ) }}
                                                                     <div class="input-group-append">
                                                                         <a href="javascript:;" data-repeater-delete class="btn btn-danger btn-icon">
                                                                             <i class="la la-close"></i>
@@ -113,7 +113,7 @@
                                                                 <div class="input-group">
                                                                     {{ form_widget( result.id ) }}
                                                                     {{ form_widget( result.indicator, { 'attr' : { 'form' : 'report', 'class' : 'form-control' } } ) }}
-                                                                    {{ form_widget( result.value, { 'attr' : { 'form' : 'report', 'class' : 'form-control' } } ) }}
+                                                                    {{ form_widget( result.value, { 'attr' : { placeholder: 'Saisissez la valeur ici', 'form' : 'report', 'class' : 'form-control' } } ) }}
                                                                     <div class="input-group-append">
                                                                         <a href="javascript:;" data-repeater-delete class="btn btn-danger btn-icon">
                                                                             <i class="la la-close"></i>

@@ -60,6 +60,13 @@ class Activity
     private $title;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Gedmo\Versioned
+     * @Groups({"full", "raw", "activity", "project", "indicator"})
+     */
+    private $description;
+
+    /**
      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned
      * @Assert\Type(
@@ -147,6 +154,18 @@ class Activity
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }
