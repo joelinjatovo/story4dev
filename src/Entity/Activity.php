@@ -361,7 +361,7 @@ class Activity
         return $this;
     }
 
-    public function getProgression(?Iteration $iteration)
+    public function getProgression(?Iteration $iteration = null)
     {
         $progression = 0;
         $indicators = $this->getIndicators();

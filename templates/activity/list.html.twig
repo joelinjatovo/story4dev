@@ -10,11 +10,10 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">{{ project.title }}</h3>
-            <div class="kt-subheader__group" id="kt_subheader_search">
-                <span class="kt-subheader__desc" id="kt_subheader_total">450 Total</span>
-            </div>
             <div class="kt-subheader__breadcrumbs">
-                <a href="{{ path('admin_index') }}" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('admin_index') }}" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                {% endif %}
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="{{ path('project_list', { 'slug' : project.author.slug, 'page' : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
@@ -25,7 +24,7 @@
         </div>        
         <div class="kt-subheader__toolbar">
             <a href="{{ path('project_show', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
-            <a href="{{ path('activity_create', { 'slug': project.author.slug, 'project_id': project.id }) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
+            <a href="{{ path('activity_index', { 'slug': project.author.slug, 'project_id': project.id }) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
         </div>
     </div>
 </div>
