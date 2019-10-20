@@ -194,7 +194,7 @@
 	
 <div class="row">
     <div class="col-lg-12">
-        <div class="kt-portlet kt-portlet--height-fluid">
+        <div class="kt-portlet kt-portlet--height-fluid" id="reports">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <a href="{{ path('report_list2', { activity_id : activity.id, project_id : activity.project.id, slug: activity.project.author.slug } ) }}">
@@ -232,7 +232,7 @@
 <div class="row">
     <div class="col-lg-6">
         <!--begin:: Widgets/Notifications-->
-		<div class="kt-portlet kt-portlet--height-fluid">
+		<div class="kt-portlet kt-portlet--height-fluid" id="indicators">
 			<div class="kt-portlet__head">
 				<div class="kt-portlet__head-label">
 					<a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}"><h3 class="kt-portlet__head-title">Avancement</h3></a>
@@ -268,7 +268,7 @@
 	</div>
     <div class="col-lg-6">
         <!--begin:: Widgets/Notifications-->
-        <div class="kt-portlet kt-portlet--height-fluid">
+        <div class="kt-portlet kt-portlet--height-fluid" id="documents">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label"><a href="{{ path('file_list_activity', { activity_id : activity.id, project_id : activity.project.id, slug: activity.project.author.slug } ) }}" >
                         <h3 class="kt-portlet__head-title">Documents</h3>
