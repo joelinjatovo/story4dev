@@ -53,7 +53,6 @@ class ReportController extends AbstractController
         $report->setAuthor($this->getUser());
         
         $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity ));
-        $form->remove('createdAt');
         
         return $this->render('report/create.html.twig', [
             'user'     => $user, 
@@ -85,7 +84,6 @@ class ReportController extends AbstractController
         $report = new Report();
         
         $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity ));
-        $form->remove('createdAt');
         
         $form->handleRequest($request);
         if ( $form->isSubmitted() ) {
@@ -207,7 +205,6 @@ class ReportController extends AbstractController
         }
         
         $form = $this->createForm(ReportType::class, $report, array('activity' => $activity));
-        $form->remove('createdAt');
         
         return $this->render('report/edit.html.twig', [
             'user'     => $user, 
@@ -247,7 +244,6 @@ class ReportController extends AbstractController
         }
         
         $form = $this->createForm(ReportType::class, $report, array('activity' => $activity));
-        $form->remove('createdAt');
         
         $form->handleRequest($request);
         
