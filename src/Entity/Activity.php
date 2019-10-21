@@ -182,6 +182,11 @@ class Activity
         return $this;
     }
     
+    public function isDeleted()
+    {
+        return ! is_null( $this->deletedAt );
+    }
+    
     public function getAddress(): ?Address
     {
         return $this->address;

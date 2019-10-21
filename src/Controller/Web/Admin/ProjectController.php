@@ -122,4 +122,77 @@ class ProjectController extends AbstractController
             'search'   => $search, 
         ]);
     }
+    
+    /**
+     * @Route("/admin/project/remove", name="remove", methods="POST")
+     * 
+     * @IsGranted("ROLE_SUPER_ADMIN") 
+     * 
+     */
+    public function remove(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+        	
+                $entityManager->getFilters()->disable("deleted");
+                
+                $project = $entityManager->getRepository(Project::class)->find($id);
+                if( $project && $project->isDeleted()){
+                    $entityManager->remove($project);
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'Projet supprimé complètement avec succès',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
+    }
+    
+    /**
+     * @Route("/admin/project/restore", name="restore", methods="POST")
+     * 
+     * @IsGranted("ROLE_SUPER_ADMIN") 
+     * 
+     */
+    public function restore(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+        	
+                $entityManager->getFilters()->disable("deleted");
+
+                $project = $entityManager->getRepository(Project::class)->find($id);
+                if( $project && $project->isDeleted()){
+                    $project->setDeletedAt(null);
+                    $entityManager->persist($project);
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'Projet restauré avec succès',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
+    }
 }

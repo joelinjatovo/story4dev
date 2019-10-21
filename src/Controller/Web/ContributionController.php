@@ -163,7 +163,7 @@ class ContributionController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $contribution  = $entityManager->getRepository(ProjectContribution::class)->find($id);
 
-                if( $contribution){
+                if( $contribution ){
                     $this->denyAccessUnlessGranted('accept', $contribution);
 
                     if($contribution->isPinged()){
@@ -171,6 +171,7 @@ class ContributionController extends AbstractController
                     }else{
                         $contribution->setStatus(ProjectContribution::STATUS_PING);
                     }
+                    
                     $entityManager->persist($contribution);
                     $entityManager->flush();
 
@@ -202,7 +203,7 @@ class ContributionController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $contribution  = $entityManager->getRepository(ProjectContribution::class)->find($id);
 
-                if( $contribution && ! $contribution->getUser()->isAdmin()){
+                if( $contribution && ! $contribution->isAdmin()){
                     $this->denyAccessUnlessGranted('edit', $contribution->getProject());
                     
                     $entityManager->remove($contribution);

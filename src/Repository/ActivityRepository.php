@@ -20,6 +20,13 @@ class ActivityRepository extends ServiceEntityRepository
         parent::__construct($registry, Activity::class);
     }
     
+    public function getAllDeleted()
+    {
+        return $this->createQueryBuilder('p')
+            ->where("p.deletedAt IS NOT NULL")
+            ->getQuery();
+    }
+    
     public function findByProject(Project $project)
     {
         return $this->createQueryBuilder('a')

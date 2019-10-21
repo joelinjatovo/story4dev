@@ -91,4 +91,38 @@
 
 
 {% block javascripts %}
+<script type="text/javascript">
+jQuery(document).ready(function($){
+    $(document).on('click', '.btn-remove', function(e){
+        e.preventDefault();
+        var $this = $(this);
+            swal.fire({
+                title:"Vous êtes sûre?",
+                text:"Vous ne pourez pas revenir en arrière après!",
+                type:"warning",
+                showCancelButton:!0,
+                confirmButtonText:"Oui, supprimez le!",
+                cancelButtonText:"Annuler"
+            }).then(function(e){
+                if(e.value){
+                    KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+                    $.post("/project/remove", { id: $this.attr('data-id') })
+                    .done(function( data ) {
+                        KTApp.unblockPage();
+                        if(data.success){
+                            $this.closest('.project-item').remove();
+                            toastr.success(data.message);
+                        }else{
+                            toastr.error(data.message, data.title);
+                        }
+                    })
+                    .fail(function() {
+                        KTApp.unblockPage();
+                    });
+                }
+            })
+    });
+    
+});
+</script>
 {% endblock %}

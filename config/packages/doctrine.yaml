@@ -41,3 +41,7 @@ doctrine:
         dql:
             datetime_functions:
                 DATE: App\DQL\DQLDate
+        filters:
+            deleted:
+                class: 'App\Repository\Filters\DeletedFilter'
+                enabled: true

@@ -368,6 +368,38 @@ class ReportController extends AbstractController
     }
     
     /**
+     * @Route("/report/remove", name="remove", methods="POST")
+     */
+    public function remove(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $report = $entityManager->getRepository(Report::class)->find($id);
+                if( $report && ! $report->isDeleted() ){
+                    $this->denyAccessUnlessGranted('remove', $report);
+
+                    $entityManager->remove($report);
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'Rapport supprimé avec succès',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
+    }
+    
+    /**
      * @Route("/{slug}/project/{project_id}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
      * @Route("/{slug}/project/{project_id}/reports/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
      * @Entity("user", options={"mapping": {"slug": "slug"}})

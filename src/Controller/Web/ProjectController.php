@@ -207,25 +207,35 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/remove/{id}", name="remove", methods="POST")
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
-     * @Entity("project", options={"mapping": {"id": "id"}})
+     * @Route("/project/remove", name="remove", methods="POST")
      */
-    public function remove(User $user, Project $project)
+    public function remove(Request $request)
     {
-        $this->denyAccessUnlessGranted('remove', $project);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $project = $entityManager->getRepository(Project::class)->find($id);
+                if( $project && ! $project->isDeleted()){
+                    $this->denyAccessUnlessGranted('remove', $project);
+
+                    $entityManager->remove($project);
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'Projet supprimé avec succès',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
         }
-        
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $entityManager->remove($project);
-        
-        $entityManager->flush();
-        
-        return new Response('Project removed successfully');
     }
     
     /**

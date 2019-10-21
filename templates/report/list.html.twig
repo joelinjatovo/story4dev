@@ -15,7 +15,6 @@
                 <span class="kt-subheader__desc" id="kt_subheader_total">{{ reports.count }} Total </span>
             </div>
             <div class="kt-subheader__breadcrumbs">
-                <a href="{{ path('admin_index') }}" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="{{ path('project_list', { 'slug' : project.author.slug, 'page' : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
@@ -131,4 +130,55 @@
 
 
 {% block javascripts %}
+<script type="text/javascript">
+jQuery(document).ready(function($){
+toastr.options = {
+"closeButton": false,
+"debug": false,
+"newestOnTop": false,
+"progressBar": false,
+"positionClass": "toast-top-right",
+"preventDuplicates": false,
+"onclick": null,
+"showDuration": "300",
+"hideDuration": "1000",
+"timeOut": "5000",
+"extendedTimeOut": "1000",
+"showEasing": "swing",
+"hideEasing": "linear",
+"showMethod": "fadeIn",
+"hideMethod": "fadeOut"
+};
+    $(document).on('click', '.btn-remove', function(e){
+        e.preventDefault();
+        var $this = $(this);
+            swal.fire({
+                title:"Vous êtes sûre?",
+                text:"Vous ne pourez pas revenir en arrière après!",
+                type:"warning",
+                showCancelButton:!0,
+                confirmButtonText:"Oui, supprimez le!",
+                cancelButtonText:"Annuler"
+            }).then(function(e){
+                if(e.value){
+                    KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+                    $.post("/report/remove", { id: $this.attr('data-id') })
+                    .done(function( data ) {
+                        KTApp.unblockPage();
+                        if(data.success){
+                            $this.closest('.report-item').remove();
+                            toastr.success(data.message);
+                        }else{
+                            toastr.error(data.message, data.title);
+                        }
+                    })
+                    .fail(function() {
+                        KTApp.unblockPage();
+                    });
+                }
+            })
+    });
+    
+});
+</script>
 {% endblock %}

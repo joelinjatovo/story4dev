@@ -10,9 +10,8 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Détail de l'activité</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__breadcrumbs">
-                <a href="{{ path('admin_index') }}" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
-                <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="{{ path('project_list', { 'slug' : activity.project.author.slug, 'page' : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="{{ path('project_show', { 'slug' : activity.project.author.slug, 'id': activity.project.id })}}" class="kt-subheader__breadcrumbs-link">{{ activity.project.title }}</a>

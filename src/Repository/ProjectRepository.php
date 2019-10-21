@@ -27,6 +27,13 @@ class ProjectRepository extends AppRepository
             ->getQuery();
     }
     
+    public function getAllDeleted()
+    {
+        return $this->createQueryBuilder('p')
+            ->where("p.deletedAt IS NOT NULL")
+            ->getQuery();
+    }
+    
     public function findByAuthor(User $user)
     {
         return $this->createQueryBuilder('p')

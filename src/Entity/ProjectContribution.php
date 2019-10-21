@@ -15,6 +15,7 @@ use App\Entity\User;
  * @ORM\Table(name="project_contributions")
  * @ORM\Entity(repositoryClass="App\Repository\ProjectContributionRepository")
  * @Gedmo\Loggable
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
 class ProjectContribution
 {

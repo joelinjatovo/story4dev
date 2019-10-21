@@ -9,17 +9,14 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">{{ project.title }}</h3>
+            <h3 class="kt-subheader__title">Toutes les activités</h3>
             <div class="kt-subheader__breadcrumbs">
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('admin_index') }}" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
-                {% endif %}
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="{{ path('project_list', { 'slug' : project.author.slug, 'page' : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="{{ path('project_show', { 'slug' : project.author.slug, 'id': project.id })}}" class="kt-subheader__breadcrumbs-link">{{ project.title }}</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Activities</span>
+                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Activités</span>
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
@@ -56,4 +53,56 @@
 
 
 {% block javascripts %}
+
+<script type="text/javascript">
+jQuery(document).ready(function($){
+toastr.options = {
+"closeButton": false,
+"debug": false,
+"newestOnTop": false,
+"progressBar": false,
+"positionClass": "toast-top-right",
+"preventDuplicates": false,
+"onclick": null,
+"showDuration": "300",
+"hideDuration": "1000",
+"timeOut": "5000",
+"extendedTimeOut": "1000",
+"showEasing": "swing",
+"hideEasing": "linear",
+"showMethod": "fadeIn",
+"hideMethod": "fadeOut"
+};
+    $(document).on('click', '.btn-remove', function(e){
+        e.preventDefault();
+        var $this = $(this);
+            swal.fire({
+                title:"Vous êtes sûre?",
+                text:"Vous ne pourez pas revenir en arrière après!\nToutes les rapports ainsi que les données rattachées à cette activité vont être supprimés aussi.",
+                type:"warning",
+                showCancelButton:!0,
+                confirmButtonText:"Oui, supprimez la!",
+                cancelButtonText:"Annuler"
+            }).then(function(e){
+                if(e.value){
+                    KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+                    $.post("/activity/remove", { id: $this.attr('data-id') })
+                    .done(function( data ) {
+                        KTApp.unblockPage();
+                        if(data.success){
+                            $this.closest('.activity-item').remove();
+                            toastr.success(data.message);
+                        }else{
+                            toastr.error(data.message, data.title);
+                        }
+                    })
+                    .fail(function() {
+                        KTApp.unblockPage();
+                    });
+                }
+            })
+    });
+    
+});
+</script>
 {% endblock %}

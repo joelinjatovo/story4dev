@@ -293,30 +293,35 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/remove/{activity_id}", name="remove", methods="POST", requirements={"project_id"="\d+","activity_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
+     * @Route("/activity/remove", name="remove", methods="POST")
      */
-    public function remove(User $user, Project $project, Activity $activity)
+    public function remove(Request $request)
     {
-        $this->denyAccessUnlessGranted('remove', $activity);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $activity = $entityManager->getRepository(Activity::class)->find($id);
+                if( $activity  && ! $activity->isDeleted()){
+                    $this->denyAccessUnlessGranted('remove', $activity);
+
+                    $entityManager->remove($activity);
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'Activité supprimé avec succès',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
         }
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-        
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $entityManager->remove($activity);
-        
-        $entityManager->flush();
-        
-        return new Response('Activity removed successfully');
     }
     
     /**

@@ -15,6 +15,7 @@ use App\Traits\TimestampableEntity;
 use App\Traits\SoftDeleteableEntity;
 
 /**
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @Gedmo\Loggable
  * @ORM\Entity(repositoryClass="App\Repository\ReportRepository")
  * @ORM\Table(name="reports")
@@ -224,6 +225,11 @@ class Report
         $this->setStatus(self::STATUS_CLOSED);
         
         return $this;
+    }
+    
+    public function isDeleted()
+    {
+        return ! is_null( $this->deletedAt );
     }
 
     public function getAuthor(): ?User

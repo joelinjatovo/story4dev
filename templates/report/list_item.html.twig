@@ -1,5 +1,5 @@
 <!--begin:: Portlet-->
-<div class="kt-portlet kt-portlet--height-fluid">
+<div class="kt-portlet kt-portlet--height-fluid report-item">
     <div class="kt-portlet__body kt-portlet__body--fit">
         <!--begin::Widget -->
         <div class="kt-widget kt-widget--project-1">
@@ -44,6 +44,14 @@
                                     <a href="{{ path('report_edit', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-settings"></i>
                                         <span class="kt-nav__link-text">Modifier</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if is_granted('remove', report) %}
+                                <li class="kt-nav__item">
+                                    <a href="#" data-id="{{ report.id }}" class="kt-nav__link btn-remove">
+                                        <i class="kt-nav__link-icon flaticon-delete"></i>
+                                        <span class="kt-nav__link-text">Supprimer</span>
                                     </a>
                                 </li>
                             {% endif %}
