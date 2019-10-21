@@ -2,9 +2,6 @@
 
 {% block title %}Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
-{% block stylesheets %}
-{% endblock %}
-
 {% block subheader %}
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
@@ -96,6 +93,9 @@
                 <div class="kt-widget__content">
                     <div class="kt-widget__head">
                         <a href="#" class="kt-widget__title" style="font-size: 2.0rem;">{{ project.title }}</a>
+                        <label class="colorpicker" data-toggle="kt-tooltip" title="" data-original-title="Changer le logo du projet">
+                            <i class="fa fa-pen"></i>
+                        </label>
                     </div>
 
                     <div class="kt-widget__subhead">
@@ -159,7 +159,7 @@
 <!--end:: Portlet-->
 
 <!--begin:: Portlet-->
-<div class="kt-portlet ">
+<div class="kt-portlet " style="background-color: rgba(34, 185, 255, 0.1);">
     <div class="kt-portlet__body kt-portlet__body--fit">
         <div class="kt-widget kt-widget--project-1">
             <div class="kt-widget__body">
@@ -249,7 +249,7 @@
     
 <div class="row">
     <div class="col-xl-6" id="reports">
-        <div class="kt-portlet kt-portlet--height-fluid">
+        <div class="kt-portlet kt-portlet--height-fluid" style="background-color: rgba(29, 201, 183, 0.1);">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <a href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}">
@@ -286,7 +286,7 @@
     
 <div class="row">
     <div class="col-xl-6" id="activities">
-        <div class="kt-portlet kt-portlet--height-fluid">
+        <div class="kt-portlet kt-portlet--height-fluid" style="background-color: rgba(29, 201, 183, 0.1);">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <a href="{{ path('activity_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}">
