@@ -1,4 +1,4 @@
-<div class="kt-widget5__item">
+<div class="kt-widget5__item" style="padding-bottom: 0.5rem;margin-bottom: 0.5rem;">
     <div class="kt-widget5__content">
         <div class="kt-widget5__section">
             <a href="{{ url('activity_show', { 'slug' : activity.project.author.slug, 'project_id' : activity.project.id, 'activity_id' : activity.id }) }}" class="kt-widget5__title">
@@ -12,12 +12,11 @@
     </div>						
     <div class="kt-widget5__content">
         <div class="kt-widget5__stats">
-            <span class="kt-widget5__number">{{ activity.indicators.count }}</span>
-            <span class="kt-widget5__sales">Indicateurs</span>
+            <span class="kt-widget5__sales"><span class="kt-widget5__number">{{ activity.indicators.count }}</span> Indicateurs</span>
         </div>
         <div class="kt-widget5__stats">
-            <span class="kt-widget5__number">{{ activity.reports.count }}</span>
-            <span class="kt-widget5__votes">Rapports</span>
+            <span class="kt-widget5__sales"><span class="kt-widget5__number">{{ activity.reports.count }}</span> Rapports</span>
+            
         </div>
     </div>	
 </div>

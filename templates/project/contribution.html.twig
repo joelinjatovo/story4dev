@@ -1,21 +1,26 @@
-<div class="kt-widget__item contribution-item" >
-    <span class="kt-media kt-media--circle"> 
+<div class="kt-widget kt-widget--user-profile-4">
+    <div class="kt-widget__head">
+        <div class="kt-widget__media">
         <img src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') : default_avatar }}" alt="avatar">
-    </span>
-    <div class="kt-widget__info">
-        <div class="kt-widget__section">
-            <a href="{{ path('contribution_show', { 'project_id' : contribution.project.id, 'slug': contribution.project.author.slug, 'contribution_id': contribution.id } ) }}" class="kt-widget__username">{{ contribution.user.fullname }}</a>
+            <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-boldest kt-hidden">
+                JB
+            </div>
         </div>
-        <span class="kt-widget__desc">
-            {{ (contribution.user.title is null) or (contribution.user.title is empty) ? contribution.user.email : contribution.user.title }}
-        </span>
-    </div>
-    <div class="kt-widget__action">
-        {% if contribution.isAdmin() %}
-            <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-primary report-status">admin</span>
-        {% else %}
-            <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-success report-status">contributeur</span>
-        {% endif %}
-        <span class="kt-widget__date">{{ contribution.createdat|ago }}</span>
+        <div class="kt-widget__content">
+            <div class="kt-widget__section">
+                <a href="{{ path('contribution_show', { 'project_id' : contribution.project.id, 'slug': contribution.project.author.slug, 'contribution_id': contribution.id } ) }}" class="kt-widget__username">
+                    {{ contribution.user.fullname }}
+                </a>
+                <div class="kt-widget__button">
+                    {% if contribution.user.reports.count > 10 %}
+                        <span class="btn btn-label-primary btn-sm">{{ contribution.user.reports.count }} Rapports</span>
+                    {% elseif contribution.user.reports.count > 0 %}
+                        <span class="btn btn-label-success btn-sm">{{ contribution.user.reports.count }} Rapports</span>
+                    {% else %}
+                        <span class="btn btn-label-danger btn-sm">Aucun rapport effectué</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
