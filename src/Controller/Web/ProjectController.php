@@ -18,6 +18,7 @@ use App\Entity\Project;
 use App\Entity\Report;
 use App\Entity\Activity;
 use App\Entity\Iteration;
+use App\Entity\Meta\ProjectMeta;
 use App\Form\ActivityType;
 use App\Form\ProjectType;
 use App\Service\FormError;
@@ -247,5 +248,55 @@ class ProjectController extends AbstractController
             'user'     => $user,
             'projects' => $projects, 
         ]);
+    }
+    
+    /**
+     * @Route("/project/color", name="color", methods="POST")
+     */
+    public function color(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $metakey = $request->request->get('metakey');
+            $color = $request->request->get('color');
+            $id = $request->request->get('id');
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $project = $entityManager->getRepository(Project::class)->find($id);
+            if( $project ){
+                $this->denyAccessUnlessGranted('edit', $project);
+
+                $found = false;
+                foreach($project->getMetas() as $meta){
+                    if($meta->getMetaKey() === $metakey ){
+                        $found = true;
+                        break;
+                    }
+                }
+
+                if( ! $found || ! $meta ) {
+                    $meta = new ProjectMeta();
+                    $meta->setProject($project);
+                    $meta->setMetaKey($metakey);
+                }
+
+                $meta->setMetaValue($color);
+
+                $entityManager->persist($meta);
+                $entityManager->flush();
+                
+                return $this->json([
+                    'success' => true,
+                    'metakey' => $metakey,
+                    'color'   => $color,
+                    'message' => 'Color changed',
+                ]);
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
     }
 }

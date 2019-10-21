@@ -376,6 +376,18 @@ class Project
         return $this;
     }
     
+    public function getMeta(string $metakey, $default = null): ?string
+    {
+        $metas = $this->getMetas();
+        foreach($metas as $meta){
+            if($meta->getMetaKey() === $metakey){
+                return $meta->getMetaValue();
+            }
+        }
+
+        return $default;
+    }
+    
     public function getMetas(): ?Collection
     {
         return $this->metas;
