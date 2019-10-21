@@ -35,6 +35,14 @@ services:
         arguments:
             $targetDirectory: '%upload_directory%'
 
+    App\Security\FacebookAuthenticator:
+        arguments:
+            $targetDirectory: '%upload_directory%'
+
+    App\Security\GoogleAuthenticator:
+        arguments:
+            $targetDirectory: '%upload_directory%'
+
     App\Security\Voter\ProjectVoter:
         arguments:
             $em: '@doctrine.orm.entity_manager'

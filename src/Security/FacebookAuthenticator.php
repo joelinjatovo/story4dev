@@ -37,8 +37,9 @@ class FacebookAuthenticator extends SocialAuthenticator
     private $templating;
     private $session;
     private $optionService;
+    private $targetDirectory;
 
-    public function __construct(OptionService $optionService, SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating)
+    public function __construct($targetDirectory, OptionService $optionService, SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating)
     {
         $this->em = $em;
         $this->clientRegistry = $clientRegistry;
@@ -49,6 +50,7 @@ class FacebookAuthenticator extends SocialAuthenticator
         $this->templating = $templating;
         $this->session = $session;
         $this->optionService = $optionService;
+        $this->targetDirectory = $targetDirectory;
     }
 
     public function supports(Request $request)
@@ -83,11 +85,6 @@ class FacebookAuthenticator extends SocialAuthenticator
         $newAccount = false;
         $token = "";
         if (!$user) {
-            $picture_url = $facebookUser->getPictureUrl();
-            $contents = file_get_contents($picture_url);
-            $name = substr($picture_url, strrpos($picture_url, '/') + 1);
-            //\Symfony\Component\Templating\Storage\Storage::put($name, $contents);
-
             $plain_password = random_bytes(10);
             $username = str_replace('@', '', $email);
             $username = str_replace('.', '-', $username);
@@ -106,6 +103,14 @@ class FacebookAuthenticator extends SocialAuthenticator
             $token = $this->tokenGenerator->generateToken();
             $user->setResetToken($token);
             $user->setResetedAt(new \DateTime());
+            
+            $picture_url = $facebookUser->getPictureUrl();
+            $finalName = md5(uniqid(rand(), true))."_avatar.jpg";
+            $newfile = $this->targetDirectory . '/user/'.$finalName;
+            if ( copy($picture_url, $newfile) ) {
+                $user->setAvatar($finalName);
+            }
+
             $newAccount = true;
 
         }

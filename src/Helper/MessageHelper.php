@@ -7,8 +7,10 @@ use App\Service\OptionService;
 class MessageHelper {
     
     public static function getMessage(OptionService $optionService, string $subject){
+        $email = $optionService->get('app_admin_email')??'admin@story4dev.com';
+        $name  = $optionService->get('app_admin_name')??'Admin';
         $admins = [
-            $optionService->get('app_admin_email') => $optionService->get('app_admin_name'),
+            $email => $name,
         ];
         $subject .= ' - ['. $optionService->get('app_name') . ']';
 

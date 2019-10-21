@@ -36,8 +36,9 @@ class GoogleAuthenticator extends SocialAuthenticator
     private $templating;
     private $session;
     private $optionService;
+    private $targetDirectory;
 
-    public function __construct(OptionService $optionService, SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating)
+    public function __construct($targetDirectory, OptionService $optionService, SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating)
     {
         $this->clientRegistry = $clientRegistry;
         $this->em = $em;
@@ -48,6 +49,7 @@ class GoogleAuthenticator extends SocialAuthenticator
         $this->templating = $templating;
         $this->session = $session;
         $this->optionService = $optionService;
+        $this->targetDirectory = $targetDirectory;
     }
 
     public function supports(Request $request)
@@ -73,8 +75,6 @@ class GoogleAuthenticator extends SocialAuthenticator
         
         $newAccount = false;
         if (!$user) {
-            $picture_url = $googleUser->getPicture();
-
             $plain_password = random_bytes(10);
             $username = str_replace('@', '', $email);
             $username = str_replace('.', '-', $username);
@@ -93,6 +93,14 @@ class GoogleAuthenticator extends SocialAuthenticator
             $token = $this->tokenGenerator->generateToken();
             $user->setResetToken($token);
             $user->setResetedAt(new \DateTime());
+            
+            $picture_url = $googleUser->getPicture();
+            $finalName = md5(uniqid(rand(), true))."_avatar.jpg";
+            $newfile = $this->targetDirectory . '/user/'.$finalName;
+            if ( copy($picture_url, $newfile) ) {
+                $user->setAvatar($finalName);
+            }
+
             $newAccount = true;
         }
         
