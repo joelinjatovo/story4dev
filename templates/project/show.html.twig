@@ -32,24 +32,24 @@
                         <!--begin::Nav-->
                         <ul class="kt-nav">
                             {% if is_granted('edit', project) %}
-                            <li class="kt-nav__head">
-                                Nouveau                                 
-                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
-                            </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__item">
-                                <a href="{{ path('activity_index', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon-map"></i>
-                                    <span class="kt-nav__link-text">Activité</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <button class="kt-nav__link" data-toggle="modal" data-target="#kt_modal_activities">
-                                    <i class="kt-nav__link-icon flaticon2-checking"></i>
-                                    <span class="kt-nav__link-text">Rapport</span>
-                                </button>
-                            </li>
-                            <li class="kt-nav__separator"></li>
+                                <li class="kt-nav__head">
+                                    Nouveau                                 
+                                    <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                </li>
+                                <li class="kt-nav__separator"></li>
+                                <li class="kt-nav__item">
+                                    <a href="{{ path('activity_index', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon-map"></i>
+                                        <span class="kt-nav__link-text">Activité</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <button class="kt-nav__link" data-toggle="modal" data-target="#kt_modal_activities">
+                                        <i class="kt-nav__link-icon flaticon2-checking"></i>
+                                        <span class="kt-nav__link-text">Rapport</span>
+                                    </button>
+                                </li>
+                                <li class="kt-nav__separator"></li>
                             {% endif %}
                             <li class="kt-nav__head">
                                 Aller dans                                   
@@ -343,8 +343,8 @@
             <div class="kt-portlet__body">
                 <div class="row">
                     {% set i = 1 %}
-                    {% for contribution in project.contributions.slice(0, 12) %}
-                        {% if i > 1 and ( i % 4  ) == 0  %}</div><div class="row">{% endif %}
+                    {% for contribution in project.contributions.slice(0, 3) %}
+                        {% if i > 1 and ( i % 5  ) == 0  %}</div><div class="row">{% endif %}
                         <div class="col-md-6 col-lg-3">
                             {{ include('project/contribution.html.twig', { 'contribution' : contribution } ) }}
                         </div>
@@ -352,7 +352,7 @@
                     {% else %}
                         Il n'y a pas encore des contributeurs dans ce projet.
                     {% endfor %}
-                    {% if i > 1 and ( i % 4  ) != 0  %}</div>{% endif %}
+                    {% if i > 1 and ( i % 5  ) > 1  %}</div>{% endif %}
                 </div>
             </div>
         </div>
