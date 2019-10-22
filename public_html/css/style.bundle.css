@@ -31013,8 +31013,8 @@ strong {
     .kt-widget5 .kt-widget5__item .kt-widget5__content .kt-widget5__pic {
       padding-right: 1.25rem; }
       .kt-widget5 .kt-widget5__item .kt-widget5__content .kt-widget5__pic img {
-        max-width: 5rem;
-        border-radius: 4px; }
+        max-width: 4rem;
+        border-radius: 50%; }
     .kt-widget5 .kt-widget5__item .kt-widget5__content .kt-widget5__title {
       font-size: 1.1rem;
       font-weight: 500;

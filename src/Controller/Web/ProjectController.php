@@ -81,11 +81,12 @@ class ProjectController extends AbstractController
         $series =  $project->getSerie();
         
         return $this->render('project/show.html.twig', [
-            'user'    => $user, 
-            'project' => $project, 
-            'reports' => $reports, 
-            'data'    => json_encode($data),
-            'series'  => json_encode($series),
+            'user'          => $user, 
+            'project'       => $project, 
+            'reports'       => $reports,
+            'reports_count' => count($reports),  
+            'data'          => json_encode($data),
+            'series'        => json_encode($series),
         ]);
     }
     
