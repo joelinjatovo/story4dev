@@ -28,13 +28,14 @@ use App\Service\PaginatorService;
 class ActivityController extends AbstractController
 {
     /**
-     * @Route("/{slug}/project/{project_id}/activity", name="index", methods="GET", requirements={"project_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity", name="index", methods="GET", requirements={"project_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function index(User $user, Project $project)
+    public function index(Project $project)
     {
         $this->denyAccessUnlessGranted('edit', $project);
+        
+        $user = $project->getAuthor();
         
         $activity = new Activity();
         $form = $this->createForm(ActivityType::class, $activity);
@@ -48,14 +49,14 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/activity", name="create", methods="POST")
-     * @Route("/{slug}/project/{project_id}/activity", name="create_2", methods="POST", requirements={"project_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity", name="create", methods="POST", requirements={"project_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function create(?User $user, ?Project $project, Request $request, FormError $formError): Response
+    public function create(Project $project, Request $request, FormError $formError): Response
     {
         $this->denyAccessUnlessGranted('edit', $project);
+        
+        $user = $project->getAuthor();
         
         $activity = new Activity();
         $form = $this->createForm(ActivityType::class, $activity);
@@ -72,18 +73,8 @@ class ActivityController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($activity);
             $entityManager->flush();
-            
-            if ( $request->isXmlHttpRequest() ) {
-                return $this->json([
-                    'success' => true,
-                    'title'   => 'Success',
-                    'status'  => 'success',
-                    'message' => 'Activity created successfully.',
-                    'html'    => $this->renderView('project/activity.html.twig', ['activity' => $activity] )
-                ]);
-            }
         
-            $this->addFlash('success', 'Activity created succesfully.');
+            $this->addFlash('success', 'Activité créée avec succès.');
 
             $action = strtolower( $request->request->get('submit') );
             switch($action){
@@ -115,17 +106,7 @@ class ActivityController extends AbstractController
 
         }
         
-        if ( $request->isXmlHttpRequest() ) {
-            return $this->json([
-                'success' => false,
-                'title'   => 'Invalid Request',
-                'status'  => 'error',
-                'message' => 'An error was occured. :)',
-                'errors'  => $formError->getErrorMessages($form),
-            ]);
-        }
-        
-        $this->addFlash('error', 'Something went wrong.');
+        $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
 
         return $this->redirectToRoute('activity_index', [
             'slug'       => $user->getSlug(),
@@ -134,29 +115,23 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}", name="show", methods="GET", requirements={"project_id"="\d+","activity_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}", name="show", methods="GET", requirements={"project_id"="\d+","activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function show(User $user, Project $project, Activity $activity)
+    public function show(Project $project, Activity $activity)
     {
         $this->denyAccessUnlessGranted('view', $activity);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
         }
         
+        $user = $project->getAuthor();
+        
         $entityManager = $this->getDoctrine()->getManager();
         $reports = $entityManager->getRepository(Report::class)->findByActivity($activity)->execute();
 
-        $indicator = new Indicator();
-        $form = $this->createForm(IndicatorType::class, $indicator);
-        
         $data   =  $activity->getData();
         $series =  $activity->getSerie();
         
@@ -165,29 +140,25 @@ class ActivityController extends AbstractController
             'project'  => $project,
             'activity' => $activity, 
             'reports'  => $reports, 
-            'form'     => $form->createView(),
             'data'     => json_encode($data),
             'series'   => json_encode($series),
         ]);
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/edit/{activity_id}", name="edit", methods="GET", requirements={"project_id"="\d+","activity_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/edit/{activity_id}", name="edit", methods="GET", requirements={"project_id"="\d+","activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function edit(User $user, Project $project, Activity $activity)
+    public function edit(Project $project, Activity $activity)
     {
         $this->denyAccessUnlessGranted('edit', $activity);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
         }
+        
+        $user = $project->getAuthor();
         
         $form = $this->createForm(ActivityType::class, $activity);
 
@@ -200,22 +171,19 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/edit/{activity_id}", name="update", methods="POST", requirements={"project_id"="\d+","activity_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/edit/{activity_id}", name="update", methods="POST", requirements={"project_id"="\d+","activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function update(User $user, Project $project, Activity $activity, Request $request, FormError $formError)
+    public function update(Project $project, Activity $activity, Request $request, FormError $formError)
     {
         $this->denyAccessUnlessGranted('edit', $activity);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
         }
+        
+        $user = $project->getAuthor();
         
         $form = $this->createForm(ActivityType::class, $activity);
         
@@ -225,17 +193,8 @@ class ActivityController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($activity);
             $entityManager->flush();
-            
-            if ( $request->isXmlHttpRequest() ) {
-                return $this->json([
-                    'success' => true,
-                    'title'   => 'Success',
-                    'status'  => 'success',
-                    'message' => 'Activity updated successfully.',
-                ]);
-            }
         
-            $this->addFlash('success', 'Activity updated succesfully.');
+            $this->addFlash('success', 'Votre modification a été bien sauvegardé.');
 
             $action = strtolower( $request->request->get('submit') );
             switch($action){
@@ -272,18 +231,8 @@ class ActivityController extends AbstractController
                 'activity_id' => $activity->getId(), 
             ]);
         }
-        
-        if ( $request->isXmlHttpRequest() ) {
-            return $this->json([
-                'success' => false,
-                'title'   => 'Invalid Request',
-                'status'  => 'error',
-                'message' => 'An error was occured. :)',
-                'errors'  => $formError->getErrorMessages($form),
-            ]);
-        }
-        
-        $this->addFlash('error', 'Something went wrong.');
+
+        $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
 
         return $this->redirectToRoute('activity_edit', [
             'slug'        => $user->getSlug(),
@@ -325,16 +274,15 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activities/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activities/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(User $user, Project $project, $page = 1, PaginatorService $paginator)
+    public function list(Project $project, $page = 1, PaginatorService $paginator)
     {
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
+        $this->denyAccessUnlessGranted('view', $project);
         
+        $user = $project->getAuthor();
+
         $entityManager = $this->getDoctrine()->getManager();
         
         $query = $entityManager->getRepository(Activity::class)->findByProject($project);
@@ -345,25 +293,6 @@ class ActivityController extends AbstractController
             'user'       => $user,
             'project'    => $project,
             'activities' => $activities
-        ]);
-    }
-    
-    /**
-     * @Route("/{slug}/project/{project_id}/activities", name="choose", methods="GET")
-     */
-    public function choose(User $user, Project $project)
-    {
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
-        
-        $entityManager = $this->getDoctrine()->getManager();
-        $activities = $entityManager->getRepository(Activity::class)->findBy(['project' => $project]);
-        
-        return $this->json([
-            'status'  => 'success',
-            'message' => 'OK',
-            'html'    => $this->renderView('activity/choose.html.twig', ['activities' => $activities] )
         ]);
     }
 }

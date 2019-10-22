@@ -31,22 +31,19 @@ class IndicatorController extends AbstractController
 {
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator", name="index", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("project/{project_id}/activity/{activity_id}/indicator", name="index", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function index(User $user, Project $project, Activity $activity)
+    public function index(Project $project, Activity $activity)
     {
         $this->denyAccessUnlessGranted('edit', $activity);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
         }
+        
+        $user = $project->getAuthor();
 
         $indicator = new Indicator();
         foreach($project->getIterations() as $iteration){
@@ -68,22 +65,19 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator", name="create", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}/indicator", name="create", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function create(User $user, Project $project, Activity $activity, Request $request, FormError $formError)
+    public function create(Project $project, Activity $activity, Request $request, FormError $formError)
     {
         $this->denyAccessUnlessGranted('edit', $activity);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
         }
+        
+        $user = $project->getAuthor();
 
         $indicator = new Indicator();
         $form = $this->createForm(IndicatorType::class, $indicator);
@@ -100,18 +94,8 @@ class IndicatorController extends AbstractController
             $entityManager->persist($indicator);
 
             $entityManager->flush();
-            
-            if ( $request->isXmlHttpRequest() ) {
-                return $this->json([
-                    'success' => true,
-                    'title'   => 'Success',
-                    'status'  => 'success',
-                    'message' => 'Indicator created successfully.',
-                    'html'    => $this->renderView('activity/indicator.html.twig', ['indicator' => $indicator] )
-                ]);
-            }
         
-            $this->addFlash('success', 'Indicator created succesfully.');
+            $this->addFlash('success', 'L\'indicateur a été bien sauvegardé avec succès.');
 
             $args = [
                 'slug'        => $user->getSlug(),
@@ -137,17 +121,7 @@ class IndicatorController extends AbstractController
             
         }
         
-        if ( $request->isXmlHttpRequest() ) {
-            return $this->json([
-                'success' => false,
-                'title'   => 'Invalid Request',
-                'status'  => 'error',
-                'message' => 'An error was occured. :)',
-                'errors'  => $formError->getErrorMessages($form),
-            ]);
-        }
-        
-        $this->addFlash('error', 'Something went wrong.');
+        $this->addFlash('error', "L'indicateur n'a pas été sauvegardé. Une erreur s'est produite.");
 
         return $this->redirectToRoute('indicator_index', [
             'slug'        => $user->getSlug(),
@@ -157,19 +131,14 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/{indicator_id}", name="show", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}/indicator/{indicator_id}", name="show", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function show(User $user, Project $project, Activity $activity, Indicator $indicator)
+    public function show(Project $project, Activity $activity, Indicator $indicator)
     {
         $this->denyAccessUnlessGranted('view', $indicator);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
@@ -178,6 +147,8 @@ class IndicatorController extends AbstractController
         if($indicator->getActivity() != $activity ){
             throw $this->createNotFoundException('The activity does not match');
         }
+        
+        $user = $project->getAuthor();
         
         $goal = new Goal();
         $form = $this->createForm(GoalType::class, $goal);
@@ -195,19 +166,14 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/edit/{indicator_id}", name="edit", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}/indicator/edit/{indicator_id}", name="edit", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function edit(User $user, Project $project, Activity $activity, Indicator $indicator)
+    public function edit(Project $project, Activity $activity, Indicator $indicator)
     {
         $this->denyAccessUnlessGranted('edit', $indicator);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
@@ -216,6 +182,8 @@ class IndicatorController extends AbstractController
         if($indicator->getActivity() != $activity ){
             throw $this->createNotFoundException('The activity does not match');
         }
+        
+        $user = $project->getAuthor();
         
         $form = $this->createForm(IndicatorType::class, $indicator);
         
@@ -229,19 +197,14 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/edit/{indicator_id}", name="update", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}/indicator/edit/{indicator_id}", name="update", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function update(User $user, Project $project, Activity $activity, Indicator $indicator, Request $request, FormError $formError)
+    public function update(Project $project, Activity $activity, Indicator $indicator, Request $request, FormError $formError)
     {
         $this->denyAccessUnlessGranted('edit', $indicator);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
@@ -251,6 +214,8 @@ class IndicatorController extends AbstractController
             throw $this->createNotFoundException('The activity does not match');
         }
         
+        $user = $project->getAuthor();
+        
         $form = $this->createForm(IndicatorType::class, $indicator);
 
         $form->handleRequest($request);
@@ -259,17 +224,8 @@ class IndicatorController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($indicator);
             $entityManager->flush();
-            
-            if ( $request->isXmlHttpRequest() ) {
-                return $this->json([
-                    'success' => true,
-                    'title'   => 'Success',
-                    'status'  => 'success',
-                    'message' => 'Indicator updated successfully.',
-                ]);
-            }
         
-            $this->addFlash('success', 'Indicator updated succesfully.');
+            $this->addFlash('success', "l'indicateur a été bien modifié avec succès.");
             
             $args = [
                 'slug'        => $user->getSlug(),
@@ -295,17 +251,7 @@ class IndicatorController extends AbstractController
             return $this->redirectToRoute('indicator_edit', $args);
         }
         
-        if ( $request->isXmlHttpRequest() ) {
-            return $this->json([
-                'success' => false,
-                'title'   => 'Invalid Request',
-                'status'  => 'error',
-                'message' => 'An error was occured. :)',
-                'errors'  => $formError->getErrorMessages($form),
-            ]);
-        }
-        
-        $this->addFlash('error', 'Something went wrong.');
+        $this->addFlash('error', "Les modifications n'ont pas été sauvegardée. Une erreur s'est produite. Veuillez réessayer!");
 
         return $this->redirectToRoute('indicator_edit', [
             'slug'         => $user->getSlug(),
@@ -316,55 +262,20 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicator/remove/{indicator_id}", name="remove", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}/indicators/{page<\d+>?1}", name="list", methods="GET")
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function remove(User $user, Project $project, Activity $activity, Indicator $indicator)
-    {
-        $this->denyAccessUnlessGranted('remove', $indicator);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-        
-        if($indicator->getActivity() != $activity ){
-            throw $this->createNotFoundException('The activity does not match');
-        }
-        
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $entityManager->remove($indicator);
-        
-        $entityManager->flush();
-        
-        return new Response('indicator removed successfully');
-    }
-    
-    /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/indicators/{page<\d+>?1}", name="list", methods="GET")
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
-     * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
-     */
-    public function list(User $user, Project $project, Activity $activity, $page = 1, PaginatorService $paginator, Request $request)
+    public function list(Project $project, Activity $activity, $page = 1, PaginatorService $paginator, Request $request)
     {
         $this->denyAccessUnlessGranted('view', $activity);
         
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
-        
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
         }
+        
+        $user = $project->getAuthor();
         
         $entityManager = $this->getDoctrine()->getManager();
         

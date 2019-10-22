@@ -32,7 +32,7 @@ class FileController extends AbstractController
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function list(User $user, Project $project = null, Activity $activity = null, $page = 1, Request $request, PaginatorService $paginator)
+    public function list(?User $user, ?Project $project = null, Activity $activity = null, $page = 1, Request $request, PaginatorService $paginator)
     {
         if($this->getUser() != $user ){
             throw $this->createNotFoundException('The author does not match');
@@ -40,7 +40,7 @@ class FileController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
         
-        $projects = $entityManager->getRepository(Project::class)->findProjectsAndContributions($user)->execute();
+        $projects = $entityManager->getRepository(Project::class)->findByContributor($user)->execute();
             
         if( $project != null ) {
             
@@ -85,7 +85,7 @@ class FileController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
 
-        $projects = $entityManager->getRepository(Project::class)->findProjectsAndContributions($user)->execute();
+        $projects = $entityManager->getRepository(Project::class)->findByContributor($user)->execute();
         
         return $this->render('file/show.html.twig', [
             'file'    => $file,

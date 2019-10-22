@@ -23,44 +23,38 @@ class ContributionController extends AbstractController
 {
     
     /**
-     * @Route("/{slug}/project/{project_id}/contributions", name="list", methods="GET", requirements={"project_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/contributions", name="list", methods="GET", requirements={"project_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(User $user, Project $project)
+    public function list(Project $project)
     {
-        //$this->denyAccessUnlessGranted('edit', $project);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
+        $this->denyAccessUnlessGranted('view', $project);
         
         $contributions = $project->getContributions();
         
+        $user = $project->getAuthor();
+        
         return $this->render('contribution/list.html.twig', [
-            'user'    => $user, 
-            'project' => $project, 
+            'user'          => $user, 
+            'project'       => $project, 
             'contributions' => $contributions, 
         ]);
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/contribution/{contribution_id}/{page<\d+>?1}", name="show", methods="GET", requirements={"project_id"="\d+","contribution_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/contribution/{contribution_id}/{page<\d+>?1}", name="show", methods="GET", requirements={"project_id"="\d+","contribution_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("projectcontribution", options={"mapping": {"contribution_id": "id"}})
      */
-    public function show(User $user, Project $project, ProjectContribution $contribution, $page = 1, PaginatorService $paginator)
+    public function show(Project $project, ProjectContribution $contribution, $page = 1, PaginatorService $paginator)
     {
         $this->denyAccessUnlessGranted('view', $project);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($contribution->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
         }
+        
+        $user = $project->getAuthor();
         
         $entityManager = $this->getDoctrine()->getManager();
         $query = $entityManager->getRepository(Report::class)

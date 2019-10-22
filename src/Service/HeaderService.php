@@ -39,7 +39,7 @@ class HeaderService
     public function getMyProjects()
     {
         if( $this->user ){
-            return $this->em->getRepository(Project::class)->findProjectsAndContributions($this->user)->execute();
+            return $this->em->getRepository(Project::class)->findByContributor($this->user)->execute();
         }
         
         return null;

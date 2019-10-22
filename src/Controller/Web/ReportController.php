@@ -31,22 +31,19 @@ use App\Service\PaginatorService;
 class ReportController extends AbstractController
 {
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report", name="index", methods="GET", requirements={"project_id"="\d+","activity_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}/report", name="index", methods="GET", requirements={"project_id"="\d+","activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function index(User $user, Project $project, Activity $activity)
+    public function index(Project $project, Activity $activity)
     {
         $this->denyAccessUnlessGranted('view', $activity);
         
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
-
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
         }
+        
+        $user = $project->getAuthor();
         
         $report = new Report();
         $report->setActivity($activity);
@@ -64,22 +61,19 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report", name="create", methods="POST", requirements={"project_id"="\d+","activity_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}/report", name="create", methods="POST", requirements={"project_id"="\d+","activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function create(User $user, Project $project, Activity $activity, Request $request): Response
+    public function create(Project $project, Activity $activity, Request $request): Response
     {
         $this->denyAccessUnlessGranted('view', $activity);
         
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
-
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
         }
+        
+        $user = $project->getAuthor();
 
         $report = new Report();
         
@@ -136,7 +130,7 @@ class ReportController extends AbstractController
                         ]);
                 }
             }else{
-                $this->addFlash('error', "Votre rapport n'a pas été bien enregistré.");
+                $this->addFlash('error', "Votre rapport n'a pas été enregistré. Veuillez réessayer!");
             }
         }
         
@@ -148,23 +142,20 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report/{report_id}", name="show", methods="GET", requirements={"project_id"="\d+","report_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}/report/{report_id}", name="show", methods="GET", requirements={"project_id"="\d+","report_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function show(User $user, Project $project, Activity $activity, Report $report)
+    public function show(Project $project, Activity $activity, Report $report)
     {
         $this->denyAccessUnlessGranted('view', $report);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
         }
+        
+        $user = $project->getAuthor();
 
         if($report->getActivity() != $activity ){
             throw $this->createNotFoundException('The activity does not match');
@@ -182,19 +173,14 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report/edit/{report_id}", name="edit", methods="GET", requirements={"project_id"="\d+","id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}/report/edit/{report_id}", name="edit", methods="GET", requirements={"project_id"="\d+","id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function edit(User $user, Project $project, Activity $activity, Report $report)
+    public function edit(Project $project, Activity $activity, Report $report)
     {
         $this->denyAccessUnlessGranted('edit', $report);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
@@ -203,6 +189,8 @@ class ReportController extends AbstractController
         if($report->getActivity() != $activity ){
             throw $this->createNotFoundException('The activity does not match');
         }
+        
+        $user = $project->getAuthor();
         
         $form = $this->createForm(ReportType::class, $report, array('activity' => $activity));
         
@@ -216,19 +204,14 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/report/edit/{report_id}", name="update", methods="POST", requirements={"project_id"="\d+","id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}/report/edit/{report_id}", name="update", methods="POST", requirements={"project_id"="\d+","id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function update(User $user, Project $project, Activity $activity, Report $report, Request $request)
+    public function update(Project $project, Activity $activity, Report $report, Request $request)
     {
         $this->denyAccessUnlessGranted('edit', $report);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
@@ -237,6 +220,8 @@ class ReportController extends AbstractController
         if($report->getActivity() != $activity ){
             throw $this->createNotFoundException('The activity does not match');
         }
+        
+        $user = $project->getAuthor();
         
         $originalResults = new ArrayCollection();
         foreach ($report->getResults() as $result) {
@@ -355,7 +340,7 @@ class ReportController extends AbstractController
                     'success' => true,
                     'status'  => $report->getStatusLabel(),
                     'class'   => $report->getStatusClass(),
-                    'message' => 'Status changed',
+                    'message' => 'Le statut du rapport a été bien changé.',
                 ]);
             }
             
@@ -400,16 +385,15 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
-     * @Route("/{slug}/project/{project_id}/reports/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{project_id}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
+     * @Route("/project/{project_id}/reports/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(User $user, Project $project, $activity_id = 0, $page = 1, PaginatorService $paginator)
+    public function list(Project $project, $activity_id = 0, $page = 1, PaginatorService $paginator)
     {
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
+        $this->denyAccessUnlessGranted('view', $project);
+        
+        $user = $project->getAuthor();
 
         $entityManager = $this->getDoctrine()->getManager();
 

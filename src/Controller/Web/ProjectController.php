@@ -32,18 +32,15 @@ use App\Service\PaginatorService;
 class ProjectController extends AbstractController
 {
     /**
-     * @Route("/{slug}/project/{id}/dashboard", name="dashboard", methods="GET", requirements={"id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{id}/dashboard", name="dashboard", methods="GET", requirements={"id"="\d+"})
      * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function dashboard(User $user, Project $project)
+    public function dashboard(Project $project)
     {
         $this->denyAccessUnlessGranted('edit', $project);
-        
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
 
+        $user =$project->getAuthor();
+        
         $entityManager = $this->getDoctrine()->getManager();
         $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
         $users = $entityManager->getRepository(User::class)->findAll();
@@ -69,17 +66,14 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/{id}", name="show", methods="GET", requirements={"id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/{id}", name="show", methods="GET", requirements={"id"="\d+"})
      * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function show(User $user, Project $project)
+    public function show(Project $project)
     {
         $this->denyAccessUnlessGranted('view', $project);
         
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
+        $user = $project->getAuthor();
 
         $entityManager = $this->getDoctrine()->getManager();
         $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
@@ -96,18 +90,15 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
      * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function edit(User $user, Project $project)
+    public function edit(Project $project)
     {
         $this->denyAccessUnlessGranted('edit', $project);
         
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
-        
+        $user = $project->getAuthor();
+
         $form = $this->createForm(ProjectType::class, $project);
         
         return $this->render('project/edit.html.twig', [
@@ -118,18 +109,15 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/project/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/project/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
      * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function update(User $user, Project $project, Request $request, FormError $formError)
+    public function update(Project $project, Request $request, FormError $formError)
     {
         $this->denyAccessUnlessGranted('edit', $project);
         
-        if($project->getAuthor() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
-        
+        $user = $project->getAuthor();
+
         $originalIterations = new ArrayCollection();
         foreach ($project->getIterations() as $iteration) {
             $originalIterations->add($iteration);
@@ -239,17 +227,18 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/projects/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/projects/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/{slug}/projects/{page<\d+>?1}", name="list2", methods="GET")
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      */
-    public function list(User $user, PaginatorService $paginator, int $page)
+    public function list(?User $user = null, PaginatorService $paginator, int $page)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        if($this->isGranted('ROLE_ADMIN') || ($user == $this->getUser()) ){
-            $query = $entityManager->getRepository(Project::class)->findProjectsAndContributions($user);
+        if( $user && ( $this->isGranted('ROLE_ADMIN') ||  ( $user == $this->getUser() ) ) ) {
+            $query = $entityManager->getRepository(Project::class)->findByContributor($user);
         }else{
-            $query = $entityManager->getRepository(Project::class)->findProjectsAndContributions($user, $this->getUser());
+            $query = $entityManager->getRepository(Project::class)->findByContributor($this->getUser());
         }
 
         $projects = $paginator->paginate($query, 10);
