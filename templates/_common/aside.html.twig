@@ -48,7 +48,7 @@
                             <span class="kt-menu__arrow"></span>
                             <ul class="kt-menu__subnav">
                                 <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom"><span class="kt-menu__link"><span class="kt-menu__link-text">{{ project.title }}</span></span></li>
-                                <li class="kt-menu__item"><a href="{{ path('project_dashboard', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet la la-rocket"><span></span></i><span class="kt-menu__link-text">Tableau de bord</span></a></li>
+                                <li class="kt-menu__item "><a  href="{{ path('project_dashboard', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Tableau de bord</span></a></li>
                                 <li class="kt-menu__item "><a  href="{{ path('activity_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Activités</span></a></li>
                                 <li class="kt-menu__item "><a  href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Rapports</span></a></li>
                                 <li class="kt-menu__item "><a  href="{{ path('contribution_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-group"><span></span></i><span class="kt-menu__link-text">Contributeurs</span></a></li>
@@ -88,8 +88,8 @@
                                     <span class="kt-menu__link"><span class="kt-menu__link-text">Corbeilles</span></span>
                                 </li>
                                 <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'project' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Projets</span></a></li>
-                                <li class="kt-menu__item kt-hidden" aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'activity' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Activités</span></a></li>
-                                <li class="kt-menu__item kt-hidden" aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'report' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Rapports</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'activity' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Activités</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'report' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Rapports</span></a></li>
                             </ul>
                         </div>
                     </li>

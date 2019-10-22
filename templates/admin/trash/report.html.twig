@@ -1,0 +1,36 @@
+ <tr data-row="0" class="kt-datatable__row report-item" style="left: 0px;">
+    <td data-field="User" data-autohide-disabled="false" class="kt-datatable__cell">
+        <span style="width: 222px;">
+            <div class="kt-user-card-v2">
+                <div class="kt-user-card-v2__pic">
+                    <img alt="avatar" src="{{ report.author.avatar ? vich_uploader_asset(report.author, 'avatarFile') : default_avatar }}">
+                </div>
+                <div class="kt-user-card-v2__details">
+                    <a class="kt-user-card-v2__name" href="#">{{ report.title }}</a>
+                    <span class="kt-user-card-v2__email">{{ report.activity.title }}</span>
+                </div>
+            </div>
+        </span>
+    </td>
+    <td data-field="Rapports" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="kt-font-bold">{{ report.activity.title }}</span></span>
+    </td>
+    <td data-field="Indicateurs" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="kt-font-bold">{{ report.results.count }} </span>Indicateurs</span>
+    </td>
+    <td data-field="Documents" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="kt-font-bold">{{ report.reportFiles.count }} </span>Documents</span>
+    </td>
+    <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
+        <span style="overflow: visible; position: relative; width: 100px;">
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <a title="Restaurer ce rapport" data-id="{{ report.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-restore">
+                    <i class="la la-recycle"></i>
+                </a>
+                <a title="Supprimer complètement ce rapport" data-id="{{ report.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+                    <i class="la la-trash"></i>
+                </a>
+            {% endif %}
+        </span>
+    </td>
+</tr>
