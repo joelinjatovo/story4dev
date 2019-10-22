@@ -1,150 +1,42 @@
-<div class="kt-portlet activity-item">
-    <div class="kt-portlet__body">
-        <div class="kt-widget kt-widget--user-profile-3">
-            <div class="kt-widget__top">
-                <div class="kt-widget__content" style="padding-left:0px;">
-                    <div class="kt-widget__head">
-                        <a href="{{ path('activity_show', { 'slug': activity.project.author.slug, 'project_id': activity.project.id, 'activity_id': activity.id }) }}" class="kt-widget__username">
-                            {{ activity.title }}                 
-                        </a>                         
-                        <div class="kt-widget__action">
-                            <div class="kt-portlet__head-toolbar">
-                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
-                                    <i class="flaticon-more-1"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
-                                    <ul class="kt-nav">
-                                        {% if is_granted('view', activity) %}
-                                            <li class="kt-nav__item">
-                                                <a href="{{ path('activity_show', { 'slug': activity.project.author.slug, 'project_id': activity.project.id, 'activity_id': activity.id }) }}" class="kt-nav__link">
-                                                    <i class="kt-nav__link-icon flaticon2-line-chart"></i>
-                                                    <span class="kt-nav__link-text">Détails</span>
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                        {% if is_granted('edit', activity) %}
-                                            <li class="kt-nav__item">
-                                                <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
-                                                    <i class="kt-nav__link-icon flaticon2-settings"></i>
-                                                    <span class="kt-nav__link-text">Modifier</span>
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                        {% if is_granted('view', activity) %}
-                                            <li class="kt-nav__item">
-                                                <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
-                                                    <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
-                                                    <span class="kt-nav__link-text">Créer un indicateur</span>
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                        {% if is_granted('view', activity) %}
-                                            <li class="kt-nav__item">
-                                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
-                                                    <i class="kt-nav__link-icon flaticon2-avatar"></i>
-                                                    <span class="kt-nav__link-text">Créer un rapport</span>
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                        {% if is_granted('remove', activity) %}
-                                            <li class="kt-nav__item">
-                                                <a data-id={{ activity.id }} href="#" class="kt-nav__link btn-remove">
-                                                    <i class="kt-nav__link-icon flaticon-delete"></i>
-                                                    <span class="kt-nav__link-text">Supprimer</span>
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% if activity.contactEmail or activity.contactPhone or activity.contactAddress %}
-                        <div class="kt-widget__subhead kt-hidden">
-                            {% if activity.contactEmail %}<a href="#"><i class="flaticon2-new-email"></i>{{ activity.contactEmail }}</a>{% endif %}
-                            {% if activity.contactPhone %}<a href="#"><i class="flaticon2-calendar-3"></i>{{ activity.contactPhone }} </a>{% endif %}
-                            {% if activity.contactAddress %}<a href="#"><i class="flaticon2-placeholder"></i>{{ activity.contactAddress }}</a>{% endif %}
-                        </div>
-                    {% endif  %}
-                </div>    
-            </div>
-
-            {% if activity.description is not empty %}
-                <div class="kt-widget__body kt-portlet__body--fit">
-                    <span class="kt-widget__text">
-                        {{ activity.description|excerpt }}                       
-                    </span>
-                </div>
-            {% endif  %}
-
-            <div class="kt-widget__bottom">
-                <div class="kt-widget__item">
-                    <div class="kt-widget__progress-" style="width: 90%;">
-                        <div class="kt-widget__text">
-                            Avancement
-                        </div>
-                        <div class="progress" style="height: 5px;width: 100%;">
-                            <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ activity.progression }}%;" aria-valuenow="{{ activity.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="kt-widget__stats">
-                            {{ activity.progression }}%
-                        </div>
-                    </div>
-                </div>
-
-                {% if activity.budget > 0 %}
-                    <div class="kt-widget__item">
-                        <div class="kt-widget__icon">
-                            <i class="flaticon-piggy-bank"></i>
-                        </div>
-                        <div class="kt-widget__details">
-                            <span class="kt-widget__title">Budget</span>
-                            <span class="kt-widget__value">{{ activity.budget }}</span>
-                        </div>
-                    </div>
-                {% endif  %}
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-file-2"></i>
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">{{ activity.reports.count }} Rapports</span>
-                        <a href="{{ path('report_list2', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-widget__value kt-font-brand">Lister</a>
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-confetti"></i>
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__title">{{ activity.indicators.count }} Indicateurs</span>
-                        <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-widget__value kt-font-brand">Lister</a>
-                    </div>
-                </div>
-
-                <div class="kt-widget__item">
-                    <div class="kt-widget__icon">
-                        <i class="flaticon-attachment"></i>
-                    </div>
-                    <div class="kt-widget__details">
-                        <div class="kt-section__content kt-section__content--solid">
-                            <div class="kt-media-group">
-                                {% for activityFile in activity.activityFiles %}
-                                    {% if activityFile.file %}
-                                        <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Fichier attaché">
-                                            <img src="{{ activityFile.file.name ? vich_uploader_asset(activityFile.file, 'file') : default_picture }}" alt="image">
-                                        </a>
-                                    {% endif %}
-                                {% else %}
-                                    Aucun fichier attaché avec cette activité.
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
+<tr data-row="0" class="kt-datatable__row activity-item" style="left: 0px;">
+    <td data-field="User" data-autohide-disabled="false" class="kt-datatable__cell">
+        <span style="width: 222px;">
+            <div class="kt-user-card-v2">
+                <div class="kt-user-card-v2__details">
+                    <a class="kt-user-card-v2__name" href="#">{{ activity.title }}</a>
+                    <span class="kt-user-card-v2__email">{{ activity.description|excerpt(50) }}</span>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </span>
+    </td>
+    <td data-field="Projets" class="kt-datatable__cell">
+        <span style="width: 222px;">
+            <div class="kt-user-card-v2">
+                <div class="kt-user-card-v2__pic">
+                    <img alt="avatar" src="{{ activity.project.picture ? vich_uploader_asset(activity.project, 'pictureFile') : default_picture }}">
+                </div>
+                <div class="kt-user-card-v2__details">
+                    <a class="kt-user-card-v2__name" href="#">{{ activity.project.title }}</a>
+                </div>
+            </div>
+        </span>
+    </td>
+    <td data-field="Indicateurs" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="kt-font-bold">{{ activity.indicators.count }} </span>Indicateurs</span>
+    </td>
+    <td data-field="Rapports" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="kt-font-bold">{{ activity.reports.count }} </span>Rapports</span>
+    </td>
+    <td data-field="Documents" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="kt-font-bold">{{ activity.activityFiles.count }} </span>Documents</span>
+    </td>
+    <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
+        <span style="overflow: visible; position: relative; width: 100px;">
+            {% if is_granted('remove', activity) %}
+                <a title="Supprimer cette activité" data-id="{{ activity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+                    <i class="la la-trash"></i>
+                </a>
+            {% endif %}
+        </span>
+    </td>
+</tr>
