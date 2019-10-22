@@ -54,6 +54,22 @@
                             </ul>
                         </div>
                     </li>
+                    <li class="kt-menu__item kt-menu__item--submenu kt-menu__item--bottom kt-menu__item--open-dropdown kt-menu__item--hover" aria-haspopup="true" data-ktmenu-submenu-toggle="click" data-ktmenu-link-redirect="1">
+                        <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+                            <i class="kt-menu__link-icon flaticon2-analytics-2"></i>
+                            <span class="kt-menu__link-text">Tableau de bord</span>
+                            <i class="kt-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="kt-menu__submenu ">
+                            <span class="kt-menu__arrow"></span>
+                            <ul class="kt-menu__subnav">
+                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" aria-haspopup="true" data-ktmenu-link-redirect="1"><span class="kt-menu__link"><span class="kt-menu__link-text">Tableau de bord: {{ project.title }}</span></span></li>
+                                <li class="kt-menu__item " aria-haspopup="true" data-ktmenu-link-redirect="1"><a href="#" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Reports</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true"><a href="#" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Clients</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true"><a href="/metronic/preview/demo7/#.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Audit</span></a></li>
+                            </ul>
+                        </div>
+                    </li>
                 {% endif %}
                 {% if is_granted('ROLE_USER') and activity is defined and activity is not null and ( activity.id > 0 ) %}
                     <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--bottom" aria-haspopup="true"  data-ktmenu-submenu-toggle="click" data-ktmenu-link-redirect="1">
