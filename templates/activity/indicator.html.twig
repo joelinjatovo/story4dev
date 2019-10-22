@@ -17,7 +17,7 @@
                 <span>{{ indicator.value }} / {{ indicator.goalValue }}</span>						    							 
             </a>
             <div class="progress progress-sm">
-                <div class="progress-bar bg-brand" role="progressbar" style="width: {{ indicator.progression }}%" aria-valuenow="{{ indicator.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-{{ indicator.progressionclass }}" role="progressbar" style="width: {{ indicator.progression }}%" aria-valuenow="{{ indicator.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
         </div>	
     </div>						

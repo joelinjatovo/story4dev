@@ -234,6 +234,21 @@ class Indicator
         return $this;
     }
 
+    public function getProgressionClass(?Iteration $iteration = null): string
+    {
+        $progression = $this->getProgression($iteration);
+        if($progression<=30){
+            return 'danger';
+        }
+        if($progression<=50){
+            return 'warning';
+        }
+        if($progression<=80){
+            return 'brand';
+        }
+        return 'success';
+    }
+
     public function getProgression(?Iteration $iteration = null)
     {
         if( $this->getGoalValue($iteration) != 0 ) {

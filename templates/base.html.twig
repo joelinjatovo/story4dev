@@ -159,9 +159,12 @@
                         if (response.data){
                             var count = $('#file-list').data('count');
                             var name = $('#file-list').data('name');
-                            $('#file-list').append('<input type="hidden" name="' + name + '[' + count + '][type]" value="image" >');
-                            $('#file-list').append('<input type="hidden" name="' + name + '[' + count + '][file]" value="' + response.data.id + '" >');
-                            $('#file-list').append(response.html);
+                            var html ='<div class="file-list-item">';
+                            html += '<input type="hidden" name="' + name + '[' + count + '][type]" value="image" >';
+                            html += '<input type="hidden" name="' + name + '[' + count + '][file]" value="' + response.data.id + '" >';
+                            html += response.html;
+                            html += '</div>';
+                            $('#file-list').append(html);
                             $('#file-list').data('count', count + 1);
                             $('#files-list').append(response.fileHtml);
                         }

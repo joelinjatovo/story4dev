@@ -112,7 +112,6 @@
                         <div class="kt-widget__head">
                             <a href="{{ url('indicator_show', { 'slug' : indicator.activity.project.author.slug, 'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id, 'indicator_id' : indicator.id }) }}" class="kt-widget__username">
                                 {{ indicator.title }}   
-                                <i class="flaticon2-correct kt-font-success kt-hidden"></i>                       
                             </a>
                         </div>
 
@@ -124,7 +123,7 @@
                                     Progression générale
                                 </div>
                                 <div class="progress" style="height: 5px;width: 100%;">
-                                    <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ indicator.progression }}%;" aria-valuenow="{{ indicator.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar kt-bg-{{ indicator.progressionclass }}" role="progressbar" style="width: {{ indicator.progression }}%;" aria-valuenow="{{ indicator.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <div class="kt-widget__stats">
                                     {{ indicator.progression }}% 
@@ -142,7 +141,7 @@
                                         {{ goal.iteration.title }}
                                     </div>
                                     <div class="progress" style="height: 5px;width: 100%;">
-                                        <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ indicator.progression(goal.iteration) }}%;" aria-valuenow="{{ indicator.progression(goal.iteration) }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar kt-bg-{{ indicator.progressionclass(goal.iteration) }}" role="progressbar" style="width: {{ indicator.progression(goal.iteration) }}%;" aria-valuenow="{{ indicator.progression(goal.iteration) }}" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                     <div class="kt-widget__stats">
                                         {{ indicator.progression(goal.iteration) }}% 
