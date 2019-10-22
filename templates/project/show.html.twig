@@ -15,7 +15,6 @@
         <div class="kt-subheader__toolbar">
             {% if is_granted('edit', project) %}
                 <a href="{{ path('project_edit', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn kt-subheader__btn-primary">Modifier</a>
-                <a href="{{ path('project_dashboard', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-label-brand btn-bold">Dashboard</a>
             {% endif %}
             <div class="kt-subheader__wrapper">
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">

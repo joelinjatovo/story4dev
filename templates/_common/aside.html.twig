@@ -47,10 +47,11 @@
                         <div class="kt-menu__submenu ">
                             <span class="kt-menu__arrow"></span>
                             <ul class="kt-menu__subnav">
-                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" aria-haspopup="true"  data-ktmenu-link-redirect="1"><span class="kt-menu__link"><span class="kt-menu__link-text">{{ project.title }}</span></span></li>
-                                <li class="kt-menu__item " aria-haspopup="true"  data-ktmenu-link-redirect="1"><a  href="{{ path('activity_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Activités</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Rapports</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('contribution_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-group"><span></span></i><span class="kt-menu__link-text">Contributeurs</span></a></li>
+                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom"><span class="kt-menu__link"><span class="kt-menu__link-text">{{ project.title }}</span></span></li>
+                                <li class="kt-menu__item"><a href="{{ path('project_dashboard', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet la la-rocket"><span></span></i><span class="kt-menu__link-text">Tableau de bord</span></a></li>
+                                <li class="kt-menu__item "><a  href="{{ path('activity_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Activités</span></a></li>
+                                <li class="kt-menu__item "><a  href="{{ path('report_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Rapports</span></a></li>
+                                <li class="kt-menu__item "><a  href="{{ path('contribution_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-group"><span></span></i><span class="kt-menu__link-text">Contributeurs</span></a></li>
                             </ul>
                         </div>
                     </li>
