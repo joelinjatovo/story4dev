@@ -161,9 +161,45 @@ class ProjectController extends AbstractController
             }
 
             $entityManager->persist($project);
+
+            try{
+                $metakeys = [
+                    'header_bg_color',
+                ];
+                $colors = $request->request->get('colors');
+                foreach($colors as $metakey => $color ){
+                    if( ! in_array($metakey, $metakeys) ){
+                        continue;
+                    }
+
+                    if(strlen($color) > 8 ){
+                        continue;
+                    }
+
+                    $found = false;
+                    foreach($project->getMetas() as $meta){
+                        if($meta->getMetaKey() === $metakey ){
+                            $found = true;
+                            break;
+                        }
+                    }
+
+                    if( ! $found || ! $meta ) {
+                        $meta = new ProjectMeta();
+                        $meta->setProject($project);
+                        $meta->setMetaKey($metakey);
+                    }
+
+                    $meta->setMetaValue($color);
+
+                    $entityManager->persist($meta);
+                }
+            }catch(\Exception $e){
+            }
+
             $entityManager->flush();
         
-            $this->addFlash('success', 'Project updated succesfully.');
+            $this->addFlash('success', 'Votre modification a été bien sauvegardé.');
             
             $args = [
                 'slug' => $user->getSlug(),
@@ -187,7 +223,7 @@ class ProjectController extends AbstractController
             
         }
         
-        $this->addFlash('error', 'Something went wrong.' . $form->getErrors());
+        $this->addFlash('error', 'Votre modification n\'a pas été sauvegardé. Une erreur s\'est produite. ' . $form->getErrors());
 
         return $this->redirectToRoute('project_edit', [
             'slug' => $user->getSlug(),

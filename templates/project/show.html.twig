@@ -97,7 +97,7 @@
                     <div class="kt-widget__head">
                         <a href="#" class="kt-widget__title" style="font-size: 2.0rem;">{{ project.title }}</a>
                         {% if is_granted('edit', project) %}
-                            <label class="colorpicker" data-id="{{ project.id }}" data-metakey="header_bg_color" data-toggle="kt-tooltip" title="" data-original-title="Changer la couleur de fond">
+                            <label class="colorpicker kt-hidden" data-id="{{ project.id }}" data-metakey="header_bg_color" data-toggle="kt-tooltip" title="" data-original-title="Changer la couleur de fond">
                                 <i class="fa fa-pen" style="float: right;"></i>
                             </label>
                         {% endif %}
