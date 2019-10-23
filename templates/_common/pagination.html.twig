@@ -3,7 +3,7 @@
 {% set _currentParams = app.request.attributes.get('_route_params') %}
 
 {% set _limit = pagination.query.maxResults %}
-{% set _pageCount = ( pagination.count / _limit ) | round  %}
+{% set _pageCount = ( ( pagination.count / _limit ) | round ) + 1  %}
 
 {% if _pageCount > 0 %}
     <ul class="kt-pagination__links">
