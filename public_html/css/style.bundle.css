@@ -37679,8 +37679,8 @@ button.kt-nav__link {
     overflow: hidden !important;
     text-overflow: ellipsis;
 }
-.kt-subheader__title{
-    display: inline-block;
+.kt-subheader .kt-subheader__main .kt-subheader__title{
+    display: inline-block  !important;
     max-width: 200px;
     white-space: nowrap;
     overflow: hidden !important;
