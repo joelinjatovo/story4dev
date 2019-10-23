@@ -32,17 +32,11 @@
     </td>
     <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 150px;">
-            <a href="{{ path('admin_user_edit', {id: user.id} ) }}" title="Modifier détails" class="btn btn-sm btn-clean btn-icon btn-icon-md">
-                <i class="la la-edit"></i>
-            </a>
-            <a href="{{ path('admin_user_show', {id: user.id} ) }}" title="Afficher détails" class="btn btn-sm btn-clean btn-icon btn-icon-md">
-                <i class="la la-eye"></i>
-            </a>
-            <a href="{{ path('user_show', {slug: user.slug} ) }}" title="Afficher détails" class="btn btn-sm btn-clean btn-icon btn-icon-md kt-hidden">
-                <i class="la la-desktop"></i>
-            </a>
             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <a title="Supprimer" data-id="{{ user.id }}"  class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+                <a title="Restaurer cet utilisateur" data-id="{{ user.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-restore">
+                    <i class="la la-recycle"></i>
+                </a>
+                <a title="Supprimer cet utilisateur" data-id="{{ user.id }}"  class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
                     <i class="la la-trash"></i>
                 </a>
             {% endif %}

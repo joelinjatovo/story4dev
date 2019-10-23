@@ -189,4 +189,77 @@ class UserController extends AbstractController
         
         return $this->render('admin/user/list.html.twig', $params);
     }
+    
+    /**
+     * @Route("/user/remove", name="remove", methods="POST")
+     * 
+     * @IsGranted("ROLE_SUPER_ADMIN") 
+     * 
+     */
+    public function remove(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+        	
+                $entityManager->getFilters()->disable("deleted");
+                
+                $user = $entityManager->getRepository(User::class)->find($id);
+                if( $user && ! $user->isSuperAdmin() ){
+                    $entityManager->remove($user);
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'L\'utilisateur a été supprimé avec succès.',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
+    }
+    
+    /**
+     * @Route("/user/restore", name="restore", methods="POST")
+     * 
+     * @IsGranted("ROLE_SUPER_ADMIN") 
+     * 
+     */
+    public function restore(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+        	
+                $entityManager->getFilters()->disable("deleted");
+
+                $user = $entityManager->getRepository(User::class)->find($id);
+                if( $user && $user->isDeleted()){
+                    $user->setDeletedAt(null);
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'L\'utilisateur a été restauré avec succès',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
+    }
 }

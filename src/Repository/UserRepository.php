@@ -27,6 +27,13 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
         parent::__construct($registry, User::class);
     }
     
+    public function getAllDeleted()
+    {
+        return $this->createQueryBuilder('u')
+            ->where("u.deletedAt IS NOT NULL")
+            ->getQuery();
+    }
+    
     public function getAll($search = null, $role = null, $status = null)
     {
         $qb = $this->createQueryBuilder('u');
