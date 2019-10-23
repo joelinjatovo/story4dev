@@ -37672,3 +37672,10 @@ button.kt-nav__link {
     width: 100%;
     text-align: left;
 }
+.kt-subheader__breadcrumbs-link{
+    display: inline-block;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
