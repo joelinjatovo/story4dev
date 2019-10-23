@@ -8,18 +8,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-use App\Entity\Activity;
+use App\Entity\Report;
+use App\Service\PaginatorService;
 
 /** 
- * @Route(name="admin_activity_")
+ * @Route(name="admin_report_")
  *
  * @IsGranted("ROLE_ADMIN") 
  */
-class ActivityController extends AbstractController
+class ReportController extends AbstractController
 {
     
     /**
-     * @Route("/admin/activity/remove", name="remove", methods="POST")
+     * @Route("/admin/report/remove", name="remove", methods="POST")
      * 
      * @IsGranted("ROLE_SUPER_ADMIN") 
      * 
@@ -31,17 +32,17 @@ class ActivityController extends AbstractController
             
             if( $id > 0 ) {
                 $entityManager = $this->getDoctrine()->getManager();
-
+                
                 $entityManager->getFilters()->disable("deleted");
                 
-                $activity = $entityManager->getRepository(Activity::class)->find($id);
-                if( $activity && $activity->isDeleted()){
-                    $entityManager->remove($activity);
+                $report = $entityManager->getRepository(Report::class)->find($id);
+                if( $report && $report->isDeleted()){
+                    $entityManager->remove($report);
                     $entityManager->flush();
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Activité supprimé complètement avec succès',
+                        'message' => 'Rapport supprimé complètement avec succès',
                     ]);
                 }
             }
@@ -55,7 +56,7 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/admin/activity/restore", name="restore", methods="POST")
+     * @Route("/admin/report/restore", name="restore", methods="POST")
      * 
      * @IsGranted("ROLE_SUPER_ADMIN") 
      * 
@@ -70,15 +71,15 @@ class ActivityController extends AbstractController
                 
                 $entityManager->getFilters()->disable("deleted");
 
-                $activity = $entityManager->getRepository(Activity::class)->find($id);
-                if( $activity && $activity->isDeleted()){
-                    $activity->setDeletedAt(null);
-                    $entityManager->persist($activity);
+                $report = $entityManager->getRepository(Report::class)->find($id);
+                if( $report && $report->isDeleted()){
+                    $report->setDeletedAt(null);
+                    $entityManager->persist($report);
                     $entityManager->flush();
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Activité restauré avec succès',
+                        'message' => 'Rapport restauré avec succès',
                     ]);
                 }
             }

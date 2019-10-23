@@ -1,25 +1,19 @@
-<tr data-row="0" class="kt-datatable__row activity-item" style="left: 0px;">
+ <tr data-row="0" class="kt-datatable__row activity-item" style="left: 0px;">
     <td data-field="User" data-autohide-disabled="false" class="kt-datatable__cell">
-        <span style="width: 222px;">
-            <div class="kt-user-card-v2">
-                <div class="kt-user-card-v2__details">
-                    <a class="kt-user-card-v2__name" href="#">{{ activity.title }}</a>
-                    <span class="kt-user-card-v2__email">{{ activity.description|excerpt(50) }}</span>
-                </div>
-            </div>
-        </span>
-    </td>
-    <td data-field="Projets" class="kt-datatable__cell">
         <span style="width: 222px;">
             <div class="kt-user-card-v2">
                 <div class="kt-user-card-v2__pic">
                     <img alt="avatar" src="{{ activity.project.picture ? vich_uploader_asset(activity.project, 'pictureFile') : default_picture }}">
                 </div>
                 <div class="kt-user-card-v2__details">
-                    <a class="kt-user-card-v2__name" href="#">{{ activity.project.title }}</a>
+                    <a class="kt-user-card-v2__name" href="#">{{ activity.title }}</a>
+                    <span class="kt-user-card-v2__email">{{ activity.project.title }}</span>
                 </div>
             </div>
         </span>
+    </td>
+    <td data-field="Projet" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="kt-font-bold">{{ activity.project.title }}</span></span>
     </td>
     <td data-field="Indicateurs" class="kt-datatable__cell">
         <span style="width: 100px;"><span class="kt-font-bold">{{ activity.indicators.count }} </span>Indicateurs</span>
@@ -27,13 +21,13 @@
     <td data-field="Rapports" class="kt-datatable__cell">
         <span style="width: 100px;"><span class="kt-font-bold">{{ activity.reports.count }} </span>Rapports</span>
     </td>
-    <td data-field="Documents" class="kt-datatable__cell">
-        <span style="width: 100px;"><span class="kt-font-bold">{{ activity.activityFiles.count }} </span>Documents</span>
-    </td>
     <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 100px;">
-            {% if is_granted('remove', activity) %}
-                <a title="Supprimer cette activité" data-id="{{ activity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <a title="Restaurer cette activité" data-id="{{ activity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-restore">
+                    <i class="la la-recycle"></i>
+                </a>
+                <a title="Supprimer complètement cette activité" data-id="{{ activity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
                     <i class="la la-trash"></i>
                 </a>
             {% endif %}

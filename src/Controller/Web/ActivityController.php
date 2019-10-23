@@ -275,9 +275,10 @@ class ActivityController extends AbstractController
     
     /**
      * @Route("/project/{project_id}/activities/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
+     * @Route("/project/{project_id}/activities/{type}/{page<\d+>?1}", name="list_type", methods="GET", requirements={"project_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(Project $project, $page = 1, PaginatorService $paginator)
+    public function list(Project $project, ?string $type, $page = 1, PaginatorService $paginator)
     {
         $this->denyAccessUnlessGranted('view', $project);
         
@@ -288,8 +289,16 @@ class ActivityController extends AbstractController
         $query = $entityManager->getRepository(Activity::class)->findByProject($project);
         
         $activities = $paginator->paginate($query, 10);
+
+        if($type == 'list'){
+            return $this->render('activity/list.html.twig', [
+                'user'       => $user,
+                'project'    => $project,
+                'activities' => $activities
+            ]);
+        }
         
-        return $this->render('activity/list.html.twig', [
+        return $this->render('activity/grid.html.twig', [
             'user'       => $user,
             'project'    => $project,
             'activities' => $activities

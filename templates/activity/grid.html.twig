@@ -32,45 +32,11 @@
 
 {% block content %}
 <div class="row">
-	<div class="col-xl-8 col-lg-12 order-lg-1 order-xl-1">
-		<div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
-            <div class="kt-portlet__body kt-portlet__body--fit">
-                <!--begin: Datatable -->
-                <div class="kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--loaded" >
-                    <table class="kt-datatable__table" style="display: block;">
-                        <thead class="kt-datatable__head">
-                            <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="Activités" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Activités</span>
-                                </th>
-                                <th data-field="Projets" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Projets</span>
-                                </th>
-                                <th data-field="Indicateurs" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Indicateurs</span>
-                                </th>
-                                <th data-field="Rapports" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Rapports</span>
-                                </th>
-                                <th data-field="Documents" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Documents</span>
-                                </th>
-                                <th data-field="Actions" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Actions</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="kt-datatable__body">
-                            {% for activity in activities %}
-                                {{ include('activity/list_item.html.twig', {'activity': activity}) }}
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <!--end: Datatable -->
-            </div>
+    {% for activity in activities %}
+        <div class="col-xl-6">
+            {{ include('activity/grid_item.html.twig', {'activity': activity}) }}
         </div>
-    </div>
+    {% endfor %}
 </div>
     
 <div class="row">

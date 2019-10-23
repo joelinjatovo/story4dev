@@ -3,23 +3,20 @@
 namespace App\Controller\Web;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 
 use App\Entity\User;
 use App\Entity\File;
 use App\Entity\Project;
 use App\Entity\Report;
 use App\Entity\Activity;
-use App\Entity\Iteration;
+use App\Entity\Indicator;
+use App\Entity\ActivityFile;
 use App\Entity\Meta\ProjectMeta;
-use App\Form\ActivityType;
 use App\Form\ProjectType;
 use App\Service\FormError;
 use App\Service\PaginatorService;
@@ -52,11 +49,19 @@ class ProjectController extends AbstractController
         $data   =  $project->getData();
         $series =  $project->getSerie();
         
+        $count = [];
+        $count['activities'] = $entityManager->getRepository(Activity::class)->createQueryBuilder('a')->select('count(a.id)')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
+        $count['reports']    = $entityManager->getRepository(Report::class)->createQueryBuilder('r')->select('count(r.id)')->leftJoin('r.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
+        $count['indicators'] = $entityManager->getRepository(Indicator::class)->createQueryBuilder('i')->select('count(i.id)')->leftJoin('i.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
+        $count['files']      = $entityManager->getRepository(ActivityFile::class)->createQueryBuilder('af')->select('count(af.id)')->leftJoin('af.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
+
+        
         return $this->render('project/dashboard.html.twig', [
             'user'    => $user, 
             'project' => $project, 
             'reports' => $reports, 
             'users'   => $users,
+            'count'   => $count,
             'data'    => json_encode($data),
             'series'   => json_encode($series),
             'filesCount'         => count($files),

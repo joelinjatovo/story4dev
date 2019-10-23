@@ -1,0 +1,198 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Activités au corbeille - Admin - {{ app.user.fullname }}{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block subheader %}
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">{% if search is not empty %} Résultat de recherche : {{ search }} {% else %}Liste d'activité au corbeille{% endif %}</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <div class="kt-subheader__group" id="kt_subheader_search">
+                <span class="kt-subheader__desc" id="kt_subheader_total">{{ activities.count }} Total</span>
+                <form class="kt-margin-l-20" id="kt_subheader_search_form" method="GET">
+                    <div class="kt-input-icon kt-input-icon--right kt-subheader__search">
+                        <input type="text" name="s" value="{{ search }}" maxlength="20" class="form-control" placeholder="Rechercher..." id="generalSearch">
+                        <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect id="bound" x="0" y="0" width="24" height="24"></rect>
+                                        <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" id="Path-2" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                        <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" id="Path" fill="#000000" fill-rule="nonzero"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>        
+        <div class="kt-subheader__toolbar">
+            <a href="{{ path( 'admin_index' ) }}" class="btn btn-label-brand btn-bold">Retour</a>
+            <div class="kt-subheader__wrapper">
+                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
+                    <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+                                <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
+                            </g>
+                        </svg>
+                        <!--<i class="flaticon2-plus"></i>-->
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
+                        <!--begin::Nav-->
+                        <ul class="kt-nav">
+                            <li class="kt-nav__head">
+                                Nouveau:                                    
+                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                            </li>
+                            <li class="kt-nav__separator"></li>
+                            <li class="kt-nav__item">
+                                <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
+                                    <span class="kt-nav__link-text">Projet</span>
+                                </a>
+                            </li>        
+                            <li class="kt-nav__item">
+                                <a href="{{ path( 'admin_user_index' ) }}" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
+                                    <span class="kt-nav__link-text">Utilisateur</span>
+                                </a>
+                            </li>                        
+                            <li class="kt-nav__item">
+                                <a href="{{ path( 'admin_unit_index' ) }}" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
+                                    <span class="kt-nav__link-text">Unité de mesure</span>
+                                </a>
+                            </li>                        
+                            <li class="kt-nav__item">
+                                <a href="{{ path( 'admin_periodicity_index' ) }}" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
+                                    <span class="kt-nav__link-text">Périodicité</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <!--end::Nav-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-xl-8 col-lg-12 order-lg-1 order-xl-1">
+		<div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
+            <div class="kt-portlet__body kt-portlet__body--fit">
+                <!--begin: Datatable -->
+                <div class="kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--loaded" id="local_data" style="">
+                    <table class="kt-datatable__table" style="display: block;">
+                        <thead class="kt-datatable__head">
+                            <tr class="kt-datatable__row" style="left: 0px;">
+                                <th data-field="Activités" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">Activités</span>
+                                </th>
+                                <th data-field="Projet" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Projet</span>
+                                </th>
+                                <th data-field="Indicateurs" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Indicateurs</span>
+                                </th>
+                                <th data-field="Rapports" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Rapports</span>
+                                </th>
+                                <th data-field="Actions" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="kt-datatable__body">
+                            {% for activity in activities %}
+                                {{ include('admin/trash/activity.html.twig', {activity: activity}) }}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!--end: Datatable -->
+            </div>
+        </div>
+    </div>
+</div>
+    
+<div class="row">
+    <div class="col-xl-12">       
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <!--begin: Pagination-->
+                <div class="kt-pagination kt-pagination--brand">
+                    {{ include('_common/pagination.html.twig', {'pagination': activities}) }}
+                </div>
+                <!--end: Pagination-->
+            </div>
+        </div>
+    </div>           
+</div>
+{% endblock %}
+
+
+{% block javascripts %}
+<script type="text/javascript">
+jQuery(document).ready(function($){
+    $(document).on('click', '.btn-remove', function(e){
+        e.preventDefault();
+        var $this = $(this);
+            swal.fire({
+                title:"Vous êtes sûre?",
+                text:"Vous ne pourez pas revenir en arrière après!",
+                type:"warning",
+                showCancelButton:!0,
+                confirmButtonText:"Oui, supprimez le!",
+                cancelButtonText:"Annuler"
+            }).then(function(e){
+                if(e.value){
+                    KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+                    $.post("/admin/activity/remove", { id: $this.attr('data-id') })
+                    .done(function( data ) {
+                        KTApp.unblockPage();
+                        if(data.success){
+                            $this.closest('.activity-item').remove();
+                            toastr.success(data.message);
+                        }else{
+                            toastr.error(data.message, data.title);
+                        }
+                    })
+                    .fail(function() {
+                        KTApp.unblockPage();
+                    });
+                }
+            })
+    });
+    $(document).on('click', '.btn-restore', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+        $.post("/admin/activity/restore", { id: $this.attr('data-id') })
+        .done(function( data ) {
+            KTApp.unblockPage();
+            if(data.success){
+                $this.closest('.activity-item').remove();
+                toastr.success(data.message);
+            }else{
+                toastr.error(data.message, data.title);
+            }
+        })
+        .fail(function() {
+            KTApp.unblockPage();
+        });
+    });
+});
+</script>
+{% endblock %}
