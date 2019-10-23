@@ -93,7 +93,7 @@
 
 {% block content %}
 {% for indicator in indicators %}
-    <div class="kt-portlet">
+    <div class="kt-portlet indicator-item">
         <div class="kt-portlet__body">
             <div class="kt-widget kt-widget--user-profile-3">
                 <div class="kt-widget__top">
@@ -101,7 +101,42 @@
                         <div class="kt-widget__head">
                             <a href="{{ url('indicator_show', { 'slug' : indicator.activity.project.author.slug, 'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id, 'indicator_id' : indicator.id }) }}" class="kt-widget__username">
                                 {{ indicator.title }}   
-                            </a>
+                            </a>                         
+                        <div class="kt-widget__action">
+                            <div class="kt-portlet__head-toolbar">
+                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                    <i class="flaticon-more-1"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+                                    <ul class="kt-nav">
+                                        {% if is_granted('view', indicator) %}
+                                            <li class="kt-nav__item">
+                                                <a href="{{ url('indicator_show', {'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id, 'indicator_id' : indicator.id }) }}" class="kt-nav__link">
+                                                    <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                                    <span class="kt-nav__link-text">Détails</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if is_granted('edit', indicator) %}
+                                            <li class="kt-nav__item">
+                                                <a href="{{ path('indicator_edit', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'indicator_id' : indicator.id} ) }}" class="kt-nav__link">
+                                                    <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                                    <span class="kt-nav__link-text">Modifier</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if is_granted('remove', indicator) %}
+                                            <li class="kt-nav__item">
+                                                <a data-id={{ indicator.id }} href="#" class="kt-nav__link btn-remove">
+                                                    <i class="kt-nav__link-icon flaticon-delete"></i>
+                                                    <span class="kt-nav__link-text">Supprimer</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                         </div>
 
                         <div class="kt-widget__info">
@@ -160,4 +195,37 @@
 
 
 {% block javascripts %}
+<script type="text/javascript">
+jQuery(document).ready(function($){
+    $(document).on('click', '.btn-remove', function(e){
+        e.preventDefault();
+        var $this = $(this);
+            swal.fire({
+                title:"Vous êtes sûre?",
+                text:"Vous ne pourez pas revenir en arrière après!",
+                type:"warning",
+                showCancelButton:!0,
+                confirmButtonText:"Oui, supprimez le!",
+                cancelButtonText:"Annuler"
+            }).then(function(e){
+                if(e.value){
+                    KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+                    $.post("/indicator/remove", { id: $this.attr('data-id') })
+                    .done(function( data ) {
+                        KTApp.unblockPage();
+                        if(data.success){
+                            $this.closest('.indicator-item').remove();
+                            toastr.success(data.message);
+                        }else{
+                            toastr.error(data.message, data.title);
+                        }
+                    })
+                    .fail(function() {
+                        KTApp.unblockPage();
+                    });
+                }
+            })
+    });
+});
+</script>
 {% endblock %}

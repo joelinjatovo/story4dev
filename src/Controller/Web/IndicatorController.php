@@ -296,4 +296,36 @@ class IndicatorController extends AbstractController
             'search' => $search,
         ]);
     }
+    
+    /**
+     * @Route("/indicator/remove", name="remove", methods="POST")
+     */
+    public function remove(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $indicator = $entityManager->getRepository(Indicator::class)->find($id);
+                if( $indicator && ! $indicator->isDeleted()){
+                    $this->denyAccessUnlessGranted('remove', $indicator);
+
+                    $entityManager->remove($indicator);
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'L\'indicateur a été supprimé avec succès',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
+    }
 }
