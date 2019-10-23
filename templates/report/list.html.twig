@@ -16,7 +16,7 @@
             </div>
             <div class="kt-subheader__breadcrumbs">
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="{{ path('project_list', { 'slug' : project.author.slug, 'page' : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
+                <a href="{{ path('project_list', { 'slug' : project.author.slug, 'page' : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projets</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="{{ path('project_show', { 'slug' : project.author.slug, 'id': project.id })}}" class="kt-subheader__breadcrumbs-link">{{ project.title }}</a>
                 {% if activity is not null %}
@@ -24,7 +24,7 @@
                     <a href="{{ path('activity_show', { 'slug' : activity.project.author.slug, 'project_id': activity.project.id, 'activity_id': activity.id } ) }}" class="kt-subheader__breadcrumbs-link">{{ activity.title }}</a>
                 {% endif %} 
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Reports</span>
+                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Rapports</span>
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
