@@ -444,9 +444,13 @@ class Activity
     {
         $series = [];
         foreach($this->getIndicators() as $indicator){
+            $title = $indicator->getTitle();
+            if( strlen($title) > 25 ){
+                $title = substr($title, 0, 25).'...';
+            }
             $series[] = [
                 'id'    => 'indicator_'.$indicator->getId(),
-                'title' => $indicator->getTitle(),
+                'title' => $title,
             ];
         }
         return $series;
