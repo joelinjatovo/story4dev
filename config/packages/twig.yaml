@@ -9,3 +9,4 @@ twig:
         setting: '@App\Service\OptionService'
         default_avatar: '/images/avatar.png'
         default_picture: '/images/picture.png'
+        GOOGLE_MAPS_API_KEY: '%env(GOOGLE_MAPS_API_KEY)%'

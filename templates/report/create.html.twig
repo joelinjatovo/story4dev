@@ -267,6 +267,8 @@
 		<!--end::Portlet-->
 	</div>
 </div>
+
+<div id="map" style="height: 400px;width: 100%;"></div>
 {% endblock %}
 
 
@@ -281,5 +283,18 @@ jQuery(document).ready(function($){
 		$this.closest('.file-list-item').remove();
     });
 });
+function initMap() {
+    var uluru = {lat: -25.344, lng: 131.036};
+    var map = new google.maps.Map(
+    document.getElementById('map'), {zoom: 4, center: uluru});
+    var marker = new google.maps.Marker({
+        position: uluru, 
+        map: map,
+        draggable:true,
+        title:"Drag me!"
+    });
+}
 </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&callback=initMap"
+  type="text/javascript"></script>
 {% endblock %}
