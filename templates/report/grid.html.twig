@@ -112,44 +112,13 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="row">
-	<div class="col-xl-8 col-lg-12 order-lg-1 order-xl-1">
-		<div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
-            <div class="kt-portlet__body kt-portlet__body--fit">
-                <div class="kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--loaded" >
-                    <table class="kt-datatable__table" style="display: block;">
-                        <thead class="kt-datatable__head">
-                            <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="Rapports" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 250px;">Rapports</span>
-                                </th>
-                                <th data-field="Auteurs" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Auteurs</span>
-                                </th>
-                                <th data-field="Date" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Date</span>
-                                </th>
-                                <th data-field="Résultats" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Résultats</span>
-                                </th>
-                                <th data-field="Documents" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 200px;">Documents</span>
-                                </th>
-                                <th data-field="Actions" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 150px;">Actions</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="kt-datatable__body">
-                            {% for report in reports %}
-                                {{ include('report/list_item.html.twig', {'report': report}) }}
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    {% for report in reports %}
+        <div class="col-xl-6">
+            {{ include('report/grid_item.html.twig', {'report': report}) }}
         </div>
-    </div>
+    {% endfor %}
 </div>
     
 <div class="row">
@@ -167,18 +136,36 @@
 </div>
 {% endblock %}
 
+
 {% block javascripts %}
 <script type="text/javascript">
 jQuery(document).ready(function($){
+toastr.options = {
+"closeButton": false,
+"debug": false,
+"newestOnTop": false,
+"progressBar": false,
+"positionClass": "toast-top-right",
+"preventDuplicates": false,
+"onclick": null,
+"showDuration": "300",
+"hideDuration": "1000",
+"timeOut": "5000",
+"extendedTimeOut": "1000",
+"showEasing": "swing",
+"hideEasing": "linear",
+"showMethod": "fadeIn",
+"hideMethod": "fadeOut"
+};
     $(document).on('click', '.btn-remove', function(e){
         e.preventDefault();
         var $this = $(this);
             swal.fire({
                 title:"Vous êtes sûre?",
-                text:"Vous ne pourez pas revenir en arrière après!\nToutes les rapports ainsi que les données rattachées à cette activité vont être supprimés aussi.",
+                text:"Vous ne pourez pas revenir en arrière après!",
                 type:"warning",
                 showCancelButton:!0,
-                confirmButtonText:"Oui, supprimez la!",
+                confirmButtonText:"Oui, supprimez le!",
                 cancelButtonText:"Annuler"
             }).then(function(e){
                 if(e.value){
@@ -199,6 +186,7 @@ jQuery(document).ready(function($){
                 }
             })
     });
+    
 });
 </script>
 {% endblock %}

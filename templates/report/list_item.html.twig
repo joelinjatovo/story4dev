@@ -1,113 +1,68 @@
-<!--begin:: Portlet-->
-<div class="kt-portlet kt-portlet--height-fluid report-item">
-    <div class="kt-portlet__body kt-portlet__body--fit">
-        <!--begin::Widget -->
-        <div class="kt-widget kt-widget--project-1">
-            <div class="kt-widget__head">
-                <div class="kt-widget__label">
-                    <div class="kt-widget__media">
-                        <span class="kt-media kt-media--lg kt-media--circle"> 
-                            <img src="{{ report.author.avatar ? vich_uploader_asset(report.author, 'avatarFile') : default_avatar }}" alt="image">
-                        </span>
-                    </div>
-                    <div class="kt-widget__info kt-margin-t-5">
-                        {% if is_granted('view', report) %}
-                            <a href="{{ path('report_show', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-widget__title">
-                                {{ report.title }}                                                
-                            </a>
-                        {% else %}
-                            <a href="#" class="kt-widget__title">
-                                {{ report.title }}                                                
-                            </a>
-                        {% endif %}
-                        <span class="kt-widget__desc">
-                            {{ report.author.fullname }}
-                        </span>
-                    </div>
-                </div>
-                <div class="kt-portlet__head-toolbar">
-                    <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
-                        <i class="flaticon-more-1"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
-                        <ul class="kt-nav">
-                            {% if is_granted('view', report) %}
-                                <li class="kt-nav__item">
-                                    <a href="{{ path('report_show', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
-                                        <i class="kt-nav__link-icon flaticon2-line-chart"></i>
-                                        <span class="kt-nav__link-text">Détails</span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                            {% if is_granted('edit', report) %}
-                                <li class="kt-nav__item">
-                                    <a href="{{ path('report_edit', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
-                                        <i class="kt-nav__link-icon flaticon2-settings"></i>
-                                        <span class="kt-nav__link-text">Modifier</span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                            {% if is_granted('remove', report) %}
-                                <li class="kt-nav__item">
-                                    <a href="#" data-id="{{ report.id }}" class="kt-nav__link btn-remove">
-                                        <i class="kt-nav__link-icon flaticon-delete"></i>
-                                        <span class="kt-nav__link-text">Supprimer</span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </div>
+<tr data-row="0" class="kt-datatable__row report-item" style="left: 0px;">
+    <td data-field="Rapports" data-autohide-disabled="false" class="kt-datatable__cell">
+        <span style="width: 250px;">
+            <div class="kt-user-card-v2">
+                <div class="kt-user-card-v2__details">
+                    <a class="kt-user-card-v2__name" href="{{ path('report_show', { 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id }) }}">{{ report.title }}</a>
+                    <span class="kt-user-card-v2__email">{{ report.description|excerpt(50) }}</span>
                 </div>
             </div>
-
-            <div class="kt-widget__body">
-                <div class="kt-widget__stats">
-                    <div class="kt-widget__item">
-                        <span class="kt-widget__date">
-                            Date de création
-                        </span>
-                        <div class="kt-widget__label">
-                            <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d') }}</span>
-                        </div>
-                    </div>
-
-                    <div class="kt-widget__item">
-                        <span class="kt-widget__date">
-                            Date de synchronisation
-                        </span>
-                        <div class="kt-widget__label">
-                            <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ report.syncedat is empty ? "" : report.syncedat | date('Y-m-d') }}</span>
-                        </div>
-                    </div>
+        </span>
+    </td>
+    <td data-field="Auteurs" class="kt-datatable__cell">
+        <span style="width: 222px;">
+            <div class="kt-user-card-v2">
+                <div class="kt-user-card-v2__pic">
+                    <img alt="avatar" src="{{ report.author.avatar ? vich_uploader_asset(report.author, 'avatarFile') : default_avatar }}">
                 </div>
-
-                <span class="kt-widget__text">
-                    {{ report.description|excerpt }}                         
-                </span>
-
-                <div class="kt-widget__content">
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__subtitle">Résultats</span>
-                        <span class="kt-widget__value">{{ report.results.count }}</span>
-                    </div>
-                    <div class="kt-widget__details">
-                        <span class="kt-widget__subtitle">Documents</span>
-                        <div class="kt-media-group">
-                            {% for reportFile in report.reportFiles %}
-                                {% if reportFile.file %}
-                                    <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Fichier attaché">
-                                        <img src="{{ asset( reportFile.file.icone ) }}" alt="image">
-                                    </a>
-                                {% endif %}
-                            {% else %}
-                                Aucun fichier attaché à ce rapport.
-                            {% endfor %}
-                        </div>                                 
-                    </div>
+                <div class="kt-user-card-v2__details">
+                    <a class="kt-user-card-v2__name" href="{{ url('user_show', {'slug': report.author.slug}) }}">{{ report.author.fullname }}</a>
+                    <span class="kt-user-card-v2__email">{{ report.author.email }}</span>
+                    {% if report.author.verified %}
+                        <i class="flaticon2-correct"></i>    
+                    {% endif %}   
                 </div>
             </div>
+        </span>
+    </td>
+    <td data-field="Date" class="kt-datatable__cell">
+        <span class="width: 100px; kt-font-bold">{{ report.createdat | date('Y-m-d') }}</span>
+    </td>
+    <td data-field="Résultats" class="kt-datatable__cell">
+        <span style="width: 100px;" ><span class="kt-font-bold">{{ report.results.count }} </span>Résultats</span>
+    </td>
+    <td data-field="Documents" class="kt-datatable__cell">
+        <div style="width: 200px;">
+            <div class="kt-media-group">
+                {% for reportFile in report.reportFiles.slice(0, 5) %}
+                    {% if reportFile.file %}
+                        <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Fichier attaché">
+                            <img src="{{ asset( reportFile.file.icone ) }}" alt="image">
+                        </a>
+                    {% endif %}
+                {% else %}
+                    Aucun fichier attaché à ce rapport.
+                {% endfor %}
+            </div>       
         </div>
-        <!--end::Widget -->
-    </div>
-</div>
-<!--end:: Portlet-->
+    </td>
+    <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
+        <span style="overflow: visible; position: relative; width: 150px;">
+            {% if is_granted('edit', report) %}
+                <a href="{{ path('report_edit', { 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                    <i class="la la-edit"></i>
+                </a>
+            {% endif %}
+            {% if is_granted('view', report) %}
+                <a href="{{ path('report_show', { 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                    <i class="la la-eye"></i>
+                </a>
+            {% endif %}
+            {% if is_granted('remove', report) %}
+                <a title="Supprimer ce rapport" data-id="{{ report.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+                    <i class="la la-trash"></i>
+                </a>
+            {% endif %}
+        </span>
+    </td>
+</tr>

@@ -386,10 +386,12 @@ class ReportController extends AbstractController
     
     /**
      * @Route("/project/{project_id}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
+     * @Route("/project/{project_id}/activity/{activity_id}/reports/{type}/{page<\d+>?1}", name="list2_type", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
      * @Route("/project/{project_id}/reports/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
+     * @Route("/project/{project_id}/reports/{type}/{page<\d+>?1}", name="list_type", methods="GET", requirements={"project_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(Project $project, $activity_id = 0, $page = 1, PaginatorService $paginator)
+    public function list(Project $project, $activity_id = 0, ?string $type, $page = 1, PaginatorService $paginator)
     {
         $this->denyAccessUnlessGranted('view', $project);
         
@@ -420,8 +422,17 @@ class ReportController extends AbstractController
         }
         
         $reports = $paginator->paginate($query, 10);
+
+        if($type == 'list'){
+            return $this->render('report/list.html.twig', [
+                'user'     => $user,
+                'project'  => $project,
+                'activity' => $activity,
+                'reports'  => $reports
+            ]);
+        }
         
-        return $this->render('report/list.html.twig', [
+        return $this->render('report/grid.html.twig', [
             'user'     => $user,
             'project'  => $project,
             'activity' => $activity,
