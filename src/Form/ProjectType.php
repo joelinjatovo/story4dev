@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
@@ -34,6 +35,9 @@ class ProjectType extends AbstractType
                 ),
             ])
             ->add('budget', FloatType::class, [
+                'required'   => false,
+            ])
+            ->add('currency', CurrencyType::class, [
                 'required'   => false,
             ])
             ->add('start_at', DateType::class, [

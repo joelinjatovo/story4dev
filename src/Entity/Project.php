@@ -158,6 +158,11 @@ class Project
      */
     private $tags;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $currency;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -586,6 +591,18 @@ class Project
                 $tag->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(?string $currency): self
+    {
+        $this->currency = $currency;
 
         return $this;
     }
