@@ -25,7 +25,6 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFilter('html', [$this, 'formatHtml']),
             new TwigFilter('excerpt', [$this, 'formatExcerpt']),
-            new TwigFilter('link', [$this, 'formatLink'], ['needs_environment' => true]),
         ];
     }
 
@@ -73,33 +72,5 @@ class AppExtension extends AbstractExtension
         }
         
         return $html;
-    }
-    
-    public function formatLink(\Twig_Environment $env, $type, $subject, $admin = false): string
-    {
-        $router = $env->getExtension('routing');
-
-        if( $admin ) {
-        }else{
-            if( $subject instanceof Project ){
-                switch ($type) {
-                    case 'index':
-                    case 'create':
-                        return $router->getPath('project_index');
-                    break;
-                    case 'edit':
-                    case 'update':
-                        return $router->getPath('project_edit', [
-                                'id' => $subject->getId(),
-                            ]);
-                    break;
-                    case 'list':
-                        return $router->getPath('project_list');
-                    break;
-                }
-            }
-        }
-
-        return $router->getPath('app_index');
     }
 }

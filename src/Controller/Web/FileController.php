@@ -25,19 +25,14 @@ class FileController extends AbstractController
 {
     
     /**
-     * @Route("/{slug}/files/{page<\d+>?1}", name="list", methods="GET")
-     * @Route("/{slug}/project/{project_id}/files/{page<\d+>?1}", name="list_project", methods="GET")
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/files/{page<\d+>?1}", name="list_activity", methods="GET")
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/files/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/project/{project_id}/files/{page<\d+>?1}", name="list_project", methods="GET")
+     * @Route("/project/{project_id}/activity/{activity_id}/files/{page<\d+>?1}", name="list_activity", methods="GET")
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function list(?User $user, ?Project $project = null, Activity $activity = null, $page = 1, Request $request, PaginatorService $paginator)
+    public function list(?Project $project = null, Activity $activity = null, $page = 1, Request $request, PaginatorService $paginator)
     {
-        if($this->getUser() != $user ){
-            throw $this->createNotFoundException('The author does not match');
-        }
-        
         $entityManager = $this->getDoctrine()->getManager();
         
         $projects = $entityManager->getRepository(Project::class)->findByContributor($user)->execute();
