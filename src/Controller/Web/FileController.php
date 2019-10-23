@@ -35,6 +35,8 @@ class FileController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         
+        $user = $this->getuser();
+        
         $projects = $entityManager->getRepository(Project::class)->findByContributor($user)->execute();
             
         if( $project != null ) {
