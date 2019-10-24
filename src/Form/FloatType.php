@@ -16,7 +16,7 @@ class FloatType extends AbstractType
             'attr'  => [
                 'step' => 0.01,
                 'min'  => 0,
-                'max'  => 100000,
+                'max'  => 9000000000000,
             ]
         ]);
     }

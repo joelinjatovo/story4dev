@@ -23,15 +23,9 @@ class ActivityType extends AbstractType
                     'uiColor' => '#ffffff',
                 ),
             ])
-            /*
-            ->add('budget', FloatType::class, [
-                'required'   => false,
-            ])
-            */
             ->add('contactemail')
             ->add('contactphone')
             ->add('contactaddress')
-            //->add('address', AddressType::class)
             ->add('project', EntityType::class, [
                 'class' => Project::class,
                 'choice_label' => function ($project) {
@@ -57,6 +51,11 @@ class ActivityType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Activity::class,
+            'attr'  => [
+                'step' => 0.01,
+                'min'  => 0,
+                'max'  => 1000000000000,
+            ]
         ]);
     }
 }

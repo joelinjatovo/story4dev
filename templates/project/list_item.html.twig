@@ -103,7 +103,7 @@
                     {% if project.budget > 0 %}
                     <div class="kt-widget__details">
                         <span class="kt-widget__subtitle">Budget</span>
-                        <span class="kt-widget__value"><span></span>{{ project.budget }}</span>
+                        <span class="kt-widget__value">{{ project.budget }} <span>{{ project.currency }}</span></span>
                     </div>
                     {% endif %}
 
