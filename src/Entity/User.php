@@ -254,53 +254,53 @@ class User implements UserInterface, \Serializable
     private $address;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="author", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $activities;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="author", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $indicators;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Iteration", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Iteration", mappedBy="author", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $iterations;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="author", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $goals;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="author", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $projects;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="author", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $reports;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="author", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="author", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $results;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Token", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Token", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $tokens;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProjectContribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\ProjectContribution", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      * @Groups({"full", "user"})
      */
     private $projectContributions;
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ActivityContribution", mappedBy="user", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\ActivityContribution", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      * @Groups({"full", "user"})
      */
     private $activityContributions;
@@ -312,12 +312,12 @@ class User implements UserInterface, \Serializable
     protected $metas;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\File", mappedBy="author")
+     * @ORM\OneToMany(targetEntity="App\Entity\File", mappedBy="author", cascade={"persist", "remove"})
      */
     private $files;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Download", mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Download", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $downloads;
 

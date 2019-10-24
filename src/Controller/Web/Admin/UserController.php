@@ -208,8 +208,11 @@ class UserController extends AbstractController
                 
                 $user = $entityManager->getRepository(User::class)->find($id);
                 if( $user && ! $user->isSuperAdmin() ){
+                    /*
                     $user->setDeletedAt(new \DateTime());
                     $entityManager->persist($user);
+                    */
+                    $entityManager->remove($user);
                     $entityManager->flush();
                     
                     return $this->json([

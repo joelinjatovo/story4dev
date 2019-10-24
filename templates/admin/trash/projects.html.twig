@@ -168,6 +168,7 @@ jQuery(document).ready(function($){
                     })
                     .fail(function() {
                         KTApp.unblockPage();
+                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
                     });
                 }
             })
@@ -188,6 +189,7 @@ jQuery(document).ready(function($){
         })
         .fail(function() {
             KTApp.unblockPage();
+            toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
         });
     });
 });
