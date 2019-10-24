@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Entity\Project;
 use App\Entity\Activity;
 use App\Entity\Report;
+use App\Entity\Indicator;
 use App\Service\PaginatorService;
 
 /** 
@@ -66,6 +67,14 @@ class TrashController extends AbstractController
                 $reports = $paginator->paginate($query);
                 return $this->render('admin/trash/reports.html.twig', [
                     'reports' => $reports, 
+                    'search'   => $search, 
+                ]);
+            break;
+            case 'indicators':
+                $query = $entityManager->getRepository(Indicator::class)->getAllDeleted();
+                $indicators = $paginator->paginate($query);
+                return $this->render('admin/trash/indicators.html.twig', [
+                    'indicators' => $indicators, 
                     'search'   => $search, 
                 ]);
             break;

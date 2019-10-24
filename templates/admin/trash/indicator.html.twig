@@ -1,0 +1,30 @@
+ <tr data-row="0" class="kt-datatable__row indicator-item" style="left: 0px;">
+    <td data-field="User" data-autohide-disabled="false" class="kt-datatable__cell">
+        <span style="width: 222px;">
+            <div class="kt-user-card-v2">
+                <div class="kt-user-card-v2__details">
+                    <a class="kt-user-card-v2__name" href="#">{{ indicator.title }}</a>
+                    <span class="kt-user-card-v2__email">{{ indicator.activity.title }}</span>
+                </div>
+            </div>
+        </span>
+    </td>
+    <td data-field="Activités" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="kt-font-bold">{{ indicator.activity.title }}</span></span>
+    </td>
+    <td data-field="Résultats" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="kt-font-bold">{{ indicator.results.count }} </span>Résultats</span>
+    </td>
+    <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
+        <span style="overflow: visible; position: relative; width: 100px;">
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <a title="Restaurer cet indicateur" data-id="{{ indicator.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-restore">
+                    <i class="la la-recycle"></i>
+                </a>
+                <a title="Supprimer complètement cet indicateur" data-id="{{ indicator.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+                    <i class="la la-trash"></i>
+                </a>
+            {% endif %}
+        </span>
+    </td>
+</tr>

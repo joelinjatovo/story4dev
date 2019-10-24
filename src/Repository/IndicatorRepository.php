@@ -20,6 +20,13 @@ class IndicatorRepository extends ServiceEntityRepository
         parent::__construct($registry, Indicator::class);
     }
     
+    public function getAllDeleted()
+    {
+        return $this->createQueryBuilder('i')
+            ->where("i.deletedAt IS NOT NULL")
+            ->getQuery();
+    }
+    
     public function findByActivity(Activity $activity, $search = null)
     {
         if( empty($search) ){
