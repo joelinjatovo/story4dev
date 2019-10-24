@@ -130,6 +130,6 @@ class IndicatorVoter extends Voter
 
     private function canRemove(Indicator $indicator, User $user)
     {
-        return false;
+        return $this->canEdit($indicator, $user);
     }
 }

@@ -121,6 +121,6 @@ class ActivityVoter extends Voter
 
     private function canRemove(Activity $activity, User $user)
     {
-        return false;
+        return $this->canEdit($activity, $user);
     }
 }

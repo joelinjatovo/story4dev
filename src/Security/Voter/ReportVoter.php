@@ -132,6 +132,6 @@ class ReportVoter extends Voter
 
     private function canRemove(Report $report, User $user)
     {
-        return false;
+        return $this->canEdit($report, $user);
     }
 }
