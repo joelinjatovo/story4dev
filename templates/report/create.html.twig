@@ -260,6 +260,9 @@
 						</div>
 						<div class="col-xl-2"></div>
 					</div>
+                    {{ form_widget( form.latitude ) }}
+                    {{ form_widget( form.longitude ) }}
+                    {{ form_widget( form.altitude ) }}
                     {{ form_row( form._token ) }}
                 {{ form_end( form, {'render_rest': false}) }}
 			</div>
@@ -267,12 +270,27 @@
 		<!--end::Portlet-->
 	</div>
 </div>
-
-<div id="map" style="height: 400px;width: 100%;"></div>
 {% endblock %}
 
 
 {% block javascripts %}
+{% if report.id <= 0 %}
+<script src="{{ asset('js/gmaps.js') }}" type="text/javascript" ></script>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+    GMaps.geolocate({
+        success:function(e){
+            jQuery('#report_latitude').val(e.coords.latitude);
+            jQuery('#report_longitude').val(e.coords.longitude);
+            jQuery('#report_altitude').val(e.coords.altitude);
+        },
+        error:function(t){toastr.error("Erreur de géolocalisation<br>"+t.message);},
+        not_supported:function(){toastr.error("Votre navigateur ne supporte pas la géolocalisation.")},
+        always:function(){}
+    })
+});
+</script>
+{% endif %}
 <script type="text/javascript">
 jQuery(document).ready(function($){
 	jQuery('.js-datepicker').datepicker({format: 'yyyy-mm-dd'});
@@ -283,18 +301,5 @@ jQuery(document).ready(function($){
 		$this.closest('.file-list-item').remove();
     });
 });
-function initMap() {
-    var uluru = {lat: -25.344, lng: 131.036};
-    var map = new google.maps.Map(
-    document.getElementById('map'), {zoom: 4, center: uluru});
-    var marker = new google.maps.Marker({
-        position: uluru, 
-        map: map,
-        draggable:true,
-        title:"Drag me!"
-    });
-}
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&callback=initMap"
-  type="text/javascript"></script>
 {% endblock %}

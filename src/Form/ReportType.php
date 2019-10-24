@@ -13,6 +13,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -28,9 +29,9 @@ class ReportType extends AbstractType
                     'uiColor' => '#ffffff',
                 ),
             ])
-            ->add('longitude')
-            ->add('latitude')
-            ->add('altitude')
+            ->add('longitude', HiddenType::class)
+            ->add('latitude', HiddenType::class)
+            ->add('altitude', HiddenType::class)
             ->add('results', CollectionType::class, [
                 'entry_type' => ResultType::class,
                 'entry_options' => [
