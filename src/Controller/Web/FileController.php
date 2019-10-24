@@ -68,24 +68,25 @@ class FileController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/file/{file_id}", name="show", methods="GET")
-     * @Route("/{slug}/project/{project_id}/file/{file_id}", name="show_project", methods="GET")
-     * @Route("/{slug}/project/{project_id}/activity/{activity_id}/file/{file_id}", name="show_activity", methods="GET")
-     * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/file/{file_id}", name="show", methods="GET")
+     * @Route("/project/{project_id}/file/{file_id}", name="show_project", methods="GET")
+     * @Route("/project/{project_id}/activity/{activity_id}/file/{file_id}", name="show_activity", methods="GET")
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("file", options={"mapping": {"file_id": "id"}})
      */
-    public function show(File $file, User $user, Project $project = null, Activity $activity = null)
+    public function show(File $file, Project $project = null, Activity $activity = null)
     {
         $this->denyAccessUnlessGranted('view', $file);
+
+        $user = $this->getUser();
         
         $entityManager = $this->getDoctrine()->getManager();
 
         $projects = $entityManager->getRepository(Project::class)->findByContributor($user)->execute();
         
         return $this->render('file/show.html.twig', [
-            'file'    => $file,
+            'file'     => $file,
             'user'     => $user,
             'project'  => $project,
             'projects' => $projects,
