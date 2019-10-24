@@ -68,6 +68,9 @@
                                 <th data-field="Label" class="kt-datatable__cell">
                                     <span style="width: 80px;">Libellé</span>
                                 </th>
+                                <th data-field="Indicateurs" class="kt-datatable__cell">
+                                    <span style="width: 120px;">Indicateurs</span>
+                                </th>
                                 <th data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
                                     <span style="width: 110px;">Actions</span>
                                 </th>
@@ -75,19 +78,22 @@
                         </thead>
                         <tbody class="kt-datatable__body">
                             {% for unit in units %}
-                             <tr data-row="0" class="kt-datatable__row" style="left: 0px;">
+                             <tr data-row="0" class="kt-datatable__row unit-item" style="left: 0px;">
                                 <td data-field="Unit" class="kt-datatable__cell">
                                     <span style="width: 222px;"><span class="kt-font-bold">{{ unit.title }}</span></span>
                                 </td>
                                 <td data-field="Label" class="kt-datatable__cell">
                                     <span style="width: 80px;"><span class="kt-font-bold">{{ unit.label }}</span></span>
                                 </td>
+                                <td data-field="Indicateurs" class="kt-datatable__cell">
+                                    <span style="width: 120px;"><span class="kt-font-bold">{{ unit.indicators.count }}</span> indicateurs</span>
+                                </td>
                                 <td data-field="Actions" class="kt-datatable__cell">
                                     <span style="overflow: visible; position: relative; width: 110px;">
                                         <a href="{{ path('admin_unit_edit', {id: unit.id} ) }}" title="Modifier détails" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                             <i class="la la-edit"></i>
                                         </a>
-                                        <a title="Supprimer" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                        <a title="Supprimer" data-id="{{ unit.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
                                             <i class="la la-trash"></i>
                                         </a>
                                     </span>
@@ -104,6 +110,39 @@
 </div>
 {% endblock %}
 
-
 {% block javascripts %}
+<script type="text/javascript">
+jQuery(document).ready(function($){
+    $(document).on('click', '.btn-remove', function(e){
+        e.preventDefault();
+        var $this = $(this);
+            swal.fire({
+                title:"Vous êtes sûre?",
+                text:"Vous ne pourez pas revenir en arrière après!",
+                type:"warning",
+                showCancelButton:!0,
+                confirmButtonText:"Oui, supprimez le!",
+                cancelButtonText:"Annuler"
+            }).then(function(e){
+                if(e.value){
+                    KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+                    $.post("/admin/unit/remove", { id: $this.attr('data-id') })
+                    .done(function( data ) {
+                        KTApp.unblockPage();
+                        if(data.success){
+                            $this.closest('.unit-item').remove();
+                            toastr.success(data.message);
+                        }else{
+                            toastr.error(data.message, data.title);
+                        }
+                    })
+                    .fail(function() {
+                        KTApp.unblockPage();
+                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+                    });
+                }
+            })
+    });
+});
+</script>
 {% endblock %}

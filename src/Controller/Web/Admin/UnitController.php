@@ -114,18 +114,37 @@ class UnitController extends AbstractController
     }
     
     /**
-     * @Route("/admin/unit/remove/{id}", name="remove", methods="POST")
-     * @Entity("unit", options={"mapping": {"id": "id"}})
+     * @Route("/admin/unit/remove", name="remove", methods="POST")
+     * 
      */
-    public function remove(Unit $unit)
+    public function remove(Request $request)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $entityManager->remove($unit);
-        
-        $entityManager->flush();
-        
-        return new Response("L'unité de mesure a été supprimée.");
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+
+                $entityManager->getFilters()->disable("deleted");
+                
+                $unit = $entityManager->getRepository(Unit::class)->find($id);
+                if( $unit ){
+                    $entityManager->remove($unit);
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'Unité supprimé complètement avec succès',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
     }
     
     /**

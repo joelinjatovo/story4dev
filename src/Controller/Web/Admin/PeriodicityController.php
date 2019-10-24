@@ -116,18 +116,37 @@ class PeriodicityController extends AbstractController
     }
     
     /**
-     * @Route("/admin/periodicity/remove/{id}", name="remove", methods="POST")
-     * @Entity("periodicity", options={"mapping": {"id": "id"}})
+     * @Route("/admin/periodicity/remove", name="remove", methods="POST")
+     * 
      */
-    public function remove(Periodicity $periodicity)
+    public function remove(Request $request)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $entityManager->remove($periodicity);
-        
-        $entityManager->flush();
-        
-        return new Response("La périodicité a été supprimée.");
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+
+                $entityManager->getFilters()->disable("deleted");
+                
+                $periodicity = $entityManager->getRepository(Periodicity::class)->find($id);
+                if( $periodicity ){
+                    $entityManager->remove($periodicity);
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'Périodicité supprimée complètement avec succès',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
     }
     
     /**
