@@ -356,7 +356,8 @@ class ReportController extends AbstractController
                 if( $report && ! $report->isDeleted() ){
                     $this->denyAccessUnlessGranted('remove', $report);
 
-                    $entityManager->remove($report);
+                    $report->setDeletedAt(new \DateTime());
+                    $entityManager->persist($report);
                     $entityManager->flush();
                     
                     return $this->json([

@@ -308,7 +308,8 @@ class IndicatorController extends AbstractController
                 if( $indicator && ! $indicator->isDeleted()){
                     $this->denyAccessUnlessGranted('remove', $indicator);
 
-                    $entityManager->remove($indicator);
+                    $indicator->setDeletedAt(new \DateTime());
+                    $entityManager->persist($indicator);
                     $entityManager->flush();
                     
                     return $this->json([

@@ -191,6 +191,43 @@ class UserController extends AbstractController
     }
     
     /**
+     * @Route("/user/trash", name="trash", methods="POST")
+     * 
+     * @IsGranted("ROLE_SUPER_ADMIN") 
+     * 
+     */
+    public function trash(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+        	
+                $entityManager->getFilters()->disable("deleted");
+                
+                $user = $entityManager->getRepository(User::class)->find($id);
+                if( $user && ! $user->isSuperAdmin() ){
+                    $user->setDeletedAt(new \DateTime());
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'L\'utilisateur a été supprimé avec succès.',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
+    }
+    
+    /**
      * @Route("/user/remove", name="remove", methods="POST")
      * 
      * @IsGranted("ROLE_SUPER_ADMIN") 
@@ -207,7 +244,7 @@ class UserController extends AbstractController
                 $entityManager->getFilters()->disable("deleted");
                 
                 $user = $entityManager->getRepository(User::class)->find($id);
-                if( $user && ! $user->isSuperAdmin() ){
+                if( $user && ! $user->isSuperAdmin() && $user->isDeleted() ){
                     $entityManager->remove($user);
                     $entityManager->flush();
                     

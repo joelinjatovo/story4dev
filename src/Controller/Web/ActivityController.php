@@ -244,7 +244,8 @@ class ActivityController extends AbstractController
                 if( $activity  && ! $activity->isDeleted()){
                     $this->denyAccessUnlessGranted('remove', $activity);
 
-                    $entityManager->remove($activity);
+                    $activity->setDeletedAt(new \DateTime());
+                    $entityManager->persist($activity);
                     $entityManager->flush();
                     
                     return $this->json([

@@ -159,7 +159,7 @@ jQuery(document).ready(function($){
             }).then(function(e){
                 if(e.value){
                     KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
-                    $.post("/admin/user/remove", { id: $this.attr('data-id') })
+                    $.post("/admin/user/trash", { id: $this.attr('data-id') })
                     .done(function( data ) {
                         KTApp.unblockPage();
                         if(data.success){
@@ -171,6 +171,7 @@ jQuery(document).ready(function($){
                     })
                     .fail(function() {
                         KTApp.unblockPage();
+                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
                     });
                 }
             })

@@ -182,6 +182,7 @@ toastr.options = {
                     })
                     .fail(function() {
                         KTApp.unblockPage();
+                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
                     });
                 }
             })

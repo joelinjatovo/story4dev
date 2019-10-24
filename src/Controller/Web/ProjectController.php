@@ -248,7 +248,8 @@ class ProjectController extends AbstractController
                 if( $project && ! $project->isDeleted()){
                     $this->denyAccessUnlessGranted('remove', $project);
 
-                    $entityManager->remove($project);
+                    $project->setDeletedAt(new \DateTime());
+                    $entityManager->persist($project);
                     $entityManager->flush();
                     
                     return $this->json([
