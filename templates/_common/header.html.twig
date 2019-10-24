@@ -6,7 +6,7 @@
         <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout- "  >
             <ul class="kt-menu__nav ">
                 {% if project is defined and project is not null and ( project.id > 0 ) %}
-                <li class="kt-menu__item"  aria-haspopup="true"><a href="{{ path( 'project_show', { slug : project.author.slug, id : project.id } ) }}" class="kt-menu__link "><h4 style="margin: 0;">{{ project.title }}</h4></a></li>
+                <li class="kt-menu__item"  aria-haspopup="true"><a href="{{ path( 'project_show', { id : project.id } ) }}" class="kt-menu__link "><h4 style="margin: 0;">{{ project.title }}</h4></a></li>
                 {% endif %}
             </ul>
         </div>
@@ -129,7 +129,7 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="{{ path('project_list', { slug: app.user.slug } ) }}" class="kt-notification__item">
+                        <a href="{{ path('project_list') }}" class="kt-notification__item">
                             <div class="kt-notification__item-icon">
                                 <i class="flaticon2-mail kt-font-warning"></i>
                             </div>
@@ -155,7 +155,7 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="{{ path('file_list', { slug: app.user.slug } ) }}" class="kt-notification__item">
+                        <a href="{{ path('file_list') }}" class="kt-notification__item">
                             <div class="kt-notification__item-icon">
                                 <i class="flaticon2-hourglass kt-font-brand"></i>
                             </div>

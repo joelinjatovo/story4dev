@@ -1,18 +1,18 @@
 <div class="kt-widget31__item">
     <div class="kt-widget31__content">
         <div class="kt-widget31__info">
-            <a href="{{ url('indicator_show', { 'slug' : indicator.activity.project.author.slug, 'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id, 'indicator_id' : indicator.id }) }}" class="kt-widget31__username">
+            <a href="{{ url('indicator_show', { 'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id, 'indicator_id' : indicator.id }) }}" class="kt-widget31__username">
                 {{ indicator.title }}
             </a>
             <p class="kt-widget31__text">
-                Unit : {{ indicator.unit.title }}
+                Unité : {{ indicator.unit.title }}
             </p>							 		 
         </div>					 
     </div>
 
     <div class="kt-widget31__content">
         <div class="kt-widget31__progress">
-            <a href="{{ url('indicator_show', { 'slug' : indicator.activity.project.author.slug, 'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id, 'indicator_id' : indicator.id }) }}" class="kt-widget31__stats">
+            <a href="{{ url('indicator_show', { 'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id, 'indicator_id' : indicator.id }) }}" class="kt-widget31__stats">
                 <span>{{ indicator.progression }}%</span>
                 <span>{{ indicator.value }} / {{ indicator.goalValue }}</span>						    							 
             </a>

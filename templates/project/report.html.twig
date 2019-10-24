@@ -4,7 +4,7 @@
             <img class="kt-widget7__img"  src="{{ report.author.avatar ? vich_uploader_asset(report.author, 'avatarFile') : default_avatar }}" alt="avatar">
         </div>
         <div class="kt-widget5__section">
-            <a href="{{ path('report_show', { 'report_id' : report.id,  'activity_id' : report.activity.id, 'project_id' : report.activity.project.id, 'slug': report.activity.project.author.slug } ) }}" class="kt-widget5__title">
+            <a href="{{ path('report_show', { 'report_id' : report.id,  'activity_id' : report.activity.id, 'project_id' : report.activity.project.id } ) }}" class="kt-widget5__title">
                 {{ report.title }}
             </a>
             <div class="kt-widget5__info">

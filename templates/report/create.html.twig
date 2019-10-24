@@ -43,14 +43,14 @@
                             <li class="kt-nav__separator"></li>
                             {% if is_granted('edit', activity) %}
                                 <li class="kt-nav__item">
-                                    <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'slug': activity.project.author.slug } ) }}" class="kt-nav__link">
+                                    <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-drop"></i>
                                         <span class="kt-nav__link-text">Indicateur</span>
                                     </a>
                                 </li>
                             {% endif %}
                             <li class="kt-nav__item">
-                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
+                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
                                     <span class="kt-nav__link-text">Rapport</span>
                                 </a>
@@ -62,19 +62,19 @@
                             </li>
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__item">
-                                <a href="{{ path('report_list', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
+                                <a href="{{ path('report_list', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
                                     <span class="kt-nav__link-text">Les rapports</span>
                                 </a>
                             </li>
                             <li class="kt-nav__item">
-                                <a href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
+                                <a href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
                                     <span class="kt-nav__link-text">Les documents</span>
                                 </a>
                             </li>
                             <li class="kt-nav__item">
-                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-nav__link">
+                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
                                     <span class="kt-nav__link-text">Les indicateurs</span>
                                 </a>
@@ -102,9 +102,9 @@
 				</div>
 				<div class="kt-portlet__head-toolbar">
                     {% if report is defined and report is not null and (report.id>0) %}
-					   <a href="{{ url('report_show', { 'slug' : report.activity.project.author.slug, 'project_id' : report.activity.project.id, 'activity_id' : report.activity.id, 'report_id' : report.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+					   <a href="{{ url('report_show', { 'project_id' : report.activity.project.id, 'activity_id' : report.activity.id, 'report_id' : report.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
                     {% else %}
-					   <a href="{{ url('activity_show', { 'slug' : activity.project.author.slug, 'project_id' : activity.project.id, 'activity_id' : activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+					   <a href="{{ url('activity_show', { 'project_id' : activity.project.id, 'activity_id' : activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
                     {% endif %}
 					<div class="btn-group">
 						<button type="submit" form="report" name="submit" value="save-default" class="btn btn-brand">

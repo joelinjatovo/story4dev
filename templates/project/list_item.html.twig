@@ -11,7 +11,7 @@
                         </span>
                     </div>
                     <div class="kt-widget__info kt-margin-t-5">
-                        <a href="{{ path('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="kt-widget__title">
+                        <a href="{{ path('project_show', {'id': project.id}) }}" class="kt-widget__title">
                             {{ project.title }}                                                 
                         </a>
                         <span class="kt-widget__desc">
@@ -35,7 +35,7 @@
                         <ul class="kt-nav">
                             {% if is_granted('view', project) %}
                                 <li class="kt-nav__item">
-                                    <a href="{{ path('project_show', { 'slug' : project.author.slug, 'id': project.id })}}" class="kt-nav__link">
+                                    <a href="{{ path('project_show', { 'id': project.id })}}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-line-chart"></i>
                                         <span class="kt-nav__link-text">Détails</span>
                                     </a>
@@ -43,7 +43,7 @@
                             {% endif %}
                             {% if is_granted('edit', project) %}
                                 <li class="kt-nav__item">
-                                    <a href="{{ path('project_edit', { 'slug' : project.author.slug, 'id': project.id })}}" class="kt-nav__link">
+                                    <a href="{{ path('project_edit', { 'id': project.id })}}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-edit"></i>
                                         <span class="kt-nav__link-text">Modifier</span>
                                     </a>
@@ -111,12 +111,12 @@
                         <span class="kt-widget__subtitle">Contributeurs</span>
                         <div class="kt-media-group">
                             {% for contribution in project.contributions.slice(0, 7) %}
-                            <a href="{{ path('contribution_show', { 'project_id' : contribution.project.id, 'slug': contribution.project.author.slug, 'contribution_id': contribution.id } ) }}" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{{ contribution.user.fullname ?? contribution.user.email }}">
+                            <a href="{{ path('contribution_show', { 'project_id' : contribution.project.id, 'contribution_id': contribution.id } ) }}" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{{ contribution.user.fullname ?? contribution.user.email }}">
                                 <img src="{{ contribution.user.avatar is null ? default_avatar : vich_uploader_asset(contribution.user, 'avatarFile') }}" alt="avatar">
                             </a>
                             {% endfor %}
                             {% if project.contributions.count > 7 %}
-                                <a href="{{ path('contribution_list', { 'project_id' : project.id, 'slug': project.author.slug } ) }}" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                <a href="{{ path('contribution_list', { 'project_id' : project.id } ) }}" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                     <span>+{{ project.contributions.count - 7 }}</span>
                                 </a>
                             {% endif %}
@@ -130,17 +130,17 @@
                     <div class="kt-widget__section">
                         <div class="kt-widget__blog">
                             <i class="flaticon2-list-1"></i>
-                            <a href="{{ path( 'activity_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">{{ project.activities.count }}  Activities</a>
+                            <a href="{{ path( 'activity_list', { 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">{{ project.activities.count }}  Activities</a>
                         </div>
 
                         <div class="kt-widget__blog kt-hidden">
                             <i class="flaticon2-talk"></i>
-                            <a href="{{ path( 'report_list', { 'slug': project.author.slug, 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">--- Reports</a>
+                            <a href="{{ path( 'report_list', { 'project_id': project.id } ) }}" class="kt-widget__value kt-font-brand">--- Reports</a>
                         </div>
                     </div>
 
                     <div class="kt-widget__section">
-                        <a href="{{ path('project_show', {'slug': project.author.slug, 'id': project.id}) }}" class="btn btn-brand btn-sm btn-upper btn-bold">détails</a>                                 
+                        <a href="{{ path('project_show', {'id': project.id}) }}" class="btn btn-brand btn-sm btn-upper btn-bold">détails</a>                                 
                     </div>
                 </div>
             </div>

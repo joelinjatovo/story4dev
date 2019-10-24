@@ -16,7 +16,7 @@
                     <img alt="avatar" src="{{ report.author.avatar ? vich_uploader_asset(report.author, 'avatarFile') : default_avatar }}">
                 </div>
                 <div class="kt-user-card-v2__details">
-                    <a class="kt-user-card-v2__name" href="{{ url('user_show', {'slug': report.author.slug}) }}">{{ report.author.fullname }}</a>
+                    <a class="kt-user-card-v2__name" href="{{ path('user_show', {'slug': report.author.slug}) }}">{{ report.author.fullname }}</a>
                     <span class="kt-user-card-v2__email">{{ report.author.email }}</span>
                     {% if report.author.verified %}
                         <i class="flaticon2-correct"></i>    

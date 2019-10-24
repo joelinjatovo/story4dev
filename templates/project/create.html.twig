@@ -22,7 +22,7 @@
 				</div>
 				<div class="kt-portlet__head-toolbar">
                     {% if project is defined and project is not null and ( project.id > 0 ) %}
-                        <a href="{{ path('project_show', { 'id' : project.id, 'slug': project.author.slug } ) }}" class="btn btn-clean kt-margin-r-10">
+                        <a href="{{ path('project_show', { 'id' : project.id } ) }}" class="btn btn-clean kt-margin-r-10">
                             <i class="la la-arrow-left"></i>
                             <span class="kt-hidden-mobile">Retour</span>
                         </a>
