@@ -42,7 +42,6 @@ class IndicatorType extends AbstractType
                 'by_reference' => false,
             ])
             ->add('cummulative', CheckboxType::class, [
-                'label'    => 'Show this entry publicly?',
                 'required' => false,
             ])
             ->add('submit', SubmitType::class, [
