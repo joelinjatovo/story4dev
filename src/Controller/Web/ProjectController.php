@@ -207,7 +207,6 @@ class ProjectController extends AbstractController
             $this->addFlash('success', 'Votre modification a été bien sauvegardé.');
             
             $args = [
-                'slug' => $user->getSlug(),
                 'id'   => $project->getId()
             ];
 
@@ -231,7 +230,6 @@ class ProjectController extends AbstractController
         $this->addFlash('error', 'Votre modification n\'a pas été sauvegardé. Une erreur s\'est produite. ' . $form->getErrors());
 
         return $this->redirectToRoute('project_edit', [
-            'slug' => $user->getSlug(),
             'id'   => $project->getId(), 
         ]);
     }

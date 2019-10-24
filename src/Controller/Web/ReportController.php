@@ -102,20 +102,17 @@ class ReportController extends AbstractController
                 switch($action){
                     case 'save-exit':
                         return $this->redirectToRoute('activity_show', [
-                            'slug'        => $user->getSlug(),
                             'project_id'  => $project->getId(), 
                             'activity_id' => $activity->getId(), 
                         ]);
                     case 'save-continue':
                         return $this->redirectToRoute('report_show', [
-                            'slug'        => $user->getSlug(),
                             'project_id'  => $project->getId(), 
                             'activity_id' => $activity->getId(), 
                             'report_id'   => $report->getId(), 
                         ]);
                     case 'save-edit':
                         return $this->redirectToRoute('report_edit', [
-                            'slug'        => $user->getSlug(),
                             'project_id'  => $project->getId(), 
                             'activity_id' => $activity->getId(), 
                             'report_id'   => $report->getId(), 
@@ -124,7 +121,6 @@ class ReportController extends AbstractController
                     case 'save-default':
                     default:
                         return $this->redirectToRoute('report_index', [
-                            'slug'        => $user->getSlug(), 
                             'project_id'  => $project->getId(), 
                             'activity_id' => $activity->getId(), 
                         ]);
@@ -135,7 +131,6 @@ class ReportController extends AbstractController
         }
         
         return $this->redirectToRoute('report_index', [
-            'slug'        => $user->getSlug(), 
             'project_id'  => $project->getId(), 
             'activity_id' => $activity->getId(), 
         ]);
@@ -271,28 +266,24 @@ class ReportController extends AbstractController
                 switch($action){
                     case 'save-exit':
                         return $this->redirectToRoute('activity_show', [
-                            'slug'        => $user->getSlug(),
                             'project_id'  => $project->getId(), 
                             'activity_id' => $activity->getId(), 
                         ]);
                     case 'save-continue':
                     case 'save-edit':
                         return $this->redirectToRoute('report_edit', [
-                            'slug'        => $user->getSlug(),
                             'project_id'  => $project->getId(), 
                             'activity_id' => $activity->getId(), 
                             'report_id'   => $report->getId(), 
                         ]);
                     case 'save-create':
                         return $this->redirectToRoute('report_index', [
-                            'slug'        => $user->getSlug(), 
                             'project_id'  => $project->getId(), 
                             'activity_id' => $activity->getId(), 
                         ]);
                     case 'save-default':
                     default:
                         return $this->redirectToRoute('report_show', [
-                            'slug'        => $user->getSlug(),
                             'project_id'  => $project->getId(), 
                             'activity_id' => $activity->getId(), 
                             'report_id'   => $report->getId(), 
@@ -304,7 +295,6 @@ class ReportController extends AbstractController
         }
         
         return $this->redirectToRoute('report_edit', [
-            'slug'        => $user->getSlug(), 
             'project_id'  => $project->getId(), 
             'activity_id' => $activity->getId(),
             'report_id'   => $report->getId(), 

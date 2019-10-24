@@ -98,7 +98,6 @@ class IndicatorController extends AbstractController
             $this->addFlash('success', 'L\'indicateur a été bien sauvegardé avec succès.');
 
             $args = [
-                'slug'        => $user->getSlug(),
                 'project_id'  => $project->getId(),
                 'activity_id' => $activity->getId(),
             ];
@@ -228,7 +227,6 @@ class IndicatorController extends AbstractController
             $this->addFlash('success', "l'indicateur a été bien modifié avec succès.");
             
             $args = [
-                'slug'        => $user->getSlug(),
                 'project_id'  => $project->getId(),
                 'activity_id' => $activity->getId(),
                 'indicator_id' => $indicator->getId()
@@ -254,7 +252,6 @@ class IndicatorController extends AbstractController
         $this->addFlash('error', "Les modifications n'ont pas été sauvegardée. Une erreur s'est produite. Veuillez réessayer!");
 
         return $this->redirectToRoute('indicator_edit', [
-            'slug'         => $user->getSlug(),
             'project_id'   => $project->getId(), 
             'activity_id'  => $activity->getId(),
             'indicator_id' => $indicator->getId()

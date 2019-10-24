@@ -69,10 +69,9 @@ class ProjectController extends AbstractController
 
             $entityManager->flush();
         
-            $this->addFlash('success', 'Project created succesfully.');
+            $this->addFlash('success', 'Projet créé avec succès.');
             
             $args = [
-                'slug' => $project->getAuthor()->getSlug(),
                 'id'   => $project->getId()
             ];
             
@@ -90,7 +89,6 @@ class ProjectController extends AbstractController
             }
 
             return $this->redirectToRoute('project_edit', [
-                'slug' => $project->getAuthor()->getSlug(),
                 'id'   => $project->getId()
             ]);
             

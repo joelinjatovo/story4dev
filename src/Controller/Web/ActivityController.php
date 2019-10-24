@@ -80,18 +80,15 @@ class ActivityController extends AbstractController
             switch($action){
                 case 'save-exit':
                     return $this->redirectToRoute('project_show', [
-                        'slug' => $user->getSlug(),
                         'id'   => $project->getId(), 
                     ]);
                 case 'save-continue':
                     return $this->redirectToRoute('activity_show', [
-                        'slug'        => $user->getSlug(),
                         'project_id'  => $project->getId(), 
                         'activity_id' => $activity->getId(), 
                     ]);
                 case 'save-edit':
                     return $this->redirectToRoute('activity_edit', [
-                        'slug'        => $user->getSlug(),
                         'project_id'  => $project->getId(), 
                         'activity_id' => $activity->getId(), 
                     ]);
@@ -99,7 +96,6 @@ class ActivityController extends AbstractController
                 case 'save-default':
                 default:
                     return $this->redirectToRoute('activity_index', [
-                        'slug'       => $user->getSlug(),
                         'project_id' => $project->getId(), 
                     ]);
             }
@@ -109,7 +105,6 @@ class ActivityController extends AbstractController
         $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
 
         return $this->redirectToRoute('activity_index', [
-            'slug'       => $user->getSlug(),
             'project_id' => $project->getId(),
         ]);
     }
@@ -200,17 +195,14 @@ class ActivityController extends AbstractController
             switch($action){
                 case 'save-exit':
                     return $this->redirectToRoute('project_show', [
-                        'slug' => $user->getSlug(),
                         'id'   => $project->getId(), 
                     ]);
                 case 'save-create':
                     return $this->redirectToRoute('activity_create', [
-                        'slug'        => $user->getSlug(),
                         'project_id'  => $project->getId(), 
                     ]);
                 case 'save-continue':
                     return $this->redirectToRoute('activity_show', [
-                        'slug'        => $user->getSlug(),
                         'project_id'  => $project->getId(), 
                         'activity_id' => $activity->getId(), 
                     ]);
@@ -218,7 +210,6 @@ class ActivityController extends AbstractController
                 case 'save-default':
                 default:
                     return $this->redirectToRoute('activity_edit', [
-                        'slug'       => $user->getSlug(),
                         'project_id' => $project->getId(), 
                         'activity_id' => $activity->getId(), 
                     ]);
@@ -226,7 +217,6 @@ class ActivityController extends AbstractController
             }
 
             return $this->redirectToRoute('activity_edit', [
-                'slug'        => $user->getSlug(),
                 'project_id'  => $project->getId(), 
                 'activity_id' => $activity->getId(), 
             ]);
@@ -235,7 +225,6 @@ class ActivityController extends AbstractController
         $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
 
         return $this->redirectToRoute('activity_edit', [
-            'slug'        => $user->getSlug(),
             'project_id'  => $project->getId(), 
             'activity_id' => $activity->getId(), 
         ]);
