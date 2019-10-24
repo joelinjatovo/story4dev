@@ -283,9 +283,17 @@ class Indicator
         $value = 0;
         if($iteration){
             foreach($this->getResults() as $result){
-                if(($result->getReport()->getCreatedAt() >= $iteration->getStartAt()) && 
-                        ($result->getReport()->getCreatedAt() < $iteration->getEndAt())){
-                    $value += $result->getValue();
+                if($this->getCummulative()){
+                    // Get value below iteration end date
+                    if( $result->getReport()->getCreatedAt() < $iteration->getEndAt() ){
+                        $value += $result->getValue();
+                    }
+                }else{
+                    // Get value between iteration dates
+                    if(($result->getReport()->getCreatedAt() >= $iteration->getStartAt()) && 
+                            ($result->getReport()->getCreatedAt() < $iteration->getEndAt())){
+                        $value += $result->getValue();
+                    }
                 }
             }
         }else{

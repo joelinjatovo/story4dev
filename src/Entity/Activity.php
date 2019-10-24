@@ -384,16 +384,8 @@ class Activity
     public function getGoalValue(?Iteration $iteration)
     {
         $goalValue = 0;
-        if($iteration){
-            foreach($iteration->getGoals() as $goal){
-                $goalValue += $goal->getValue();
-            }
-        }else{
-            foreach($this->getProject()->getIterations() as $iteration){
-                foreach($iteration->getGoals() as $goal){
-                    $goalValue += $goal->getValue();
-                }
-            }
+        foreach($this->getIndicators() as $indicator){
+            $goalValue += $indicator->getGoalValue($iteration);
         }
         return $goalValue;
     }
