@@ -91,8 +91,14 @@ class Indicator
      */
     protected $metas;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $cummulative;
+
     public function __construct()
     {
+        $this->setCummulative(false);
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->goals = new ArrayCollection();
@@ -306,5 +312,17 @@ class Indicator
         }
         
         return $datas;
+    }
+
+    public function getCummulative(): ?bool
+    {
+        return $this->cummulative;
+    }
+
+    public function setCummulative(bool $cummulative): self
+    {
+        $this->cummulative = $cummulative;
+
+        return $this;
     }
 }

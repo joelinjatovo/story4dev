@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class IndicatorType extends AbstractType
 {
@@ -39,6 +40,10 @@ class IndicatorType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+            ])
+            ->add('cummulative', CheckboxType::class, [
+                'label'    => 'Show this entry publicly?',
+                'required' => false,
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Save indicator'
