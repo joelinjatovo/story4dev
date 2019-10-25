@@ -38,7 +38,7 @@ class PaginatorService
         if($limit===false){
             $option = $this->optionService->get('paginator_limit');
             if( ! $option ){
-                $limit = 5;
+                $limit = 20;
             }
         }
             
