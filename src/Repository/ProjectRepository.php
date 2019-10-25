@@ -61,15 +61,6 @@ class ProjectRepository extends AppRepository
             ->getQuery();
     }
     
-    public function findContributions(User $user)
-    {
-        return $this->createQueryBuilder('p')
-            ->join('p.contributions', 'c')
-            ->where('p.author != :user AND c.user = :user')
-            ->setParameter('user', $user)
-            ->getQuery();
-    }
-    
     public function findByIds(Array $ids)
     {
         return $this->createQueryBuilder('p')

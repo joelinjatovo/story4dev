@@ -27,15 +27,6 @@ class HeaderService
         return null;
     }
     
-    public function getContributions()
-    {
-        if( $this->user ){
-            return $this->em->getRepository(Project::class)->findContributions($this->user)->execute();
-        }
-        
-        return null;
-    }
-    
     public function getMyProjects()
     {
         if( $this->user ){
