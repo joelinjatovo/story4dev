@@ -182,9 +182,20 @@
                         Statistiques
                     </h3>
                 </div>
+            </div><div class="kt-portlet__body">
+                <div class="form-group form-group-last row">
+                    <label class="col-form-label col-lg-3 col-sm-12">Whitelist examples</label>
+                    <div class="col-lg-6 col-md-9 col-sm-12">
+                        <input id="kt_tagify_2" placeholder='type...' value='Back to the Future, Whiplash' autofocus data-blacklist='.NET,PHP'>
+
+                        <div class="kt-margin-t-10">
+                            In this example, the field is pre-ocupied with 3 tags, and last tag is not included in the whitelist, and will be removed because the enforceWhitelist option flag is set to true
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="kt-portlet__body kt-portlet__body--fluid">
-                 <div id="chartdiv" style="width: 100%; height: 400px;"></div>
+                <div id="chartdiv" style="width: 100%; height: 400px;"></div>
             </div>
         </div>
     </div>
@@ -313,107 +324,10 @@ am4core.ready(function() {
 
     // Create chart instance
     var chart = am4core.create("chartdiv", am4charts.XYChart);
-
-    // Add data
-    chart.data = [{
-      "date": "2013-01-16",
-      "market1": 71,
-      "market2": 75,
-      "sales1": 5,
-      "sales2": 8
-    }, {
-      "date": "2013-01-17",
-      "market1": 74,
-      "market2": 78,
-      "sales1": 4,
-      "sales2": 6
-    }, {
-      "date": "2013-01-18",
-      "market1": 78,
-      "market2": 88,
-      "sales1": 5,
-      "sales2": 2
-    }, {
-      "date": "2013-01-19",
-      "market1": 85,
-      "market2": 89,
-      "sales1": 8,
-      "sales2": 9
-    }, {
-      "date": "2013-01-20",
-      "market1": 82,
-      "market2": 89,
-      "sales1": 9,
-      "sales2": 6
-    }, {
-      "date": "2013-01-21",
-      "market1": 83,
-      "market2": 85,
-      "sales1": 3,
-      "sales2": 5
-    }, {
-      "date": "2013-01-22",
-      "market1": 88,
-      "market2": 92,
-      "sales1": 5,
-      "sales2": 7
-    }, {
-      "date": "2013-01-23",
-      "market1": 85,
-      "market2": 90,
-      "sales1": 7,
-      "sales2": 6
-    }, {
-      "date": "2013-01-24",
-      "market1": 85,
-      "market2": 91,
-      "sales1": 9,
-      "sales2": 5
-    }, {
-      "date": "2013-01-25",
-      "market1": 80,
-      "market2": 84,
-      "sales1": 5,
-      "sales2": 8
-    }, {
-      "date": "2013-01-26",
-      "market1": 87,
-      "market2": 92,
-      "sales1": 4,
-      "sales2": 8
-    }, {
-      "date": "2013-01-27",
-      "market1": 84,
-      "market2": 87,
-      "sales1": 3,
-      "sales2": 4
-    }, {
-      "date": "2013-01-28",
-      "market1": 83,
-      "market2": 88,
-      "sales1": 5,
-      "sales2": 7
-    }, {
-      "date": "2013-01-29",
-      "market1": 84,
-      "market2": 87,
-      "sales1": 5,
-      "sales2": 8
-    }, {
-      "date": "2013-01-30",
-      "market1": 81,
-      "market2": 85,
-      "sales1": 4,
-      "sales2": 7
-    }];
     
     chart.data = {{ data|raw }};
 
     // Create axes
-    //var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-    //dateAxis.renderer.grid.template.location = 0;
-    //dateAxis.renderer.minGridDistance = 30;
-    
     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "iteration";
     
@@ -463,8 +377,12 @@ am4core.ready(function() {
             bullet3.circle.strokeWidth = 2;
             bullet3.circle.fill = am4core.color("#fff");
 
-    var _series = {{ series|raw }};
-    jQuery.each(_series, function(index, value) {
+    var whitelist = [];
+    var indicatorSeries = [];
+    var _seriesIndex = {{ series|raw }};
+    jQuery.each(_seriesIndex, function(index, value) {
+        whitelist.push({value:value.title, id:index});
+        
         var series4 = chart.series.push(new am4charts.LineSeries());
         series4.dataFields.valueY = value.id;
         series4.dataFields.categoryX = "iteration";
@@ -476,30 +394,15 @@ am4core.ready(function() {
         //series4.stroke = chart.colors.getIndex(0).lighten(0.5);
         //series4.strokeDasharray = "3,3";
         series4.hidden = true;
+        series4.hiddenInLegend = true; 
 
         var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
             bullet4.circle.radius = 3;
             bullet4.circle.strokeWidth = 2;
             bullet4.circle.fill = am4core.color("#fff");
+        
+        indicatorSeries.push(series4);
     });
-    
-    /*
-    var series5 = chart.series.push(new am4charts.LineSeries());
-        series5.dataFields.valueY = "report";
-        series5.dataFields.categoryX = "iteration";
-        series5.name = "Nombre de rapport";
-        series5.strokeWidth = 2;
-        series5.tensionX = 0.7;
-        series5.yAxis = valueAxis2;
-        series5.tooltipText = "{name}\n[bold font-size: 18]{valueY}[/]";
-        series5.stroke = chart.colors.getIndex(0).lighten(0.5);
-        series5.strokeDasharray = "3,3";
-
-        var bullet5 = series5.bullets.push(new am4charts.CircleBullet());
-            bullet5.circle.radius = 3;
-            bullet5.circle.strokeWidth = 2;
-            bullet5.circle.fill = am4core.color("#fff");
-    */
     
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -507,16 +410,31 @@ am4core.ready(function() {
     // Add legend
     chart.legend = new am4charts.Legend();
     chart.legend.position = "top";
-
-    // Add scrollbar
-    /*
-    chart.scrollbarX = new am4charts.XYChartScrollbar();
-    chart.scrollbarX.series.push(series1);
-    chart.scrollbarX.series.push(series3);
-    chart.scrollbarX.parent = chart.bottomAxesContainer;
-    */
+    
+    // Selector
+    e=document.getElementById("kt_tagify_2"),
+    new Tagify(e,{
+        enforceWhitelist:!0,
+        whitelist:whitelist,
+        callbacks:{
+            add:function(e){
+                console.log(e);
+                indicatorSeries[e.detail.data.id].show();
+            },
+            remove:function(e){
+                console.log(e);
+                indicatorSeries[e.detail.data.id].hide();
+            }
+        }
+    })
 
 }); // end am4core.ready()
+    
+    
+</script>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+});
 </script>
 
 
