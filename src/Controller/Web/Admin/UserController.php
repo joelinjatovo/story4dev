@@ -208,10 +208,11 @@ class UserController extends AbstractController
                 
                 $user = $entityManager->getRepository(User::class)->find($id);
                 if( $user && ! $user->isSuperAdmin() ){
-                    /*
-                    $user->setDeletedAt(new \DateTime());
-                    $entityManager->persist($user);
-                    */
+                    // give all project to the current superadmin
+                    foreach($user->getProjects() as $project){
+                        $project->setAuthor($this->getUser());
+                        $entityManager->persist($project);
+                    }
                     $entityManager->remove($user);
                     $entityManager->flush();
                     
