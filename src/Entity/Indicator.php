@@ -74,19 +74,21 @@ class Indicator
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="indicator", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "indicator", "project", "activity"})
      */
     private $goals;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="indicator", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full"})
      */
     private $results;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\IndicatorMeta", mappedBy="indicator", orphanRemoval=true)
-     * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"meta_indicator"})
      */
     protected $metas;

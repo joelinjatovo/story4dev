@@ -126,25 +126,28 @@ class Project
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "project"})
      */
     private $activities;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Iteration", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "project"})
      */
     private $iterations;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProjectContribution", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "project"})
      */
     private $contributions;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\ProjectMeta", mappedBy="project", orphanRemoval=true)
-     * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "meta_project"})
      */
     protected $metas;

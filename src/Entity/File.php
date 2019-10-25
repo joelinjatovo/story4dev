@@ -83,6 +83,7 @@ class File
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ActivityFile", mappedBy="file", orphanRemoval=true)
+     * @ORM\JoinColumn(name="file_id", referencedColumnName="id", onDelete="cascade")
      */
     private $activityFiles;
 

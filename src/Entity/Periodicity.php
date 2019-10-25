@@ -58,7 +58,7 @@ class Periodicity
     private $author;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="periodicity", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="periodicity", fetch="EXTRA_LAZY")
      * @Groups({"full"})
      */
     private $projects;

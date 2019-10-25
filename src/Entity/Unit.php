@@ -58,7 +58,7 @@ class Unit
     private $author;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="activity", fetch="EXTRA_LAZY")
      * @Groups({"full", "unit"})
      */
     private $indicators;

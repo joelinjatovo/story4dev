@@ -71,6 +71,7 @@ class Iteration
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="iteration", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="iteration_id", referencedColumnName="id", onDelete="cascade")
      */
     private $goals;
 

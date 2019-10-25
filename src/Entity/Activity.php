@@ -101,31 +101,35 @@ class Activity
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "activity", "project"})
      */
     private $indicators;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ActivityContribution", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full"})
      */
     private $contributions;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ActivityFile", mappedBy="activity", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "activity", "project"})
      */
     private $activityFiles;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="activity", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "activity", "project"})
      */
     private $reports;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\ActivityMeta", mappedBy="activity", orphanRemoval=true)
-     * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"meta_activity"})
      */
     protected $metas;
