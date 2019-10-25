@@ -106,19 +106,18 @@
                             <span class="kt-menu__arrow"></span>
                             <div class="kt-menu__wrapper">
                                 <ul class="kt-menu__subnav">
-                                    <li class="kt-menu__item" aria-haspopup="true" ><a href="{{ url( 'admin_settings_index') }}" class="kt-menu__link "><span class="kt-menu__link-text">Paramètres</span></a></li>
+                                    <li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true" ><span class="kt-menu__link"><span class="kt-menu__link-text">Paramètres</span></span></li>
+                                    <li class="kt-menu__item" aria-haspopup="true" ><a href="{{ url( 'admin_settings_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-gear"></i><span class="kt-menu__link-text">Général</span></a></li>
 
                                     <li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true" ><span class="kt-menu__link"><span class="kt-menu__link-text">Ajouter</span></span></li>
-                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_user_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-user"></i><span class="kt-menu__link-text">Utilisateur</span></a></li>
-                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_project_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-commenting"></i><span class="kt-menu__link-text">Projet</span></a></li>
-                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_unit_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-coffee"></i><span class="kt-menu__link-text">Unité de mesure</span></a></li>
-                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_periodicity_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-coffee"></i><span class="kt-menu__link-text">Périodicité</span></a></li>
+                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_unit_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-connectdevelop"></i><span class="kt-menu__link-text">Unité de mesure</span></a></li>
+                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_periodicity_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-calendar"></i><span class="kt-menu__link-text">Périodicité</span></a></li>
                                 
                                     <li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"  data-ktmenu-link-redirect="1"><span class="kt-menu__link"><span class="kt-menu__link-text">Utilisateurs</span></span></li>
-                                    <li class="kt-menu__item" aria-haspopup="true"  data-ktmenu-link-redirect="1"><a  href="/admin/users" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tous</span></a></li>
+                                    <li class="kt-menu__item" aria-haspopup="true"  data-ktmenu-link-redirect="1"><a  href="{{ path('admin_user_list') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">Tous</span></a></li>
                                     <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true"  data-ktmenu-submenu-toggle="click" data-ktmenu-submenu-mode="accordion">
                                         <a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
-                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                            <i class="kt-menu__link-icon la la-list"></i>
                                             <span class="kt-menu__link-text">Statut</span>
                                             <i class="kt-menu__ver-arrow la la-angle-right"></i>
                                         </a>
@@ -132,13 +131,15 @@
                                             </ul>
                                         </div>
                                     </li>
+                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_role', { role: 'admin'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">Administrateurs</span></a></li>
+                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_role', { role: 'user'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">Clients</span></a></li>
+                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_user_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-plus"></i><span class="kt-menu__link-text">Ajouter</span></a></li>
+                                    
+                                    <li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"  data-ktmenu-link-redirect="1"><span class="kt-menu__link"><span class="kt-menu__link-text">Projets</span></span></li>
+                                    <li class="kt-menu__item" aria-haspopup="true"  data-ktmenu-link-redirect="1"><a  href="{{ path('admin_project_list') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">Tous</span></a></li>
+                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_project_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-plus"></i><span class="kt-menu__link-text">Ajouter</span></a></li>
+                                   
 
-                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_role', { role: 'admin'} ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Administrateurs</span></a></li>
-                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_role', { role: 'user'} ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Clients</span></a></li>
-
-                                    <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom-1 kt-hidden" aria-haspopup="true" ><span class="kt-menu__link"><span class="kt-menu__link-text">Aides</span><span class="kt-menu__link-badge"></span></span></li>
-                                    <li class="kt-menu__item  kt-hidden" aria-haspopup="true" ><a  href="/faq" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">FAQ</span></a></li>
-                                    <li class="kt-menu__item  kt-hidden" aria-haspopup="true" ><a  href="/feedback" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Feedback</span></a></li>
                                 </ul>
                             </div>
                         </div>
