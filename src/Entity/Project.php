@@ -549,9 +549,11 @@ class Project
         $series = [];
         foreach($this->getActivities() as $activity){
             $title = $activity->getTitle();
+            /*
             if( strlen($title) > 25 ){
                 $title = substr($title, 0, 25).'...';
             }
+            */
             $series[] = [
                 'id'    => 'activity_'.$activity->getId(),
                 'title' => $title,
