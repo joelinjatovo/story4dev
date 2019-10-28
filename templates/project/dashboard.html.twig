@@ -187,8 +187,19 @@
                     </h3>
                 </div>
             </div>
-            <div class="kt-portlet__body kt-portlet__body--fluid">
-                 <div id="chartdiv" style="width: 100%; height: 400px;"></div>
+            <div class="kt-portlet__body">
+                <div class="form-group form-group-last row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <select class="form-control kt-select2" id="select_activity"  multiple="multiple">
+                            {% set i = 1 %}
+                            {% for serie in _series %}
+                                <option value="{{ i }}">{{ serie.title }}</option>
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div id="chartdiv" style="width: 100%; height: 400px;"></div>
             </div>
         </div>
     </div>
@@ -294,43 +305,29 @@ am4core.ready(function() {
             bullet3.circle.strokeWidth = 2;
             bullet3.circle.fill = am4core.color("#fff");
 
-    var _series = {{ series|raw }};
-    jQuery.each(_series, function(index, value) {
-        var series4 = chart.series.push(new am4charts.LineSeries());
-        series4.dataFields.valueY = value.id;
-        series4.dataFields.categoryX = "iteration";
-        series4.name = value.title;
-        series4.strokeWidth = 2;
-        series4.tensionX = 0.7;
-        series4.yAxis = valueAxis2;
-        series4.tooltipText = "{name}\n[bold font-size: 20]{valueY}%[/]";
-        //series4.stroke = chart.colors.getIndex(0).lighten(0.5);
-        //series4.strokeDasharray = "3,3";
-        series4.hidden = true;
+    var activitySeries = [];
+    var _seriesIndex = {{ series|raw }};
+    
+    jQuery.each(_seriesIndex, function(index, value) {
+        index++;
+        activitySeries[index] = chart.series.push(new am4charts.LineSeries());
+        activitySeries[index].dataFields.valueY = value.id;
+        activitySeries[index].dataFields.categoryX = "iteration";
+        activitySeries[index].name = value.title;
+        activitySeries[index].strokeWidth = 2;
+        activitySeries[index].tensionX = 0.7;
+        activitySeries[index].yAxis = valueAxis2;
+        activitySeries[index].tooltipText = "{name}\n[bold font-size: 20]{valueY}%[/]";
+        //activitySeries[index].stroke = chart.colors.getIndex(0).lighten(0.5);
+        //indicatorSeries[index].strokeDasharray = "3,3";
+        activitySeries[index].hidden = true;
+        activitySeries[index].hiddenInLegend = true; 
 
-        var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
+        var bullet4 = activitySeries[index].bullets.push(new am4charts.CircleBullet());
             bullet4.circle.radius = 3;
             bullet4.circle.strokeWidth = 2;
             bullet4.circle.fill = am4core.color("#fff");
     });
-    
-    /*
-    var series5 = chart.series.push(new am4charts.LineSeries());
-        series5.dataFields.valueY = "report";
-        series5.dataFields.categoryX = "iteration";
-        series5.name = "Nombre de rapport";
-        series5.strokeWidth = 2;
-        series5.tensionX = 0.7;
-        series5.yAxis = valueAxis2;
-        series5.tooltipText = "{name}\n[bold font-size: 18]{valueY}[/]";
-        series5.stroke = chart.colors.getIndex(0).lighten(0.5);
-        series5.strokeDasharray = "3,3";
-
-        var bullet5 = series5.bullets.push(new am4charts.CircleBullet());
-            bullet5.circle.radius = 3;
-            bullet5.circle.strokeWidth = 2;
-            bullet5.circle.fill = am4core.color("#fff");
-    */
     
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -338,14 +335,25 @@ am4core.ready(function() {
     // Add legend
     chart.legend = new am4charts.Legend();
     chart.legend.position = "top";
-
-    // Add scrollbar
-    /*
-    chart.scrollbarX = new am4charts.XYChartScrollbar();
-    chart.scrollbarX.series.push(series1);
-    chart.scrollbarX.series.push(series3);
-    chart.scrollbarX.parent = chart.bottomAxesContainer;
-    */
+    
+    // Selector
+    jQuery("#select_activity").select2({placeholder:"Séléctionnez une activité"});
+    jQuery('#select_activity').on('change', function (evt) {
+      if (jQuery('#select_activity').select2('val') != null){
+           jQuery.each(activitySeries, function(index, activitySerie) {
+               if(activitySerie !== undefined ){
+                   activitySerie.hide();
+               }
+           });
+           var $datas = $('#select_activity').select2('data');
+           jQuery.each($datas, function(index, $data) {
+               var id = parseInt($data.id);
+               if(activitySeries[id] !== undefined ){
+                   activitySeries[id].show();
+               }
+           });
+      }
+    });
 
 }); // end am4core.ready()
     

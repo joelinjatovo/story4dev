@@ -63,6 +63,7 @@ class ProjectController extends AbstractController
             'users'   => $users,
             'count'   => $count,
             'data'    => json_encode($data),
+            '_series' => $series,
             'series'   => json_encode($series),
             'filesCount'         => count($files),
             'files'              => $files,

@@ -136,6 +136,7 @@ class ActivityController extends AbstractController
             'activity' => $activity, 
             'reports'  => $reports, 
             'data'     => json_encode($data),
+            '_series'  => $series,
             'series'   => json_encode($series),
         ]);
     }

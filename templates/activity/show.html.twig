@@ -182,19 +182,19 @@
                         Statistiques
                     </h3>
                 </div>
-            </div><div class="kt-portlet__body">
+            </div>
+            <div class="kt-portlet__body">
                 <div class="form-group form-group-last row">
-                    <label class="col-form-label col-lg-3 col-sm-12">Whitelist examples</label>
-                    <div class="col-lg-6 col-md-9 col-sm-12">
-                        <input id="kt_tagify_2" placeholder='type...' value='Back to the Future, Whiplash' autofocus data-blacklist='.NET,PHP'>
-
-                        <div class="kt-margin-t-10">
-                            In this example, the field is pre-ocupied with 3 tags, and last tag is not included in the whitelist, and will be removed because the enforceWhitelist option flag is set to true
-                        </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <select class="form-control kt-select2" id="select_indicator"  multiple="multiple">
+                            {% set i = 1 %}
+                            {% for serie in _series %}
+                                <option value="{{ i }}">{{ serie.title }}</option>
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
-            </div>
-            <div class="kt-portlet__body kt-portlet__body--fluid">
                 <div id="chartdiv" style="width: 100%; height: 400px;"></div>
             </div>
         </div>
@@ -377,31 +377,28 @@ am4core.ready(function() {
             bullet3.circle.strokeWidth = 2;
             bullet3.circle.fill = am4core.color("#fff");
 
-    var whitelist = [];
     var indicatorSeries = [];
     var _seriesIndex = {{ series|raw }};
+    
     jQuery.each(_seriesIndex, function(index, value) {
-        whitelist.push({value:value.title, id:index});
-        
-        var series4 = chart.series.push(new am4charts.LineSeries());
-        series4.dataFields.valueY = value.id;
-        series4.dataFields.categoryX = "iteration";
-        series4.name = value.title;
-        series4.strokeWidth = 2;
-        series4.tensionX = 0.7;
-        series4.yAxis = valueAxis2;
-        series4.tooltipText = "{name}\n[bold font-size: 20]{valueY}%[/]";
-        //series4.stroke = chart.colors.getIndex(0).lighten(0.5);
-        //series4.strokeDasharray = "3,3";
-        series4.hidden = true;
-        series4.hiddenInLegend = true; 
+        index++;
+        indicatorSeries[index] = chart.series.push(new am4charts.LineSeries());
+        indicatorSeries[index].dataFields.valueY = value.id;
+        indicatorSeries[index].dataFields.categoryX = "iteration";
+        indicatorSeries[index].name = value.title;
+        indicatorSeries[index].strokeWidth = 2;
+        indicatorSeries[index].tensionX = 0.7;
+        indicatorSeries[index].yAxis = valueAxis2;
+        indicatorSeries[index].tooltipText = "{name}\n[bold font-size: 20]{valueY}%[/]";
+        //indicatorSeries[index].stroke = chart.colors.getIndex(0).lighten(0.5);
+        //indicatorSeries[index].strokeDasharray = "3,3";
+        indicatorSeries[index].hidden = true;
+        indicatorSeries[index].hiddenInLegend = true; 
 
-        var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
+        var bullet4 = indicatorSeries[index].bullets.push(new am4charts.CircleBullet());
             bullet4.circle.radius = 3;
             bullet4.circle.strokeWidth = 2;
             bullet4.circle.fill = am4core.color("#fff");
-        
-        indicatorSeries.push(series4);
     });
     
     // Add cursor
@@ -412,30 +409,29 @@ am4core.ready(function() {
     chart.legend.position = "top";
     
     // Selector
-    e=document.getElementById("kt_tagify_2"),
-    new Tagify(e,{
-        enforceWhitelist:!0,
-        whitelist:whitelist,
-        callbacks:{
-            add:function(e){
-                console.log(e);
-                indicatorSeries[e.detail.data.id].show();
-            },
-            remove:function(e){
-                console.log(e);
-                indicatorSeries[e.detail.data.id].hide();
-            }
-        }
-    })
+    jQuery("#select_indicator").select2({placeholder:"Séléctionnez un indicateur"});
+    jQuery('#select_indicator').on('change', function (evt) {
+      if (jQuery('#select_indicator').select2('val') != null){
+           jQuery.each(indicatorSeries, function(index, indicatorSerie) {
+               if(indicatorSerie !== undefined ){
+                   indicatorSerie.hide();
+               }
+           });
+           var $datas = $('#select_indicator').select2('data');
+           jQuery.each($datas, function(index, $data) {
+               var id = parseInt($data.id);
+               if(indicatorSeries[id] !== undefined ){
+                   indicatorSeries[id].show();
+               }
+           });
+      }
+    });
 
 }); // end am4core.ready()
-    
     
 </script>
 <script type="text/javascript">
 jQuery(document).ready(function($){
 });
 </script>
-
-
 {% endblock %}
