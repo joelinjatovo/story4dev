@@ -12,6 +12,7 @@
         "friendsofsymfony/ckeditor-bundle": "^2.1",
         "friendsofsymfony/rest-bundle": "^2.5",
         "gesdinet/jwt-refresh-token-bundle": "^0.7.1",
+        "intervention/image": "^2.5",
         "jms/serializer-bundle": "^3.4",
         "khanzadimahdi/uploadmanager": "^1.0",
         "knplabs/knp-gaufrette-bundle": "^0.6.1",

@@ -192,6 +192,9 @@
     "hoa/zformat": {
         "version": "1.17.01.10"
     },
+    "intervention/image": {
+        "version": "2.5.0"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
