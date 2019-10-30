@@ -1,5 +1,3 @@
-
-
 <div style="visibility:hidden; opacity:0; display: none;" class="dropzone-container" aria-modal="true" role="dialog">
     <button class="btn-close" type="button" aria-label="Close Modal" title="Close Modal"><span aria-hidden="true">×</span></button>
     <div class="file-selector-inner">
@@ -8,13 +6,13 @@
                 <div class="kt-portlet__head-toolbar">
                     <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x nav-tabs-line-right" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#kt_portlet_base_demo_2_3_tab_content" role="tab">
-                                <i class="fa fa-calendar-check-o" aria-hidden="true"></i>Upload
+                            <a class="nav-link active" data-toggle="tab" href="#dropzone_upload" role="tab">
+                                <i class="fa fa-calendar-check-o" aria-hidden="true"></i>Téléchargement
                             </a>
                         </li>
-                        <li class="nav-item kt-hidden">
-                            <a class="nav-link" data-toggle="tab" href="#kt_portlet_base_demo_2_2_tab_content" role="tab">
-                                <i class="fa fa-bar-chart" aria-hidden="true"></i>Select
+                        <li class="nav-item">
+                            <a id="btn-dropzone-select" class="nav-link" data-toggle="tab" href="#dropzone_select" role="tab">
+                                <i class="fa fa-bar-chart" aria-hidden="true"></i>Selection
                             </a>
                         </li>
                     </ul>
@@ -22,7 +20,7 @@
             </div>
             <div class="kt-portlet__body" style="height: 100%;">
                 <div class="tab-content" style="height: 100%;">
-                    <div class="tab-pane active" id="kt_portlet_base_demo_2_3_tab_content" role="tabpanel" style="height: 100%;">
+                    <div class="tab-pane active" id="dropzone_upload" role="tabpanel" style="height: 100%;">
                         <div class="dropzone dropzone-default dropzone-success dz-clickable"  style="height: 100%;">
                             <div class="dropzone-msg dz-message needsclick">
                                 <h3 class="dropzone-msg-title">Drop files here or click to upload.</h3>
@@ -30,8 +28,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane kt-hidden" id="kt_portlet_base_demo_2_2_tab_content" role="tabpanel" style="height: 100%;">
-                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    <div class="tab-pane" id="dropzone_select" role="tabpanel" style="height: 100%;">
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12">
+                                <div class="row" id="files-list">
+                                    <div class="col-xl-3 col-lg-3 col-md-6">
+                                        <div class="kt-portlet">
+                                            <div class="kt-portlet__body">
+                                                <div class="kt-widget__files">
+                                                    <div class="kt-widget__media">
+                                                        <a href="/uploads/file/5daf5e85147c1_name.png" data-toggle="lightbox" data-gallery="gallery"><img class="kt-widget__img kt-hidden-" src="/uploads/file/5daf5e85147c1_name.png" alt="image"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>      
             </div>

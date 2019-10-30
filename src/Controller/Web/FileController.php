@@ -59,6 +59,19 @@ class FileController extends AbstractController
 
         $files = $paginator->paginate($query);
         
+        if ( $request->isXmlHttpRequest() ) {
+            return $this->json([
+                'success' => true,
+                'title' => 'Ajax Error',
+                'message' => 'here',
+                'html' => $this->renderView('file/list.html.twig', [
+                    'files'    => $files,
+                    'user'     => $user,
+                    'project'  => null,
+                    'projects' => $projects,
+                ]),
+            ]);
+        }
         return $this->render('file/list.html.twig', [
             'files'    => $files,
             'user'     => $user,
