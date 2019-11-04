@@ -27,12 +27,18 @@ class ActivityRepository extends ServiceEntityRepository
             ->getQuery();
     }
     
-    public function findByProject(Project $project)
+    public function findByProject(Project $project, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
     {
-        return $this->createQueryBuilder('a')
+        $queryBuilder = $this->createQueryBuilder('a')
             ->where('a.project = :project')
             ->setParameter('project', $project)
-            ->getQuery();
+            ->orderBy('a.'.$orderBy, $order);
+        
+        if($limit > 0){
+            $queryBuilder->setMaxResults($limit);
+        }
+        
+        return $queryBuilder->getQuery();
     }
 
     // /**

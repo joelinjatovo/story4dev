@@ -20,6 +20,7 @@ use App\Entity\Meta\ProjectMeta;
 use App\Form\ProjectType;
 use App\Service\FormError;
 use App\Service\PaginatorService;
+use App\Helper\ProjectHelper;
 
 /** 
  * @Route(name="project_")
@@ -28,6 +29,8 @@ use App\Service\PaginatorService;
  */
 class ProjectController extends AbstractController
 {
+    const RECENT_ITEMS_COUNT = 10;
+    
     /**
      * @Route("/project/{id}/dashboard", name="dashboard", methods="GET", requirements={"id"="\d+"})
      * @Entity("project", options={"mapping": {"id": "id"}})
@@ -82,14 +85,26 @@ class ProjectController extends AbstractController
         $user = $project->getAuthor();
 
         $entityManager = $this->getDoctrine()->getManager();
-        $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
+        $activities = $entityManager->getRepository(Activity::class)
+            ->findByProject($project, 'createdAt', 'DESC', $project->getMeta('recent_activity_count', self::RECENT_ITEMS_COUNT))
+            ->execute();
+        $reports = $entityManager->getRepository(Report::class)
+            ->findByProject($project, null, 'createdAt', 'DESC', $project->getMeta('recent_report_count', self::RECENT_ITEMS_COUNT))
+            ->execute();
+        $contributions = $entityManager->getRepository(User::class)
+            ->findByProject($project, 'createdAt', 'DESC', $project->getMeta('recent_contribution_count', self::RECENT_ITEMS_COUNT))
+            ->execute();
         $data   =  $project->getData();
         $series =  $project->getSerie();
         
         return $this->render('project/show.html.twig', [
             'user'          => $user, 
             'project'       => $project, 
-            'reports'       => $reports,
+            'recent'        => [
+                'activities'    => $activities,
+                'reports'       => $reports,
+                'contributions' => $contributions,
+            ],
             'reports_count' => count($reports),  
             'data'          => json_encode($data),
             'series'        => json_encode($series),
@@ -100,17 +115,20 @@ class ProjectController extends AbstractController
      * @Route("/project/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
      * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function edit(Project $project)
+    public function edit(Project $project, ProjectHelper $projectHelper)
     {
         $this->denyAccessUnlessGranted('edit', $project);
         
         $user = $project->getAuthor();
 
-        $form = $this->createForm(ProjectType::class, $project);
+        $fields = $projectHelper->getMetaFields($project);
+        
+        $form = $this->createForm(ProjectType::class, $project, ['fields' => $fields]);
         
         return $this->render('project/edit.html.twig', [
             'user'    => $user, 
             'project' => $project, 
+            'fields'  => $fields,
             'form'    => $form->createView()
         ]);
     }
@@ -119,7 +137,7 @@ class ProjectController extends AbstractController
      * @Route("/project/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
      * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function update(Project $project, Request $request, FormError $formError)
+    public function update(Project $project, Request $request, FormError $formError, ProjectHelper $projectHelper)
     {
         $this->denyAccessUnlessGranted('edit', $project);
         
@@ -130,7 +148,9 @@ class ProjectController extends AbstractController
             $originalIterations->add($iteration);
         }
         
-        $form = $this->createForm(ProjectType::class, $project);
+        $fields = $projectHelper->getMetaFields($project);
+        
+        $form = $this->createForm(ProjectType::class, $project, ['fields' => $fields]);
         
         $form->handleRequest($request);
         
@@ -167,38 +187,44 @@ class ProjectController extends AbstractController
             }
 
             $entityManager->persist($project);
+            
+            
 
             try{
-                $metakeys = [
-                    'header_bg_color',
+                $items = [
+                    'colors' => [
+                        'header_bg_color',
+                    ],
                 ];
-                $colors = $request->request->get('colors');
-                foreach($colors as $metakey => $color ){
-                    if( ! in_array($metakey, $metakeys) ){
-                        continue;
-                    }
-
-                    if(strlen($color) > 8 ){
-                        continue;
-                    }
-
-                    $found = false;
-                    foreach($project->getMetas() as $meta){
-                        if($meta->getMetaKey() === $metakey ){
-                            $found = true;
-                            break;
+                foreach($items as $key => $metakeys ){
+                    $posts = $request->request->get($key);
+                    foreach($posts as $metakey => $metavalue ){
+                        if( ! in_array($metakey, $metakeys) ){
+                            continue;
                         }
+
+                        if(strlen($metavalue) > 8 ){
+                            continue;
+                        }
+
+                        $found = false;
+                        foreach($project->getMetas() as $meta){
+                            if($meta->getMetaKey() === $metakey ){
+                                $found = true;
+                                break;
+                            }
+                        }
+
+                        if( ! $found || ! $meta ) {
+                            $meta = new ProjectMeta();
+                            $meta->setProject($project);
+                            $meta->setMetaKey($metakey);
+                        }
+
+                        $meta->setMetaValue($metavalue);
+
+                        $entityManager->persist($meta);
                     }
-
-                    if( ! $found || ! $meta ) {
-                        $meta = new ProjectMeta();
-                        $meta->setProject($project);
-                        $meta->setMetaKey($metakey);
-                    }
-
-                    $meta->setMetaValue($color);
-
-                    $entityManager->persist($meta);
                 }
             }catch(\Exception $e){
             }
@@ -258,13 +284,13 @@ class ProjectController extends AbstractController
                     ]);
                 }
             }
-            
-            return $this->json([
-                'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
-            ]);
         }
+            
+        return $this->json([
+            'success' => false,
+            'title'   => 'Invalid Request',
+            'message' => 'An error was occured. :)',
+        ]);
     }
     
     /**

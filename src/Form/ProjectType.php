@@ -78,12 +78,27 @@ class ProjectType extends AbstractType
                 'label' => 'Save project'
             ])
         ;
+        
+        $fields = isset($options['fields'])?$options['fields']:null;
+        if( is_array( $fields ) ) {
+            foreach($fields as $group => $metas){
+                $type = $metas['form_type'];
+                unset($metas['form_type']);
+                foreach($metas as $key => $values){
+                    $builder->add( $group.'_'.$key, $type, [
+                        'mapped' => false,
+                        'datas'  => $values,
+                    ]);
+                }
+            }
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Project::class,
+            'fields'     => null,
         ]);
     }
 }

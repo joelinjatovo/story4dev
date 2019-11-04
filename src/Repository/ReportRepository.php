@@ -65,24 +65,23 @@ class ReportRepository extends ServiceEntityRepository
             ->getQuery();
     }
     
-    public function findByProject(Project $project, ?User $user = null)
+    public function findByProject(Project $project, ?User $user = null, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
     {
+        $queryBuilder = $this->createQueryBuilder('r');
+        $queryBuilder->leftJoin('r.activity', 'a');
+        $queryBuilder->andWhere('a.project = :project')->setParameter('project', $project);
+        $queryBuilder->orderBy('r.'.$orderBy, $order);
+        
         if($user){
-            return $this->createQueryBuilder('r')
-                ->leftJoin('r.activity', 'a')
-                ->where('a.project = :project AND r.author = :user')
-                ->setParameter('project', $project)
-                ->setParameter('user', $user)
-                ->orderBy('r.createdAt', 'DESC')
-                ->getQuery();
+            $queryBuilder->where('r.author = :user');
+            $queryBuilder->setParameter('user', $user);
         }
         
-        return $this->createQueryBuilder('r')
-            ->leftJoin('r.activity', 'a')
-            ->where('a.project = :project')
-            ->setParameter('project', $project)
-            ->orderBy('r.createdAt', 'DESC')
-            ->getQuery();
+        if($limit > 0){
+            $queryBuilder->setMaxResults($limit);
+        }
+        
+        return $queryBuilder->getQuery();
     }
     
     public function findByContribution(Project $project, User $user)

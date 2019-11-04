@@ -94,6 +94,21 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->getOneOrNullResult();
     }
     
+    public function findByProject(Project $project, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
+    {
+        $queryBuilder = $this->createQueryBuilder('u')
+            ->join('u.projectContributions', 'c')
+            ->where('c.project = :project')
+            ->setParameter('project', $project)
+            ->orderBy('c.'.$orderBy, $order);
+        
+        if($limit > 0){
+            $queryBuilder->setMaxResults($limit);
+        }
+        
+        return $queryBuilder->getQuery();
+    }
+    
     public function findAuthorAndContrubitors(Project $project)
     {
         return $this->createQueryBuilder('u')

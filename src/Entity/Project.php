@@ -128,6 +128,7 @@ class Project
      * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="project", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "project"})
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $activities;
 
