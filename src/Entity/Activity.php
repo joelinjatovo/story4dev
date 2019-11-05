@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\EntityNotFoundException;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -87,6 +88,7 @@ class Activity
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="activities")
+     * @ORM\JoinColumn(nullable=true)
      * @Gedmo\Versioned
      * @Groups({"full"})
      */
@@ -94,6 +96,7 @@ class Activity
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="activities")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"full"})
      */
@@ -101,35 +104,30 @@ class Activity
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "activity", "project"})
      */
     private $indicators;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ActivityContribution", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full"})
      */
     private $contributions;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ActivityFile", mappedBy="activity", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "activity", "project"})
      */
     private $activityFiles;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="activity", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "activity", "project"})
      */
     private $reports;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\ActivityMeta", mappedBy="activity", orphanRemoval=true)
-     * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"meta_activity"})
      */
     protected $metas;
@@ -417,23 +415,25 @@ class Activity
     public function getData()
     {
         $datas = [];
-        if($this->getProject()){
-            foreach($this->getProject()->getIterations() as $iteration){
-                $data = [
-                    "iteration"   => $iteration->getTitle(),
-                    "value"       => $this->getValue($iteration),
-                    "goal"        => $this->getGoalValue($iteration),
-                    "report"      => $this->getReportsCount($iteration),
-                    "progression" => $this->getProgression($iteration),
-                ];
+        try{        
+            if($this->getProject()){
+                foreach($this->getProject()->getIterations() as $iteration){
+                    $data = [
+                        "iteration"   => $iteration->getTitle(),
+                        "value"       => $this->getValue($iteration),
+                        "goal"        => $this->getGoalValue($iteration),
+                        "report"      => $this->getReportsCount($iteration),
+                        "progression" => $this->getProgression($iteration),
+                    ];
 
-                foreach($this->getIndicators() as $indicator){
-                    $data['indicator_'.$indicator->getId()] = $indicator->getProgression($iteration);
+                    foreach($this->getIndicators() as $indicator){
+                        $data['indicator_'.$indicator->getId()] = $indicator->getProgression($iteration);
+                    }
+
+                    $datas[] = $data;
                 }
-
-                $datas[] = $data;
             }
-        }
+        }catch(EntityNotFoundException $e){}
         
         return $datas;
     }

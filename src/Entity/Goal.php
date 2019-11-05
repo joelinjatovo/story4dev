@@ -52,6 +52,7 @@ class Goal
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Indicator", inversedBy="goals")
+     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"full", "goal"})
      */
@@ -59,7 +60,7 @@ class Goal
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Iteration", inversedBy="goals")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(name="iteration_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"full", "goal", "project", "activity"})
      */

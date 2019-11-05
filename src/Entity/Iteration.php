@@ -59,19 +59,20 @@ class Iteration
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="iterations")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      */
     private $author;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="iterations")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      */
     private $project;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="iteration", orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="iteration_id", referencedColumnName="id", onDelete="cascade")
      */
     private $goals;
 

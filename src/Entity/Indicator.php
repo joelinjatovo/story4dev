@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\EntityNotFoundException;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -53,6 +54,7 @@ class Indicator
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @ORM\JoinColumn(nullable=true)
      * @Gedmo\Versioned
      * @Groups({"full", "indicator"})
      */
@@ -60,6 +62,7 @@ class Indicator
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="indicators")
+     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"full", "indicator"})
      */
@@ -67,6 +70,7 @@ class Indicator
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Unit", inversedBy="indicators")
+     * @ORM\JoinColumn(name="unit_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"full", "indicator", "project", "activity"})
      */
@@ -74,21 +78,18 @@ class Indicator
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Goal", mappedBy="indicator", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "indicator", "project", "activity"})
      */
     private $goals;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="indicator", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full"})
      */
     private $results;
     
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meta\IndicatorMeta", mappedBy="indicator", orphanRemoval=true)
-     * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"meta_indicator"})
      */
     protected $metas;
@@ -270,9 +271,11 @@ class Indicator
         $value = 0;
         foreach($this->getGoals() as $goal){
             if($iteration){
-                if( $goal->getIteration() && ( $goal->getIteration()->getId() == $iteration->getId() ) ){
-                    $value += $goal->getValue();
-                }
+                try{
+                    if( $goal->getIteration() && ( $goal->getIteration()->getId() == $iteration->getId() ) ){
+                        $value += $goal->getValue();
+                    }
+                }catch(EntityNotFoundException $e){}
             }else{
                 $value += $goal->getValue();
             }
@@ -286,17 +289,21 @@ class Indicator
         if($iteration){
             foreach($this->getResults() as $result){
                 if($this->getCummulative()){
-                    // Get value below iteration end date
-                    if( $result->getReport() && ( $result->getReport()->getCreatedAt() < $iteration->getEndAt() ) ){
-                        $value += $result->getValue();
-                    }
+                    try{
+                        // Get value below iteration end date
+                        if( $result->getReport() && ( $result->getReport()->getCreatedAt() < $iteration->getEndAt() ) ){
+                            $value += $result->getValue();
+                        }
+                    }catch(EntityNotFoundException $e){}
                 }else{
-                    // Get value between iteration dates
-                    if( $result->getReport() && 
-                            ( $result->getReport()->getCreatedAt() >= $iteration->getStartAt() ) && 
-                            ( $result->getReport()->getCreatedAt() < $iteration->getEndAt() ) ) {
-                        $value += $result->getValue();
-                    }
+                    try{
+                        // Get value between iteration dates
+                        if( $result->getReport() && 
+                                ( $result->getReport()->getCreatedAt() >= $iteration->getStartAt() ) && 
+                                ( $result->getReport()->getCreatedAt() < $iteration->getEndAt() ) ) {
+                            $value += $result->getValue();
+                        }
+                    }catch(EntityNotFoundException $e){}
                 }
             }
         }else{
@@ -310,19 +317,22 @@ class Indicator
     public function getData()
     {
         $datas = [];
-        if( $this->getActivity() && $this->getActivity()->getProject() ){
-            foreach($this->getActivity()->getProject()->getIterations() as $iteration){
-                $data = [
-                    "iteration"   => $iteration->getTitle(),
-                    "unit"        => $this->getUnit()->getTitle(),
-                    "value"       => $this->getValue($iteration),
-                    "goal"        => $this->getGoalValue($iteration),
-                    "progression" => $this->getProgression($iteration),
-                ];
 
-                $datas[] = $data;
+        try{
+            if( $this->getActivity() && $this->getActivity()->getProject() ){
+                foreach($this->getActivity()->getProject()->getIterations() as $iteration){
+                    $data = [
+                        "iteration"   => $iteration->getTitle(),
+                        "unit"        => $this->getUnit()->getTitle(),
+                        "value"       => $this->getValue($iteration),
+                        "goal"        => $this->getGoalValue($iteration),
+                        "progression" => $this->getProgression($iteration),
+                    ];
+
+                    $datas[] = $data;
+                }
             }
-        }
+        }catch(EntityNotFoundException $e){}
         
         return $datas;
     }

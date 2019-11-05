@@ -19,11 +19,13 @@ class FileTag
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\File", inversedBy="filesTags")
+     * @ORM\JoinColumn(name="file_id", referencedColumnName="id", onDelete="cascade")
      */
     private $file;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Tag", inversedBy="filesTags")
+     * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", onDelete="cascade")
      */
     private $tag;
 

@@ -53,6 +53,7 @@ class ProjectContribution
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projectContributions")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"project"})
      */
@@ -60,6 +61,7 @@ class ProjectContribution
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="contributions")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"user"})
      */

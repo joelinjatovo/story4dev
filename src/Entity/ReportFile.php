@@ -27,20 +27,20 @@ class ReportFile
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\File", inversedBy="activityFiles")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="file_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "activity", "project", "report"})
      */
     private $file;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="activityFiles")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade", nullable=true)
      */
     private $activity;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Report", inversedBy="reportFiles")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="cascade")
      */
     private $report;
 

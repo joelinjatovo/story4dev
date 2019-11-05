@@ -52,6 +52,7 @@ class Periodicity
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @ORM\JoinColumn(nullable=true)
      * @Gedmo\Versioned
      * @Groups({"full"})
      */

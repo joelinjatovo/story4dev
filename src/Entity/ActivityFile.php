@@ -27,14 +27,14 @@ class ActivityFile
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\File", inversedBy="activityFiles")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="file_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "activity", "project"})
      */
     private $file;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="activityFiles")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      */
     private $activity;
 

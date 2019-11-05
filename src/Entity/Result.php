@@ -59,6 +59,7 @@ class Result
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="results")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"full", "report"})
      */
@@ -66,12 +67,14 @@ class Result
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Report", inversedBy="results")
+     * @ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      */
     private $report;
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Indicator", inversedBy="goals")
+     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"full", "report", "activity", "project"})
      */

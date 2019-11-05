@@ -31,6 +31,7 @@ class Tag
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="tags")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="cascade")
      */
     private $project;
 

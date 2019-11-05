@@ -111,7 +111,7 @@ class Project
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="cascade", nullable=false)
      * @Gedmo\Versioned
      * @Groups({"full"})
      */
@@ -119,6 +119,7 @@ class Project
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Periodicity", inversedBy="projects")
+     * @ORM\JoinColumn(nullable=true)
      * @Gedmo\Versioned
      * @Groups({"full", "project", "activity"})
      */

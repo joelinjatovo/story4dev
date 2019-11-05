@@ -44,6 +44,7 @@ class ActivityContribution
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="activityContributions")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"activity"})
      */
@@ -51,6 +52,7 @@ class ActivityContribution
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="contributions")
+     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"user"})
      */

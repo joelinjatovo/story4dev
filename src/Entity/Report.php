@@ -87,6 +87,7 @@ class Report
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reports")
+     * @ORM\JoinColumn(nullable=true)
      * @Gedmo\Versioned
      * @Groups({"full", "report", "activity", "project"})
      */
@@ -94,6 +95,7 @@ class Report
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="reports")
+     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
      * @Groups({"full", "report"})
      */
@@ -101,14 +103,12 @@ class Report
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="report", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "report", "activity", "project"})
      */
     private $results;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ReportFile", mappedBy="report", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="report_id", referencedColumnName="id", onDelete="cascade")
      * @Groups({"full", "report", "activity", "project"})
      */
     private $reportFiles;

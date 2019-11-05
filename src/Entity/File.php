@@ -99,6 +99,7 @@ class File
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="files")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $author;
 

@@ -32,12 +32,13 @@ class Download
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="downloads")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\File", inversedBy="downloads")
+     * @ORM\JoinColumn(name="file_id", referencedColumnName="id", onDelete="cascade")
      */
     private $file;
 

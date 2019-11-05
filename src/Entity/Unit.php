@@ -52,6 +52,7 @@ class Unit
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @ORM\JoinColumn(nullable=true)
      * @Gedmo\Versioned
      * @Groups({"full", "unit"})
      */
@@ -70,6 +71,7 @@ class Unit
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="units")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $project;
 
