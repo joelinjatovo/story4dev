@@ -50,7 +50,9 @@
                                         <i class="kt-nav__link-icon flaticon2-drop"></i>
                                         <span class="kt-nav__link-text">Activité</span>
                                     </a>
-                                </li>                        
+                                </li>
+                            {% endif %}
+                            {% if is_granted('create_indicator', activity) %}                     
                                 <li class="kt-nav__item">
                                     <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-new-email"></i>

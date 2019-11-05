@@ -46,7 +46,7 @@
                                 <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                             </li>
                             <li class="kt-nav__separator"></li>
-                            {% if is_granted('edit', activity) %}
+                            {% if is_granted('create_indicator', activity) %}
                                 <li class="kt-nav__item">
                                     <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-drop"></i>
@@ -251,7 +251,7 @@
                     <a href="{{ path('indicator_list', { activity_id : activity.id, project_id : activity.project.id } ) }}" class="btn btn-label-brand btn-bold btn-sm">
                         Tous
                     </a>
-                    {% if is_granted('edit', activity) %}
+                    {% if is_granted('create_indicator', activity) %}
                         <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="btn btn-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

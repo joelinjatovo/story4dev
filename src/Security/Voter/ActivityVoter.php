@@ -4,6 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\Activity;
 use App\Entity\User;
+use App\Entity\Indicator;
 use App\Entity\ProjectContribution;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -15,6 +16,7 @@ class ActivityVoter extends Voter
     const VIEW   = 'view';
     const EDIT   = 'edit';
     const REMOVE = 'remove';
+    const CREATE_INDICATOR = 'create_indicator';
 
     private $security;
     private $em;
@@ -28,7 +30,7 @@ class ActivityVoter extends Voter
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::VIEW, self::EDIT, self::REMOVE])) {
+        if (!in_array($attribute, [self::VIEW, self::EDIT, self::REMOVE, self::CREATE_INDICATOR])) {
             return false;
         }
 
@@ -65,6 +67,8 @@ class ActivityVoter extends Voter
                 return $this->canEdit($activity, $user);
             case self::REMOVE:
                 return $this->canRemove($activity, $user);
+            case self::CREATE_INDICATOR:
+                return $this->canCreateIndicator($activity, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
@@ -122,5 +126,23 @@ class ActivityVoter extends Voter
     private function canRemove(Activity $activity, User $user)
     {
         return $this->canEdit($activity, $user);
+    }
+
+    private function canCreateIndicator(Activity $activity, User $user)
+    {
+        if( $this->canEdit($activity, $user) ) {
+            
+            $project = $activity->getProject();
+            if( ! $project ){
+                return false;
+            }
+            
+            $quotas = $project->getMeta('quotas_indicator', 10000);
+            $indicators = $this->em->getRepository(Indicator::class)->createQueryBuilder('i')->select('count(i.id)')->leftJoin('i.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
+
+            return ( $quotas >= $indicators );
+        }
+        
+        return false;
     }
 }

@@ -37,7 +37,7 @@ class IndicatorController extends AbstractController
      */
     public function index(Project $project, Activity $activity)
     {
-        $this->denyAccessUnlessGranted('edit', $activity);
+        $this->denyAccessUnlessGranted('create_indicator', $activity);
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
@@ -71,7 +71,7 @@ class IndicatorController extends AbstractController
      */
     public function create(Project $project, Activity $activity, Request $request, FormError $formError)
     {
-        $this->denyAccessUnlessGranted('edit', $activity);
+        $this->denyAccessUnlessGranted('create_indicator', $activity);
         
         if($activity->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
