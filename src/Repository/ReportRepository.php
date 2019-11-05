@@ -48,21 +48,21 @@ class ReportRepository extends ServiceEntityRepository
             ->getQuery();
     }
     
-    public function findByActivity(Activity $activity, ?User $user = null)
+    public function findByActivity(Activity $activity, ?User $user = null, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
     {
+        $queryBuilder = $this->createQueryBuilder('r');
+        $queryBuilder->andWhere('r.activity = :activity')->setParameter('activity', $activity);
+        $queryBuilder->orderBy('r.'.$orderBy, $order);
+        
         if($user){
-            return $this->createQueryBuilder('r')
-                ->where('r.activity = :activity AND r.author = :user')
-                ->setParameter('activity', $activity)
-                ->setParameter('user', $user)
-                ->orderBy('r.createdAt', 'DESC')
-                ->getQuery();
+            $queryBuilder->andWhere('r.author = :user')->setParameter('user', $user);
         }
-        return $this->createQueryBuilder('r')
-            ->where('r.activity = :activity')
-            ->setParameter('activity', $activity)
-            ->orderBy('r.createdAt', 'DESC')
-            ->getQuery();
+        
+        if($limit > 0){
+            $queryBuilder->setMaxResults($limit);
+        }
+        
+        return $queryBuilder->getQuery();
     }
     
     public function findByProject(Project $project, ?User $user = null, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
@@ -73,8 +73,7 @@ class ReportRepository extends ServiceEntityRepository
         $queryBuilder->orderBy('r.'.$orderBy, $order);
         
         if($user){
-            $queryBuilder->where('r.author = :user');
-            $queryBuilder->setParameter('user', $user);
+            $queryBuilder->andWhere('r.author = :user')->setParameter('user', $user);
         }
         
         if($limit > 0){

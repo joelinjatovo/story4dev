@@ -85,6 +85,18 @@
         </div>
     </div>
 </div>
+    
+<div class="row">
+    <div class="col-xl-12">       
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <div class="kt-pagination kt-pagination--brand">
+                    {{ include('_common/pagination.html.twig', {'pagination': contributions}) }}
+                </div>
+            </div>
+        </div>
+    </div>           
+</div>
 {% endblock %}
 
 {% block javascripts %}

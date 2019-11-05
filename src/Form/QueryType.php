@@ -12,27 +12,23 @@ class QueryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $datas = isset($options['datas'])&&is_array($options['datas'])?$options['datas']:['order_by'=>'createdAt','order'=>'ASC','count'=>10];
-        
         $builder
             ->add('order_by', ChoiceType::class, [
-                'placeholder' => 'Choisissez une option',
+                'placeholder' => 'Choisissez le champs à trier',
                 'choices'  => [
                     'Date' => 'createdAt',
                     'Titre' => 'title',
                 ],
-                'data'  => $datas['order_by'],
             ])
             ->add('order', ChoiceType::class, [
-                'placeholder' => 'Choisissez une option',
+                'placeholder' => 'Choisissez l\'ordre du tri',
                 'choices'  => [
                     'Croissant'   => 'ASC',
                     'Décroissant' => 'DESC',
                 ],
-                'data'  => $datas['order_by'],
             ])
             ->add('count', NumberType::class, [
-                'data'  => $datas['count'],
+                //'placeholder' => 'Nombre maximal à afficher',
             ])
         ;
     }
@@ -40,7 +36,6 @@ class QueryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'datas' => null
             // Configure your form options here
         ]);
     }

@@ -84,12 +84,18 @@ class ProjectType extends AbstractType
             foreach($fields as $group => $metas){
                 $type = $metas['form_type'];
                 unset($metas['form_type']);
-                foreach($metas as $key => $values){
-                    $builder->add( $group.'_'.$key, $type, [
-                        'mapped' => false,
-                        'datas'  => $values,
-                    ]);
-                }
+                
+                $builder->add($group, CollectionType::class, [
+                    'entry_type' => $type,
+                    'entry_options' => [
+                        //'label' => false
+                    ],
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                    'mapped' => false,
+                    'data' => $metas['data'],
+                ]);
             }
         }
     }

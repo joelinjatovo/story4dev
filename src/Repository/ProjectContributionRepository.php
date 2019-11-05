@@ -6,6 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use App\Entity\ProjectContribution;
+use App\Entity\Project;
 
 /**
  * @method Contributor|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,5 +19,19 @@ class ProjectContributionRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, ProjectContribution::class);
+    }
+    
+    public function findByProject(Project $project, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
+    {
+        $queryBuilder = $this->createQueryBuilder('pc')
+            ->where('pc.project = :project')
+            ->setParameter('project', $project)
+            ->orderBy('pc.'.$orderBy, $order);
+        
+        if($limit > 0){
+            $queryBuilder->setMaxResults($limit);
+        }
+        
+        return $queryBuilder->getQuery();
     }
 }

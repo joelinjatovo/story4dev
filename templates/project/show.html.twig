@@ -85,7 +85,7 @@
 
 {% block content %}
 <!--begin:: Portlet-->
-<div class="kt-portlet header_bg_color" style="background-color: {{ project.meta('header_bg_color', '#ffffff') }}">
+<div class="kt-portlet header_bg_color" style="background-color: {{ project.meta('colors_header_bg', '#ffffff') }}">
     <div class="kt-portlet__body">
         <div class="kt-widget kt-widget--user-profile-3">
             <div class="kt-widget__top">
@@ -176,7 +176,7 @@
 
 {% if project.description is not empty %}
 <!--begin:: Portlet-->
-<div class="kt-portlet description_bg_color" style="background-color: {{ project.meta('description_bg_color', '#ffffff') }};">
+<div class="kt-portlet description_bg_color" style="background-color: {{ project.meta('colors_description_bg', '#ffffff') }};">
     <div class="kt-portlet__body kt-portlet__body--fit">
         <div class="kt-widget kt-widget--project-1">
             <div class="kt-widget__body">
@@ -231,7 +231,7 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <a href="{{ path('activity_list', { 'project_id' : project.id } ) }}">
-                        <h3 class="kt-portlet__head-title">Activities</h3>
+                        <h3 class="kt-portlet__head-title">Activités</h3>
                     </a>
                 </div>
                 <div class="kt-portlet__head-toolbar">

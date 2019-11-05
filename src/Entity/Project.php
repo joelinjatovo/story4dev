@@ -403,6 +403,29 @@ class Project
         return $default;
     }
     
+    public function updateMeta(string $metakey, $value): ProjectMeta
+    {
+        $found = false;
+        $metas = $this->getMetas();
+        foreach($metas as $meta){
+            if($meta->getMetaKey() === $metakey){
+                $found = true;
+                break;
+            }
+        }
+
+        if( ! $found || ! $meta ) {
+            $meta = new ProjectMeta();
+            $meta->setMetaKey($metakey);
+            $meta->setMetaValue($value);
+            $this->addMeta($meta);
+        }else{
+            $meta->setMetaValue($value);
+        }
+
+        return $meta;
+    }
+    
     public function getMetas(): ?Collection
     {
         return $this->metas;

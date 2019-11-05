@@ -23,14 +23,21 @@ class ContributionController extends AbstractController
 {
     
     /**
-     * @Route("/project/{project_id}/contributions", name="list", methods="GET", requirements={"project_id"="\d+"})
+     * @Route("/project/{project_id}/contributions/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
      * @Entity("project", options={"mapping": {"project_id": "id"}})
      */
-    public function list(Project $project)
+    public function list(Project $project, $page = 1, PaginatorService $paginator)
     {
         $this->denyAccessUnlessGranted('view', $project);
         
-        $contributions = $project->getContributions();
+        $order_by = $project->getMeta('contribution_order_by', 'createdAt');
+        $order    = $project->getMeta('contribution_order', 'DESC');
+
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $query = $entityManager->getRepository(ProjectContribution::class)->findByProject($project, $order_by, $order);
+        
+        $contributions = $paginator->paginate($query, 10);
         
         $user = $project->getAuthor();
         

@@ -385,6 +385,9 @@ class ReportController extends AbstractController
     {
         $this->denyAccessUnlessGranted('view', $project);
         
+        $order_by = $project->getMeta('report_order_by', 'createdAt');
+        $order    = $project->getMeta('report_order', 'DESC');
+        
         $user = $project->getAuthor();
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -403,12 +406,12 @@ class ReportController extends AbstractController
             
             $this->denyAccessUnlessGranted('view', $activity);
             
-            $query = $entityManager->getRepository(Report::class)->findByActivity($activity);
+            $query = $entityManager->getRepository(Report::class)->findByActivity($activity, null, $order_by, $order);
             
         }else{
             $this->denyAccessUnlessGranted('view', $project);
             
-            $query = $entityManager->getRepository(Report::class)->findByProject($project);
+            $query = $entityManager->getRepository(Report::class)->findByProject($project, null, $order_by, $order);
         }
         
         $reports = $paginator->paginate($query, 10);

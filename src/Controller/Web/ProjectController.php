@@ -16,6 +16,7 @@ use App\Entity\Report;
 use App\Entity\Activity;
 use App\Entity\Indicator;
 use App\Entity\ActivityFile;
+use App\Entity\ProjectContribution;
 use App\Entity\Meta\ProjectMeta;
 use App\Form\ProjectType;
 use App\Service\FormError;
@@ -85,15 +86,9 @@ class ProjectController extends AbstractController
         $user = $project->getAuthor();
 
         $entityManager = $this->getDoctrine()->getManager();
-        $activities = $entityManager->getRepository(Activity::class)
-            ->findByProject($project, 'createdAt', 'DESC', $project->getMeta('recent_activity_count', self::RECENT_ITEMS_COUNT))
-            ->execute();
-        $reports = $entityManager->getRepository(Report::class)
-            ->findByProject($project, null, 'createdAt', 'DESC', $project->getMeta('recent_report_count', self::RECENT_ITEMS_COUNT))
-            ->execute();
-        $contributions = $entityManager->getRepository(User::class)
-            ->findByProject($project, 'createdAt', 'DESC', $project->getMeta('recent_contribution_count', self::RECENT_ITEMS_COUNT))
-            ->execute();
+        $activities    = $entityManager->getRepository(Activity::class)->findByProject($project, $project->getMeta('activity_order_by', 'createdAt'), $project->getMeta('activity_order', 'DESC'), $project->getMeta('activity_count', self::RECENT_ITEMS_COUNT))->execute();
+        $reports       = $entityManager->getRepository(Report::class)->findByProject($project, null, $project->getMeta('report_order_by', 'createdAt'), $project->getMeta('report_order', 'DESC'), $project->getMeta('report_count', self::RECENT_ITEMS_COUNT))->execute();
+        $contributions = $entityManager->getRepository(ProjectContribution::class)->findByProject($project, $project->getMeta('contribution_order_by', 'createdAt'), $project->getMeta('contribution_order', 'DESC'), $project->getMeta('contribution_count', self::RECENT_ITEMS_COUNT))->execute();
         $data   =  $project->getData();
         $series =  $project->getSerie();
         
@@ -185,50 +180,30 @@ class ProjectController extends AbstractController
                     $updated_iteration->setAuthor($this->getUser());
                 }
             }
-
-            $entityManager->persist($project);
             
-            
-
+            // save project meta data
             try{
-                $items = [
-                    'colors' => [
-                        'header_bg_color',
-                    ],
-                ];
-                foreach($items as $key => $metakeys ){
-                    $posts = $request->request->get($key);
-                    foreach($posts as $metakey => $metavalue ){
-                        if( ! in_array($metakey, $metakeys) ){
-                            continue;
-                        }
+                foreach($fields as $group => $metas){
+                    $postValues = $form[$group]->getData();
+                    foreach($postValues as $key => $queryMetas){
+                        if(is_array($queryMetas)){
+                            foreach($queryMetas as  $postKey => $metavalue){
+                                $metakey = $key.'_'.$postKey;
+                                $meta = $project->updateMeta($metakey, $metavalue);
 
-                        if(strlen($metavalue) > 8 ){
-                            continue;
-                        }
-
-                        $found = false;
-                        foreach($project->getMetas() as $meta){
-                            if($meta->getMetaKey() === $metakey ){
-                                $found = true;
-                                break;
+                                $entityManager->persist($meta);
                             }
+                        }else{
+                            $metakey = $group.'_'.$key;
+                            $meta = $project->updateMeta($metakey, $queryMetas);
+                            $entityManager->persist($meta);
                         }
-
-                        if( ! $found || ! $meta ) {
-                            $meta = new ProjectMeta();
-                            $meta->setProject($project);
-                            $meta->setMetaKey($metakey);
-                        }
-
-                        $meta->setMetaValue($metavalue);
-
-                        $entityManager->persist($meta);
                     }
                 }
             }catch(\Exception $e){
             }
 
+            $entityManager->persist($project);
             $entityManager->flush();
         
             $this->addFlash('success', 'Votre modification a été bien sauvegardé.');

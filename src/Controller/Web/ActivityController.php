@@ -276,7 +276,9 @@ class ActivityController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
         
-        $query = $entityManager->getRepository(Activity::class)->findByProject($project);
+        $order_by = $project->getMeta('activity_order_by', 'createdAt');
+        $order    = $project->getMeta('activity_order', 'DESC');
+        $query = $entityManager->getRepository(Activity::class)->findByProject($project, $order_by, $order);
         
         $activities = $paginator->paginate($query, 10);
 
