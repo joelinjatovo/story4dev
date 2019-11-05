@@ -118,6 +118,15 @@ class ProjectController extends AbstractController
 
         $fields = $projectHelper->getMetaFields($project);
         
+        // remove admin only fields
+        if( ! $this->isGranted('ROLE_ADMIN') ) {
+            foreach($fields as $key => $value ){
+                if( isset( $value['admin_only'] ) && $value['admin_only'] ) {
+                    unset($fields[$key]);
+                }
+            }
+        }
+        
         $form = $this->createForm(ProjectType::class, $project, ['fields' => $fields]);
         
         return $this->render('project/edit.html.twig', [
@@ -144,6 +153,15 @@ class ProjectController extends AbstractController
         }
         
         $fields = $projectHelper->getMetaFields($project);
+        
+        // remove admin only fields
+        if( ! $this->isGranted('ROLE_ADMIN') ) {
+            foreach($fields as $key => $value ){
+                if( isset( $value['admin_only'] ) && $value['admin_only'] ) {
+                    unset($fields[$key]);
+                }
+            }
+        }
         
         $form = $this->createForm(ProjectType::class, $project, ['fields' => $fields]);
         

@@ -273,16 +273,18 @@
                                             </div>
                                         {% endfor %}
                                         
-                                        {% for quota in form.quotas %}
-                                            <div class="form-group row">
-                                                <label class="col-lg-3 col-form-label">Quotas</label>
-                                                <div class="col-xl-3 col-lg-3">
-                                                    <div class="input-group">
-                                                        {{ form_widget( quota, { 'attr' : { 'form' : 'project', 'placeholder' : 'Count', 'class' : 'form-control', 'autocomplete':'off' } } ) }}
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            {% for quota in form.quotas %}
+                                                <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">Quotas</label>
+                                                    <div class="col-xl-3 col-lg-3">
+                                                        <div class="input-group">
+                                                            {{ form_widget( quota, { 'attr' : { 'form' : 'project', 'placeholder' : 'Count', 'class' : 'form-control', 'autocomplete':'off' } } ) }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        {% endfor %}
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endif %}
