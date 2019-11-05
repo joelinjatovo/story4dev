@@ -268,6 +268,24 @@ class ProjectController extends AbstractController
                 if( $project && ! $project->isDeleted()){
                     $this->denyAccessUnlessGranted('remove', $project);
 
+                    /**
+                    foreach($project->getActivities() as $activity){
+                        $entityManager->remove($activity);
+                    }
+
+                    foreach($project->getIterations() as $iteration){
+                        $entityManager->remove($iteration);
+                    }
+
+                    foreach($project->getContributions() as $contribution){
+                        $entityManager->remove($contribution);
+                    }
+
+                    foreach($project->getMetas() as $meta){
+                        $entityManager->remove($meta);
+                    }
+                    */
+                    
                     $entityManager->remove($project);
                     $entityManager->flush();
                     

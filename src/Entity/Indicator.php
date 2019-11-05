@@ -270,7 +270,7 @@ class Indicator
         $value = 0;
         foreach($this->getGoals() as $goal){
             if($iteration){
-                if( $goal->getIteration()->getId() == $iteration->getId() ){
+                if( $goal->getIteration() && ( $goal->getIteration()->getId() == $iteration->getId() ) ){
                     $value += $goal->getValue();
                 }
             }else{
@@ -287,13 +287,14 @@ class Indicator
             foreach($this->getResults() as $result){
                 if($this->getCummulative()){
                     // Get value below iteration end date
-                    if( $result->getReport()->getCreatedAt() < $iteration->getEndAt() ){
+                    if( $result->getReport() && ( $result->getReport()->getCreatedAt() < $iteration->getEndAt() ) ){
                         $value += $result->getValue();
                     }
                 }else{
                     // Get value between iteration dates
-                    if(($result->getReport()->getCreatedAt() >= $iteration->getStartAt()) && 
-                            ($result->getReport()->getCreatedAt() < $iteration->getEndAt())){
+                    if( $result->getReport() && 
+                            ( $result->getReport()->getCreatedAt() >= $iteration->getStartAt() ) && 
+                            ( $result->getReport()->getCreatedAt() < $iteration->getEndAt() ) ) {
                         $value += $result->getValue();
                     }
                 }
@@ -309,16 +310,18 @@ class Indicator
     public function getData()
     {
         $datas = [];
-        foreach($this->getActivity()->getProject()->getIterations() as $iteration){
-            $data = [
-                "iteration"   => $iteration->getTitle(),
-                "unit"        => $this->getUnit()->getTitle(),
-                "value"       => $this->getValue($iteration),
-                "goal"        => $this->getGoalValue($iteration),
-                "progression" => $this->getProgression($iteration),
-            ];
-            
-            $datas[] = $data;
+        if( $this->getActivity() && $this->getActivity()->getProject() ){
+            foreach($this->getActivity()->getProject()->getIterations() as $iteration){
+                $data = [
+                    "iteration"   => $iteration->getTitle(),
+                    "unit"        => $this->getUnit()->getTitle(),
+                    "value"       => $this->getValue($iteration),
+                    "goal"        => $this->getGoalValue($iteration),
+                    "progression" => $this->getProgression($iteration),
+                ];
+
+                $datas[] = $data;
+            }
         }
         
         return $datas;

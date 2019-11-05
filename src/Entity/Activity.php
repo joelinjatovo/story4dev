@@ -417,20 +417,22 @@ class Activity
     public function getData()
     {
         $datas = [];
-        foreach($this->getProject()->getIterations() as $iteration){
-            $data = [
-                "iteration"   => $iteration->getTitle(),
-                "value"       => $this->getValue($iteration),
-                "goal"        => $this->getGoalValue($iteration),
-                "report"      => $this->getReportsCount($iteration),
-                "progression" => $this->getProgression($iteration),
-            ];
-            
-            foreach($this->getIndicators() as $indicator){
-                $data['indicator_'.$indicator->getId()] = $indicator->getProgression($iteration);
+        if($this->getProject()){
+            foreach($this->getProject()->getIterations() as $iteration){
+                $data = [
+                    "iteration"   => $iteration->getTitle(),
+                    "value"       => $this->getValue($iteration),
+                    "goal"        => $this->getGoalValue($iteration),
+                    "report"      => $this->getReportsCount($iteration),
+                    "progression" => $this->getProgression($iteration),
+                ];
+
+                foreach($this->getIndicators() as $indicator){
+                    $data['indicator_'.$indicator->getId()] = $indicator->getProgression($iteration);
+                }
+
+                $datas[] = $data;
             }
-            
-            $datas[] = $data;
         }
         
         return $datas;
