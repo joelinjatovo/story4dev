@@ -23,6 +23,13 @@ class ProjectContributionRepository extends ServiceEntityRepository
     
     public function findByProject(Project $project, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
     {
+        switch($orderBy){
+            default:
+            case 'createdAt':
+                $orderBy = 'createdAt';
+            break;
+        }
+        
         $queryBuilder = $this->createQueryBuilder('pc')
             ->where('pc.project = :project')
             ->setParameter('project', $project)
