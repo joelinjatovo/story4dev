@@ -47,7 +47,7 @@
                         <div class="kt-menu__submenu ">
                             <span class="kt-menu__arrow"></span>
                             <ul class="kt-menu__subnav">
-                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom"><span class="kt-menu__link"><span class="kt-menu__link-text">{{ project.title }}</span></span></li>
+                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" title="{{ project.title }}" ><span class="kt-menu__link"><span class="kt-menu__link-text">Mon projet</span></span></li>
                                 <li class="kt-menu__item "><a  href="{{ path('project_dashboard', { 'id' : project.id } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Tableau de bord</span></a></li>
                                 <li class="kt-menu__item "><a  href="{{ path('activity_list', { 'project_id' : project.id } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Activités</span></a></li>
                                 <li class="kt-menu__item "><a  href="{{ path('report_list', { 'project_id' : project.id } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Rapports</span></a></li>
@@ -66,7 +66,7 @@
                         <div class="kt-menu__submenu ">
                             <span class="kt-menu__arrow"></span>
                             <ul class="kt-menu__subnav">
-                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" aria-haspopup="true"  data-ktmenu-link-redirect="1"><span class="kt-menu__link"><span class="kt-menu__link-text">{{ activity.title }}</span></span></li>
+                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" aria-haspopup="true"  data-ktmenu-link-redirect="1" title="{{ activity.title }}"><span class="kt-menu__link"><span class="kt-menu__link-text">Activité</span></span></li>
                                 <li class="kt-menu__item " aria-haspopup="true"  data-ktmenu-link-redirect="1"><a  href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-spoon"><span></span></i><span class="kt-menu__link-text">Documents</span></a></li>
                                 <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('report_list2', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Rapports</span></a></li>
                                 <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-shield"><span></span></i><span class="kt-menu__link-text">Indicateurs</span></a></li>

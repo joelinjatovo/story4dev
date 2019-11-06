@@ -560,7 +560,10 @@ class Project
             ];
             
             foreach($this->getActivities() as $activity){
-                $data['activity_'.$activity->getId()] = $activity->getProgression($iteration);
+                //$data['a_'.$activity->getId()] = $activity->getProgression($iteration);
+                foreach($activity->getIndicators() as $indicator){
+                    $data['i_'.$indicator->getId()] = $indicator->getProgression($iteration);
+                }
             }
             
             $datas[] = $data;
@@ -573,16 +576,14 @@ class Project
     {
         $series = [];
         foreach($this->getActivities() as $activity){
-            $title = $activity->getTitle();
             /*
+            $title = $activity->getTitle();
             if( strlen($title) > 25 ){
                 $title = substr($title, 0, 25).'...';
             }
             */
-            $series[] = [
-                'id'    => 'activity_'.$activity->getId(),
-                'title' => $title,
-            ];
+            $a_series = $activity->getSerie();
+            $series = array_merge($series, $a_series);
         }
         return $series;
     }

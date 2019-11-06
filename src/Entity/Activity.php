@@ -427,7 +427,7 @@ class Activity
                     ];
 
                     foreach($this->getIndicators() as $indicator){
-                        $data['indicator_'.$indicator->getId()] = $indicator->getProgression($iteration);
+                        $data['i_'.$indicator->getId()] = $indicator->getProgression($iteration);
                     }
 
                     $datas[] = $data;
@@ -449,7 +449,7 @@ class Activity
             }
             */
             $series[] = [
-                'id'    => 'indicator_'.$indicator->getId(),
+                'id'    => 'i_'.$indicator->getId(),
                 'title' => $title,
             ];
         }
