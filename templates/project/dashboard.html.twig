@@ -337,7 +337,7 @@ am4core.ready(function() {
     chart.legend.position = "top";
     
     // Selector
-    jQuery("#select_activity").select2({placeholder:"Séléctionnez une activité"});
+    jQuery("#select_activity").select2({placeholder:"Séléctionnez les indicateurs à afficher sur le graphe."});
     jQuery('#select_activity').on('change', function (evt) {
       if (jQuery('#select_activity').select2('val') != null){
            jQuery.each(activitySeries, function(index, activitySerie) {
