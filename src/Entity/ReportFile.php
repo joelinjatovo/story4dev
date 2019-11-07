@@ -21,14 +21,14 @@ class ReportFile
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"full", "activity", "project", "report"})
+     * @Groups({"full", "activity", "project", "report", "report_feed"})
      */
     private $type;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\File", inversedBy="activityFiles")
      * @ORM\JoinColumn(name="file_id", referencedColumnName="id", onDelete="cascade")
-     * @Groups({"full", "activity", "project", "report"})
+     * @Groups({"full", "activity", "project", "report", "report_feed"})
      */
     private $file;
 

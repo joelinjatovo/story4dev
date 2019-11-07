@@ -83,6 +83,26 @@ class ReportRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery();
     }
     
+    public function feedByProject(Project $project, ?User $user = null, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
+    {
+        $queryBuilder = $this->createQueryBuilder('r');
+        $queryBuilder->leftJoin('r.activity', 'a');
+        $queryBuilder->andWhere('a.project = :project')->setParameter('project', $project);
+        $queryBuilder->andWhere('r.publishExternally = :publish OR r.publishExternally IS NULL')->setParameter('publish', 1);
+        $queryBuilder->andWhere('r.status = :status')->setParameter('status', Report::STATUS_TERMINATED);
+        $queryBuilder->orderBy('r.'.$orderBy, $order);
+        
+        if($user){
+            $queryBuilder->andWhere('r.author = :user')->setParameter('user', $user);
+        }
+        
+        if($limit > 0){
+            $queryBuilder->setMaxResults($limit);
+        }
+        
+        return $queryBuilder->getQuery();
+    }
+    
     public function findByContribution(Project $project, User $user)
     {
         return $this->createQueryBuilder('r')

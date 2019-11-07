@@ -9,8 +9,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\Entity\Project;
+use App\Entity\Report;
+use App\Service\PaginatorService;
 
 /** 
  * @Route(name="feed_")
@@ -19,18 +22,21 @@ use App\Entity\Project;
 class FeedController extends AbstractController
 {
     /**
-     * @Route("/feed/{format}/{id}", name="index", methods="GET", requirements={"id"="\d+"})
-     * @Route("/feed/{id}", name="index_json", methods="GET", requirements={"id"="\d+"})
+     * @Route("/feed/json/{id}/{page<\d+>?1}", name="json", methods="GET", requirements={"id"="\d+"})
      * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function index($format = 'json', Project $project)
+    public function jsonFeed($page = 1, Project $project, PaginatorService $paginator)
     {
-        switch($format){
-            case 'xml':
-                return $this->json(['format'=>'XML', 'data'=>'OK']);
-            default:
-            case 'json':
-                return $this->json(['format'=>'json', 'data'=>'OK']);
-        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $query = $entityManager->getRepository(Report::class)->feedByProject($project);
+        $reports = $paginator->paginate($query);
+        return $this->json([
+            'pagination' => [
+                'page'  => (int) $page,
+                'found' => (int) $reports->count(),
+            ], 
+            'format' => 'json', 
+            'data'   => $reports
+        ], JsonResponse::HTTP_OK, [], ['groups' => ['raw']]);
     }
 }

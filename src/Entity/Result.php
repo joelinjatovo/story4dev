@@ -32,28 +32,28 @@ class Result
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report", "activity", "project"})
+     * @Groups({"full", "raw", "report", "activity", "project", "report_feed"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report"})
+     * @Groups({"full", "raw", "report", "report_feed"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report"})
+     * @Groups({"full", "raw", "report", "report_feed"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="integer", nullable=false)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report", "activity", "project"})
+     * @Groups({"full", "raw", "report", "activity", "project", "report_feed"})
      */
     private $value;
     
@@ -76,7 +76,7 @@ class Result
      * @ORM\ManyToOne(targetEntity="App\Entity\Indicator", inversedBy="goals")
      * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
-     * @Groups({"full", "report", "activity", "project"})
+     * @Groups({"full", "report", "activity", "project", "report_feed"})
      */
     private $indicator;
 

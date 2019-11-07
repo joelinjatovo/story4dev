@@ -9,25 +9,25 @@ trait LocationTrait
 {
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"full", "raw", "report", "result", "activity"})
+     * @Groups({"full", "raw", "report", "result", "activity", "report_feed"})
      */
     private $longitude;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"full", "raw", "report", "result", "activity"})
+     * @Groups({"full", "raw", "report", "result", "activity", "report_feed"})
      */
     private $latitude;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"full", "raw", "report", "result", "activity"})
+     * @Groups({"full", "raw", "report", "result", "activity", "report_feed"})
      */
     private $altitude;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"full", "raw", "report", "result", "activity"})
+     * @Groups({"full", "raw", "report", "result", "activity", "report_feed"})
      */
     private $locationTitle;
 

@@ -44,7 +44,7 @@ class Report
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report", "activity", "project"})
+     * @Groups({"full", "raw", "report", "activity", "project", "report_feed"})
      */
     private $id;
 
@@ -56,21 +56,21 @@ class Report
      * )
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report", "activity", "project"})
+     * @Groups({"full", "raw", "report", "activity", "project", "report_feed"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report", "activity", "project"})
+     * @Groups({"full", "raw", "report", "activity", "project", "report_feed"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "report", "activity", "project"})
+     * @Groups({"full", "raw", "report", "activity", "project", "report_feed"})
      */
     private $synced_at;
     
@@ -97,19 +97,19 @@ class Report
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity", inversedBy="reports")
      * @ORM\JoinColumn(name="activity_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
-     * @Groups({"full", "report"})
+     * @Groups({"full", "report", "report_feed"})
      */
     private $activity;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Result", mappedBy="report", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @Groups({"full", "report", "activity", "project"})
+     * @Groups({"full", "report", "activity", "project", "report_feed"})
      */
     private $results;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ReportFile", mappedBy="report", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
-     * @Groups({"full", "report", "activity", "project"})
+     * @Groups({"full", "report", "activity", "project", "report_feed"})
      */
     private $reportFiles;
 
@@ -125,8 +125,15 @@ class Report
      */
     private $ip;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"full", "report", "activity", "project"})
+     */
+    private $publishExternally;
+
     public function __construct()
     {
+        $this->publishExternally = false;
         $this->isModified = false;
         $this->setStatus(self::STATUS_OPENED);
         $this->setCreatedAt(new \DateTime());
@@ -336,6 +343,18 @@ class Report
     public function setIp(string $ip): self
     {
         $this->ip = $ip;
+
+        return $this;
+    }
+
+    public function getPublishExternally(): ?bool
+    {
+        return $this->publishExternally;
+    }
+
+    public function setPublishExternally(?bool $publishExternally): self
+    {
+        $this->publishExternally = $publishExternally;
 
         return $this;
     }

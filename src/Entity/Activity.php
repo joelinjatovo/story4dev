@@ -44,7 +44,7 @@ class Activity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "activity", "project", "indicator"})
+     * @Groups({"full", "raw", "activity", "project", "indicator", "report_feed"})
      */
     private $id;
 
@@ -56,14 +56,14 @@ class Activity
      * )
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "activity", "project", "indicator"})
+     * @Groups({"full", "raw", "activity", "project", "indicator", "report_feed"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "activity", "project", "indicator"})
+     * @Groups({"full", "raw", "activity", "project", "indicator", "report_feed"})
      */
     private $description;
 
@@ -75,7 +75,7 @@ class Activity
      *     message="The value {{ value }} is not a valid {{ type }}."
      * )
      * @Gedmo\Versioned
-     * @Groups({"full", "raw", "activity", "project"})
+     * @Groups({"full", "raw", "activity", "project", "report_feed"})
      */
     private $budget;
     

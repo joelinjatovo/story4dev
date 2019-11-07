@@ -181,6 +181,31 @@
 									{% else %}
 										<input type="hidden" name="report[createdAt]" value="{{ report.createdAt|date('Y-m-d h:i:s') }}">
 									{% endif %}
+                                    
+                                    <div class="form-group row">
+                                        {{ form_label( form.status, "Statut", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                        <div class="col-lg-9 col-xl-6">
+                                            <div class="input-group">
+                                                {{ form_widget( form.status, { 'attr' : { 'class' : 'form-control' } } ) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+									{% if is_granted('edit', project) %}
+                                        <div class="form-group row">
+                                            <label class="col-3 col-form-label">Flux Externe</label>
+                                            <div class="col-9">
+                                                <div class="kt-checkbox-inline">
+                                                    <label class="kt-checkbox">
+                                                        {{ form_widget( form.publishExternally ) }} Publiez le rapport sur le blog 
+                                                    <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+									{% else %}
+										<input type="hidden" name="report[publishExternally]" value="{{ report.publishExternally }}">
+									{% endif %}
 								</div>
 							</div>
 							<div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
