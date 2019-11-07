@@ -54,6 +54,10 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.security.guard.jwt_token_authenticator
+        feed:
+            pattern:  ^/feed
+            stateless: true
+            anonymous: true
         main:
             user_checker: App\Security\Checker\UserChecker
             anonymous: true
@@ -75,6 +79,8 @@ security:
         - { path: ^/api/v1/token,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/v1/register$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,              roles: IS_AUTHENTICATED_FULLY }
+        
+        - { path: ^/feed,             roles: IS_AUTHENTICATED_ANONYMOUSLY }
         
         - { path: ^/login$,           roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register$,        roles: IS_AUTHENTICATED_ANONYMOUSLY }
