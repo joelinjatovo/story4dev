@@ -19,11 +19,18 @@ use App\Entity\Project;
 class FeedController extends AbstractController
 {
     /**
-     * @Route("/feed/{id}", name="index", methods="GET", requirements={"id"="\d+"})
+     * @Route("/feed/{format}/{id}", name="index", methods="GET", requirements={"id"="\d+"})
+     * @Route("/feed/{id}", name="index_json", methods="GET", requirements={"id"="\d+"})
      * @Entity("project", options={"mapping": {"id": "id"}})
      */
-    public function index(Project $project)
+    public function index($format = 'json', Project $project)
     {
-        return $this->json(['data'=>'OK']);
+        switch($format){
+            case 'xml':
+                return $this->json(['format'=>'XML', 'data'=>'OK']);
+            default:
+            case 'json':
+                return $this->json(['format'=>'json', 'data'=>'OK']);
+        }
     }
 }
