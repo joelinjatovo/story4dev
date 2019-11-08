@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use App\Entity\Meta\ProjectMeta;
 use App\Entity\ProjectContribution;
@@ -168,6 +169,13 @@ class Project
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $currency;
+
+    /**
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     * @Groups({"full", "raw", "project", "user", "report"})
+     */
+    private $slug;
 
     public function __construct()
     {
@@ -627,6 +635,18 @@ class Project
     public function setCurrency(?string $currency): self
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

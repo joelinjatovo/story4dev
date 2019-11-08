@@ -89,6 +89,12 @@
                                         </div>
                                     </div>
 									<div class="form-group row">
+                    					{{ form_label( form.slug, 'Url du projet', { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+										<div class="col-9">
+											{{ form_widget( form.slug, { 'attr' : { 'class' : 'form-control' } } ) }}
+										</div>
+									</div>
+									<div class="form-group row">
                     					{{ form_label( form.title, 'Nom du projet', { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											{{ form_widget( form.title, { 'attr' : { 'class' : 'form-control' } } ) }}
