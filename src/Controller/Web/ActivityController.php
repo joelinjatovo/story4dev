@@ -28,7 +28,7 @@ use App\Service\PaginatorService;
 class ActivityController extends AbstractController
 {
     /**
-     * @Route("/{slug}/activity", name="index", methods="GET")
+     * @Route("/p/{slug}/activity", name="index", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function index(Project $project)
@@ -49,7 +49,7 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity", name="create", methods="POST")
+     * @Route("/p/{slug}/activity", name="create", methods="POST")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function create(Project $project, Request $request, FormError $formError): Response
@@ -113,7 +113,7 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/{activity_id}", name="show", methods="GET", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}", name="show", methods="GET", requirements={"activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
@@ -145,7 +145,7 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/edit/{activity_id}", name="edit", methods="GET", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/activity/edit/{activity_id}", name="edit", methods="GET", requirements={"activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
@@ -170,7 +170,7 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/edit/{activity_id}", name="update", methods="POST", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/activity/edit/{activity_id}", name="update", methods="POST", requirements={"activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
@@ -267,8 +267,8 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activities/{page<\d+>?1}", name="list", methods="GET")
-     * @Route("/{slug}/activities/{type}/{page<\d+>?1}", name="list_type", methods="GET")
+     * @Route("/p/{slug}/activities/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/p/{slug}/activities/{type}/{page<\d+>?1}", name="list_type", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function list(Project $project, ?string $type, $page = 1, PaginatorService $paginator)

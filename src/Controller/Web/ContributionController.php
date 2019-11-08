@@ -23,7 +23,7 @@ class ContributionController extends AbstractController
 {
     
     /**
-     * @Route("/{slug}/contributions/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/p/{slug}/contributions/{page<\d+>?1}", name="list", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function list(Project $project, $page = 1, PaginatorService $paginator)
@@ -49,7 +49,7 @@ class ContributionController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/contribution/{contribution_id}/{page<\d+>?1}", name="show", methods="GET", requirements={"contribution_id"="\d+"})
+     * @Route("/p/{slug}/contribution/{contribution_id}/{page<\d+>?1}", name="show", methods="GET", requirements={"contribution_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("projectcontribution", options={"mapping": {"contribution_id": "id"}})
      */

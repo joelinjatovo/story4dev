@@ -26,8 +26,8 @@ class FileController extends AbstractController
     
     /**
      * @Route("/files/{page<\d+>?1}", name="list", methods="GET")
-     * @Route("/{slug}/files/{page<\d+>?1}", name="list_project", methods="GET")
-     * @Route("/{slug}/activity/{activity_id}/files/{page<\d+>?1}", name="list_activity", methods="GET")
+     * @Route("/p/{slug}/files/{page<\d+>?1}", name="list_project", methods="GET")
+     * @Route("/p/{slug}/activity/{activity_id}/files/{page<\d+>?1}", name="list_activity", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
@@ -69,8 +69,8 @@ class FileController extends AbstractController
     
     /**
      * @Route("/file/{file_id}", name="show", methods="GET")
-     * @Route("/{slug}/file/{file_id}", name="show_project", methods="GET")
-     * @Route("/{slug}/activity/{activity_id}/file/{file_id}", name="show_activity", methods="GET")
+     * @Route("/p/{slug}/file/{file_id}", name="show_project", methods="GET")
+     * @Route("/p/{slug}/activity/{activity_id}/file/{file_id}", name="show_activity", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("file", options={"mapping": {"file_id": "id"}})

@@ -31,7 +31,7 @@ class IndicatorController extends AbstractController
 {
     
     /**
-     * @Route("{slug}/activity/{activity_id}/indicator", name="index", methods="GET", requirements={"activity_id"="\d+"})
+     * @Route("/p{slug}/activity/{activity_id}/indicator", name="index", methods="GET", requirements={"activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
@@ -65,7 +65,7 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/{activity_id}/indicator", name="create", methods="POST", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/indicator", name="create", methods="POST", requirements={"activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
@@ -129,7 +129,7 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/{activity_id}/indicator/{indicator_id}", name="show", methods="GET", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/indicator/{indicator_id}", name="show", methods="GET", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
@@ -164,7 +164,7 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/{activity_id}/indicator/edit/{indicator_id}", name="edit", methods="GET", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/indicator/edit/{indicator_id}", name="edit", methods="GET", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
@@ -195,7 +195,7 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/{activity_id}/indicator/edit/{indicator_id}", name="update", methods="POST", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/indicator/edit/{indicator_id}", name="update", methods="POST", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
@@ -258,7 +258,7 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/{activity_id}/indicators/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/p/{slug}/activity/{activity_id}/indicators/{page<\d+>?1}", name="list", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})

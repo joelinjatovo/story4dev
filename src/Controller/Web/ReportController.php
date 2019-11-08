@@ -31,7 +31,7 @@ use App\Service\PaginatorService;
 class ReportController extends AbstractController
 {
     /**
-     * @Route("/{slug}/activity/{activity_id}/report", name="index", methods="GET", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/report", name="index", methods="GET", requirements={"activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
@@ -61,7 +61,7 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/{activity_id}/report", name="create", methods="POST", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/report", name="create", methods="POST", requirements={"activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
@@ -137,7 +137,7 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/{activity_id}/report/{report_id}", name="show", methods="GET", requirements={"report_id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/report/{report_id}", name="show", methods="GET", requirements={"report_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
@@ -168,7 +168,7 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/{activity_id}/report/edit/{report_id}", name="edit", methods="GET", requirements={"id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/report/edit/{report_id}", name="edit", methods="GET", requirements={"id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
@@ -199,7 +199,7 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/{activity_id}/report/edit/{report_id}", name="update", methods="POST", requirements={"id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/report/edit/{report_id}", name="update", methods="POST", requirements={"id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
@@ -375,10 +375,10 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"activity_id"="\d+"})
-     * @Route("/{slug}/activity/{activity_id}/reports/{type}/{page<\d+>?1}", name="list2_type", methods="GET", requirements={"activity_id"="\d+"})
-     * @Route("/{slug}/reports/{page<\d+>?1}", name="list", methods="GET")
-     * @Route("/{slug}/reports/{type}/{page<\d+>?1}", name="list_type", methods="GET")
+     * @Route("/p/{slug}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/reports/{type}/{page<\d+>?1}", name="list2_type", methods="GET", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/reports/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/p/{slug}/reports/{type}/{page<\d+>?1}", name="list_type", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function list(Project $project, $activity_id = 0, ?string $type, $page = 1, PaginatorService $paginator)

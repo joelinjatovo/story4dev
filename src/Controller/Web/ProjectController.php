@@ -33,7 +33,7 @@ class ProjectController extends AbstractController
     const RECENT_ITEMS_COUNT = 10;
     
     /**
-     * @Route("/{slug}/dashboard", name="dashboard", methods="GET")
+     * @Route("/p/{slug}/dashboard", name="dashboard", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function dashboard(Project $project)
@@ -76,7 +76,7 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/p/{slug}", name="show", methods="GET")
+     * @Route("/p/{slug}/", name="show", methods="GET", requirements={"slug"="^(?!admin|login|logout|register|forgot|contribution).+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function show(Project $project)
@@ -107,7 +107,7 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/edit", name="edit", methods="GET")
+     * @Route("/p/{slug}/edit", name="edit", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function edit(Project $project, ProjectHelper $projectHelper)
@@ -138,7 +138,7 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}/edit", name="update", methods="POST")
+     * @Route("/p/{slug}/edit", name="update", methods="POST")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function update(Project $project, Request $request, FormError $formError, ProjectHelper $projectHelper)
