@@ -1,16 +1,11 @@
-{% extends 'security/emails/base.html.twig' %}
-
-{% block content %}
 <h3>You did it! You registered!</h3>
 
 Hi {{ user.email }}! You're successfully registered.
 
 {# example, assuming you have a route named "login" #}
-To login, go to: <a href="{{ url }}">...</a>.
+To login, go to: <a href="{{ url }}">here</a>.
 
 Thanks!
 
 {# Makes an absolute URL to the /images/logo.png file #}
 <img src="{{ absolute_url(asset('images/logo.png')) }}">
-    
-{% endblock %}

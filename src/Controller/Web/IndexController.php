@@ -25,7 +25,7 @@ class IndexController extends AbstractController
     {
         $message = (new \Swift_Message('Hello Email'))
             ->setFrom('admin@story4dev.com')
-            ->setTo('haja@emediaplace.com')
+            ->setTo('joelinjatovo@gmail.com')
             ->setBody(
                 $this->renderView(
                     'security/emails/test.html.twig'
