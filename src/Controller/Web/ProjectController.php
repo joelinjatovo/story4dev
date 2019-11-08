@@ -76,7 +76,7 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/{slug}", name="show", methods="GET")
+     * @Route("/p/{slug}", name="show", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function show(Project $project)
