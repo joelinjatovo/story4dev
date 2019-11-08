@@ -17,6 +17,7 @@
         "knplabs/knp-gaufrette-bundle": "^0.6.1",
         "knplabs/knp-time-bundle": "^1.9",
         "knpuniversity/oauth2-client-bundle": "^1.28",
+        "league/commonmark": "^1.1",
         "league/oauth2-facebook": "^2.0",
         "league/oauth2-google": "^3.0",
         "lexik/jwt-authentication-bundle": "^2.6",
@@ -43,6 +44,9 @@
         "symfony/validator": "4.3.*",
         "symfony/web-link": "4.3.*",
         "symfony/yaml": "4.3.*",
+        "twig/cssinliner-extra": "^2.12",
+        "twig/extra-bundle": "^2.12",
+        "twig/markdown-extra": "^2.12",
         "vich/uploader-bundle": "^1.10"
     },
     "require-dev": {

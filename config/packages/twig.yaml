@@ -10,3 +10,8 @@ twig:
         default_avatar: '/images/avatar.png'
         default_picture: '/images/picture.png'
         GOOGLE_MAPS_API_KEY: '%env(GOOGLE_MAPS_API_KEY)%'
+    paths:
+        # point this wherever your css files live
+        '%kernel.project_dir%/public_html/css': css
+        # point this wherever your images live
+        '%kernel.project_dir%/public_html/images': images
