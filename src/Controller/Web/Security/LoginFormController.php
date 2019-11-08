@@ -88,21 +88,18 @@ class LoginFormController extends AbstractController
             $user->setRoles(['ROLE_USER']);
  
             $url = $this->generateUrl('app_confirm', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
-
-            $message = MessageHelper::getMessage($optionService, 'Nouveau compte')
+            $body = $this->renderView(
+                'security/emails/confirm.html.twig',
+                [
+                    'user'  => $user,
+                    'url'   => $url,
+                    'label' => "Confirmer mon compte",
+                ]
+            );
+            
+            $message = MessageHelper::getMessage($optionService, 'Instructions de confirmation', $body, 'text/html')
                 ->setTo($user->getEmail());
             
-            $message->setBody(
-                    $this->renderView(
-                        'security/emails/confirm.html.twig',
-                        [
-                            'user' => $user,
-                            'url'  => $url,
-                            //'logo' => $message->embed(\Swift_Image::fromPath(public_path().'/images/logo.png'))
-                        ]
-                    ),
-                    'text/html'
-                );
             $mailer->send($message);
             
             $entityManager = $this->getDoctrine()->getManager();

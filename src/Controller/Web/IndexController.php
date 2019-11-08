@@ -24,23 +24,25 @@ class IndexController extends AbstractController
     public function mail(\Swift_Mailer $mailer)
     {
         $data = [
-            'user' => $this->getUser()
+            'user' => $this->getUser(),
+            'url'   => "#",
+            'label' => "Confirmer mon compte",
         ];
         $message = (new \Swift_Message('Hello Email'))
             ->setFrom('admin@story4dev.com')
             ->setTo('joelinjatovo@gmail.com')
             ->setBody(
                 $this->renderView(
-                    'security/emails/test.html.twig',
+                    'security/emails/confirm.html.twig',
                     $data
                 ),
                 'text/html'
             )
         ;
 
-        //$mailer->send($message);
+        $mailer->send($message);
 
-        return $this->render('security/emails/test.html.twig', $data);
+        return $this->render('security/emails/confirm.html.twig', $data);
     }
 
     /**
