@@ -110,19 +110,17 @@ class GoogleAuthenticator extends SocialAuthenticator
 
         if($newAccount){
             $url = $this->router->generate('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
- 
-            $message = MessageHelper::getMessage($this->optionService, 'Nouvelle inscription')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    $this->templating->render(
-                        'security/emails/forgot.html.twig',
-                        [
-                            'user' => $user,
-                            'url'  => $url,
-                        ]
-                    ),
-                    'text/html'
-                );
+            
+            $body = $this->renderView('security/emails/forgot.html.twig', [
+                    'user'  => $user,
+                    'url'   => $url,
+                    'label' => "Créer mot de passe",
+                ]
+            );
+            
+            $message = MessageHelper::getMessage($optionService, 'Nouvelle inscription', $body, 'text/html')
+                ->setTo($user->getEmail());
+            
             $this->mailer->send($message);
         }
 

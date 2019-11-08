@@ -88,9 +88,8 @@ class LoginFormController extends AbstractController
             $user->setRoles(['ROLE_USER']);
  
             $url = $this->generateUrl('app_confirm', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
-            $body = $this->renderView(
-                'security/emails/confirm.html.twig',
-                [
+            
+            $body = $this->renderView( 'security/emails/confirm.html.twig', [
                     'user'  => $user,
                     'url'   => $url,
                     'label' => "Confirmer mon compte",
@@ -193,20 +192,17 @@ class LoginFormController extends AbstractController
             }
  
             $url = $this->generateUrl('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
- 
-            $message = MessageHelper::getMessage($optionService, 'Nouveau mot de passe')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    $this->renderView(
-                        'security/emails/forgot.html.twig',
-                        [
-                            'user' => $user,
-                            'url'  => $url,
-                            //'logo' => $message->embed(\Swift_Image::fromPath(public_path().'/images/logo.png'))
-                        ]
-                    ),
-                    'text/html'
-                );
+            
+            $body = $this->renderView('security/emails/forgot.html.twig', [
+                    'user'  => $user,
+                    'url'   => $url,
+                    'label' => "Créer mot de passe",
+                ]
+            );
+            
+            $message = MessageHelper::getMessage($optionService, 'Nouveau mot de passe ', $body, 'text/html')
+                ->setTo($user->getEmail());
+            
             $mailer->send($message);
             
             if ( $request->isXmlHttpRequest() ) {

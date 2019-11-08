@@ -1,11 +1,59 @@
-<h3>You did it! You registered!</h3>
+{% extends 'security/emails/base.html.twig' %}
 
-Hi {{ user.email }}! You're successfully registered.
+{% block content %}
+<div style="margin:0px auto;max-width:600px;background:#fff">
+    <table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#fff" align="center" border="0">
+        <tbody>
+            <tr>
+                <td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:0px">
+                    <div style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%">
+                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                            <tbody>
+                                <tr>
+                                    <td style="word-wrap:break-word;font-size:0px;padding:5px 20px" align="left">
+                                        <div style="color:#000000;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left">
+                                          <a style="color:#1572b0;font-weight:500;font-size:17px;line-height:20px;text-decoration:none" target="_blank"> Bonjour,
+                                          </a>
+                                          <p style="font-size:15px;color:#585858;line-height:20px">Pour pouvoir créer votre nouveau mot de passe, merci de suivre ou copier le lien ci-dessous dans la barre d’adresse de votre navigateur :
+                                            <a  style="color:#585858;font-size:15px;line-height:20px;font-weight:500" href="{{ url }}">{{ url }}</a>
+                                          </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-{# example, assuming you have a route named "login" #}
-To login, go to: <a href="{{ url }}">...</a>.
-
-Thanks!
-
-{# Makes an absolute URL to the /images/logo.png file #}
-<img src="{{ absolute_url(asset('images/logo.png')) }}">
+    <div style="margin:0px auto;max-width:600px">
+        <table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%" align="center" border="0">
+            <tbody>
+                <tr>
+                    <td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:0px">
+                        <div style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%">
+                            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="word-wrap:break-word;font-size:0px;padding:20px 20px 20px 20px;padding-top:15px;padding-bottom:15px" align="center">
+                                            <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate" align="center" border="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="border:none;border-radius:3px;color:white;padding:10px 15px" align="center" valign="middle" bgcolor="#3498DC"><a href="{{ url }}" style="text-decoration:none;background:#3498dc;color:white;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;line-height:1.7;text-transform:none;margin:0px" target="_blank">{{ label }}</a></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
