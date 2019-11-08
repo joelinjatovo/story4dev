@@ -12,7 +12,7 @@
                     </div>
                     <div class="kt-widget__info kt-margin-t-5">
                         {% if is_granted('view', report) %}
-                            <a href="{{ path('report_show', { 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-widget__title">
+                            <a href="{{ path('report_show', { slug: report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-widget__title">
                                 {{ report.title }}                                                
                             </a>
                         {% else %}
@@ -33,7 +33,7 @@
                         <ul class="kt-nav">
                             {% if is_granted('view', report) %}
                                 <li class="kt-nav__item">
-                                    <a href="{{ path('report_show', { 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
+                                    <a href="{{ path('report_show', { slug: report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-line-chart"></i>
                                         <span class="kt-nav__link-text">Détails</span>
                                     </a>
@@ -41,7 +41,7 @@
                             {% endif %}
                             {% if is_granted('edit', report) %}
                                 <li class="kt-nav__item">
-                                    <a href="{{ path('report_edit', { 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
+                                    <a href="{{ path('report_edit', { slug: report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-settings"></i>
                                         <span class="kt-nav__link-text">Modifier</span>
                                     </a>

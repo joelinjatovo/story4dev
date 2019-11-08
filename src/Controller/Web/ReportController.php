@@ -31,8 +31,8 @@ use App\Service\PaginatorService;
 class ReportController extends AbstractController
 {
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}/report", name="index", methods="GET", requirements={"project_id"="\d+","activity_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}/report", name="index", methods="GET", requirements={"activity_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
     public function index(Project $project, Activity $activity)
@@ -61,8 +61,8 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}/report", name="create", methods="POST", requirements={"project_id"="\d+","activity_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}/report", name="create", methods="POST", requirements={"activity_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
     public function create(Project $project, Activity $activity, Request $request): Response
@@ -102,18 +102,18 @@ class ReportController extends AbstractController
                 switch($action){
                     case 'save-exit':
                         return $this->redirectToRoute('activity_show', [
-                            'project_id'  => $project->getId(), 
+                            'slug'  => $project->getSlug(),
                             'activity_id' => $activity->getId(), 
                         ]);
                     case 'save-continue':
                         return $this->redirectToRoute('report_show', [
-                            'project_id'  => $project->getId(), 
+                            'slug'  => $project->getSlug(),
                             'activity_id' => $activity->getId(), 
                             'report_id'   => $report->getId(), 
                         ]);
                     case 'save-edit':
                         return $this->redirectToRoute('report_edit', [
-                            'project_id'  => $project->getId(), 
+                            'slug'  => $project->getSlug(),
                             'activity_id' => $activity->getId(), 
                             'report_id'   => $report->getId(), 
                         ]);
@@ -121,7 +121,7 @@ class ReportController extends AbstractController
                     case 'save-default':
                     default:
                         return $this->redirectToRoute('report_index', [
-                            'project_id'  => $project->getId(), 
+                            'slug'  => $project->getSlug(),
                             'activity_id' => $activity->getId(), 
                         ]);
                 }
@@ -131,14 +131,14 @@ class ReportController extends AbstractController
         }
         
         return $this->redirectToRoute('report_index', [
-            'project_id'  => $project->getId(), 
+            'slug'  => $project->getSlug(),
             'activity_id' => $activity->getId(), 
         ]);
     }
     
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}/report/{report_id}", name="show", methods="GET", requirements={"project_id"="\d+","report_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}/report/{report_id}", name="show", methods="GET", requirements={"report_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
@@ -168,8 +168,8 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}/report/edit/{report_id}", name="edit", methods="GET", requirements={"project_id"="\d+","id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}/report/edit/{report_id}", name="edit", methods="GET", requirements={"id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
@@ -199,8 +199,8 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}/report/edit/{report_id}", name="update", methods="POST", requirements={"project_id"="\d+","id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}/report/edit/{report_id}", name="update", methods="POST", requirements={"id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
@@ -266,25 +266,25 @@ class ReportController extends AbstractController
                 switch($action){
                     case 'save-exit':
                         return $this->redirectToRoute('activity_show', [
-                            'project_id'  => $project->getId(), 
+                            'slug'  => $project->getSlug(),
                             'activity_id' => $activity->getId(), 
                         ]);
                     case 'save-continue':
                     case 'save-edit':
                         return $this->redirectToRoute('report_edit', [
-                            'project_id'  => $project->getId(), 
+                            'slug'  => $project->getSlug(),
                             'activity_id' => $activity->getId(), 
                             'report_id'   => $report->getId(), 
                         ]);
                     case 'save-create':
                         return $this->redirectToRoute('report_index', [
-                            'project_id'  => $project->getId(), 
+                            'slug'  => $project->getSlug(),
                             'activity_id' => $activity->getId(), 
                         ]);
                     case 'save-default':
                     default:
                         return $this->redirectToRoute('report_show', [
-                            'project_id'  => $project->getId(), 
+                            'slug'  => $project->getSlug(),
                             'activity_id' => $activity->getId(), 
                             'report_id'   => $report->getId(), 
                         ]);
@@ -295,7 +295,7 @@ class ReportController extends AbstractController
         }
         
         return $this->redirectToRoute('report_edit', [
-            'project_id'  => $project->getId(), 
+            'slug'  => $project->getSlug(),
             'activity_id' => $activity->getId(),
             'report_id'   => $report->getId(), 
         ]);
@@ -375,11 +375,11 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
-     * @Route("/project/{project_id}/activity/{activity_id}/reports/{type}/{page<\d+>?1}", name="list2_type", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
-     * @Route("/project/{project_id}/reports/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
-     * @Route("/project/{project_id}/reports/{type}/{page<\d+>?1}", name="list_type", methods="GET", requirements={"project_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"activity_id"="\d+"})
+     * @Route("/{slug}/activity/{activity_id}/reports/{type}/{page<\d+>?1}", name="list2_type", methods="GET", requirements={"activity_id"="\d+"})
+     * @Route("/{slug}/reports/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/{slug}/reports/{type}/{page<\d+>?1}", name="list_type", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function list(Project $project, $activity_id = 0, ?string $type, $page = 1, PaginatorService $paginator)
     {

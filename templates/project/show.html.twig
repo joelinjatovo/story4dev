@@ -14,7 +14,7 @@
         </div>        
         <div class="kt-subheader__toolbar">
             {% if is_granted('edit', project) %}
-                <a href="{{ path('project_edit', { 'id' : project.id } ) }}" class="btn kt-subheader__btn-primary">Modifier</a>
+                <a href="{{ path('project_edit', {slug : project.slug } ) }}" class="btn kt-subheader__btn-primary">Modifier</a>
             {% endif %}
             <div class="kt-subheader__wrapper">
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
@@ -37,7 +37,7 @@
                                 </li>
                                 <li class="kt-nav__separator"></li>
                                 <li class="kt-nav__item">
-                                    <a href="{{ path('activity_index', { 'project_id' : project.id } ) }}" class="kt-nav__link">
+                                    <a href="{{ path('activity_index', { 'slug' : project.slug } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon-map"></i>
                                         <span class="kt-nav__link-text">Activité</span>
                                     </a>
@@ -56,19 +56,19 @@
                             </li>
                             <li class="kt-nav__separator"></li>                        
                             <li class="kt-nav__item">
-                                <a href="{{ path('activity_list', { 'project_id' : project.id } ) }}" class="kt-nav__link">
+                                <a href="{{ path('activity_list', { 'slug' : project.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon-map"></i>
                                     <span class="kt-nav__link-text">Les activités</span>
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
-                                <a href="{{ path('report_list', { 'project_id' : project.id } ) }}" class="kt-nav__link">
+                                <a href="{{ path('report_list', { 'slug' : project.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-list"></i>
                                     <span class="kt-nav__link-text">Les rapports</span>
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
-                                <a href="{{ path('contribution_list', { 'project_id' : project.id } ) }}" class="kt-nav__link">
+                                <a href="{{ path('contribution_list', { 'slug' : project.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-group"></i>
                                     <span class="kt-nav__link-text">Les contributeurs</span>
                                 </a>
@@ -202,7 +202,7 @@
             <div class="modal-body">
                 <div class="kt-notification-v2">
                     {% for activity in project.activities %}
-                        <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-notification-v2__item">
+                        <a href="{{ path('report_index', { 'activity_id' : activity.id, slug: project.slug } ) }}" class="kt-notification-v2__item">
                             <div class="kt-notification-v2__itek-wrapper">
                                 <div class="kt-notification-v2__item-title">
                                     {{ activity.title }}
@@ -230,16 +230,16 @@
         <div class="kt-portlet kt-portlet--height-fluid" style="background-color: rgba(29, 201, 183, 0.1);">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <a href="{{ path('activity_list', { 'project_id' : project.id } ) }}">
+                    <a href="{{ path('activity_list', { slug: project.slug } ) }}">
                         <h3 class="kt-portlet__head-title">Activités</h3>
                     </a>
                 </div>
                 <div class="kt-portlet__head-toolbar">
-                    <a href="{{ path('activity_list', { 'project_id' : project.id } ) }}" class="btn btn-label-primary btn-bold btn-sm">
+                    <a href="{{ path('activity_list', { slug: project.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
                         Toutes
                     </a>
                     {% if is_granted('edit', project) %}
-                        <a href="{{ path('activity_index', { 'project_id' : project.id } ) }}" class="btn btn-icon">
+                        <a href="{{ path('activity_index', { slug: project.slug } ) }}" class="btn btn-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                     <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
@@ -266,12 +266,12 @@
         <div class="kt-portlet kt-portlet--height-fluid" style="background-color: rgba(29, 201, 183, 0.1);">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <a href="{{ path('report_list', { 'project_id' : project.id } ) }}">
+                    <a href="{{ path('report_list', { slug: project.slug } ) }}">
                         <h3 class="kt-portlet__head-title">Rapports</h3>
                     </a>
                 </div>
                 <div class="kt-portlet__head-toolbar">
-                    <a href="{{ path('report_list', { 'project_id' : project.id } ) }}" class="btn btn-label-primary btn-bold btn-sm">
+                    <a href="{{ path('report_list', { slug: project.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
                         Tous
                     </a>
                     <button class="btn btn-icon" data-toggle="modal" data-target="#kt_modal_activities">
@@ -303,12 +303,12 @@
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <a href="{{ path('contribution_list', { 'project_id' : project.id } ) }}">
+                    <a href="{{ path('contribution_list', { slug: project.slug } ) }}">
                         <h3 class="kt-portlet__head-title">Equipe projet</h3>
                     </a>
                 </div>
                 <div class="kt-portlet__head-toolbar">
-                    <a href="{{ path('contribution_list', { 'project_id' : project.id } ) }}" class="btn btn-label-brand btn-bold btn-sm">
+                    <a href="{{ path('contribution_list', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold btn-sm">
                         Tous
                     </a>
                 </div>

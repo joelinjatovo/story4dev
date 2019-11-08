@@ -19,7 +19,7 @@ use App\Service\PaginatorService;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/{slug}/{page<\d+>?1}", name="show", methods="GET")
+     * @Route("/u/{slug}/{page<\d+>?1}", name="show", methods="GET")
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      */
     public function show(User $user, $page = 1, PaginatorService $paginator)

@@ -11,7 +11,7 @@
                         </span>
                     </div>
                     <div class="kt-widget__info kt-margin-t-5">
-                        <a href="{{ path('report_show', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-widget__title">
+                        <a href="{{ path('report_show', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-widget__title">
                             {{ report.title }}                                                
                         </a>
                         <span class="kt-widget__desc">
@@ -26,14 +26,14 @@
                     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
                         <ul class="kt-nav">
                             <li class="kt-nav__item">
-                                <a href="{{ path('report_show', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
+                                <a href="{{ path('report_show', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-line-chart"></i>
                                     <span class="kt-nav__link-text">Détails</span>
                                 </a>
                             </li>
                             {% if is_granted('edit', report) %}
                                 <li class="kt-nav__item">
-                                    <a href="{{ path('report_edit', { 'slug': report.activity.project.author.slug, 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
+                                    <a href="{{ path('report_edit', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-settings"></i>
                                         <span class="kt-nav__link-text">Modifier</span>
                                     </a>

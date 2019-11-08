@@ -1,7 +1,7 @@
 <div class="kt-widget31__item">
     <div class="kt-widget31__content">
         <div class="kt-widget31__info">
-            <a href="{{ url('indicator_show', { 'project_id' : result.indicator.activity.project.id, 'activity_id' : result.indicator.activity.id, 'indicator_id' : result.indicator.id }) }}" class="kt-widget31__username">
+            <a href="{{ url('indicator_show', { 'slug' : result.indicator.activity.project.slug, 'activity_id' : result.indicator.activity.id, 'indicator_id' : result.indicator.id }) }}" class="kt-widget31__username">
                 {{ result.indicator.title }}
             </a>
             <p class="kt-widget31__text">
@@ -12,7 +12,7 @@
 
     <div class="kt-widget31__content">
         <div class="kt-widget31__progress">
-            <a href="{{ url('indicator_show', { 'project_id' : result.indicator.activity.project.id, 'activity_id' : result.indicator.activity.id, 'indicator_id' : result.indicator.id }) }}" class="kt-widget31__stats">
+            <a href="{{ url('indicator_show', { 'slug' : result.indicator.activity.project.slug, 'activity_id' : result.indicator.activity.id, 'indicator_id' : result.indicator.id }) }}" class="kt-widget31__stats">
                 <span>{{ result.indicator.progression }}%</span>
                 <span>{{ result.indicator.value }} / {{ result.indicator.goalValue }}</span>						    							 
             </a>

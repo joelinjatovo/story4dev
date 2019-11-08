@@ -22,8 +22,8 @@ use App\Service\PaginatorService;
 class FeedController extends AbstractController
 {
     /**
-     * @Route("/feed/json/{id}/{page<\d+>?1}", name="json", methods="GET", requirements={"id"="\d+"})
-     * @Entity("project", options={"mapping": {"id": "id"}})
+     * @Route("/feed/json/{slug}/{page<\d+>?1}", name="json", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function jsonFeed($page = 1, Project $project, PaginatorService $paginator)
     {
@@ -35,8 +35,9 @@ class FeedController extends AbstractController
                 'page'  => (int) $page,
                 'found' => (int) $reports->count(),
             ], 
-            'format' => 'json', 
-            'data'   => $reports
+            'format'  => 'json', 
+            'project' => $project,
+            'data'    => $reports
         ], JsonResponse::HTTP_OK, [], ['groups' => ['raw']]);
     }
 }

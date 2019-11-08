@@ -3,7 +3,7 @@
         <span style="width: 250px;">
             <div class="kt-user-card-v2">
                 <div class="kt-user-card-v2__details">
-                    <a class="kt-user-card-v2__name" href="{{ path('report_show', { 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id }) }}">{{ report.title }}</a>
+                    <a class="kt-user-card-v2__name" href="{{ path('report_show', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id }) }}">{{ report.title }}</a>
                     <span class="kt-user-card-v2__email">{{ report.description|excerpt(50) }}</span>
                 </div>
             </div>
@@ -49,12 +49,12 @@
     <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 150px;">
             {% if is_granted('edit', report) %}
-                <a href="{{ path('report_edit', { 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                <a href="{{ path('report_edit', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                     <i class="la la-edit"></i>
                 </a>
             {% endif %}
             {% if is_granted('view', report) %}
-                <a href="{{ path('report_show', { 'project_id': report.activity.project.id, 'activity_id': report.activity.id, 'report_id': report.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                <a href="{{ path('report_show', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                     <i class="la la-eye"></i>
                 </a>
             {% endif %}

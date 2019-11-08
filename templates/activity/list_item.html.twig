@@ -3,7 +3,7 @@
         <span style="width: 222px;">
             <div class="kt-user-card-v2">
                 <div class="kt-user-card-v2__details">
-                    <a class="kt-user-card-v2__name" href="{{ path('activity_show', { 'project_id': activity.project.id, 'activity_id': activity.id }) }}">{{ activity.title }}</a>
+                    <a class="kt-user-card-v2__name" href="{{ path('activity_show', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}">{{ activity.title }}</a>
                     <span class="kt-user-card-v2__email">{{ activity.description|excerpt(50) }}</span>
                 </div>
             </div>
@@ -24,23 +24,23 @@
         </span>
     </td>
     <td data-field="Indicateurs" class="kt-datatable__cell">
-        <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : activity.project.id} ) }}" style="width: 100px;"><span class="kt-font-bold">{{ activity.indicators.count }} </span>Indicateurs</a>
+        <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'slug' : activity.project.slug} ) }}" style="width: 100px;"><span class="kt-font-bold">{{ activity.indicators.count }} </span>Indicateurs</a>
     </td>
     <td data-field="Rapports" class="kt-datatable__cell">
-        <a style="width: 100px;" href="{{ path('report_list2', { 'activity_id' : activity.id, 'project_id' : activity.project.id} ) }}"><span class="kt-font-bold">{{ activity.reports.count }} </span>Rapports</a>
+        <a style="width: 100px;" href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : activity.project.slug} ) }}"><span class="kt-font-bold">{{ activity.reports.count }} </span>Rapports</a>
     </td>
     <td data-field="Documents" class="kt-datatable__cell">
-        <a style="width: 100px;" href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'project_id' : activity.project.id } ) }}"><span class="kt-font-bold">{{ activity.activityFiles.count }} </span>Documents</a>
+        <a style="width: 100px;" href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}"><span class="kt-font-bold">{{ activity.activityFiles.count }} </span>Documents</a>
     </td>
     <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 150px;">
             {% if is_granted('edit', activity) %}
-                <a href="{{ path('activity_edit', { 'project_id': activity.project.id, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                <a href="{{ path('activity_edit', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                     <i class="la la-edit"></i>
                 </a>
             {% endif %}
             {% if is_granted('view', activity) %}
-                <a href="{{ path('activity_show', { 'project_id': activity.project.id, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                <a href="{{ path('activity_show', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                     <i class="la la-eye"></i>
                 </a>
             {% endif %}

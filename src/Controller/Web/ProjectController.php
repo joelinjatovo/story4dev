@@ -33,8 +33,8 @@ class ProjectController extends AbstractController
     const RECENT_ITEMS_COUNT = 10;
     
     /**
-     * @Route("/project/{id}/dashboard", name="dashboard", methods="GET", requirements={"id"="\d+"})
-     * @Entity("project", options={"mapping": {"id": "id"}})
+     * @Route("/{slug}/dashboard", name="dashboard", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function dashboard(Project $project)
     {
@@ -76,8 +76,8 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/project/{id}", name="show", methods="GET", requirements={"id"="\d+"})
-     * @Entity("project", options={"mapping": {"id": "id"}})
+     * @Route("/{slug}", name="show", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function show(Project $project)
     {
@@ -107,8 +107,8 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/project/edit/{id}", name="edit", methods="GET", requirements={"id"="\d+"})
-     * @Entity("project", options={"mapping": {"id": "id"}})
+     * @Route("/{slug}/edit", name="edit", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function edit(Project $project, ProjectHelper $projectHelper)
     {
@@ -138,8 +138,8 @@ class ProjectController extends AbstractController
     }
     
     /**
-     * @Route("/project/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
-     * @Entity("project", options={"mapping": {"id": "id"}})
+     * @Route("/{slug}/edit", name="update", methods="POST")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function update(Project $project, Request $request, FormError $formError, ProjectHelper $projectHelper)
     {
@@ -227,7 +227,7 @@ class ProjectController extends AbstractController
             $this->addFlash('success', 'Votre modification a été bien sauvegardé.');
             
             $args = [
-                'id'   => $project->getId()
+                'slug' => $project->getSlug(), 
             ];
 
             $action = strtolower( $request->request->get('submit') );
@@ -248,9 +248,12 @@ class ProjectController extends AbstractController
         }
         
         $this->addFlash('error', 'Votre modification n\'a pas été sauvegardé. Une erreur s\'est produite. ' . $form->getErrors());
-
-        return $this->redirectToRoute('project_edit', [
-            'id'   => $project->getId(), 
+        
+        return $this->render('project/edit.html.twig', [
+            'user'    => $user, 
+            'project' => $project, 
+            'fields'  => $fields,
+            'form'    => $form->createView()
         ]);
     }
     
@@ -306,7 +309,7 @@ class ProjectController extends AbstractController
     
     /**
      * @Route("/projects/{page<\d+>?1}", name="list", methods="GET")
-     * @Route("/{slug}/projects/{page<\d+>?1}", name="list2", methods="GET")
+     * @Route("/u/{slug}/projects/{page<\d+>?1}", name="list2", methods="GET")
      * @Entity("user", options={"mapping": {"slug": "slug"}})
      */
     public function list(?User $user = null, PaginatorService $paginator, int $page)

@@ -72,7 +72,7 @@ class ProjectController extends AbstractController
             $this->addFlash('success', 'Projet créé avec succès.');
             
             $args = [
-                'id'   => $project->getId()
+                'slug' => $project->getSlug(), 
             ];
             
             $action = strtolower( $request->request->get('submit') );
@@ -89,14 +89,18 @@ class ProjectController extends AbstractController
             }
 
             return $this->redirectToRoute('project_edit', [
-                'id'   => $project->getId()
+                'slug' => $project->getSlug(), 
             ]);
             
         }
         
-        $this->addFlash('error', 'Something went wrong.');
+        $this->addFlash('error', 'Une erreur s\'est produite.');
 
-        return $this->redirectToRoute('admin_project_create');
+        return $this->render('project/create.html.twig', [
+            'user'    => $user,
+            'project' => $project,
+            'form'    => $form->createView()
+        ]);
     }
     
     /**

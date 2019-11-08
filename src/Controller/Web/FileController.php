@@ -26,9 +26,9 @@ class FileController extends AbstractController
     
     /**
      * @Route("/files/{page<\d+>?1}", name="list", methods="GET")
-     * @Route("/project/{project_id}/files/{page<\d+>?1}", name="list_project", methods="GET")
-     * @Route("/project/{project_id}/activity/{activity_id}/files/{page<\d+>?1}", name="list_activity", methods="GET")
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/files/{page<\d+>?1}", name="list_project", methods="GET")
+     * @Route("/{slug}/activity/{activity_id}/files/{page<\d+>?1}", name="list_activity", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
     public function list(?Project $project = null, Activity $activity = null, $page = 1, Request $request, PaginatorService $paginator)
@@ -69,9 +69,9 @@ class FileController extends AbstractController
     
     /**
      * @Route("/file/{file_id}", name="show", methods="GET")
-     * @Route("/project/{project_id}/file/{file_id}", name="show_project", methods="GET")
-     * @Route("/project/{project_id}/activity/{activity_id}/file/{file_id}", name="show_activity", methods="GET")
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/file/{file_id}", name="show_project", methods="GET")
+     * @Route("/{slug}/activity/{activity_id}/file/{file_id}", name="show_activity", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("file", options={"mapping": {"file_id": "id"}})
      */

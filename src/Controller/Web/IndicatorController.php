@@ -31,8 +31,8 @@ class IndicatorController extends AbstractController
 {
     
     /**
-     * @Route("project/{project_id}/activity/{activity_id}/indicator", name="index", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("{slug}/activity/{activity_id}/indicator", name="index", methods="GET", requirements={"activity_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
     public function index(Project $project, Activity $activity)
@@ -65,8 +65,8 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}/indicator", name="create", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}/indicator", name="create", methods="POST", requirements={"activity_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
     public function create(Project $project, Activity $activity, Request $request, FormError $formError)
@@ -98,7 +98,7 @@ class IndicatorController extends AbstractController
             $this->addFlash('success', 'L\'indicateur a été bien sauvegardé avec succès.');
 
             $args = [
-                'project_id'  => $project->getId(),
+                'slug'  => $project->getSlug(),
                 'activity_id' => $activity->getId(),
             ];
             
@@ -123,15 +123,14 @@ class IndicatorController extends AbstractController
         $this->addFlash('error', "L'indicateur n'a pas été sauvegardé. Une erreur s'est produite.");
 
         return $this->redirectToRoute('indicator_index', [
-            'slug'        => $user->getSlug(),
-            'project_id'  => $project->getId(),
+            'slug'  => $project->getSlug(),
             'activity_id' => $activity->getId(), 
         ]);
     }
     
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}/indicator/{indicator_id}", name="show", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}/indicator/{indicator_id}", name="show", methods="GET", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
@@ -165,8 +164,8 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}/indicator/edit/{indicator_id}", name="edit", methods="GET", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}/indicator/edit/{indicator_id}", name="edit", methods="GET", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
@@ -196,8 +195,8 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}/indicator/edit/{indicator_id}", name="update", methods="POST", requirements={"project_id"="\d+", "activity_id"="\d+", "indicator_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}/indicator/edit/{indicator_id}", name="update", methods="POST", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
@@ -227,7 +226,7 @@ class IndicatorController extends AbstractController
             $this->addFlash('success', "l'indicateur a été bien modifié avec succès.");
             
             $args = [
-                'project_id'  => $project->getId(),
+                'slug'  => $project->getSlug(),
                 'activity_id' => $activity->getId(),
                 'indicator_id' => $indicator->getId()
             ];
@@ -252,15 +251,15 @@ class IndicatorController extends AbstractController
         $this->addFlash('error', "Les modifications n'ont pas été sauvegardée. Une erreur s'est produite. Veuillez réessayer!");
 
         return $this->redirectToRoute('indicator_edit', [
-            'project_id'   => $project->getId(), 
+            'slug'  => $project->getSlug(),
             'activity_id'  => $activity->getId(),
             'indicator_id' => $indicator->getId()
         ]);
     }
     
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}/indicators/{page<\d+>?1}", name="list", methods="GET")
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}/indicators/{page<\d+>?1}", name="list", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */

@@ -51,7 +51,7 @@ class IndexController extends AbstractController
                 foreach($contributions as $contribution){
                     $project = $contribution->getProject();
                     return $this->redirectToRoute('project_show',[
-                        'id'   => $project->getId(),
+                        'slug' => $project->getSlug(), 
                     ]);
                 }
             }

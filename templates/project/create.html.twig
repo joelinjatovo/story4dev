@@ -22,7 +22,7 @@
 				</div>
 				<div class="kt-portlet__head-toolbar">
                     {% if project is defined and project is not null and ( project.id > 0 ) %}
-                        <a href="{{ path('project_show', { 'id' : project.id } ) }}" class="btn btn-clean kt-margin-r-10">
+                        <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean kt-margin-r-10">
                             <i class="la la-arrow-left"></i>
                             <span class="kt-hidden-mobile">Retour</span>
                         </a>
@@ -88,11 +88,22 @@
                                             </div>
                                         </div>
                                     </div>
-									<div class="form-group row">
-                    					{{ form_label( form.slug, 'Url du projet', { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                                    {% set validatedClass = '' %} 
+                                    {% set invalidClass = '' %} 
+                                    {% if form.slug.vars.valid == false %}
+                                        {% set validatedClass = 'validated' %}
+                                        {% set invalidClass = 'is-invalid' %}
+                                    {% endif %}
+									<div class="form-group row {{ validatedClass }}">
+                    					{{ form_label( form.slug, 'Url du projet', { 'label_attr': { class: "col-3 col-form-label " ~ invalidClass  } } ) }}
 										<div class="col-9">
-											{{ form_widget( form.slug, { 'attr' : { 'class' : 'form-control' } } ) }}
-										</div>
+											{{ form_widget( form.slug, { 'attr' : { 'class' : "form-control " ~ invalidClass } } ) }}
+                                            {% for error in form.slug.vars.errors %}
+                                                <div id="billing_address_1-error" class="error invalid-feedback">
+                                                    {{ error.message }}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
 									</div>
 									<div class="form-group row">
                     					{{ form_label( form.title, 'Nom du projet', { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}

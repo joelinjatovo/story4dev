@@ -4,7 +4,7 @@
             <div class="kt-widget__top">
                 <div class="kt-widget__content" style="padding-left:0px;">
                     <div class="kt-widget__head">
-                        <a href="{{ path('activity_show', { 'project_id': activity.project.id, 'activity_id': activity.id }) }}" class="kt-widget__username">
+                        <a href="{{ path('activity_show', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="kt-widget__username">
                             {{ activity.title }}                 
                         </a>                         
                         <div class="kt-widget__action">
@@ -16,7 +16,7 @@
                                     <ul class="kt-nav">
                                         {% if is_granted('view', activity) %}
                                             <li class="kt-nav__item">
-                                                <a href="{{ path('activity_show', { 'project_id': activity.project.id, 'activity_id': activity.id }) }}" class="kt-nav__link">
+                                                <a href="{{ path('activity_show', { slug: activity.project.slug, 'activity_id': activity.id }) }}" class="kt-nav__link">
                                                     <i class="kt-nav__link-icon flaticon2-line-chart"></i>
                                                     <span class="kt-nav__link-text">Détails</span>
                                                 </a>
@@ -24,7 +24,7 @@
                                         {% endif %}
                                         {% if is_granted('edit', activity) %}
                                             <li class="kt-nav__item">
-                                                <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'project_id' : activity.project.id } ) }}" class="kt-nav__link">
+                                                <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" class="kt-nav__link">
                                                     <i class="kt-nav__link-icon flaticon2-settings"></i>
                                                     <span class="kt-nav__link-text">Modifier</span>
                                                 </a>
@@ -32,7 +32,7 @@
                                         {% endif %}
                                         {% if is_granted('edit', activity) %}
                                             <li class="kt-nav__item">
-                                                <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id } ) }}" class="kt-nav__link">
+                                                <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" class="kt-nav__link">
                                                     <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
                                                     <span class="kt-nav__link-text">Créer un indicateur</span>
                                                 </a>
@@ -40,7 +40,7 @@
                                         {% endif %}
                                         {% if is_granted('view', activity) %}
                                             <li class="kt-nav__item">
-                                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id} ) }}" class="kt-nav__link">
+                                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug} ) }}" class="kt-nav__link">
                                                     <i class="kt-nav__link-icon flaticon2-avatar"></i>
                                                     <span class="kt-nav__link-text">Créer un rapport</span>
                                                 </a>
@@ -110,7 +110,7 @@
                     </div>
                     <div class="kt-widget__details">
                         <span class="kt-widget__title">{{ activity.reports.count }} Rapports</span>
-                        <a href="{{ path('report_list2', { 'activity_id' : activity.id, 'project_id' : project.id} ) }}" class="kt-widget__value kt-font-brand">Lister</a>
+                        <a href="{{ path('report_list2', { activity_id : activity.id, slug : project.slug} ) }}" class="kt-widget__value kt-font-brand">Lister</a>
                     </div>
                 </div>
 
@@ -120,7 +120,7 @@
                     </div>
                     <div class="kt-widget__details">
                         <span class="kt-widget__title">{{ activity.indicators.count }} Indicateurs</span>
-                        <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : project.id} ) }}" class="kt-widget__value kt-font-brand">Lister</a>
+                        <a href="{{ path('indicator_list', { activity_id : activity.id, slug : project.slug} ) }}" class="kt-widget__value kt-font-brand">Lister</a>
                     </div>
                 </div>
 

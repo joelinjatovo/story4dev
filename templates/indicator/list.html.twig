@@ -13,15 +13,15 @@
             <div class="kt-subheader__breadcrumbs">
                 <a href="{{ path('project_list', { page : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="{{ path('project_show', { id: activity.project.id })}}" class="kt-subheader__breadcrumbs-link">{{ activity.project.title }}</a>
+                <a href="{{ path('project_show', { slug: activity.project.slug })}}" class="kt-subheader__breadcrumbs-link">{{ activity.project.title }}</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="{{ path('activity_show', { project_id: activity.project.id, activity_id: activity.id })}}" class="kt-subheader__breadcrumbs-link">{{ activity.title }}</a>
+                <a href="{{ path('activity_show', { slug: activity.project.slug, activity_id: activity.id })}}" class="kt-subheader__breadcrumbs-link">{{ activity.title }}</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Indicateurs</span>
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ url('activity_show', { 'project_id' : activity.project.id, 'activity_id' : activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+            <a href="{{ url('activity_show', { 'slug' : activity.project.slug, 'activity_id' : activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
             <div class="dropdown dropdown-inline" data-toggle="kt-tooltip" title="" data-placement="left" data-original-title="Quick actions: {{ activity.title }}">
                 <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
@@ -43,7 +43,7 @@
                         <li class="kt-nav__separator"></li>
                         {% if is_granted('create_indicator', activity) %}
                             <li class="kt-nav__item">
-                                <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'project_id' : activity.project.id } ) }}" class="kt-nav__link">
+                                <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-drop"></i>
                                     <span class="kt-nav__link-text">Indicateur</span>
                                 </a>
@@ -52,7 +52,7 @@
                         
                         {% if is_granted('view', activity) %}
                             <li class="kt-nav__item">
-                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-nav__link">
+                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
                                     <span class="kt-nav__link-text">Rapport</span>
                                 </a>
@@ -64,19 +64,19 @@
                             </li>
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__item">
-                                <a href="{{ path('report_list2', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-nav__link">
+                                <a href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
                                     <span class="kt-nav__link-text">Les rapports</span>
                                 </a>
                             </li>
                             <li class="kt-nav__item">
-                                <a href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-nav__link">
+                                <a href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
                                     <span class="kt-nav__link-text">Les documents</span>
                                 </a>
                             </li>
                             <li class="kt-nav__item">
-                                <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'project_id' : project.id } ) }}" class="kt-nav__link">
+                                <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
                                     <span class="kt-nav__link-text">Les indicateurs</span>
                                 </a>
@@ -99,7 +99,7 @@
                 <div class="kt-widget__top">
                     <div class="kt-widget__content">
                         <div class="kt-widget__head">
-                            <a href="{{ url('indicator_show', { 'slug' : indicator.activity.project.author.slug, 'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id, 'indicator_id' : indicator.id }) }}" class="kt-widget__username">
+                            <a href="{{ url('indicator_show', { 'slug' : indicator.activity.project.slug, 'activity_id' : indicator.activity.id, 'indicator_id' : indicator.id }) }}" class="kt-widget__username">
                                 {{ indicator.title }}   
                             </a>                         
                         <div class="kt-widget__action">
@@ -111,7 +111,7 @@
                                     <ul class="kt-nav">
                                         {% if is_granted('view', indicator) %}
                                             <li class="kt-nav__item">
-                                                <a href="{{ url('indicator_show', {'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id, 'indicator_id' : indicator.id }) }}" class="kt-nav__link">
+                                                <a href="{{ url('indicator_show', {'slug' : indicator.activity.project.slug, 'activity_id' : indicator.activity.id, 'indicator_id' : indicator.id }) }}" class="kt-nav__link">
                                                     <i class="kt-nav__link-icon flaticon2-line-chart"></i>
                                                     <span class="kt-nav__link-text">Détails</span>
                                                 </a>
@@ -119,7 +119,7 @@
                                         {% endif %}
                                         {% if is_granted('edit', indicator) %}
                                             <li class="kt-nav__item">
-                                                <a href="{{ path('indicator_edit', { 'activity_id' : activity.id, 'project_id' : activity.project.id, 'indicator_id' : indicator.id} ) }}" class="kt-nav__link">
+                                                <a href="{{ path('indicator_edit', { 'activity_id' : activity.id, 'slug' : activity.project.slug, 'indicator_id' : indicator.id} ) }}" class="kt-nav__link">
                                                     <i class="kt-nav__link-icon flaticon2-settings"></i>
                                                     <span class="kt-nav__link-text">Modifier</span>
                                                 </a>

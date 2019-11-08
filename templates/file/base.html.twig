@@ -38,7 +38,7 @@
 
               {% for project in projects %}
                   <li class="kt-nav__item">
-                      <a href="{{ path( 'file_list_project', { project_id: project.id } ) }}" class="kt-nav__link" data-action="list" data-type="marked">
+                      <a href="{{ path( 'file_list_project', { slug: project.slug } ) }}" class="kt-nav__link" data-action="list" data-type="marked">
                           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-nav__link-icon">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <polygon points="0 0 24 0 24 24 0 24"></polygon>

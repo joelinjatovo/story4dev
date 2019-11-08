@@ -26,6 +26,7 @@ use App\Traits\SoftDeleteableEntity;
  * @Vich\Uploadable
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  * @ORM\Table(name="projects")
+ * @UniqueEntity("slug")
  */
 class Project
 {

@@ -6,7 +6,7 @@
         <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout- "  >
             <ul class="kt-menu__nav ">
                 {% if project is defined and project is not null and ( project.id > 0 ) %}
-                <li class="kt-menu__item"  aria-haspopup="true"><a href="{{ path( 'project_show', { id : project.id } ) }}" class="kt-menu__link "><h4 style="margin: 0;">{{ project.title }}</h4></a></li>
+                <li class="kt-menu__item"  aria-haspopup="true"><a href="{{ path( 'project_show', { slug : project.slug } ) }}" class="kt-menu__link "><h4 style="margin: 0;">{{ project.title }}</h4></a></li>
                 {% endif %}
             </ul>
         </div>

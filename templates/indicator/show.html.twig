@@ -14,9 +14,9 @@
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="{{ url('project_list', { 'page' : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="{{ url('project_show', { 'id': indicator.activity.project.id })}}" class="kt-subheader__breadcrumbs-link">{{ activity.project.title }}</a>
+                <a href="{{ url('project_show', { slug: indicator.activity.project.slug })}}" class="kt-subheader__breadcrumbs-link">{{ activity.project.title }}</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="{{ url('activity_show', { 'project_id': indicator.activity.project.id, 'activity_id': indicator.activity.id })}}" class="kt-subheader__breadcrumbs-link">{{ indicator.activity.title }}</a>
+                <a href="{{ url('activity_show', { 'slug': indicator.activity.project.slug, 'activity_id': indicator.activity.id })}}" class="kt-subheader__breadcrumbs-link">{{ indicator.activity.title }}</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{{ indicator.title }}</span>
             </div>
@@ -24,9 +24,9 @@
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a href="{{ url('activity_show', { 'project_id' : indicator.activity.project.id, 'activity_id' : indicator.activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                <a href="{{ url('activity_show', { 'slug' : indicator.activity.project.slug, 'activity_id' : indicator.activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
                 {% if is_granted('edit', indicator) %}
-                    <a href="{{ path('indicator_edit', { 'indicator_id' : indicator.id, 'activity_id' : indicator.activity.id, 'project_id' : indicator.activity.project.id } ) }}" class="btn kt-subheader__btn-primary">
+                    <a href="{{ path('indicator_edit', { 'indicator_id' : indicator.id, 'activity_id' : indicator.activity.id, 'slug' : indicator.activity.project.slug } ) }}" class="btn kt-subheader__btn-primary">
                         Modifier &nbsp;
                     </a>
                 {% endif %}

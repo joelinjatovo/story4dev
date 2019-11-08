@@ -1,7 +1,7 @@
 <div class="kt-widget5__item" style="padding-bottom: 0.5rem;margin-bottom: 0.5rem;">
     <div class="kt-widget5__content">
         <div class="kt-widget5__section">
-            <a href="{{ url('activity_show', { 'project_id' : activity.project.id, 'activity_id' : activity.id }) }}" class="kt-widget5__title">
+            <a href="{{ url('activity_show', { 'slug' : activity.project.slug, 'activity_id' : activity.id }) }}" class="kt-widget5__title">
                 {{ activity.title }}
             </a>
             <div class="kt-widget5__info">

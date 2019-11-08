@@ -35,8 +35,8 @@
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ path('project_show', { 'id' : project.id } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
-            <a href="{{ path('project_edit', { 'id' : project.id } ) }}" class="btn btn-label-brand btn-bold">Modifier le projet</a>
+            <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+            <a href="{{ path('project_edit', { slug : project.slug } ) }}" class="btn btn-label-brand btn-bold">Modifier le projet</a>
         </div>
     </div>
 </div>

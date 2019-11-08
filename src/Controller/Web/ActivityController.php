@@ -28,8 +28,8 @@ use App\Service\PaginatorService;
 class ActivityController extends AbstractController
 {
     /**
-     * @Route("/project/{project_id}/activity", name="index", methods="GET", requirements={"project_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity", name="index", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function index(Project $project)
     {
@@ -49,8 +49,8 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/project/{project_id}/activity", name="create", methods="POST", requirements={"project_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity", name="create", methods="POST")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function create(Project $project, Request $request, FormError $formError): Response
     {
@@ -80,23 +80,23 @@ class ActivityController extends AbstractController
             switch($action){
                 case 'save-exit':
                     return $this->redirectToRoute('project_show', [
-                        'id'   => $project->getId(), 
+                        'slug' => $project->getSlug(), 
                     ]);
                 case 'save-continue':
                     return $this->redirectToRoute('activity_show', [
-                        'project_id'  => $project->getId(), 
+                        'slug' => $project->getSlug(), 
                         'activity_id' => $activity->getId(), 
                     ]);
                 case 'save-edit':
                     return $this->redirectToRoute('activity_edit', [
-                        'project_id'  => $project->getId(), 
+                        'slug' => $project->getSlug(), 
                         'activity_id' => $activity->getId(), 
                     ]);
                 case 'save-create':
                 case 'save-default':
                 default:
                     return $this->redirectToRoute('activity_index', [
-                        'project_id' => $project->getId(), 
+                        'slug' => $project->getSlug(), 
                     ]);
             }
 
@@ -104,14 +104,17 @@ class ActivityController extends AbstractController
         
         $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
 
-        return $this->redirectToRoute('activity_index', [
-            'project_id' => $project->getId(),
+        return $this->render('activity/create.html.twig', [
+            'user'     => $user, 
+            'project'  => $project, 
+            'activity' => $activity, 
+            'form'     => $form->createView()
         ]);
     }
     
     /**
-     * @Route("/project/{project_id}/activity/{activity_id}", name="show", methods="GET", requirements={"project_id"="\d+","activity_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/{activity_id}", name="show", methods="GET", requirements={"activity_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
     public function show(Project $project, Activity $activity)
@@ -142,8 +145,8 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/project/{project_id}/activity/edit/{activity_id}", name="edit", methods="GET", requirements={"project_id"="\d+","activity_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/edit/{activity_id}", name="edit", methods="GET", requirements={"activity_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
     public function edit(Project $project, Activity $activity)
@@ -167,8 +170,8 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/project/{project_id}/activity/edit/{activity_id}", name="update", methods="POST", requirements={"project_id"="\d+","activity_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activity/edit/{activity_id}", name="update", methods="POST", requirements={"activity_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
     public function update(Project $project, Activity $activity, Request $request, FormError $formError)
@@ -196,29 +199,29 @@ class ActivityController extends AbstractController
             switch($action){
                 case 'save-exit':
                     return $this->redirectToRoute('project_show', [
-                        'id'   => $project->getId(), 
+                        'slug' => $project->getSlug(), 
                     ]);
                 case 'save-create':
                     return $this->redirectToRoute('activity_create', [
-                        'project_id'  => $project->getId(), 
+                        'slug' => $project->getSlug(), 
                     ]);
                 case 'save-continue':
                     return $this->redirectToRoute('activity_show', [
-                        'project_id'  => $project->getId(), 
+                        'slug' => $project->getSlug(), 
                         'activity_id' => $activity->getId(), 
                     ]);
                 case 'save-edit':
                 case 'save-default':
                 default:
                     return $this->redirectToRoute('activity_edit', [
-                        'project_id' => $project->getId(), 
+                        'slug' => $project->getSlug(), 
                         'activity_id' => $activity->getId(), 
                     ]);
 
             }
 
             return $this->redirectToRoute('activity_edit', [
-                'project_id'  => $project->getId(), 
+                'slug' => $project->getSlug(), 
                 'activity_id' => $activity->getId(), 
             ]);
         }
@@ -226,7 +229,7 @@ class ActivityController extends AbstractController
         $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
 
         return $this->redirectToRoute('activity_edit', [
-            'project_id'  => $project->getId(), 
+            'slug' => $project->getSlug(), 
             'activity_id' => $activity->getId(), 
         ]);
     }
@@ -264,9 +267,9 @@ class ActivityController extends AbstractController
     }
     
     /**
-     * @Route("/project/{project_id}/activities/{page<\d+>?1}", name="list", methods="GET", requirements={"project_id"="\d+"})
-     * @Route("/project/{project_id}/activities/{type}/{page<\d+>?1}", name="list_type", methods="GET", requirements={"project_id"="\d+"})
-     * @Entity("project", options={"mapping": {"project_id": "id"}})
+     * @Route("/{slug}/activities/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/{slug}/activities/{type}/{page<\d+>?1}", name="list_type", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
     public function list(Project $project, ?string $type, $page = 1, PaginatorService $paginator)
     {
