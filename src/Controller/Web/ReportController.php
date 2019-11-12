@@ -137,7 +137,7 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/report/{report_id}", name="show", methods="GET", requirements={"report_id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/report/{report_id}", name="show", methods="GET", requirements={"activity_id"="\d+", "report_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
@@ -168,7 +168,7 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/report/edit/{report_id}", name="edit", methods="GET", requirements={"id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/report/edit/{report_id}", name="edit", methods="GET", requirements={"activity_id"="\d+", "report_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
@@ -199,7 +199,7 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/report/edit/{report_id}", name="update", methods="POST", requirements={"id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/report/edit/{report_id}", name="update", methods="POST", requirements={"activity_id"="\d+", "report_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
