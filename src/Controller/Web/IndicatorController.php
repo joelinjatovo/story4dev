@@ -31,7 +31,7 @@ class IndicatorController extends AbstractController
 {
     
     /**
-     * @Route("/p{slug}/activity/{activity_id}/indicator", name="index", methods="GET", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/activity/{activity_id}/indicator", name="index", methods="GET", requirements={"activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
