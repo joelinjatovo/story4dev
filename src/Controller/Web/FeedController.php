@@ -28,8 +28,11 @@ class FeedController extends AbstractController
     public function jsonFeed($page = 1, Project $project, PaginatorService $paginator)
     {
         $entityManager = $this->getDoctrine()->getManager();
+        /*
         $query = $entityManager->getRepository(Report::class)->feedByProject($project);
         $reports = $paginator->paginate($query);
+        */
+        $reports = $entityManager->getRepository(Report::class)->feedByProject($project)->execute();
         return $this->json([
             'pagination' => [
                 'page'  => (int) $page,
