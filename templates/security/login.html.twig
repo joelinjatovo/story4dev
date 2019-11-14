@@ -57,11 +57,11 @@
             <div class="form-container sign-in-container">
                 <form action="/login" method="post" id="sign-in-form">
                     <h1>Connexion</h1>
-                    <div class="social-container">
+                    <div class="social-container kt-hidden">
                         <a href="{{ path('connect_facebook_start') }}" class="social"><i class="fab fa-facebook-f"></i></a>
                         <a href="{{ path('connect_google_start') }}" class="social"><i class="fab fa-google-plus-g"></i></a>
                     </div>
-                    <p style="margin-top: 0;">ou utiliser votre compte existant</p>
+                    <p class="kt-hidden" style="margin-top: 0;">ou utiliser votre compte existant</p>
                     <div class="input-group f_row {{ last_username is null ? '' : 'focus' }}">
                         <label>Email</label>
                         <input value="{{ last_username }}" class="input-field" type="text" name="email"  autocomplete="off" />
@@ -109,8 +109,8 @@
                         <h1 class="hidden-mobile">Bienvenu!</h1>
                         <p class="hidden-mobile">Pour se connecter à l'application, utiliser les informations de votre compte existant.</p>
                         <button class="ghost" id="signIn">Se connecter</button>
-                        <p class="hidden-mobile">ou pour s'inscrire, utiliser</p>
-                        <div class="social-container hidden-mobile">
+                        <p class="hidden-mobile kt-hidden">ou pour s'inscrire, utiliser</p>
+                        <div class="social-container hidden-mobile kt-hidden">
                             <a href="{{ path('connect_facebook_start') }}" class="social"><i class="fab fa-facebook-f"></i></a>
                             <a href="{{ path('connect_google_start') }}" class="social"><i class="fab fa-google-plus-g"></i></a>
                         </div>
