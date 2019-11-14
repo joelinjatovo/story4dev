@@ -13,10 +13,12 @@ class ContributionVoter extends Voter
     const ACCEPT   = 'accept';
 
     private $security;
+    private $em;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, EntityManager $em)
     {
         $this->security = $security;
+        $this->em = $em;
     }
     
     protected function supports($attribute, $subject)
