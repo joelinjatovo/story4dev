@@ -72,7 +72,7 @@ class Indicator
      * @ORM\ManyToOne(targetEntity="App\Entity\Unit", inversedBy="indicators")
      * @ORM\JoinColumn(name="unit_id", referencedColumnName="id", onDelete="cascade")
      * @Gedmo\Versioned
-     * @Groups({"full", "indicator", "project", "activity"})
+     * @Groups({"full", "indicator", "project", "activity", "report_feed"})
      */
     private $unit;
 
