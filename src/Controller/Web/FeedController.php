@@ -36,7 +36,7 @@ class FeedController extends AbstractController
         return $this->json([
             'pagination' => [
                 'page'  => (int) $page,
-                'found' => (int) $reports->count(),
+                //'found' => (int) $reports->count(),
             ], 
             'format'  => 'json', 
             'project' => $project,
