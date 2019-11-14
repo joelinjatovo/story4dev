@@ -38,6 +38,6 @@ class FeedController extends AbstractController
             'format'  => 'json', 
             'project' => $project,
             'data'    => $reports
-        ], JsonResponse::HTTP_OK, [], ['groups' => ['raw']]);
+        ], JsonResponse::HTTP_OK, [], ['groups' => ['raw', 'report_feed']]);
     }
 }

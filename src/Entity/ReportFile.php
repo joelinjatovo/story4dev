@@ -15,7 +15,7 @@ class ReportFile
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"full", "activity", "project", "report"})
+     * @Groups({"full", "activity", "project", "report", "report_feed"})
      */
     private $id;
 
