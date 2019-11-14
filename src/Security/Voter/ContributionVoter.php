@@ -58,6 +58,6 @@ class ContributionVoter extends Voter
 
     private function canAccept(ProjectContribution $contribution, User $user)
     {
-        return $user == $contribution->getUser();
+        return $contribution->getUser() && ( $user->getId() == $contribution->getUser()->getId() );
     }
 }
