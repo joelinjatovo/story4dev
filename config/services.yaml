@@ -85,6 +85,12 @@ services:
         tags:
            - { name: security.voter }
 
+    App\Security\Voter\ContributionVoter:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+        tags:
+           - { name: security.voter }
+
 #sensio_framework_extra.view.listener:
     #alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
 
