@@ -58,6 +58,17 @@ class ContributionVoter extends Voter
 
     private function canAccept(ProjectContribution $contribution, User $user)
     {
+        $project = $contribution->getProject();
+        if( $project ) {
+            $contribution1 = $this->em
+                ->getRepository(ProjectContribution::class)
+                ->findOneBy(['project'=> $project, 'user' => $user]);
+            
+            if( $contribution1 && $contribution1->isAdmin() ){
+                return true;
+            }
+        }
+
         return $contribution->getUser() && ( $user->getId() == $contribution->getUser()->getId() );
     }
 }
