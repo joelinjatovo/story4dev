@@ -133,9 +133,15 @@
                             <div class="kt-media-group">
                                 {% for activityFile in activity.activityFiles %}
                                     {% if activityFile.file %}
-                                        <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Fichier attaché">
-                                            <img src="{{ activityFile.file.name ? vich_uploader_asset(activityFile.file, 'file') : default_picture }}" alt="image">
-                                        </a>
+                                        {% if activityFile.file.image %}
+                                            <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Fichier attaché">
+                                                <img src="{{ asset( activityFile.file.icone ) }}" alt="image">
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ path( 'file_download', {id:activityFile.file.id}) }}" target="_blank" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Cliquez pour le télécharger.">
+                                                <img src="{{ asset( activityFile.file.icone ) }}" alt="image">
+                                            </a>
+                                        {% endif %}
                                     {% endif %}
                                 {% else %}
                                     Aucun fichier attaché avec cette activité.
