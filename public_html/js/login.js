@@ -61,12 +61,10 @@ jQuery(document).ready(function($){
             KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppMessages.waiting}),
             form.ajaxSubmit({url:"/login",
                 error:function(d){
-                    console.error(d);
                     KTApp.unblock(form);
                     i("danger", "Erreur!", "Une erreur s'est produite.");
                 },
                 success:function(t,s,r,a){
-                    console.log(t);
                     KTApp.unblock(form);
     ;               if(t.success===true){
                         i("success", "Succès", "Vous allez être redirigé dans quelques secondes.");
@@ -103,12 +101,10 @@ jQuery(document).ready(function($){
             KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppMessages.waiting}),
             form.ajaxSubmit({url:"/register",
                 error:function(d){
-                    console.error(d);
                     KTApp.unblock(form);
                     i("danger", "Erreur!", "Une erreur s'est produite.");
                 },
                 success:function(t,s,r,a){
-                    console.log(t);
                     KTApp.unblock(form);
     ;               if(t.success===true){
                         i("success", "Succès", t.message);
@@ -142,12 +138,10 @@ jQuery(document).ready(function($){
             KTApp.block(form,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppMessages.waiting}),
             form.ajaxSubmit({url:"/forgot",
                 error:function(d){
-                    console.error(d);
                     KTApp.unblock(form);
                     i("danger", "Erreur!", "Une erreur s'est produite.");
                 },
                 success:function(t,s,r,a){
-                    console.log(t);
                     KTApp.unblock(form);
     ;               if(t.success===true){
                         i("success", "Succès", t.message);
