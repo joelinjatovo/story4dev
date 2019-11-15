@@ -72,6 +72,9 @@ class LoginFormController extends AbstractController
                 )
             );
             
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->getFilters()->disable("deleted");
+            
             $errors = $validator->validate($user);
             if ( count($errors) > 0) {
                 return $this->json([
@@ -101,7 +104,6 @@ class LoginFormController extends AbstractController
             
             $mailer->send($message);
             
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
             
