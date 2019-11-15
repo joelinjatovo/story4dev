@@ -1,13 +1,19 @@
 <div class="kt-widget4__item">
     <div class="kt-widget4__pic kt-widget4__pic--icon">
         <img src="{{ asset( activityFile.file.icone ) }}" alt="icone">  
-    </div>				
-    <a href="{{ asset( activityFile.file.icone) }}" data-toggle="lightbox" data-gallery="gallery" class="kt-widget4__title">
-        {{ activityFile.file.name }}
-    </a>						
-    <div class="kt-widget4__tools kt-hidden">
-        <a href="#" class="btn btn-clean btn-icon btn-sm btn-delete-activity-file">
-            <i class="flaticon2-delete"></i>
+    </div>
+    {% if activityFile.file.image %}
+        <a href="{{ asset( activityFile.file.icone) }}" data-toggle="lightbox" data-gallery="gallery" class="kt-widget4__title">
+            {{ activityFile.file.name }}
         </a>
-    </div>				
+    {% else %}
+        <a href="{{ path( 'file_download', {id: activityFile.file.id }) }}" target="_blank" class="kt-widget4__title">
+            {{ activityFile.file.name }}
+        </a>
+    {% endif %}
+    <div class="kt-widget4__tools">
+        <a href="{{ path( 'file_download', {id: activityFile.file.id }) }}" target="_blank" class="btn btn-clean btn-icon btn-sm">
+            <i class="flaticon2-download"></i>
+        </a>
+    </div>			
 </div>

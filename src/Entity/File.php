@@ -300,6 +300,20 @@ class File
         
     }
     
+    public function isImage()
+    {
+        $type = 'file';
+        if( in_array( $this->getMimeType(), $this->getMimeTypes() ) ){
+            $type = array_search($this->getMimeType(), $this->getMimeTypes());
+        }
+        
+        if( in_array( $type, ['jpg', 'jpeg', 'png', 'gif']) ) {
+             return true;
+        }
+           
+        return false;
+    }
+    
     public function getIcone(): ?string
     {
         $type = 'file';
