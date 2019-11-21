@@ -356,21 +356,6 @@ am4core.ready(function() {
     // Create chart instance
     var chart = am4core.create("chartdiv", am4charts.XYChart);
 
-    /*chart.exporting.menu = new am4core.ExportMenu();
-    chart.exporting.filePrefix = "{{activity.project.slug}}-{{activity.title}}_export";
-    chart.exporting.menu.items = [
-        {
-        "label": "...",
-        "menu": [{
-            "label": "Image", "type": "png"
-            },{
-            "label": "Print", "type": "print"
-            }
-        ]
-        }
-    ];
-    */
-
     chart.data = {{ data|raw }};
 
     // Create axes
