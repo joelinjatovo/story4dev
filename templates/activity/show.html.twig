@@ -182,6 +182,37 @@
                         Statistiques
                     </h3>
                 </div>
+                <div class="kt-portlet__head-toolbar">
+					<div class="kt-portlet__head-actions">
+						<div class="dropdown dropdown-inline">
+							<a href="#" class="btn btn-default btn-pill btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="flaticon2-settings"></i> Exporter 
+							</a>
+							<div class="dropdown-menu dropdown-menu-right" x-placement="top-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(32px, 0px, 0px);">
+								<ul class="kt-nav" id="chart-selector">
+                                    <li class="kt-nav__item" data-click="PNG">
+                                        <a href="#" class="kt-nav__link">
+                                            <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                            <span class="kt-nav__link-text">Image</span>
+                                        </a>
+                                    </li>
+                                    <li class="kt-nav__item" data-click="PDF">
+                                        <a href="#" class="kt-nav__link">
+                                            <i class="kt-nav__link-icon flaticon2-send"></i>
+                                            <span class="kt-nav__link-text">PDF</span>
+                                        </a>
+                                    </li>
+                                    <li class="kt-nav__item" data-click="PRINT">
+                                        <a href="#" class="kt-nav__link">
+                                            <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
+                                            <span class="kt-nav__link-text">Impression</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+						</div>
+					</div>
+				</div>
             </div>
             <div class="kt-portlet__body">
                 <div class="form-group form-group-last row">
@@ -326,6 +357,7 @@ am4core.ready(function() {
     var chart = am4core.create("chartdiv", am4charts.XYChart);
 
     chart.exporting.menu = new am4core.ExportMenu();
+    chart.exporting.filePrefix = "{{activity.project.slug}}-{{activity.title}}_export";
     chart.exporting.menu.items = [
         {
         "label": "...",
@@ -438,6 +470,37 @@ am4core.ready(function() {
                }
            });
       }
+    });
+
+    jQuery('#chart-selector .kt-nav__item').on('click', function(e) {
+        var format = jQuery(this).data('click');
+        switch (format) {
+
+            case 'CSV':
+            case 'XLSX':
+            case 'JSON':
+            chart.export['to' + format]({}, function(data) {
+                this.download(data, this.defaults.formats[format].mimeType, "amCharts." + format.toLowerCase());
+            });
+            break;
+
+            case 'JPG':
+            case 'PNG':
+            case 'SVG':
+            case 'PDF':
+            chart.export.capture({}, function() {
+                this['to' + format]({}, function(data) {
+                this.download(data, this.defaults.formats[format].mimeType, "amCharts." + format.toLowerCase());
+                });
+            });
+            break;
+
+            case 'PRINT':
+            default:
+            chart.export.capture({}, function() {
+                this.toPRINT();
+            });
+        }
     });
 
 }); // end am4core.ready()
