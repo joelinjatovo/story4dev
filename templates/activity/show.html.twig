@@ -356,7 +356,7 @@ am4core.ready(function() {
     // Create chart instance
     var chart = am4core.create("chartdiv", am4charts.XYChart);
 
-    chart.exporting.menu = new am4core.ExportMenu();
+    /*chart.exporting.menu = new am4core.ExportMenu();
     chart.exporting.filePrefix = "{{activity.project.slug}}-{{activity.title}}_export";
     chart.exporting.menu.items = [
         {
@@ -369,6 +369,7 @@ am4core.ready(function() {
         ]
         }
     ];
+    */
 
     chart.data = {{ data|raw }};
 
@@ -474,33 +475,7 @@ am4core.ready(function() {
 
     jQuery('#chart-selector .kt-nav__item').on('click', function(e) {
         var format = jQuery(this).data('click');
-        switch (format) {
-
-            case 'CSV':
-            case 'XLSX':
-            case 'JSON':
-            chart.export['to' + format]({}, function(data) {
-                this.download(data, this.defaults.formats[format].mimeType, "amCharts." + format.toLowerCase());
-            });
-            break;
-
-            case 'JPG':
-            case 'PNG':
-            case 'SVG':
-            case 'PDF':
-            chart.export.capture({}, function() {
-                this['to' + format]({}, function(data) {
-                this.download(data, this.defaults.formats[format].mimeType, "amCharts." + format.toLowerCase());
-                });
-            });
-            break;
-
-            case 'PRINT':
-            default:
-            chart.export.capture({}, function() {
-                this.toPRINT();
-            });
-        }
+        chart.exporting.export(format.toLowerCase());
     });
 
 }); // end am4core.ready()
