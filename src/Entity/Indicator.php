@@ -291,7 +291,7 @@ class Indicator
                 if($this->getCummulative()){
                     try{
                         // Get value below iteration end date
-                        if( $result->getReport() && ( $result->getReport()->getCreatedAt() < $iteration->getEndAt() ) ){
+                        if( $result->getReport() && ( $result->getReport()->getCreatedAt() <= $iteration->getEndAt() ) ){
                             $value += $result->getValue();
                         }
                     }catch(EntityNotFoundException $e){}
@@ -300,7 +300,7 @@ class Indicator
                         // Get value between iteration dates
                         if( $result->getReport() && 
                                 ( $result->getReport()->getCreatedAt() >= $iteration->getStartAt() ) && 
-                                ( $result->getReport()->getCreatedAt() < $iteration->getEndAt() ) ) {
+                                ( $result->getReport()->getCreatedAt() <= $iteration->getEndAt() ) ) {
                             $value += $result->getValue();
                         }
                     }catch(EntityNotFoundException $e){}
