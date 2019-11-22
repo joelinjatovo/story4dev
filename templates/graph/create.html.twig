@@ -1,0 +1,207 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau graphe - Projet #{{ project.id }}- {{ app.user.fullname }} {% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block subheader %}
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Nouveau graphe</h3>
+            <div class="kt-subheader__breadcrumbs">
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="{{ path('project_list', { page : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="{{ path('project_show', { slug: project.slug })}}" class="kt-subheader__breadcrumbs-link">{{ project.title }}</a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Nouveau graphe</span>
+            </div>
+        </div>        
+        <div class="kt-subheader__toolbar">
+            <a href="{{ path('activity_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
+            <a href="{{ path('activity_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+            <a href="{{ path('graph_index', { slug: project.slug }) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+   	<div class="col-lg-12">	
+		<!--begin::Portlet-->
+		<div class="kt-portlet kt-portlet--last kt-portlet--head-lg kt-portlet--responsive-mobile" id="kt_page_portlet">
+			<div class="kt-portlet__head kt-portlet__head--lg" style="">
+				<div class="kt-portlet__head-label">
+                    {% block headtitle %}
+					   <h3 class="kt-portlet__head-title">Nouveau graphe <small>entrer les détails du graphe puis enregistrer</small></h3>
+                    {% endblock %}
+				</div>
+				<div class="kt-portlet__head-toolbar">
+                    {% if graph is defined and graph is not null and (graph.id>0) %}
+					   <a href="{{ url('graph_show', { slug : graph.project.slug, graph_id : graph.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                    {% else %}
+                        <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-long-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                    {% endif %}
+					<div class="btn-group">
+						<button type="submit" form="graph" name="submit" value="save-default" class="btn btn-brand">
+							<i class="la la-check"></i> 
+							<span class="kt-hidden-mobile">Enregister</span>
+						</button>
+						<button type="button" class="btn btn-brand dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						</button>
+						<div class="dropdown-menu dropdown-menu-right">
+							<ul class="kt-nav">
+								<li class="kt-nav__item">
+									<button type="submit" form="graph" name="submit" value="save-continue" class="kt-nav__link">
+										<i class="kt-nav__link-icon flaticon2-reload"></i>
+										<span class="kt-nav__link-text">Enregister &amp; Continuer</span>
+									</button>
+								</li>
+								<li class="kt-nav__item">
+									<button type="submit" form="graph" name="submit" value="save-edit" class="kt-nav__link">
+										<i class="kt-nav__link-icon flaticon2-edit"></i>
+										<span class="kt-nav__link-text">Enregister &amp; Modifier</span>
+									</button>
+								</li>
+								<li class="kt-nav__item">
+									<button type="submit" form="graph" name="submit" value="save-create" class="kt-nav__link">
+										<i class="kt-nav__link-icon flaticon2-add-1"></i>
+										<span class="kt-nav__link-text">Enregister &amp; Ajouter</span>
+									</button>
+								</li>
+								<li class="kt-nav__item">
+									<button type="submit" form="graph" name="submit" value="save-exit" class="kt-nav__link">
+										<i class="kt-nav__link-icon flaticon-close"></i>
+										<span class="kt-nav__link-text">Enregister &amp; Quitter</span>
+									</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="kt-portlet__body">
+				{{ form_start( form, { 'method' : 'POST', 'attr' : { 'id' : 'graph', 'class' : 'kt-form' } } ) }}
+					<div class="row">
+						<div class="col-xl-2"></div>
+						<div class="col-xl-8">
+							<div class="kt-section kt-section--first">
+								<div class="kt-section__body">
+									<h3 class="kt-section__title kt-section__title-lg">A propos:</h3>
+									<div class="form-group row">
+                    					{{ form_label( form.title, "Titre du graphe", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+										<div class="col-9">
+											{{ form_widget( form.title, { 'attr' : { 'class' : 'form-control' } } ) }}
+										</div>
+									</div>
+                                    
+                                    <div id="kt_repeater_2">
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Axes du graphe</label>
+                                            <div data-repeater-list="project[iterations]" class="col-lg-9">
+                                                {% if graph.axes is empty %}
+													<div data-repeater-item="" class="kt-margin-b-10">
+                                                        <div class="form-group row">
+                                                            <div class="col-lg-3">
+                                                                <div class="input-group">
+                                                                    {{ form_widget(form.axes.vars.prototype.id ) }}
+                                                                    {{ form_widget(form.axes.vars.prototype.title, { 'attr' : { 'form' : 'graph', 'placeholder' : 'Période suivie', 'class' : 'form-control' } } ) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <div class="input-group">
+                                                                    {{ form_widget( form.axes.vars.prototype.startAt, { 'attr' : { 'form' : 'graph', 'placeholder' : 'Début du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <div class="input-group">
+                                                                    {{ form_widget( form.axes.vars.prototype.endAt, { 'attr' : { 'form' : 'graph', 'placeholder' : 'Fin du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold">
+                                                                    <i class="la la-trash-o"></i>
+                                                                    Supprimer
+                                                                </a>
+                                                            </div>
+                                                        </div>
+													</div>
+                                                {% endif %} 
+												
+                                                {% for axe in form.axes %}
+                                                    <div data-repeater-item="" class="kt-margin-b-10">
+                                                        <div class="form-group row">
+                                                            <div class="col-lg-3">
+                                                                <div class="input-group">
+                                                                    {{ form_widget( axe.id ) }}
+                                                                    {{ form_widget( axe.title, { 'attr' : { 'form' : 'project', 'placeholder' : 'Label du suivi', 'class' : 'form-control' } } ) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <div class="input-group">
+                                                                    {{ form_widget( axe.startAt, { 'attr' : { 'form' : 'project', 'placeholder' : 'Début du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <div class="input-group">
+                                                                    {{ form_widget( axe.endAt, { 'attr' : { 'form' : 'project', 'placeholder' : 'Fin du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold">
+                                                                    <i class="la la-trash-o"></i>
+                                                                    Supprimer
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}                                                       
+                                            </div>                 
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-3"></div>
+                                            <div class="col">
+                                                <div data-repeater-create="" class="btn btn btn-warning">
+                                                    <span>
+                                                        <i class="la la-plus"></i>
+                                                        <span>Ajouter un suivi</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-2"></div>
+					</div>
+					<input type="hidden" name="graph[project]" value="{{ project.id }}" >
+					{{ form_row( form._token ) }}
+				{{ form_end( form, {'render_rest': false}) }}
+			</div>
+		</div>	
+		<!--end::Portlet-->
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript" >
+jQuery(document).ready(function($){
+    jQuery('.js-datepicker').datepicker({format: 'yyyy-mm-dd'});
+    jQuery("#kt_repeater_2").repeater({
+        initEmpty:!1,
+        show:function(){
+            jQuery(this).slideDown(); 
+            jQuery('.js-datepicker').datepicker({format: 'yyyy-mm-dd'});
+        },
+        hide:function(e){confirm("Etes-vous sûre de vouloir supprimer ?")&&$(this).slideUp(e)}
+    });
+});
+</script>
+{% endblock %}

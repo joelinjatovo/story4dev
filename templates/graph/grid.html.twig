@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activités - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block subheader %}
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Toutes les activités</h3>
+            <div class="kt-subheader__breadcrumbs">
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="{{ path('project_list', { page : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="{{ path('project_show', { slug: project.slug })}}" class="kt-subheader__breadcrumbs-link">{{ project.title }}</a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Activités</span>
+            </div>
+        </div>        
+        <div class="kt-subheader__toolbar">
+            <a href="{{ path('activity_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
+            <a href="{{ path('activity_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+            <a href="{{ path('activity_index', { slug: project.slug }) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% for activity in activities %}
+        <div class="col-xl-6">
+            {{ include('activity/grid_item.html.twig', {'activity': activity}) }}
+        </div>
+    {% endfor %}
+</div>
+    
+<div class="row">
+    <div class="col-xl-12">       
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <!--begin: Pagination-->
+                <div class="kt-pagination kt-pagination--brand">
+                    {{ include('_common/pagination.html.twig', {'pagination': activities}) }}
+                </div>
+                <!--end: Pagination-->
+            </div>
+        </div>
+    </div>           
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+jQuery(document).ready(function($){
+    $(document).on('click', '.btn-remove', function(e){
+        e.preventDefault();
+        var $this = $(this);
+            swal.fire({
+                title:"Vous êtes sûre?",
+                text:"Vous ne pourez pas revenir en arrière après!\nToutes les rapports ainsi que les données rattachées à cette activité vont être supprimés aussi.",
+                type:"warning",
+                showCancelButton:!0,
+                confirmButtonText:"Oui, supprimez la!",
+                cancelButtonText:"Annuler"
+            }).then(function(e){
+                if(e.value){
+                    KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+                    $.post("/activity/remove", { id: $this.attr('data-id') })
+                    .done(function( data ) {
+                        KTApp.unblockPage();
+                        if(data.success){
+                            $this.closest('.activity-item').remove();
+                            toastr.success(data.message);
+                        }else{
+                            toastr.error(data.message, data.title);
+                        }
+                    })
+                    .fail(function() {
+                        KTApp.unblockPage();
+                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+                    });
+                }
+            })
+    });
+});
+</script>
+{% endblock %}
