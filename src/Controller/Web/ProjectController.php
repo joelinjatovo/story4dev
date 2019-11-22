@@ -76,6 +76,81 @@ class ProjectController extends AbstractController
     }
     
     /**
+     * @Route("/p/{slug}/chart", name="chart", methods="POST")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
+     */
+    public function chart(Project $project, Request $request)
+    {
+        $this->denyAccessUnlessGranted('edit', $project);
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        if ( $request->isXmlHttpRequest() ) {
+            $ids = $request->request->get('indicators');
+            
+            $indicators = [];
+            $series = [];
+            if( is_array( $ids ) && ! empty( $ids ) ) {
+                foreach($ids as $id ){
+                    $id = (int) $id;
+                    $indicator = $entityManager->getRepository(Indicator::class)->find($id);
+                    if( $indicator ) {
+                        $indicators[] = $indicator;
+                        $series[] = [
+                            'id' => 'i_'.$indicator->getId(),
+                            'title' => $indicator->getTitle(),
+                            'unit'  => $indicator->getUnit()->getLabel(),
+                        ];
+                    }
+                }
+            }
+            
+            $datas = [];
+            
+            foreach($project->getIterations() as $iteration){
+                $data = [
+                    "iteration"   => $iteration->getTitle(),
+                    "value"       => $project->getValue($iteration),
+                    "goal"        => $project->getGoalValue($iteration),
+                    "report"      => $project->getReportsCount($iteration),
+                    "progression" => $project->getProgression($iteration),
+                ];
+                
+                if( count( $indicators ) > 0 ) {
+                    $value = 0;
+                    $goal = 0;
+                    $progression = 0;
+                    foreach($indicators as $indicator){
+                        $goal += $indicator->getGoalValue($iteration);
+                        $progression += $indicator->getProgression($iteration);
+
+                        $i_value = $indicator->getValue($iteration);
+                        $value += $i_value;
+                        $data['i_'.$indicator->getId()] = $i_value;
+                    }
+                    $data['value'] = $value;
+                    $data['goal']  = $goal;
+                    $data['progression']  = ( $progression / count( $indicators ) );
+                }
+                
+                $datas[] = $data;
+            }
+            
+            return $this->json([
+                'success' => true,
+                'datas'   => $datas,
+                'series'  => $series,
+            ]);
+        }
+            
+        return $this->json([
+            'success' => false,
+            'title'   => 'Invalid Request',
+            'message' => 'An error was occured. :)',
+        ]);
+    }
+    
+    /**
      * @Route("/p/{slug}/", name="show", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */

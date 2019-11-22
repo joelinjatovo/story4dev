@@ -405,7 +405,7 @@ class Activity
     {
         $value = 0;
         foreach($this->getReports() as $report){
-            if(($report->getCreatedAt() >= $iteration->getStartAt()) && ($report->getCreatedAt() < $iteration->getEndAt())){
+            if(($report->getCreatedAt() >= $iteration->getStartAt()) && ($report->getCreatedAt() <= $iteration->getEndAt())){
                 $value += 1;
             }
         }
@@ -443,12 +443,8 @@ class Activity
         $series = [];
         foreach($this->getIndicators() as $indicator){
             $title = $indicator->getTitle();
-            /*
-            if( strlen($title) > 25 ){
-                $title = substr($title, 0, 25).'...';
-            }
-            */
             $series[] = [
+                '_id'   => $indicator->getId(),
                 'id'    => 'i_'.$indicator->getId(),
                 'title' => $title,
             ];

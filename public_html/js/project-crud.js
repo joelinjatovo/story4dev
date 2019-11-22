@@ -19,7 +19,7 @@ var KTProjectEdit = function () {
 			hide:function(e){confirm("Etes-vous sûre de vouloir supprimer ?")&&$(this).slideUp(e)}
 		});
 		jQuery("select#project_periodicity").change(function(){
-			initIteration();
+			//initIteration();
 		});
 	};
 	
@@ -36,7 +36,7 @@ var KTProjectEdit = function () {
 	return {
 		init: function() {
 			initProjectForm();
-			initIteration();
+			//initIteration();
 		}
 	};
 }();

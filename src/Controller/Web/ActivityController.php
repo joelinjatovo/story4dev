@@ -145,6 +145,86 @@ class ActivityController extends AbstractController
     }
     
     /**
+     * @Route("/p/{slug}/activity/{activity_id}/chart", name="chart", methods="POST", requirements={"activity_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
+     */
+    public function chart(Project $project, Activity $activity, Request $request)
+    {
+        $this->denyAccessUnlessGranted('view', $activity);
+        
+        if($activity->getProject() != $project ){
+            throw $this->createNotFoundException('The project does not match');
+        }
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        if ( $request->isXmlHttpRequest() ) {
+            $ids = $request->request->get('indicators');
+            
+            $indicators = [];
+            $series = [];
+            if( is_array( $ids ) && ! empty( $ids ) ) {
+                foreach($ids as $id ){
+                    $id = (int) $id;
+                    $indicator = $entityManager->getRepository(Indicator::class)->find($id);
+                    if( $indicator ) {
+                        $indicators[] = $indicator;
+                        $series[] = [
+                            'id' => 'i_'.$indicator->getId(),
+                            'title' => $indicator->getTitle(),
+                            'unit'  => $indicator->getUnit()->getLabel(),
+                        ];
+                    }
+                }
+            }
+            
+            $datas = [];
+            
+            foreach($project->getIterations() as $iteration){
+                $data = [
+                    "iteration"   => $iteration->getTitle(),
+                    "value"       => $activity->getValue($iteration),
+                    "goal"        => $activity->getGoalValue($iteration),
+                    "report"      => $activity->getReportsCount($iteration),
+                    "progression" => $activity->getProgression($iteration),
+                ];
+                
+                if( count( $indicators ) > 0 ) {
+                    $value = 0;
+                    $goal = 0;
+                    $progression = 0;
+                    foreach($indicators as $indicator){
+                        $goal += $indicator->getGoalValue($iteration);
+                        $progression += $indicator->getProgression($iteration);
+
+                        $i_value = $indicator->getValue($iteration);
+                        $value += $i_value;
+                        $data['i_'.$indicator->getId()] = $i_value;
+                    }
+                    $data['value'] = $value;
+                    $data['goal']  = $goal;
+                    $data['progression']  = ( $progression / count( $indicators ) );
+                }
+                
+                $datas[] = $data;
+            }
+            
+            return $this->json([
+                'success' => true,
+                'datas'   => $datas,
+                'series'  => $series,
+            ]);
+        }
+            
+        return $this->json([
+            'success' => false,
+            'title'   => 'Invalid Request',
+            'message' => 'An error was occured. :)',
+        ]);
+    }
+    
+    /**
      * @Route("/p/{slug}/activity/edit/{activity_id}", name="edit", methods="GET", requirements={"activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
