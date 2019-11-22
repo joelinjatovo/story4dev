@@ -178,6 +178,11 @@ class Project
      */
     private $slug;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Graph", mappedBy="project")
+     */
+    private $graphs;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -188,6 +193,7 @@ class Project
         $this->metas = new ArrayCollection();
         $this->units = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->graphs = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -648,6 +654,37 @@ class Project
     public function setSlug(?string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Graph[]
+     */
+    public function getGraphs(): Collection
+    {
+        return $this->graphs;
+    }
+
+    public function addGraph(Graph $graph): self
+    {
+        if (!$this->graphs->contains($graph)) {
+            $this->graphs[] = $graph;
+            $graph->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGraph(Graph $graph): self
+    {
+        if ($this->graphs->contains($graph)) {
+            $this->graphs->removeElement($graph);
+            // set the owning side to null (unless already changed)
+            if ($graph->getProject() === $this) {
+                $graph->setProject(null);
+            }
+        }
 
         return $this;
     }

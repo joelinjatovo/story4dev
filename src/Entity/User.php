@@ -321,6 +321,16 @@ class User implements UserInterface, \Serializable
      */
     private $downloads;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Graph", mappedBy="author")
+     */
+    private $graphs;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Axe", mappedBy="author")
+     */
+    private $axes;
+
     public function __construct()
     {
         $this->agree = true;
@@ -340,6 +350,8 @@ class User implements UserInterface, \Serializable
         $this->activityContributions = new ArrayCollection();
         $this->files = new ArrayCollection();
         $this->downloads = new ArrayCollection();
+        $this->graphs = new ArrayCollection();
+        $this->axes = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -1170,6 +1182,68 @@ class User implements UserInterface, \Serializable
             // set the owning side to null (unless already changed)
             if ($download->getUser() === $this) {
                 $download->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Graph[]
+     */
+    public function getGraphs(): Collection
+    {
+        return $this->graphs;
+    }
+
+    public function addGraph(Graph $graph): self
+    {
+        if (!$this->graphs->contains($graph)) {
+            $this->graphs[] = $graph;
+            $graph->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGraph(Graph $graph): self
+    {
+        if ($this->graphs->contains($graph)) {
+            $this->graphs->removeElement($graph);
+            // set the owning side to null (unless already changed)
+            if ($graph->getAuthor() === $this) {
+                $graph->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Axe[]
+     */
+    public function getAxes(): Collection
+    {
+        return $this->axes;
+    }
+
+    public function addAxe(Axe $axe): self
+    {
+        if (!$this->axes->contains($axe)) {
+            $this->axes[] = $axe;
+            $axe->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAxe(Axe $axe): self
+    {
+        if ($this->axes->contains($axe)) {
+            $this->axes->removeElement($axe);
+            // set the owning side to null (unless already changed)
+            if ($axe->getAuthor() === $this) {
+                $axe->setAuthor(null);
             }
         }
 
