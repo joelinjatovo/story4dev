@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Activité #{{ activity.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}Graphe #{{ graph.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,22 +9,22 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Détail de l'activité</h3>
+            <h3 class="kt-subheader__title">Détail du graphe</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__breadcrumbs">
                 <a href="{{ path('project_list', { 'page' : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="{{ path('project_show', { slug: activity.project.slug })}}" class="kt-subheader__breadcrumbs-link">{{ activity.project.title }}</a>
+                <a href="{{ path('project_show', { slug: graph.project.slug })}}" class="kt-subheader__breadcrumbs-link">{{ graph.project.title }}</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{{ activity.title }}</span>
+                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{{ graph.title }}</span>
             </div>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
                 <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
                 
-                {% if is_granted('edit', activity) %}
-                    <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" class="btn kt-subheader__btn-primary">Modifier &nbsp;</a>
+                {% if is_granted('edit', graph) %}
+                    <a href="{{ path('graph_edit', { 'graph_id' : graph.id, 'slug' : graph.project.slug } ) }}" class="btn kt-subheader__btn-primary">Modifier &nbsp;</a>
                 {% endif %}
                 
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip" title="" data-placement="left" data-original-title="Quick actions">
@@ -46,20 +46,14 @@
                                 <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                             </li>
                             <li class="kt-nav__separator"></li>
-                            {% if is_granted('create_indicator', activity) %}
+                            {% if is_granted('edit', project) %}
                                 <li class="kt-nav__item">
-                                    <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" class="kt-nav__link">
+                                    <a href="{{ path('activity_index', { 'slug' : graph.project.slug } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                        <span class="kt-nav__link-text">Indicateur</span>
+                                        <span class="kt-nav__link-text">Activité</span>
                                     </a>
                                 </li>
                             {% endif %}
-                            <li class="kt-nav__item">
-                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">Rapport</span>
-                                </a>
-                            </li>
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__head">
                                 Aller dans
@@ -67,21 +61,9 @@
                             </li>
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__item">
-                                <a href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
+                                <a href="{{ path('report_list', {'slug' : project.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
                                     <span class="kt-nav__link-text">Les rapports</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">Les documents</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">Les indicateurs</span>
                                 </a>
                             </li>
                         </ul>
@@ -95,84 +77,6 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-xl-12">
-        <div class="kt-portlet kt-portlet--height-fluid">
-            <div class="kt-portlet__body">
-                <div class="kt-widget kt-widget--user-profile-3">
-                    <div class="kt-widget__top">
-                        <div class="kt-widget__content" style="padding-left:0px;">
-                            <div class="kt-widget__head">
-                                <a href="#" class="kt-widget__username">
-                                    {{ activity.title }}    
-                                </a>
-                            </div>
-                            {% if activity.contactEmail or activity.contactPhone or activity.contactAddress %}
-                            <div class="kt-widget__subhead kt-hidden">
-                                {% if activity.contactEmail %}<a href="#"><i class="flaticon2-new-email"></i>{{ activity.contactEmail }}</a>{% endif %}
-                                {% if activity.contactPhone %}<a href="#"><i class="flaticon2-calendar-3"></i>{{ activity.contactPhone }} </a>{% endif %}
-                                {% if activity.contactAddress %}<a href="#"><i class="flaticon2-placeholder"></i>{{ activity.contactAddress }}</a>{% endif %}
-                            </div> 
-                            {% endif  %}
-                            <span class="kt-widget__text">
-                                {{ activity.description|html|raw }}                       
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="kt-widget__bottom">
-                        <div class="kt-widget__item">
-                            <div class="kt-widget__progress-" style="width: 90%;">
-                                <div class="kt-widget__text">
-                                    Avancement
-                                </div>
-                                <div class="progress" style="height: 5px;width: 100%;">
-                                    <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ activity.progression }}%;" aria-valuenow="{{ activity.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <div class="kt-widget__stats">
-                                    {{ activity.progression }}%
-                                </div>
-                            </div>
-                        </div>
-
-                        {% if activity.budget > 0 %}
-                            <div class="kt-widget__item">
-                                <div class="kt-widget__icon">
-                                    <i class="flaticon-piggy-bank"></i>
-                                </div>
-                                <div class="kt-widget__details">
-                                    <span class="kt-widget__title">Budget</span>
-                                    <span class="kt-widget__value">{{ activity.budget }}</span>
-                                </div>
-                            </div>
-                        {% endif  %}
-
-                        <div class="kt-widget__item">
-                            <div class="kt-widget__icon">
-                                <i class="flaticon-file-2"></i>
-                            </div>
-                            <div class="kt-widget__details">
-                                <span class="kt-widget__title">{{ activity.reports.count }} Rapports</span>
-                                <a href="#reports" class="kt-widget__value kt-font-brand">Voir la liste</a>
-                            </div>
-                        </div>
-
-                        <div class="kt-widget__item">
-                            <div class="kt-widget__icon">
-                                <i class="flaticon-confetti"></i>
-                            </div>
-                            <div class="kt-widget__details">
-                                <span class="kt-widget__title">{{ activity.indicators.count }} Indicateurs</span>
-                                <a href="#indicators" class="kt-widget__value kt-font-brand">Voir la liste</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-    
 <div class="row">
     <div class="col-xl-12">
         <div class="kt-portlet kt-portlet--height-fluid">
@@ -218,128 +122,21 @@
                 <div class="form-group form-group-last row">
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <select class="form-control kt-select2" id="select_indicator"  multiple="multiple">
-                            {% set i = 1 %}
                             {% for serie in _series %}
-                                <option value="{{ i }}">{{ serie.title }}</option>
-                                {% set i = i + 1 %}
+                                <option value="{{ serie._id }}">{{ serie.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
                 </div>
-                <div id="chartdiv" style="width: 100%; height: 400px;"></div>
+                <div id="chartdiv" style="width: 100%; height: 500px;"></div>
             </div>
         </div>
-    </div>
-</div>
-
-	
-<div class="row">
-    <div class="col-lg-12">
-        <div class="kt-portlet kt-portlet--height-fluid" id="reports">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label">
-                    <a href="{{ path('report_list2', { activity_id : activity.id, slug : activity.project.slug } ) }}">
-                        <h3 class="kt-portlet__head-title">Rapports</h3>
-                    </a>
-                </div>
-                <div class="kt-portlet__head-toolbar">
-                    <a href="{{ path('report_list2', { activity_id : activity.id, slug : activity.project.slug } ) }}" class="btn btn-label-brand btn-bold btn-sm">
-                        Tous
-                    </a>
-                    <a href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="btn btn-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-                                <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
-                            </g>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-            <div class="kt-portlet__body"> 
-                <div class="kt-widget5">    
-					{% for report in reports %}
-						{{ include('activity/report.html.twig', { 'report' : report } ) }}
-					{% else %}
-                        Il n'y a pas encore des rapports sur cette activité.
-					{% endfor %}
-                </div>            
-            </div>
-        </div>
-    </div>
-</div>
-    
-<div class="row">
-    <div class="col-lg-6">
-        <!--begin:: Widgets/Notifications-->
-		<div class="kt-portlet kt-portlet--height-fluid" id="indicators">
-			<div class="kt-portlet__head">
-				<div class="kt-portlet__head-label">
-					<a href="{{ path('indicator_list', { 'activity_id': activity.id, 'slug' : activity.project.slug } ) }}"><h3 class="kt-portlet__head-title">Avancement</h3></a>
-				</div>
-                <div class="kt-portlet__head-toolbar">
-                    <a href="{{ path('indicator_list', { activity_id: activity.id, slug : activity.project.slug } ) }}" class="btn btn-label-brand btn-bold btn-sm">
-                        Tous
-                    </a>
-                    {% if is_granted('create_indicator', activity) %}
-                        <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="btn btn-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-                                    <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                    <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
-                                </g>
-                            </svg>
-                        </a>
-                    {% endif %}
-                </div>
-			</div>
-			<div class="kt-portlet__body">
-                <div class="kt-widget31">
-					{% for indicator in activity.indicators.slice(0, 5) %}
-						{{ include('activity/indicator.html.twig', { 'indicator' : indicator } ) }}
-					{% else %}
-                    Il n'y a pas encore des indicateurs.
-					{% endfor %}
-				</div>
-			</div>
-		</div>
-		<!--end:: Widgets/Notifications-->
-	</div>
-    <div class="col-lg-6">
-        <!--begin:: Widgets/Notifications-->
-        <div class="kt-portlet kt-portlet--height-fluid" id="documents">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label"><a href="{{ path('file_list_activity', { activity_id : activity.id, slug : activity.project.slug } ) }}" >
-                        <h3 class="kt-portlet__head-title">Documents</h3>
-                    </a>
-                </div>
-                <div class="kt-portlet__head-toolbar">
-                    <a href="{{ path('file_list_activity', { activity_id : activity.id, slug : activity.project.slug } ) }}" class="btn btn-label-brand btn-bold btn-sm">
-                        Tous
-                    </a>
-                </div>
-            </div>
-            <div class="kt-portlet__body">
-                <div class="kt-widget4" id="kt-activity-list">
-					{% for activityFile in activity.activityFiles.slice(0, 5) %}
-						{{ include('activity/activity-file.html.twig', { 'activityFile' : activityFile } ) }}
-					{% else %}
-                    Il n'y a pas encore de document sur cette activité.
-					{% endfor %}
-                </div>
-            </div>
-        </div>
-        <!--end:: Widgets/Notifications-->
     </div>
 </div>
 {% endblock %}
 
 
 {% block javascripts %}
-<script src="{{ asset('js/admin/activity-show.js') }}" type="text/javascript" ></script>
-
 <!-- Resources -->
 <script src="{{ asset('js/am4chart/core.js') }}" type="text/javascript" ></script>
 <script src="{{ asset('js/am4chart/charts.js') }}" type="text/javascript" ></script>
@@ -347,8 +144,8 @@
 
 <!-- Chart code -->
 <script>
+var KTAppMessages = {"waiting": "Veuillez patientez s'il vous plaît..."};
 am4core.ready(function() {
-
     // Themes begin
     am4core.useTheme(am4themes_animated);
     // Themes end
@@ -358,7 +155,6 @@ am4core.ready(function() {
 
     chart.data = {{ data|raw }};
 
-    // Create axes
     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "iteration";
     
@@ -371,6 +167,20 @@ am4core.ready(function() {
     valueAxis2.renderer.grid.template.disabled = true;
 
     // Create series
+    var series4 = chart.series.push(new am4charts.LineSeries());
+        series4.dataFields.valueY = "value";
+        series4.dataFields.categoryX = "iteration";
+        series4.yAxis = valueAxis1;
+        series4.name = "Evolution";
+        series4.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] unités";
+        series4.fill = chart.colors.getIndex(0).lighten(0.5);
+        series4.strokeWidth = 2;
+
+        var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
+            bullet4.circle.radius = 3;
+            bullet4.circle.strokeWidth = 2;
+            bullet4.circle.fill = am4core.color("#fff");
+    /*
     var series1 = chart.series.push(new am4charts.ColumnSeries());
         series1.dataFields.valueY = "value";
         series1.dataFields.categoryX = "iteration";
@@ -393,6 +203,7 @@ am4core.ready(function() {
         series2.strokeWidth = 0;
         series2.clustered = false;
         series2.toBack();
+    */
     
     var series3 = chart.series.push(new am4charts.LineSeries());
         series3.dataFields.valueY = "progression";
@@ -402,35 +213,13 @@ am4core.ready(function() {
         series3.tensionX = 0.7;
         series3.yAxis = valueAxis2;
         series3.tooltipText = "{name}\n[bold font-size: 20]{valueY}%[/]";
+        series3.hidden = true;
 
         var bullet3 = series3.bullets.push(new am4charts.CircleBullet());
             bullet3.circle.radius = 3;
             bullet3.circle.strokeWidth = 2;
             bullet3.circle.fill = am4core.color("#fff");
 
-    var indicatorSeries = [];
-    var _seriesIndex = {{ series|raw }};
-    
-    jQuery.each(_seriesIndex, function(index, value) {
-        index++;
-        indicatorSeries[index] = chart.series.push(new am4charts.LineSeries());
-        indicatorSeries[index].dataFields.valueY = value.id;
-        indicatorSeries[index].dataFields.categoryX = "iteration";
-        indicatorSeries[index].name = value.title;
-        indicatorSeries[index].strokeWidth = 2;
-        indicatorSeries[index].tensionX = 0.7;
-        indicatorSeries[index].yAxis = valueAxis2;
-        indicatorSeries[index].tooltipText = "{name}\n[bold font-size: 20]{valueY}%[/]";
-        //indicatorSeries[index].stroke = chart.colors.getIndex(0).lighten(0.5);
-        //indicatorSeries[index].strokeDasharray = "3,3";
-        indicatorSeries[index].hidden = true;
-        indicatorSeries[index].hiddenInLegend = true; 
-
-        var bullet4 = indicatorSeries[index].bullets.push(new am4charts.CircleBullet());
-            bullet4.circle.radius = 3;
-            bullet4.circle.strokeWidth = 2;
-            bullet4.circle.fill = am4core.color("#fff");
-    });
     
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -439,23 +228,80 @@ am4core.ready(function() {
     chart.legend = new am4charts.Legend();
     chart.legend.position = "top";
     
+    // var
+    var ajaxRequest;
+    var activitySeries = [];
+    
     // Selector
-    jQuery("#select_indicator").select2({placeholder:"Séléctionnez un indicateur"});
-    jQuery('#select_indicator').on('change', function (evt) {
-      if (jQuery('#select_indicator').select2('val') != null){
-           jQuery.each(indicatorSeries, function(index, indicatorSerie) {
-               if(indicatorSerie !== undefined ){
-                   indicatorSerie.hide();
-               }
-           });
-           var $datas = $('#select_indicator').select2('data');
-           jQuery.each($datas, function(index, $data) {
-               var id = parseInt($data.id);
-               if(indicatorSeries[id] !== undefined ){
-                   indicatorSeries[id].show();
-               }
-           });
-      }
+    jQuery("#select_activity").select2({placeholder:"Séléctionnez les indicateurs à afficher sur le graphe."});
+    jQuery('#select_activity').on('change', function (evt) {
+        if (jQuery('#select_activity').select2('val') != null){
+            var container = jQuery("#statistic");
+            var $datas = jQuery('#select_activity').select2('data');
+            
+            var ids = [];
+            jQuery.each($datas, function(index, $data) {
+                ids.push(parseInt($data.id));
+            });
+            
+            KTApp.block(container,{overlayColor:"#000000",type:"v2",state:"primary",message: KTAppMessages.waiting});
+            
+            if (typeof ajaxRequest !== 'undefined'){
+                ajaxRequest.abort();
+            }
+      
+            ajaxRequest = jQuery.post({
+                url:"{{ path('project_chart', {slug:project.slug}) }}",
+                data: {'indicators': ids},
+                error:function(d){
+                    KTApp.unblock(container);
+                },
+                success:function(t,s,r,a){
+                    console.log(t);
+                    KTApp.unblock(container);
+                    if(t.success===true){
+                        chart.data = t.datas;
+                        
+                        // remove old series
+                        jQuery.each(activitySeries, function(index, serie) {
+                            console.log(index);
+                            console.log(serie);
+                            chart.series.removeIndex(
+                              chart.series.indexOf(serie)
+                            );
+                        });
+                        
+                        // new series
+                        activitySeries = [];
+                        jQuery.each(t.series, function(index, value) {
+                            activitySeries[index] = chart.series.push(new am4charts.ColumnSeries());
+                            activitySeries[index].dataFields.valueY = value.id;
+                            activitySeries[index].dataFields.categoryX = "iteration";
+                            activitySeries[index].name = value.title;
+                            activitySeries[index].unit = value.unit;
+                            activitySeries[index].strokeWidth = 2;
+                            //activitySeries[index].tensionX = 0.7;
+                            activitySeries[index].yAxis = valueAxis1;
+                            activitySeries[index].tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] {unit}";
+                            //activitySeries[index].stroke = chart.colors.getIndex(0).lighten(0.5);
+                            //activitySeries[index].strokeDasharray = "3,3";
+                            //activitySeries[index].hidden = true;
+                            activitySeries[index].hiddenInLegend = true; 
+
+                            /*
+                            var bullet4 = activitySeries[index].bullets.push(new am4charts.CircleBullet());
+                                bullet4.circle.radius = 3;
+                                bullet4.circle.strokeWidth = 2;
+                                bullet4.circle.fill = am4core.color("#fff");
+                            */
+                        });
+                        
+                        chart.invalidateData();
+                    }else{
+                    }
+                }
+            });
+        }
     });
 
     jQuery('#chart-selector .kt-nav__item').on('click', function(e) {
@@ -465,9 +311,5 @@ am4core.ready(function() {
 
 }); // end am4core.ready()
     
-</script>
-<script type="text/javascript">
-jQuery(document).ready(function($){
-});
 </script>
 {% endblock %}

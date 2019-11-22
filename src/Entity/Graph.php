@@ -10,6 +10,7 @@ use App\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GraphRepository")
+ * @ORM\Table(name="graphes")
  */
 class Graph
 {
@@ -42,7 +43,8 @@ class Graph
     private $author;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Axe", mappedBy="graph")
+     * @ORM\OneToMany(targetEntity="App\Entity\Axe", mappedBy="graph", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="graph_id", referencedColumnName="id", onDelete="cascade")
      */
     private $axes;
 

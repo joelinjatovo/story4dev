@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Graph;
+use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -17,6 +18,20 @@ class GraphRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Graph::class);
+    }
+    
+    public function findByProject(Project $project, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
+    {
+        $queryBuilder = $this->createQueryBuilder('g')
+            ->where('g.project = :project')
+            ->setParameter('project', $project)
+            ->orderBy('g.'.$orderBy, $order);
+        
+        if($limit > 0){
+            $queryBuilder->setMaxResults($limit);
+        }
+        
+        return $queryBuilder->getQuery();
     }
 
     // /**

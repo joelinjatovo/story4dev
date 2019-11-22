@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Activités - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}Graphes - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,14 +9,14 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Toutes les activités</h3>
+            <h3 class="kt-subheader__title">Toutes les graphes</h3>
             <div class="kt-subheader__breadcrumbs">
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="{{ path('project_list', { page : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="{{ path('project_show', { slug: project.slug })}}" class="kt-subheader__breadcrumbs-link">{{ project.title }}</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Activités</span>
+                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Graphes</span>
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
@@ -40,19 +40,16 @@
                         <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
                                 <th data-field="Activités" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Activités</span>
+                                    <span style="width: 222px;">Graphes</span>
                                 </th>
-                                <th data-field="Avancements" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Avancements</span>
+                                <th data-field="Début" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Début</span>
                                 </th>
-                                <th data-field="Indicateurs" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Indicateurs</span>
+                                <th data-field="Fin" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Fin</span>
                                 </th>
-                                <th data-field="Rapports" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Rapports</span>
-                                </th>
-                                <th data-field="Documents" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Documents</span>
+                                <th data-field="Datas" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Data</span>
                                 </th>
                                 <th data-field="Actions" class="kt-datatable__cell kt-datatable__cell--sort">
                                     <span style="width: 150px;">Actions</span>
@@ -60,8 +57,8 @@
                             </tr>
                         </thead>
                         <tbody class="kt-datatable__body">
-                            {% for activity in activities %}
-                                {{ include('activity/list_item.html.twig', {'activity': activity}) }}
+                            {% for graph in graphes %}
+                                {{ include('graph/list_item.html.twig', {'graph': graph}) }}
                             {% endfor %}
                         </tbody>
                     </table>
@@ -77,7 +74,7 @@
             <div class="kt-portlet__body">
                 <!--begin: Pagination-->
                 <div class="kt-pagination kt-pagination--brand">
-                    {{ include('_common/pagination.html.twig', {'pagination': activities}) }}
+                    {{ include('_common/pagination.html.twig', {'pagination': graphes}) }}
                 </div>
                 <!--end: Pagination-->
             </div>
@@ -102,11 +99,11 @@ jQuery(document).ready(function($){
             }).then(function(e){
                 if(e.value){
                     KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
-                    $.post("/activity/remove", { id: $this.attr('data-id') })
+                    $.post("/graph/remove", { id: $this.attr('data-id') })
                     .done(function( data ) {
                         KTApp.unblockPage();
                         if(data.success){
-                            $this.closest('.activity-item').remove();
+                            $this.closest('.graph-item').remove();
                             toastr.success(data.message);
                         }else{
                             toastr.error(data.message, data.title);

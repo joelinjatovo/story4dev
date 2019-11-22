@@ -8,6 +8,7 @@ use App\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AxeRepository")
+ * @ORM\Table(name="axes")
  */
 class Axe
 {

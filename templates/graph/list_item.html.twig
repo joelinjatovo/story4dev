@@ -1,51 +1,36 @@
-<tr data-row="0" class="kt-datatable__row activity-item" style="left: 0px;">
+<tr data-row="0" class="kt-datatable__row graph-item" style="left: 0px;">
     <td data-field="User" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="width: 222px;">
             <div class="kt-user-card-v2">
                 <div class="kt-user-card-v2__details">
-                    <a class="kt-user-card-v2__name" href="{{ path('activity_show', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}">{{ activity.title }}</a>
-                    <span class="kt-user-card-v2__email">{{ activity.description|excerpt(50) }}</span>
+                    <a class="kt-user-card-v2__name" href="{{ path('graph_show', { 'slug': graph.project.slug, 'graph_id': graph.id }) }}">{{ graph.title }}</a>
                 </div>
             </div>
         </span>
     </td>
-    <td data-field="Avancement" class="kt-datatable__cell">
-        <span style="width: 222px;">
-            <div class="kt-widget__item">
-                <div class="kt-widget__progress-" style="width: 90%;">
-                    <div class="progress" style="height: 5px;width: 100%;">
-                        <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ activity.progression }}%;" aria-valuenow="{{ activity.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="kt-widget__stats">
-                        {{ activity.progression }}%
-                    </div>
-                </div>
-            </div>
-        </span>
+    <td data-field="Début" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">{{ graph.project.startat|date("Y-m-d") }}</span></span>
     </td>
-    <td data-field="Indicateurs" class="kt-datatable__cell">
-        <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'slug' : activity.project.slug} ) }}" style="width: 100px;"><span class="kt-font-bold">{{ activity.indicators.count }} </span>Indicateurs</a>
+    <td data-field="Fin" class="kt-datatable__cell">
+        <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">{{ graph.project.endat|date("Y-m-d") }}</span></span>
     </td>
-    <td data-field="Rapports" class="kt-datatable__cell">
-        <a style="width: 100px;" href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : activity.project.slug} ) }}"><span class="kt-font-bold">{{ activity.reports.count }} </span>Rapports</a>
-    </td>
-    <td data-field="Documents" class="kt-datatable__cell">
-        <a style="width: 100px;" href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}"><span class="kt-font-bold">{{ activity.activityFiles.count }} </span>Documents</a>
+    <td data-field="Data" class="kt-datatable__cell">
+        <span style="width: 100px;">{{ graph.axes.count }} axes</span>
     </td>
     <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 150px;">
-            {% if is_granted('edit', activity) %}
-                <a href="{{ path('activity_edit', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+            {% if is_granted('edit', graph) %}
+                <a href="{{ path('graph_edit', { 'slug': graph.project.slug, 'graph_id': graph.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                     <i class="la la-edit"></i>
                 </a>
             {% endif %}
-            {% if is_granted('view', activity) %}
-                <a href="{{ path('activity_show', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+            {% if is_granted('view', graph) %}
+                <a href="{{ path('graph_show', { 'slug': graph.project.slug, 'graph_id': graph.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                     <i class="la la-eye"></i>
                 </a>
             {% endif %}
-            {% if is_granted('remove', activity) %}
-                <a title="Supprimer cette activité" data-id="{{ activity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+            {% if is_granted('remove', graph) %}
+                <a title="Supprimer cette activité" data-id="{{ graph.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
                     <i class="la la-trash"></i>
                 </a>
             {% endif %}

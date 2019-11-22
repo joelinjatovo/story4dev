@@ -103,7 +103,7 @@
                                     <div id="kt_repeater_2">
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Axes du graphe</label>
-                                            <div data-repeater-list="project[iterations]" class="col-lg-9">
+                                            <div data-repeater-list="graph[axes]" class="col-lg-9">
                                                 {% if graph.axes is empty %}
 													<div data-repeater-item="" class="kt-margin-b-10">
                                                         <div class="form-group row">
@@ -139,17 +139,17 @@
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
                                                                     {{ form_widget( axe.id ) }}
-                                                                    {{ form_widget( axe.title, { 'attr' : { 'form' : 'project', 'placeholder' : 'Label du suivi', 'class' : 'form-control' } } ) }}
+                                                                    {{ form_widget( axe.title, { 'attr' : { 'form' : 'graph', 'placeholder' : 'Label du suivi', 'class' : 'form-control' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
-                                                                    {{ form_widget( axe.startAt, { 'attr' : { 'form' : 'project', 'placeholder' : 'Début du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
+                                                                    {{ form_widget( axe.startAt, { 'attr' : { 'form' : 'graph', 'placeholder' : 'Début du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">
                                                                 <div class="input-group">
-                                                                    {{ form_widget( axe.endAt, { 'attr' : { 'form' : 'project', 'placeholder' : 'Fin du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
+                                                                    {{ form_widget( axe.endAt, { 'attr' : { 'form' : 'graph', 'placeholder' : 'Fin du suivi', 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-3">

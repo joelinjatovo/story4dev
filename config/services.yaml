@@ -55,6 +55,12 @@ services:
         tags:
            - { name: security.voter }
 
+    App\Security\Voter\GraphVoter:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+        tags:
+           - { name: security.voter }
+
     App\Security\Voter\ReportVoter:
         arguments:
             $em: '@doctrine.orm.entity_manager'

@@ -57,7 +57,7 @@ class GraphController extends AbstractController
      * @Route("/p/{slug}/graph", name="create", methods="POST")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
-    public function create(Project $project, Request $request, FormError $formError): Response
+    public function create(Project $project, Request $request, FormError $formError)
     {
         $this->denyAccessUnlessGranted('edit', $project);
         
@@ -68,14 +68,18 @@ class GraphController extends AbstractController
         
         $form->handleRequest($request);
         if ( $form->isSubmitted() && $form->isValid() ) {
-
-            $graph->setAuthor($this->getUser());
-            
             $entityManager = $this->getDoctrine()->getManager();
+            
+            // set author
+            $graph->setAuthor($this->getUser());
+            foreach($graph->getAxes() as $axe){
+                $axe->setAuthor($this->getUser());
+            }
+            
             $entityManager->persist($graph);
             $entityManager->flush();
         
-            $this->addFlash('success', 'Activité créée avec succès.');
+            $this->addFlash('success', 'Graphe créé avec succès.');
 
             $action = strtolower( $request->request->get('submit') );
             switch($action){
@@ -120,7 +124,7 @@ class GraphController extends AbstractController
      */
     public function show(Project $project, Graph $graph)
     {
-        $this->denyAccessUnlessGranted('view', $graph);
+        $this->denyAccessUnlessGranted('view', $project);
         
         if($graph->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
@@ -128,11 +132,26 @@ class GraphController extends AbstractController
         
         $user = $project->getAuthor();
         
+        $data   =  $project->getData();
+        $series =  $project->getSerie();
+        
         return $this->render('graph/show.html.twig', [
             'user'    => $user,
             'project' => $project,
             'graph'   => $graph, 
+            'data'    => json_encode($data),
+            '_series' => $series,
+            'series'   => json_encode($series),
         ]);
+    }
+    
+    /**
+     * @Route("/p/{slug}/graph/{graph_id}/chart", name="chart", methods="POST", requirements={"graph_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
+     * @Entity("graph", options={"mapping": {"graph_id": "id"}})
+     */
+    public function chart(Project $project, Graph $graph)
+    {
     }
     
     /**
@@ -142,7 +161,7 @@ class GraphController extends AbstractController
      */
     public function edit(Project $project, Graph $graph)
     {
-        $this->denyAccessUnlessGranted('edit', $graph);
+        $this->denyAccessUnlessGranted('edit', $project);
         
         if($graph->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
@@ -167,7 +186,7 @@ class GraphController extends AbstractController
      */
     public function update(Project $project, Graph $graph, Request $request, FormError $formError)
     {
-        $this->denyAccessUnlessGranted('edit', $graph);
+        $this->denyAccessUnlessGranted('edit', $project);
         
         if($graph->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
@@ -187,7 +206,28 @@ class GraphController extends AbstractController
         if ( $form->isSubmitted() && $form->isValid() ) {
             $entityManager = $this->getDoctrine()->getManager();
             
+            // remove the relationship
+            foreach ($originalAxes as $axe) {
+                $removed = true;
+                foreach($graph->getAxes() as $updated_axe){
+                    if ( ( $updated_axe->getId() > 0 ) && ($updated_axe->getId() === $axe->getId()) ) {
+                        $removed = false;
+                        break;
+                    }
+                }
+                
+                if($removed === true){
+                    $graph->removeIteration($axe);
+                    $entityManager->remove($iteration);
+                }
+            }
             
+            // set author for new iteration
+            foreach($graph->getAxes() as $updated_axe){
+                if($updated_axe->getAuthor()==null){
+                    $updated_axe->setAuthor($this->getUser());
+                }
+            }
             
             $entityManager->persist($graph);
             $entityManager->flush();
@@ -244,7 +284,7 @@ class GraphController extends AbstractController
             if( $id > 0 ) {
                 $entityManager = $this->getDoctrine()->getManager();
                 $graph = $entityManager->getRepository(Graph::class)->find($id);
-                if( $graph  && ! $graph->isDeleted()){
+                if( $graph ){
                     $this->denyAccessUnlessGranted('remove', $graph);
 
                     $entityManager->remove($graph);
@@ -267,10 +307,9 @@ class GraphController extends AbstractController
     
     /**
      * @Route("/p/{slug}/graphes/{page<\d+>?1}", name="list", methods="GET")
-     * @Route("/p/{slug}/graphes/{type}/{page<\d+>?1}", name="list_type", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
-    public function list(Project $project, ?string $type, $page = 1, PaginatorService $paginator)
+    public function list(Project $project, $page = 1, PaginatorService $paginator)
     {
         $this->denyAccessUnlessGranted('view', $project);
         
@@ -284,15 +323,7 @@ class GraphController extends AbstractController
         
         $graphes = $paginator->paginate($query, 10);
 
-        if($type == 'list'){
-            return $this->render('graph/list.html.twig', [
-                'user'    => $user,
-                'project' => $project,
-                'graphes' => $graphes
-            ]);
-        }
-        
-        return $this->render('graph/grid.html.twig', [
+        return $this->render('graph/list.html.twig', [
             'user'    => $user,
             'project' => $project,
             'graphes' => $graphes
