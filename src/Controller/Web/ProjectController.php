@@ -15,6 +15,8 @@ use App\Entity\Project;
 use App\Entity\Report;
 use App\Entity\Activity;
 use App\Entity\Indicator;
+use App\Entity\Iteration;
+use App\Entity\Result;
 use App\Entity\ActivityFile;
 use App\Entity\ProjectContribution;
 use App\Entity\Meta\ProjectMeta;
@@ -36,11 +38,15 @@ class ProjectController extends AbstractController
      * @Route("/p/{slug}/dashboard", name="dashboard", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
-    public function dashboard(Project $project)
+    public function dashboard(Project $project, Request $request)
     {
         $this->denyAccessUnlessGranted('edit', $project);
+        
+        if ( $request->isXmlHttpRequest() ) {
+            return $this->chart($project, $request);
+        }
 
-        $user =$project->getAuthor();
+        $user = $project->getAuthor();
         
         $entityManager = $this->getDoctrine()->getManager();
         $reports = $entityManager->getRepository(Report::class)->findByProject($project)->execute();
@@ -50,15 +56,94 @@ class ProjectController extends AbstractController
         $files_per_date = $entityManager->getRepository(File::class)->findByProjectPerMonth($project);
         $files_per_activity = $entityManager->getRepository(File::class)->findByProjectPerActivity($project);
         
-        $data   =  $project->getData();
-        $series =  $project->getSerie();
-        
         $count = [];
         $count['activities'] = $entityManager->getRepository(Activity::class)->createQueryBuilder('a')->select('count(a.id)')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
         $count['reports']    = $entityManager->getRepository(Report::class)->createQueryBuilder('r')->select('count(r.id)')->leftJoin('r.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
         $count['indicators'] = $entityManager->getRepository(Indicator::class)->createQueryBuilder('i')->select('count(i.id)')->leftJoin('i.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
         $count['files']      = $entityManager->getRepository(ActivityFile::class)->createQueryBuilder('af')->select('count(af.id)')->leftJoin('af.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
+        
+        $datas = $entityManager->createQuery(
+            "SELECT ite.id AS ite_id, ite.title AS iteration, SUM(res.value) AS value " .
+            "FROM " . Iteration::class . " ite " .
+            "LEFT JOIN " . Activity::class . " act WITH act.project = ite.project " .
+            "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= ite.startAt AND rep.createdAt <= ite.endAt " .
+            "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
+            "WHERE ite.project = :project " .
+            "GROUP BY ite.id " .
+            "ORDER BY ite.id " 
+        )->setParameter("project", $project)->getResult();
+            
+        foreach($datas as $key => $data){
+            if( !isset($data['value']) || is_null($data['value']) ){
+                $datas[$key]['value'] = 0;
+            }
+        }
+        
+        $ids = $request->query->get('indicators');
+        $_indicators = [];
+        $series = [];
+        if( is_array( $ids ) && ! empty( $ids ) ) {
+            foreach($ids as $id ){
+                $id = (int) $id;
+                $indicator = $entityManager->getRepository(Indicator::class)->find($id);
+                if( $indicator ) {
+                    $_indicators[] = $indicator;
+                    $series[] = [
+                        'id' => 'i_'.$indicator->getId(),
+                        'title' => $indicator->getTitle(),
+                        'unit'  => $indicator->getUnit()->getLabel(),
+                    ];
+                }
+            }
 
+            if( count($_indicators) > 0 ) {
+                $datas = $entityManager->createQuery(
+                    "SELECT ite.id AS ite_id, ite.title AS iteration, SUM(res.value) AS value " .
+                    "FROM " . Iteration::class . " ite " .
+                    "LEFT JOIN " . Activity::class . " act WITH act.project = ite.project " .
+                    "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= ite.startAt AND rep.createdAt <= ite.endAt " .
+                    "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
+                    "WHERE res.indicator IN (:indicators) " .
+                    "AND ite.project = :project " .
+                    "GROUP BY ite.id " .
+                    "ORDER BY ite.id " 
+                )->setParameter("indicators", $_indicators)->setParameter("project", $project)->getResult();
+
+                foreach($datas as $key => $data){
+                    if( !isset($data['value']) || is_null($data['value']) ){
+                        $datas[$key]['value'] = 0;
+                    }
+                }
+            }
+
+            foreach($_indicators as $indicator){
+                $results = $entityManager->createQuery(
+                    "SELECT ite.id AS ite_id, ite.title AS iteration, SUM(res.value) AS i_" . $indicator->getId() . " " .
+                    "FROM " . Iteration::class . " ite " .
+                    "LEFT JOIN " . Activity::class . " act WITH act.project = ite.project " .
+                    "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= ite.startAt AND rep.createdAt <= ite.endAt " .
+                    "LEFT JOIN " . Result::class . " res WITH res.report = rep AND res.indicator = :indicator " .
+                    "WHERE ite.project = :project " .
+                    "GROUP BY ite.id " .
+                    "ORDER BY ite.id " 
+                )->setParameter("indicator", $indicator)->setParameter("project", $project)->getResult();
+
+                foreach($results as $key => $result){
+                    $index = "i_" . $indicator->getId();
+                    if( !isset($result[$index]) || is_null($result[$index]) ){
+                        $results[$key][$index] = 0;
+                    }
+                }
+
+                $datas = array_map(function($array1,$array2){  
+                   return array_merge(isset($array1) ? $array1 : array(), isset($array2) ? $array2 : array());
+                }, $datas, $results); 
+            }
+        }else{
+            $ids = [];
+        }
+        
+        $indicators = $entityManager->getRepository(Indicator::class)->findByProject($project)->execute();
         
         return $this->render('project/dashboard.html.twig', [
             'user'    => $user, 
@@ -66,87 +151,103 @@ class ProjectController extends AbstractController
             'reports' => $reports, 
             'users'   => $users,
             'count'   => $count,
-            'data'    => json_encode($data),
-            '_series' => $series,
-            'series'   => json_encode($series),
             'filesCount'         => count($files),
             'files'              => $files,
             'files_per_activity' => $files_per_activity,
+            
+            'indicators' => $indicators,
+            'selectedIndicators' => $ids,
+            'datas'    => json_encode($datas),
+            'series'   => json_encode($series),
         ]);
     }
     
-    /**
-     * @Route("/p/{slug}/chart", name="chart", methods="POST")
-     * @Entity("project", options={"mapping": {"slug": "slug"}})
-     */
-    public function chart(Project $project, Request $request)
+    private function chart(Project $project, Request $request)
     {
         $this->denyAccessUnlessGranted('edit', $project);
         
         $entityManager = $this->getDoctrine()->getManager();
         
-        if ( $request->isXmlHttpRequest() ) {
-            $ids = $request->request->get('indicators');
-            
-            $indicators = [];
-            $series = [];
-            if( is_array( $ids ) && ! empty( $ids ) ) {
-                foreach($ids as $id ){
-                    $id = (int) $id;
-                    $indicator = $entityManager->getRepository(Indicator::class)->find($id);
-                    if( $indicator ) {
-                        $indicators[] = $indicator;
-                        $series[] = [
-                            'id' => 'i_'.$indicator->getId(),
-                            'title' => $indicator->getTitle(),
-                            'unit'  => $indicator->getUnit()->getLabel(),
-                        ];
-                    }
-                }
-            }
-            
-            $datas = [];
-            
-            foreach($project->getIterations() as $iteration){
-                $data = [
-                    "iteration"   => $iteration->getTitle(),
-                    "value"       => $project->getValue($iteration),
-                    "goal"        => $project->getGoalValue($iteration),
-                    "report"      => $project->getReportsCount($iteration),
-                    "progression" => $project->getProgression($iteration),
-                ];
-                
-                if( count( $indicators ) > 0 ) {
-                    $value = 0;
-                    $goal = 0;
-                    $progression = 0;
-                    foreach($indicators as $indicator){
-                        $goal += $indicator->getGoalValue($iteration);
-                        $progression += $indicator->getProgression($iteration);
+        $ids = $request->query->get('indicators');
 
-                        $i_value = $indicator->getValue($iteration);
-                        $value += $i_value;
-                        $data['i_'.$indicator->getId()] = $i_value;
-                    }
-                    $data['value'] = $value;
-                    $data['goal']  = $goal;
-                    $data['progression']  = ( $progression / count( $indicators ) );
+        $indicators = [];
+        $series = [];
+        if( is_array( $ids ) && ! empty( $ids ) ) {
+            foreach($ids as $id ){
+                $id = (int) $id;
+                $indicator = $entityManager->getRepository(Indicator::class)->find($id);
+                if( $indicator ) {
+                    $indicators[] = $indicator;
+                    $series[] = [
+                        'id' => 'i_'.$indicator->getId(),
+                        'title' => $indicator->getTitle(),
+                        'unit'  => $indicator->getUnit()->getLabel(),
+                    ];
                 }
-                
-                $datas[] = $data;
             }
-            
-            return $this->json([
-                'success' => true,
-                'datas'   => $datas,
-                'series'  => $series,
-            ]);
         }
-            
+
+        if( count($indicators) > 0 ) {
+            $datas = $entityManager->createQuery(
+                "SELECT ite.id AS ite_id, ite.title AS iteration, SUM(res.value) AS value " .
+                "FROM " . Iteration::class . " ite " .
+                "LEFT JOIN " . Activity::class . " act WITH act.project = ite.project " .
+                "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= ite.startAt AND rep.createdAt <= ite.endAt " .
+                "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
+                "WHERE res.indicator IN (:indicators) " .
+                "AND ite.project = :project " .
+                "GROUP BY ite.id " .
+                "ORDER BY ite.id " 
+            )->setParameter("indicators", $indicators)->setParameter("project", $project)->getResult();
+        }else{
+            $datas = $entityManager->createQuery(
+                "SELECT ite.id AS ite_id, ite.title AS iteration, SUM(res.value) AS value " .
+                "FROM " . Iteration::class . " ite " .
+                "LEFT JOIN " . Activity::class . " act WITH act.project = ite.project " .
+                "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= ite.startAt AND rep.createdAt <= ite.endAt " .
+                "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
+                "WHERE ite.project = :project " .
+                "GROUP BY ite.id " .
+                "ORDER BY ite.id " 
+            )->setParameter("project", $project)->getResult();
+        }
+
+        foreach($datas as $key => $data){
+            if( !isset($data['value']) || is_null($data['value']) ){
+                $datas[$key]['value'] = 0;
+            }
+        }
+
+        foreach($indicators as $indicator){
+            $results = $entityManager->createQuery(
+                "SELECT ite.id AS ite_id, ite.title AS iteration, SUM(res.value) AS i_" . $indicator->getId() . " " .
+                "FROM " . Iteration::class . " ite " .
+                "LEFT JOIN " . Activity::class . " act WITH act.project = ite.project " .
+                "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= ite.startAt AND rep.createdAt <= ite.endAt " .
+                "LEFT JOIN " . Result::class . " res WITH res.report = rep AND res.indicator = :indicator " .
+                "WHERE ite.project = :project " .
+                "GROUP BY ite.id " .
+                "ORDER BY ite.id " 
+            )->setParameter("indicator", $indicator)->setParameter("project", $project)->getResult();
+
+            foreach($results as $key => $result){
+                $index = "i_" . $indicator->getId();
+                if( !isset($result[$index]) || is_null($result[$index]) ){
+                    $results[$key][$index] = 0;
+                }
+            }
+
+            $datas = array_map(function($array1,$array2){  
+               return array_merge(isset($array1) ? $array1 : array(), isset($array2) ? $array2 : array());
+            }, $datas, $results); 
+        }
+
         return $this->json([
-            'success' => false,
-            'title'   => 'Invalid Request',
-            'message' => 'An error was occured. :)',
+            'success' => true,
+            'url'     => $request->getUri(),
+            'title'   => "Dashboard - Projet #{$project->getId()} - {$this->getUser()->getFullname()}",
+            'datas'   => $datas,
+            'series'  => $series,
         ]);
     }
     

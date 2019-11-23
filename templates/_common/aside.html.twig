@@ -48,10 +48,30 @@
                             <span class="kt-menu__arrow"></span>
                             <ul class="kt-menu__subnav">
                                 <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" title="{{ project.title }}" ><span class="kt-menu__link"><span class="kt-menu__link-text">Mon projet</span></span></li>
-                                <li class="kt-menu__item "><a  href="{{ path('project_dashboard', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Tableau de bord</span></a></li>
+                                <li class="kt-menu__item "><a  href="{{ path('project_dashboard', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-dashboard"><span></span></i><span class="kt-menu__link-text">Tableau de bord</span></a></li>
                                 <li class="kt-menu__item "><a  href="{{ path('activity_list', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Activités</span></a></li>
                                 <li class="kt-menu__item "><a  href="{{ path('report_list', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Rapports</span></a></li>
                                 <li class="kt-menu__item "><a  href="{{ path('contribution_list', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-group"><span></span></i><span class="kt-menu__link-text">Contributeurs</span></a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--bottom" aria-haspopup="true"  data-ktmenu-submenu-toggle="click" data-ktmenu-link-redirect="1">
+                        <a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
+                            <i class="kt-menu__link-icon flaticon2-line-chart"></i>
+                            <span class="kt-menu__link-text">Graphes</span>
+                            <i class="kt-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="kt-menu__submenu ">
+                            <span class="kt-menu__arrow"></span>
+                            <ul class="kt-menu__subnav">
+                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" title="{{ project.title }}" ><span class="kt-menu__link"><span class="kt-menu__link-text">Graphes</span></span></li>
+                                {% for graph in project.graphs %}
+                                    <li class="kt-menu__item "><a  href="{{ path('graph_show', { slug : project.slug, graph_id: graph.id } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-bar-chart"><span></span></i><span class="kt-menu__link-text">{{ graph.title }}</span></a></li>
+                                {% else %}
+                                    <li class="kt-menu__item " aria-haspopup="true" >
+                                        <a>Il n'y a pas encore de graphe.</a>
+                                    </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </li>

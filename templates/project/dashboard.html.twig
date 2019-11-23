@@ -222,8 +222,8 @@
                 <div class="form-group form-group-last row">
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <select class="form-control kt-select2" id="select_activity"  multiple="multiple">
-                            {% for serie in _series %}
-                                <option value="{{ serie._id }}">{{ serie.title }}</option>
+                            {% for indicator in indicators %}
+                                <option value="{{ indicator.id }}" {{ indicator.id in selectedIndicators ? 'selected' : '' }}>{{ indicator.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -278,18 +278,13 @@ am4core.ready(function() {
     // Create chart instance
     var chart = am4core.create("chartdiv", am4charts.XYChart);
 
-    chart.data = {{ data|raw }};
+    chart.data = {{ datas|raw }};
 
     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "iteration";
     
     var valueAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis1.title.text = "Valeur par unité";
-    
-    var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis2.title.text = "Progression";
-    valueAxis2.renderer.opposite = true;
-    valueAxis2.renderer.grid.template.disabled = true;
 
     // Create series
     var series4 = chart.series.push(new am4charts.LineSeries());
@@ -305,45 +300,6 @@ am4core.ready(function() {
             bullet4.circle.radius = 3;
             bullet4.circle.strokeWidth = 2;
             bullet4.circle.fill = am4core.color("#fff");
-    /*
-    var series1 = chart.series.push(new am4charts.ColumnSeries());
-        series1.dataFields.valueY = "value";
-        series1.dataFields.categoryX = "iteration";
-        series1.dataFields.report = "report";
-        series1.yAxis = valueAxis1;
-        series1.name = "Résultat";
-        series1.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] unités\n[bold font-size: 18]{report}[/] rapports";
-        series1.fill = chart.colors.getIndex(0);
-        series1.strokeWidth = 0;
-        series1.clustered = false;
-        series1.columns.template.width = am4core.percent(40);
-
-    var series2 = chart.series.push(new am4charts.ColumnSeries());
-        series2.dataFields.valueY = "goal";
-        series2.dataFields.categoryX = "iteration";
-        series2.yAxis = valueAxis1;
-        series2.name = "Objectif";
-        series2.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] unités";
-        series2.fill = chart.colors.getIndex(0).lighten(0.5);
-        series2.strokeWidth = 0;
-        series2.clustered = false;
-        series2.toBack();
-    */
-    
-    var series3 = chart.series.push(new am4charts.LineSeries());
-        series3.dataFields.valueY = "progression";
-        series3.dataFields.categoryX = "iteration";
-        series3.name = "Progression";
-        series3.strokeWidth = 2;
-        series3.tensionX = 0.7;
-        series3.yAxis = valueAxis2;
-        series3.tooltipText = "{name}\n[bold font-size: 20]{valueY}%[/]";
-        series3.hidden = true;
-
-        var bullet3 = series3.bullets.push(new am4charts.CircleBullet());
-            bullet3.circle.radius = 3;
-            bullet3.circle.strokeWidth = 2;
-            bullet3.circle.fill = am4core.color("#fff");
 
     
     // Add cursor
@@ -356,6 +312,19 @@ am4core.ready(function() {
     // var
     var ajaxRequest;
     var activitySeries = [];
+    
+    var dataSeries = {{ series|raw }};
+    jQuery.each(dataSeries, function(index, value) {
+        activitySeries[index] = chart.series.push(new am4charts.ColumnSeries());
+        activitySeries[index].dataFields.valueY = value.id;
+        activitySeries[index].dataFields.categoryX = "iteration";
+        activitySeries[index].name = value.title;
+        activitySeries[index].unit = value.unit;
+        activitySeries[index].strokeWidth = 2;
+        activitySeries[index].yAxis = valueAxis1;
+        activitySeries[index].tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] {unit}";
+        activitySeries[index].hiddenInLegend = true; 
+    });
     
     // Selector
     jQuery("#select_activity").select2({placeholder:"Séléctionnez les indicateurs à afficher sur le graphe."});
@@ -375,8 +344,8 @@ am4core.ready(function() {
                 ajaxRequest.abort();
             }
       
-            ajaxRequest = jQuery.post({
-                url:"{{ path('project_chart', {slug:project.slug}) }}",
+            ajaxRequest = jQuery.get({
+                url:"{{ path('project_dashboard', {slug:project.slug}) }}",
                 data: {'indicators': ids},
                 error:function(d){
                     KTApp.unblock(container);
@@ -385,6 +354,8 @@ am4core.ready(function() {
                     console.log(t);
                     KTApp.unblock(container);
                     if(t.success===true){
+                        window.history.pushState(t.title, t.title, t.url);
+                        
                         chart.data = t.datas;
                         
                         // remove old series
