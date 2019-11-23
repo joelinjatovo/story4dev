@@ -53,6 +53,12 @@
                                         <span class="kt-nav__link-text">Activité</span>
                                     </a>
                                 </li>
+                                <li class="kt-nav__item">
+                                    <a href="{{ path('graph_index', { 'slug' : graph.project.slug } ) }}" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon-map"></i>
+                                        <span class="kt-nav__link-text">Graphe</span>
+                                    </a>
+                                </li>
                             {% endif %}
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__head">
