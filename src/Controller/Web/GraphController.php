@@ -15,7 +15,9 @@ use App\Entity\Project;
 use App\Entity\Report;
 use App\Entity\Activity;
 use App\Entity\Graph;
+use App\Entity\Axe;
 use App\Entity\Indicator;
+use App\Entity\Result;
 use App\Entity\ActivityFile;
 use App\Entity\ProjectContribution;
 use App\Entity\Meta\ProjectMeta;
@@ -124,7 +126,7 @@ class GraphController extends AbstractController
      */
     public function show(Project $project, Graph $graph)
     {
-        $this->denyAccessUnlessGranted('view', $project);
+        $this->denyAccessUnlessGranted('view', $graph);
         
         if($graph->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
@@ -132,16 +134,35 @@ class GraphController extends AbstractController
         
         $user = $project->getAuthor();
         
-        $data   =  $project->getData();
-        $series =  $project->getSerie();
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $indicators = $entityManager->getRepository(Indicator::class)->findByProject($project)->execute();
+        
+        $datas = $entityManager->createQuery(
+            "SELECT axe.id AS axe_id, axe.title AS iteration, SUM(res.value) AS value " .
+            "FROM " . Axe::class . " axe " .
+            "LEFT JOIN " . Graph::class . " g WITH g = axe.graph " .
+            "LEFT JOIN " . Activity::class . " act WITH act.project = g.project " .
+            "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= axe.startAt AND rep.createdAt <= axe.endAt " .
+            "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
+            "WHERE axe.graph = :graph " .
+            "GROUP BY axe.id " .
+            "ORDER BY axe.id " 
+        )->setParameter("graph", $graph)->getResult();
+        
+            
+        foreach($datas as $key => $data){
+            if( !isset($data['value']) && is_null($data['value']) ){
+                $datas[$key]['value'] = 0;
+            }
+        }
         
         return $this->render('graph/show.html.twig', [
-            'user'    => $user,
-            'project' => $project,
-            'graph'   => $graph, 
-            'data'    => json_encode($data),
-            '_series' => $series,
-            'series'   => json_encode($series),
+            'user'       => $user,
+            'project'    => $project,
+            'graph'      => $graph, 
+            'indicators' => $indicators, 
+            'data'       => json_encode($datas),
         ]);
     }
     
@@ -150,8 +171,102 @@ class GraphController extends AbstractController
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("graph", options={"mapping": {"graph_id": "id"}})
      */
-    public function chart(Project $project, Graph $graph)
+    public function chart(Project $project, Graph $graph, Request $request)
     {
+        $this->denyAccessUnlessGranted('edit', $project);
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        if ( $request->isXmlHttpRequest() ) {
+            $ids = $request->request->get('indicators');
+            
+            $indicators = [];
+            $series = [];
+            if( is_array( $ids ) && ! empty( $ids ) ) {
+                foreach($ids as $id ){
+                    $id = (int) $id;
+                    $indicator = $entityManager->getRepository(Indicator::class)->find($id);
+                    if( $indicator ) {
+                        $indicators[] = $indicator;
+                        $series[] = [
+                            'id' => 'i_'.$indicator->getId(),
+                            'title' => $indicator->getTitle(),
+                            'unit'  => $indicator->getUnit()->getLabel(),
+                        ];
+                    }
+                }
+            }
+            
+            if( count($indicators) > 0 ) {
+                $datas = $entityManager->createQuery(
+                    "SELECT axe.id AS axe_id, axe.title AS iteration, SUM(res.value) AS value " .
+                    "FROM " . Axe::class . " axe " .
+                    "LEFT JOIN " . Graph::class . " g WITH g = axe.graph " .
+                    "LEFT JOIN " . Activity::class . " act WITH act.project = g.project " .
+                    "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= axe.startAt AND rep.createdAt <= axe.endAt " .
+                    "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
+                    "WHERE res.indicator IN (:indicators) " .
+                    "AND axe.graph = :graph " .
+                    "GROUP BY axe.id " .
+                    "ORDER BY axe.id " 
+                )->setParameter("indicators", $indicators)->setParameter("graph", $graph)->getResult();
+            }else{
+                $datas = $entityManager->createQuery(
+                    "SELECT axe.id AS axe_id, axe.title AS iteration, SUM(res.value) AS value " .
+                    "FROM " . Axe::class . " axe " .
+                    "LEFT JOIN " . Graph::class . " g WITH g = axe.graph " .
+                    "LEFT JOIN " . Activity::class . " act WITH act.project = g.project " .
+                    "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= axe.startAt AND rep.createdAt <= axe.endAt " .
+                    "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
+                    "WHERE axe.graph = :graph " .
+                    "GROUP BY axe.id " .
+                    "ORDER BY axe.id " 
+                )->setParameter("graph", $graph)->getResult();
+            }
+            
+            foreach($datas as $key => $data){
+                if( !isset($data['value']) && is_null($data['value']) ){
+                    $datas[$key]['value'] = 0;
+                }
+            }
+
+            foreach($indicators as $indicator){
+                $results = $entityManager->createQuery(
+                    "SELECT axe.id AS axe_id, axe.title AS iteration, SUM(res.value) AS i_" . $indicator->getId() . " " .
+                    "FROM " . Axe::class . " axe " .
+                    "LEFT JOIN " . Graph::class . " g WITH g = axe.graph " .
+                    "LEFT JOIN " . Activity::class . " act WITH act.project = g.project " .
+                    "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= axe.startAt AND rep.createdAt <= axe.endAt " .
+                    "LEFT JOIN " . Result::class . " res WITH res.report = rep AND res.indicator = :indicator " .
+                    "WHERE axe.graph = :graph " .
+                    "GROUP BY axe.id " .
+                    "ORDER BY axe.id " 
+                )->setParameter("indicator", $indicator)->setParameter("graph", $graph)->getResult();
+                
+                foreach($results as $key => $result){
+                    $index = "i_" . $indicator->getId();
+                    if( !isset($result[$index]) && is_null($result[$index]) ){
+                        $results[$key][$index] = 0;
+                    }
+                }
+
+                $datas = array_map(function($array1,$array2){  
+                   return array_merge(isset($array1) ? $array1 : array(), isset($array2) ? $array2 : array());
+                }, $datas, $results); 
+            }
+            
+            return $this->json([
+                'success' => true,
+                'datas'   => $datas,
+                'series'  => $series,
+            ]);
+        }
+            
+        return $this->json([
+            'success' => false,
+            'title'   => 'Invalid Request',
+            'message' => 'An error was occured. :)',
+        ]);
     }
     
     /**
@@ -161,7 +276,7 @@ class GraphController extends AbstractController
      */
     public function edit(Project $project, Graph $graph)
     {
-        $this->denyAccessUnlessGranted('edit', $project);
+        $this->denyAccessUnlessGranted('edit', $graph);
         
         if($graph->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');
@@ -186,7 +301,7 @@ class GraphController extends AbstractController
      */
     public function update(Project $project, Graph $graph, Request $request, FormError $formError)
     {
-        $this->denyAccessUnlessGranted('edit', $project);
+        $this->denyAccessUnlessGranted('edit', $graph);
         
         if($graph->getProject() != $project ){
             throw $this->createNotFoundException('The project does not match');

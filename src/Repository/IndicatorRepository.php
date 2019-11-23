@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Indicator;
 use App\Entity\Activity;
+use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -33,6 +34,7 @@ class IndicatorRepository extends ServiceEntityRepository
             return $this->createQueryBuilder('i')
                 ->where('i.activity = :activity')
                 ->setParameter('activity', $activity)
+                ->orderBy('i.title', 'ASC')
                 ->getQuery();
         }
         
@@ -40,6 +42,27 @@ class IndicatorRepository extends ServiceEntityRepository
             ->where('i.activity = :activity AND i.title LIKE :search')
             ->setParameter('activity', $activity)
             ->setParameter('search', '%'.$search.'%')
+            ->orderBy('i.title', 'ASC')
+            ->getQuery();
+    }
+    
+    public function findByProject(Project $project, $search = null)
+    {
+        if( empty($search) ){
+            return $this->createQueryBuilder('i')
+                ->join('i.activity', 'a')
+                ->where('a.project = :project')
+                ->setParameter('project', $project)
+                ->orderBy('i.title', 'ASC')
+                ->getQuery();
+        }
+        
+        return $this->createQueryBuilder('i')
+            ->join('i.activity', 'a')
+            ->where('a.project = :project AND i.title LIKE :search')
+            ->setParameter('project', $project)
+            ->setParameter('search', '%'.$search.'%')
+            ->orderBy('i.title', 'ASC')
             ->getQuery();
     }
 

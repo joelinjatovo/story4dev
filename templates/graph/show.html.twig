@@ -79,7 +79,7 @@
 {% block content %}
 <div class="row">
     <div class="col-xl-12">
-        <div class="kt-portlet kt-portlet--height-fluid">
+        <div class="kt-portlet kt-portlet--height-fluid" id="statistic">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title">
@@ -122,8 +122,8 @@
                 <div class="form-group form-group-last row">
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <select class="form-control kt-select2" id="select_indicator"  multiple="multiple">
-                            {% for serie in _series %}
-                                <option value="{{ serie._id }}">{{ serie.title }}</option>
+                            {% for indicator in indicators %}
+                                <option value="{{ indicator.id }}">{{ indicator.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -160,11 +160,6 @@ am4core.ready(function() {
     
     var valueAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis1.title.text = "Valeur par unité";
-    
-    var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis2.title.text = "Progression";
-    valueAxis2.renderer.opposite = true;
-    valueAxis2.renderer.grid.template.disabled = true;
 
     // Create series
     var series4 = chart.series.push(new am4charts.LineSeries());
@@ -180,46 +175,6 @@ am4core.ready(function() {
             bullet4.circle.radius = 3;
             bullet4.circle.strokeWidth = 2;
             bullet4.circle.fill = am4core.color("#fff");
-    /*
-    var series1 = chart.series.push(new am4charts.ColumnSeries());
-        series1.dataFields.valueY = "value";
-        series1.dataFields.categoryX = "iteration";
-        series1.dataFields.report = "report";
-        series1.yAxis = valueAxis1;
-        series1.name = "Résultat";
-        series1.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] unités\n[bold font-size: 18]{report}[/] rapports";
-        series1.fill = chart.colors.getIndex(0);
-        series1.strokeWidth = 0;
-        series1.clustered = false;
-        series1.columns.template.width = am4core.percent(40);
-
-    var series2 = chart.series.push(new am4charts.ColumnSeries());
-        series2.dataFields.valueY = "goal";
-        series2.dataFields.categoryX = "iteration";
-        series2.yAxis = valueAxis1;
-        series2.name = "Objectif";
-        series2.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] unités";
-        series2.fill = chart.colors.getIndex(0).lighten(0.5);
-        series2.strokeWidth = 0;
-        series2.clustered = false;
-        series2.toBack();
-    */
-    
-    var series3 = chart.series.push(new am4charts.LineSeries());
-        series3.dataFields.valueY = "progression";
-        series3.dataFields.categoryX = "iteration";
-        series3.name = "Progression";
-        series3.strokeWidth = 2;
-        series3.tensionX = 0.7;
-        series3.yAxis = valueAxis2;
-        series3.tooltipText = "{name}\n[bold font-size: 20]{valueY}%[/]";
-        series3.hidden = true;
-
-        var bullet3 = series3.bullets.push(new am4charts.CircleBullet());
-            bullet3.circle.radius = 3;
-            bullet3.circle.strokeWidth = 2;
-            bullet3.circle.fill = am4core.color("#fff");
-
     
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -233,11 +188,11 @@ am4core.ready(function() {
     var activitySeries = [];
     
     // Selector
-    jQuery("#select_activity").select2({placeholder:"Séléctionnez les indicateurs à afficher sur le graphe."});
-    jQuery('#select_activity').on('change', function (evt) {
-        if (jQuery('#select_activity').select2('val') != null){
+    jQuery("#select_indicator").select2({placeholder:"Séléctionnez les indicateurs à afficher sur le graphe."});
+    jQuery('#select_indicator').on('change', function (evt) {
+        if (jQuery('#select_indicator').select2('val') != null){
             var container = jQuery("#statistic");
-            var $datas = jQuery('#select_activity').select2('data');
+            var $datas = jQuery('#select_indicator').select2('data');
             
             var ids = [];
             jQuery.each($datas, function(index, $data) {
@@ -251,7 +206,7 @@ am4core.ready(function() {
             }
       
             ajaxRequest = jQuery.post({
-                url:"{{ path('project_chart', {slug:project.slug}) }}",
+                url:"{{ path('graph_chart', {slug:project.slug, graph_id: graph.id}) }}",
                 data: {'indicators': ids},
                 error:function(d){
                     KTApp.unblock(container);
@@ -286,7 +241,7 @@ am4core.ready(function() {
                             //activitySeries[index].stroke = chart.colors.getIndex(0).lighten(0.5);
                             //activitySeries[index].strokeDasharray = "3,3";
                             //activitySeries[index].hidden = true;
-                            activitySeries[index].hiddenInLegend = true; 
+                            //activitySeries[index].hiddenInLegend = true; 
 
                             /*
                             var bullet4 = activitySeries[index].bullets.push(new am4charts.CircleBullet());
