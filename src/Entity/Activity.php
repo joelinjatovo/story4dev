@@ -132,6 +132,11 @@ class Activity
      */
     protected $metas;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ActivityFavorite", mappedBy="activity", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $activityFavorites;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -141,6 +146,7 @@ class Activity
         $this->metas = new ArrayCollection();
         $this->activityFiles = new ArrayCollection();
         $this->reports = new ArrayCollection();
+        $this->activityFavorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -450,5 +456,36 @@ class Activity
             ];
         }
         return $series;
+    }
+
+    /**
+     * @return Collection|ActivityFavorite[]
+     */
+    public function getActivityFavorites(): Collection
+    {
+        return $this->activityFavorites;
+    }
+
+    public function addActivityFavorite(ActivityFavorite $activityFavorite): self
+    {
+        if (!$this->activityFavorites->contains($activityFavorite)) {
+            $this->activityFavorites[] = $activityFavorite;
+            $activityFavorite->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivityFavorite(ActivityFavorite $activityFavorite): self
+    {
+        if ($this->activityFavorites->contains($activityFavorite)) {
+            $this->activityFavorites->removeElement($activityFavorite);
+            // set the owning side to null (unless already changed)
+            if ($activityFavorite->getActivity() === $this) {
+                $activityFavorite->setActivity(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -15,6 +15,7 @@ use App\Entity\Project;
 use App\Entity\Activity;
 use App\Entity\Indicator;
 use App\Entity\Iteration;
+use App\Entity\IndicatorFavorite;
 use App\Entity\Goal;
 use App\Entity\Unit;
 use App\Form\IndicatorType;
@@ -259,16 +260,23 @@ class IndicatorController extends AbstractController
     
     /**
      * @Route("/p/{slug}/activity/{activity_id}/indicators/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/p/{slug}/activity/{activity_id}/indicators/{type}/{page<\d+>?1}", name="list_type", methods="GET")
+     * @Route("/p/{slug}/indicators/{page<\d+>?1}", name="list2", methods="GET")
+     * @Route("/p/{slug}/indicators/{type}/{page<\d+>?1}", name="list2_type", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function list(Project $project, Activity $activity, $page = 1, PaginatorService $paginator, Request $request)
+    public function list(Project $project, ?Activity $activity, ?string $type, $page = 1, PaginatorService $paginator, Request $request)
     {
-        $this->denyAccessUnlessGranted('view', $activity);
+        $this->denyAccessUnlessGranted('view', $project);
         
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
+        if($activity){
+            if($activity->getProject() != $project ){
+                throw $this->createNotFoundException('The project does not match');
+            }
+            
+            $this->denyAccessUnlessGranted('view', $activity);
         }
         
         $user = $project->getAuthor();
@@ -280,11 +288,25 @@ class IndicatorController extends AbstractController
             $search = substr($search, 0, 20);
         }
         
-        $query = $entityManager->getRepository(Indicator::class)->findByActivity($activity, $search);
+        if($activity){
+            $query = $entityManager->getRepository(Indicator::class)->findByActivity($activity, $search);
+        }else{
+            $query = $entityManager->getRepository(Indicator::class)->findByProject($project, $search);
+        }
         
         $indicators = $paginator->paginate($query, 10);
         
-        return $this->render('indicator/list.html.twig', [
+        if($type == 'list'){
+            return $this->render('indicator/list.html.twig', [
+                'user'       => $user,
+                'project'    => $project,
+                'activity'   => $activity,
+                'indicators' => $indicators,
+                'search' => $search,
+            ]);
+        }
+        
+        return $this->render('indicator/grid.html.twig', [
             'user'       => $user,
             'project'    => $project,
             'activity'   => $activity,
@@ -313,6 +335,56 @@ class IndicatorController extends AbstractController
                     return $this->json([
                         'success' => true,
                         'message' => 'L\'indicateur a été supprimé avec succès',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
+    }
+    
+    /**
+     * @Route("/indicator/star", name="star", methods="POST")
+     */
+    public function star(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $indicator = $entityManager->getRepository(Indicator::class)->find($id);
+                if( $indicator ){
+                    $this->denyAccessUnlessGranted('star', $indicator);
+
+                    $item = $entityManager
+                        ->getRepository(IndicatorFavorite::class)
+                        ->findOneBy([
+                            'user'     => $this->getUser(),
+                            'indicator' => $indicator,
+                        ]);
+                    if($item){
+                        $entityManager->remove($item);
+                        $message = 'L\'indicateur a été supprimé de votre favoris avec succès';
+                        $star = false;
+                    }else{
+                        $item = new IndicatorFavorite();
+                        $item->setUser($this->getUser());
+                        $item->setIndicator($indicator);
+                        $entityManager->persist($item);
+                        $message = 'L\'indicateur a été ajouté dans votre favoris avec succès';
+                        $star = true;
+                    }
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'star'    => $star,
+                        'message' => $message,
                     ]);
                 }
             }

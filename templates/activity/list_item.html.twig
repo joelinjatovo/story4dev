@@ -34,6 +34,11 @@
     </td>
     <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 150px;">
+            {% if is_granted('star', activity) %}
+                <a data-id="{{ activity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-star">
+                    <i class="la la-star"></i>
+                </a>
+            {% endif %}
             {% if is_granted('edit', activity) %}
                 <a href="{{ path('activity_edit', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                     <i class="la la-edit"></i>

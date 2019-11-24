@@ -99,6 +99,11 @@ class Indicator
      */
     private $cummulative;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\IndicatorFavorite", mappedBy="indicator", orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    private $indicatorFavorites;
+
     public function __construct()
     {
         $this->setCummulative(false);
@@ -107,6 +112,7 @@ class Indicator
         $this->goals = new ArrayCollection();
         $this->results = new ArrayCollection();
         $this->metas = new ArrayCollection();
+        $this->indicatorFavorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -345,6 +351,37 @@ class Indicator
     public function setCummulative(bool $cummulative): self
     {
         $this->cummulative = $cummulative;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|IndicatorFavorite[]
+     */
+    public function getIndicatorFavorites(): Collection
+    {
+        return $this->indicatorFavorites;
+    }
+
+    public function addIndicatorFavorite(IndicatorFavorite $indicatorFavorite): self
+    {
+        if (!$this->indicatorFavorites->contains($indicatorFavorite)) {
+            $this->indicatorFavorites[] = $indicatorFavorite;
+            $indicatorFavorite->setIndicator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIndicatorFavorite(IndicatorFavorite $indicatorFavorite): self
+    {
+        if ($this->indicatorFavorites->contains($indicatorFavorite)) {
+            $this->indicatorFavorites->removeElement($indicatorFavorite);
+            // set the owning side to null (unless already changed)
+            if ($indicatorFavorite->getIndicator() === $this) {
+                $indicatorFavorite->setIndicator(null);
+            }
+        }
 
         return $this;
     }

@@ -119,6 +119,29 @@ jQuery(document).ready(function($){
                 }
             })
     });
+    $(document).on('click', '.btn-star', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
+        $.post("/activity/star", { id: $this.attr('data-id') })
+        .done(function( data ) {
+            KTApp.unblockPage();
+            if(data.success){
+                if(data.star){
+                    $this.find('i').removeClass('la-star-o').addClass('la-star');
+                }else{
+                    $this.find('i').removeClass('la-star').addClass('la-star-o');
+                }
+                toastr.success(data.message);
+            }else{
+                toastr.error(data.message, data.title);
+            }
+        })
+        .fail(function() {
+            KTApp.unblockPage();
+            toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+        });
+    });
 });
 </script>
 {% endblock %}

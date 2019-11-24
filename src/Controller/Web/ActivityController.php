@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\User;
 use App\Entity\Project;
 use App\Entity\Activity;
+use App\Entity\ActivityFavorite;
 use App\Entity\Indicator;
 use App\Entity\Report;
 use App\Form\ActivityType;
@@ -334,6 +335,56 @@ class ActivityController extends AbstractController
                     return $this->json([
                         'success' => true,
                         'message' => 'Activité supprimé avec succès',
+                    ]);
+                }
+            }
+            
+            return $this->json([
+                'success' => false,
+                'title'   => 'Invalid Request',
+                'message' => 'An error was occured. :)',
+            ]);
+        }
+    }
+    
+    /**
+     * @Route("/activity/star", name="star", methods="POST")
+     */
+    public function star(Request $request)
+    {
+        if ( $request->isXmlHttpRequest() ) {
+            $id = (int) $request->request->get('id');
+            
+            if( $id > 0 ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $activity = $entityManager->getRepository(Activity::class)->find($id);
+                if( $activity ){
+                    $this->denyAccessUnlessGranted('star', $activity);
+
+                    $item = $entityManager
+                        ->getRepository(ActivityFavorite::class)
+                        ->findOneBy([
+                            'user'     => $this->getUser(),
+                            'activity' => $activity,
+                        ]);
+                    if($item){
+                        $entityManager->remove($item);
+                        $message = 'Activité supprimé de votre favoris avec succès';
+                        $star = false;
+                    }else{
+                        $item = new ActivityFavorite();
+                        $item->setUser($this->getUser());
+                        $item->setActivity($activity);
+                        $entityManager->persist($item);
+                        $message = 'Activité ajouté dans votre favoris avec succès';
+                        $star = true;
+                    }
+                    $entityManager->flush();
+                    
+                    return $this->json([
+                        'success' => true,
+                        'star'    => $star,
+                        'message' => $message,
                     ]);
                 }
             }

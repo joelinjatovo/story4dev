@@ -16,6 +16,7 @@ class IndicatorVoter extends Voter
     const VIEW   = 'view';
     const EDIT   = 'edit';
     const REMOVE = 'remove';
+    const STAR   = 'star';
 
     private $security;
     private $em;
@@ -29,7 +30,7 @@ class IndicatorVoter extends Voter
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::VIEW, self::EDIT, self::REMOVE])) {
+        if (!in_array($attribute, [self::VIEW, self::EDIT, self::REMOVE, self::STAR])) {
             return false;
         }
 
@@ -60,6 +61,8 @@ class IndicatorVoter extends Voter
         $indicator = $subject;
 
         switch ($attribute) {
+            case self::STAR:
+                return $this->canStar($indicator, $user);
             case self::VIEW:
                 return $this->canView($indicator, $user);
             case self::EDIT:
@@ -69,6 +72,11 @@ class IndicatorVoter extends Voter
         }
 
         throw new \LogicException('This code should not be reached!');
+    }
+
+    private function canStar(Indicator $indicator, User $user)
+    {
+        return $this->canView($indicator, $user);
     }
 
     private function canView(Indicator $indicator, User $user)

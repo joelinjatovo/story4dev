@@ -331,6 +331,16 @@ class User implements UserInterface, \Serializable
      */
     private $axes;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\IndicatorFavorite", mappedBy="user")
+     */
+    private $indicatorFavorites;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ActivityFavorite", mappedBy="user")
+     */
+    private $activityFavorites;
+
     public function __construct()
     {
         $this->agree = true;
@@ -352,6 +362,8 @@ class User implements UserInterface, \Serializable
         $this->downloads = new ArrayCollection();
         $this->graphs = new ArrayCollection();
         $this->axes = new ArrayCollection();
+        $this->indicatorFavorites = new ArrayCollection();
+        $this->activityFavorites = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -1244,6 +1256,68 @@ class User implements UserInterface, \Serializable
             // set the owning side to null (unless already changed)
             if ($axe->getAuthor() === $this) {
                 $axe->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|IndicatorFavorite[]
+     */
+    public function getIndicatorFavorites(): Collection
+    {
+        return $this->indicatorFavorites;
+    }
+
+    public function addIndicatorFavorite(IndicatorFavorite $indicatorFavorite): self
+    {
+        if (!$this->indicatorFavorites->contains($indicatorFavorite)) {
+            $this->indicatorFavorites[] = $indicatorFavorite;
+            $indicatorFavorite->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIndicatorFavorite(IndicatorFavorite $indicatorFavorite): self
+    {
+        if ($this->indicatorFavorites->contains($indicatorFavorite)) {
+            $this->indicatorFavorites->removeElement($indicatorFavorite);
+            // set the owning side to null (unless already changed)
+            if ($indicatorFavorite->getUser() === $this) {
+                $indicatorFavorite->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ActivityFavorite[]
+     */
+    public function getActivityFavorites(): Collection
+    {
+        return $this->activityFavorites;
+    }
+
+    public function addActivityFavorite(ActivityFavorite $activityFavorite): self
+    {
+        if (!$this->activityFavorites->contains($activityFavorite)) {
+            $this->activityFavorites[] = $activityFavorite;
+            $activityFavorite->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivityFavorite(ActivityFavorite $activityFavorite): self
+    {
+        if ($this->activityFavorites->contains($activityFavorite)) {
+            $this->activityFavorites->removeElement($activityFavorite);
+            // set the owning side to null (unless already changed)
+            if ($activityFavorite->getUser() === $this) {
+                $activityFavorite->setUser(null);
             }
         }
 
