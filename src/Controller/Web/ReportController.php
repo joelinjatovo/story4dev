@@ -18,6 +18,7 @@ use App\Entity\Report;
 use App\Entity\Activity;
 use App\Entity\Iteration;
 use App\Entity\Indicator;
+use App\Entity\IndicatorFavorite;
 use App\Form\ActivityType;
 use App\Form\ProjectType;
 use App\Form\ReportType;
@@ -52,8 +53,11 @@ class ReportController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
         
-        $favorites = $entityManager->getRepository(Indicator::class)->findFavorite($activity, $this->getUser())->execute();
-        dump($favorites); exit;
+        $favorites = $entityManager
+            ->getRepository(IndicatorFavorite::class)
+            ->findFavorite($activity, $this->getUser())
+            ->getScalarResult();
+        $favorites = array_column($favorites, "id");
         
         $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity, 'favorites' => $favorites ));
         

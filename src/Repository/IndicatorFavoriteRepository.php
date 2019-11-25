@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\IndicatorFavorite;
+use App\Entity\Activity;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -17,6 +19,18 @@ class IndicatorFavoriteRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, IndicatorFavorite::class);
+    }
+    
+    public function findFavorite(Activity $activity, User $user)
+    {
+        return $this->createQueryBuilder('if1')
+            ->select('i.id')
+            ->leftJoin('if1.indicator', 'i')
+            ->where('i.activity = :activity AND if1.user = :user')
+            ->setParameter('activity', $activity)
+            ->setParameter('user', $user)
+            ->orderBy('i.title', 'ASC')
+            ->getQuery();
     }
 
     // /**

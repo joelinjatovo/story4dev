@@ -49,8 +49,7 @@ class ResultType extends AbstractType
                     return $indicator->getTitle();
                 },
                 'preferred_choices' => function ($indicator, $key, $value) use ($favorites) {
-                    // prefer options within 3 days
-                    return $indicator->getId() == 15; //in_array($indicator, $favorites);
+                    return in_array($indicator->getId(), $favorites);
                 },
             ])
         ;
