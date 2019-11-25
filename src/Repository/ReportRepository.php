@@ -89,7 +89,7 @@ class ReportRepository extends ServiceEntityRepository
         $queryBuilder->leftJoin('r.activity', 'a');
         $queryBuilder->andWhere('a.project = :project')->setParameter('project', $project);
         $queryBuilder->andWhere('r.publishExternally = :publish OR r.publishExternally IS NULL')->setParameter('publish', 1);
-        $queryBuilder->andWhere('r.status = :status')->setParameter('status', Report::STATUS_TERMINATED);
+        //$queryBuilder->andWhere('r.status = :status')->setParameter('status', Report::STATUS_TERMINATED);
         $queryBuilder->orderBy('r.'.$orderBy, $order);
         
         if($user){
