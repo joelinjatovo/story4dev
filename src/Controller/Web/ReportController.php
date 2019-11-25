@@ -87,12 +87,19 @@ class ReportController extends AbstractController
 
         $report = new Report();
         
-        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity ));
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $favorites = $entityManager
+            ->getRepository(IndicatorFavorite::class)
+            ->findFavorite($activity, $this->getUser())
+            ->getScalarResult();
+        $favorites = array_column($favorites, "id");
+        
+        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity, 'favorites' => $favorites ));
         
         $form->handleRequest($request);
         if ( $form->isSubmitted() ) {
             if( $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
                 
                 $report->setActivity($activity);
                 $report->setAuthor($this->getUser());
@@ -197,7 +204,15 @@ class ReportController extends AbstractController
         
         $user = $project->getAuthor();
         
-        $form = $this->createForm(ReportType::class, $report, array('activity' => $activity));
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $favorites = $entityManager
+            ->getRepository(IndicatorFavorite::class)
+            ->findFavorite($activity, $this->getUser())
+            ->getScalarResult();
+        $favorites = array_column($favorites, "id");
+        
+        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity, 'favorites' => $favorites ));
         
         return $this->render('report/edit.html.twig', [
             'user'     => $user, 
@@ -233,14 +248,20 @@ class ReportController extends AbstractController
             $originalResults->add($result);
         }
         
-        $form = $this->createForm(ReportType::class, $report, array('activity' => $activity));
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $favorites = $entityManager
+            ->getRepository(IndicatorFavorite::class)
+            ->findFavorite($activity, $this->getUser())
+            ->getScalarResult();
+        $favorites = array_column($favorites, "id");
+        
+        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity, 'favorites' => $favorites ));
         
         $form->handleRequest($request);
         
         if ( $form->isSubmitted() ) {
             if( $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
-                
                 $report->setActivity($activity);
                 
                 // remove the relationship
