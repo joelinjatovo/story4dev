@@ -385,4 +385,12 @@ class Indicator
 
         return $this;
     }
+
+    public function isFavorite(User $user)
+    {
+         $favorites = $this->getIndicatorFavorites()->filter(function(IndicatorFavorite $indicatorFavorite) {
+            return $indicatorFavorite->getUser()->getId() == $user->getId();
+        });
+        return $favorites->count() > 0;
+    }
 }

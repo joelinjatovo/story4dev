@@ -28,9 +28,14 @@
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
+            
             {% if activity is not null %}
+                <a href="{{ path('indicator_list_type', { slug: project.slug, 'activity_id' : activity.id, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
+                <a href="{{ path('indicator_list_type', { slug: project.slug, 'activity_id' : activity.id, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
                 <a href="{{ url('activity_show', { 'slug' : activity.project.slug, 'activity_id' : activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
-            {% else %}
+            {% else %}            
+                <a href="{{ path('indicator_list2_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
+                <a href="{{ path('indicator_list2_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
                 <a href="{{ url('project_show', { 'slug' : project.slug }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
             {% endif %}
             <div class="dropdown dropdown-inline" data-toggle="kt-tooltip" title="" data-placement="left" data-original-title="Actions">
