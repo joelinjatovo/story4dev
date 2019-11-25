@@ -38,6 +38,7 @@ class ReportType extends AbstractType
                 'entry_type' => ResultType::class,
                 'entry_options' => [
                     'activity' => isset($options['activity'])?$options['activity']:null,
+                    'favorites' => isset($options['favorites'])?$options['favorites']:array(),
                     'label' => false,
                 ],
                 'allow_add' => true,
@@ -82,6 +83,7 @@ class ReportType extends AbstractType
             'data_class' => Report::class,
             'activity'   => null,
             'author'     => null,
+            'favorites' => array(),
         ]);
     }
 }

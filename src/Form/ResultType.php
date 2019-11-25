@@ -18,6 +18,8 @@ class ResultType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $favorites = isset($options['favorites']) ? $options['favorites'] : array();
+        
         $activity = isset($options['activity'])?$options['activity']:null;
         
         $builder
@@ -32,7 +34,7 @@ class ResultType extends AbstractType
                 'required' => true,
                 'class' => Indicator::class,
                 'query_builder' => function (IndicatorRepository $er) use ($activity) {
-                    if( ! $activity) {
+                    if( ! $activity ) {
                         return $er->createQueryBuilder('i')
                             ->orderBy('i.title', 'ASC');
                     }
@@ -45,7 +47,11 @@ class ResultType extends AbstractType
                 },
                 'choice_label' => function ($indicator) {
                     return $indicator->getTitle();
-                }
+                },
+                'preferred_choices' => function ($indicator, $key, $value) use ($favorites) {
+                    // prefer options within 3 days
+                    return $indicator->getId() == 15; //in_array($indicator, $favorites);
+                },
             ])
         ;
     }
@@ -56,6 +62,7 @@ class ResultType extends AbstractType
             'data_class' => Result::class,
             'activity'   => null,
             'author'     => null,
+            'favorites' => array(),
         ]);
     }
 }

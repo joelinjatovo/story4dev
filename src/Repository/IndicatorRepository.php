@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Indicator;
 use App\Entity\Activity;
 use App\Entity\Project;
+use App\Entity\IndicatorFavorite;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -62,6 +64,17 @@ class IndicatorRepository extends ServiceEntityRepository
             ->where('a.project = :project AND i.title LIKE :search')
             ->setParameter('project', $project)
             ->setParameter('search', '%'.$search.'%')
+            ->orderBy('i.title', 'ASC')
+            ->getQuery();
+    }
+    
+    public function findFavorite(Activity $activity, User $user)
+    {
+        return $this->createQueryBuilder('i')
+            ->join(IndicatorFavorite::class, 'if1', 'WITH if1.indicator = i')
+            ->where('i.activity = :activity AND if1.user = :user')
+            ->setParameter('activity', $activity)
+            ->setParameter('user', $user)
             ->orderBy('i.title', 'ASC')
             ->getQuery();
     }

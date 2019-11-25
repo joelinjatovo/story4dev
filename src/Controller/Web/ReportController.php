@@ -17,6 +17,7 @@ use App\Entity\Project;
 use App\Entity\Report;
 use App\Entity\Activity;
 use App\Entity\Iteration;
+use App\Entity\Indicator;
 use App\Form\ActivityType;
 use App\Form\ProjectType;
 use App\Form\ReportType;
@@ -49,7 +50,12 @@ class ReportController extends AbstractController
         $report->setActivity($activity);
         $report->setAuthor($this->getUser());
         
-        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity ));
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $favorites = $entityManager->getRepository(Indicator::class)->findFavorite($activity, $this->getUser())->execute();
+        dump($favorites); exit;
+        
+        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity, 'favorites' => $favorites ));
         
         return $this->render('report/create.html.twig', [
             'user'     => $user, 
