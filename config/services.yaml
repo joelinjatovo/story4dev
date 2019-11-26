@@ -31,6 +31,15 @@ services:
         class: App\Security\JWTTokenAuthenticator
         parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
 
+    App\Events\UserCreatedEvent:
+        arguments:
+            $user: 'App\Entity\User'
+            
+    App\Events\UserSubscriber:
+        arguments:
+            $twig: "@twig"
+            $mailer: "@mailer"
+
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%upload_directory%'

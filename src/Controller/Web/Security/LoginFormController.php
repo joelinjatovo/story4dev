@@ -12,12 +12,15 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Form\RegistrationFormType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use App\Entity\User;
 use App\Service\TokenGenerator;
 use App\Service\OptionService;
 use App\Helper\MessageHelper;
 use App\Form\AccountPasswordType;
+use App\Events\UserCreatedEvent;
 
 class LoginFormController extends AbstractController
 {
@@ -55,7 +58,7 @@ class LoginFormController extends AbstractController
     /**
      * @Route("/register", name="app_register", methods="GET|POST")
      */
-    public function register(OptionService $optionService, Request $request, TokenGenerator $tokenGenerator, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, \Swift_Mailer $mailer): Response
+    public function register(OptionService $optionService, Request $request, TokenGenerator $tokenGenerator, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, \Swift_Mailer $mailer, EventDispatcherInterface $dispatcher): Response
     {
         if ( $request->isXmlHttpRequest() ) {
             $user = new User();
@@ -106,6 +109,10 @@ class LoginFormController extends AbstractController
             
             $entityManager->persist($user);
             $entityManager->flush();
+            
+            // creates the UserCreatedEvent and dispatches it
+            $event = new UserCreatedEvent($user);
+            $dispatcher->dispatch($event, UserCreatedEvent::NAME);
             
             return $this->json([
                 'success' => true,
