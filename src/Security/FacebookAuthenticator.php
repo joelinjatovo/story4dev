@@ -124,7 +124,7 @@ class FacebookAuthenticator extends SocialAuthenticator
         if($newAccount){
             $url = $this->router->generate('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
  
-            $body = $this->renderView('security/emails/forgot.html.twig', [
+            $body = $this->renderView('emails/forgot.html.twig', [
                     'user'  => $user,
                     'url'   => $url,
                     'label' => "Créer mot de passe",

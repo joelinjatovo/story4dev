@@ -11,6 +11,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Project;
 use App\Form\FeedbackType;
+use App\Helper\MessageHelper;
+use App\Service\OptionService;
 
 /** 
  * @Route(name="app_")
@@ -82,9 +84,8 @@ class IndexController extends AbstractController
     /**
     * @Route("/feedback", name="feedback")
     */
-    public function feedback(Request $request, \Swift_Mailer $mailer)
+    public function feedback(Request $request, \Swift_Mailer $mailer, OptionService $optionService)
     {
-        
         $form = $this->createForm(FeedbackType::class);
         
         $form->handleRequest($request);
@@ -95,23 +96,24 @@ class IndexController extends AbstractController
             $email   = $form->get('email')->getData();
             $message = $form->get('message')->getData();
             
-            $message = (new \Swift_Message('Feedback - Story4Dev'))
-                ->setFrom('admin@story4dev.com')
-                ->setTo('admin@story4dev.com')
-                ->setBody(
-                    $this->renderView(
-                        'index/emails/feedback.html.twig',[
-                            'name'    => $name,
-                            'phone'   => $phone,
-                            'email'   => $email,
-                            'message' => $message,
-                        ]
-                    ),
-                    'text/html'
-                )
-            ;
-
+            $body = $this->renderView('emails/feedback.html.twig',[
+                    'url'     => '',
+                    'label'   => "Voir",
+                    'name'    => $name,
+                    'phone'   => $phone,
+                    'email'   => $email,
+                    'message' => $message,
+                ]
+            );
+            
+            $message = MessageHelper::getMessage($optionService, 'Demande d\'aide de ' . $email, $body, 'text/html')
+                ->setFrom([$email=>$name])
+                ->setTo('joelinjatovo@gmail.com');
+            
             $mailer->send($message);
+            
+            $this->addFlash('success', 'Votre Demande d\'aide a été bien envoyé aux responsables.');
+            return $this->redirectToRoute('app_feedback');
         }
         
         return $this->render('feedback/index.html.twig', [

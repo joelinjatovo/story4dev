@@ -94,11 +94,13 @@
                                         <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
                                             <tbody>
                                                 <tr>
+                                                    {% if user is defined %}
                                                     <td style="word-wrap:break-word;font-size:0px;padding:10px 25px" align="center">
                                                         <div style="color:#9b9b9b;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:11px;font-weight:400;line-height:24px;text-align:center">
                                                           <br>Membre n°{{ user.id }} - <a href="mailto:{{ user.email }}" target="_blank">{{ user.email }}</a><br>
                                                         </div>
                                                     </td>
+                                                    {% endif %}
                                                 </tr>
                                             </tbody>
                                         </table>
