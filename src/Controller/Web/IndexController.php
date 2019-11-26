@@ -35,7 +35,7 @@ class IndexController extends AbstractController
             ->setTo('joelinjatovo@gmail.com')
             ->setBody(
                 $this->renderView(
-                    'security/emails/confirm.html.twig',
+                    'emails/confirm.html.twig',
                     $data
                 ),
                 'text/html'
@@ -44,7 +44,7 @@ class IndexController extends AbstractController
 
         $mailer->send($message);
 
-        return $this->render('security/emails/confirm.html.twig', $data);
+        return $this->render('emails/confirm.html.twig', $data);
     }
 
     /**
