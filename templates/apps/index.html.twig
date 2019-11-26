@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/applications.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block subheader %}
+    <br>
+{% endblock %}
+
+{% block content %}
+<div class="kt-portlet">
+	<div class="kt-portlet__body kt-portlet__body--fit">
+		<div class="kt-pricing-2">
+			<div class="kt-pricing-2__head">
+				<div class="kt-pricing-2__title kt-font-light">
+					<h1>Télécharger l'application</h1>
+				</div>
+			</div>
+            <div class="kt-pricing-2__content">
+                <div class="kt-pricing-2__container">
+                    <div class="kt-pricing-2__items row">
+                        <div class="kt-pricing-2__item col-lg-6">
+                            <div class="kt-pricing-2__visual">
+                                <div class="kt-pricing-2__hexagon"></div>
+                                <span class="kt-pricing-2__icon kt-font-info"><i class="fab fa-android"></i></span>
+                            </div>
+                            <h2 class="kt-pricing-2__subtitle">Android</h2>
+                            <div class="kt-pricing-2__btn">
+                                <a href="{{ path('apps_android') }}" class="btn btn-brand btn-wide btn-upper btn-bold">Télécharger</a>
+                            </div>
+                        </div>
+                        <div class="kt-pricing-2__item col-lg-6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+{% endblock %}

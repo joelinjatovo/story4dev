@@ -42,6 +42,11 @@ class Download
      */
     private $file;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $type;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -85,6 +90,18 @@ class Download
     public function setFile(?File $file): self
     {
         $this->file = $file;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
