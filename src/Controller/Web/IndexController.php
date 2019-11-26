@@ -107,7 +107,6 @@ class IndexController extends AbstractController
             );
             
             $message = MessageHelper::getMessage($optionService, 'Demande d\'aide de ' . $email, $body, 'text/html')
-                ->setFrom([$email=>$name])
                 ->setTo('joelinjatovo@gmail.com');
             
             $mailer->send($message);
