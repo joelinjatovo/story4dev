@@ -52,7 +52,7 @@ class UserSubscriber implements EventSubscriberInterface
         $message = (new \Swift_Message('Utilisateur ' . $user->getId() . ' created'))
             ->setFrom('admin@story4dev.com')
             ->setTo('joelinjatovo@gmail.com')
-            ->setBody($body, 'text\html')
+            ->setBody($body, 'text/html')
         ;
         $this->mailer->send($message);
     }
