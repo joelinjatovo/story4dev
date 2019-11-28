@@ -30,6 +30,16 @@ class Session
      * @ORM\Column(type="integer", length=10)
      */
     private $sess_lifetime;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\user", inversedBy="sessions")
+     */
+    private $user;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
     
     public function getSessId(): ?string
     {
@@ -75,6 +85,30 @@ class Session
     public function setSessLifetime(int $sess_lifetime): self
     {
         $this->sess_lifetime = $sess_lifetime;
+
+        return $this;
+    }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(?user $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

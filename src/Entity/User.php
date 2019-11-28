@@ -346,6 +346,11 @@ class User implements UserInterface, \Serializable
      */
     private $lastActivityAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Session", mappedBy="user")
+     */
+    private $sessions;
+
     public function __construct()
     {
         $this->agree = true;
@@ -369,6 +374,7 @@ class User implements UserInterface, \Serializable
         $this->axes = new ArrayCollection();
         $this->indicatorFavorites = new ArrayCollection();
         $this->activityFavorites = new ArrayCollection();
+        $this->sessions = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -1352,5 +1358,36 @@ class User implements UserInterface, \Serializable
         $delay = new \DateTime($minute . ' minutes ago');
 
         return ( $this->getLastActivityAt() > $delay );
+    }
+
+    /**
+     * @return Collection|Session[]
+     */
+    public function getSessions(): Collection
+    {
+        return $this->sessions;
+    }
+
+    public function addSession(Session $session): self
+    {
+        if (!$this->sessions->contains($session)) {
+            $this->sessions[] = $session;
+            $session->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSession(Session $session): self
+    {
+        if ($this->sessions->contains($session)) {
+            $this->sessions->removeElement($session);
+            // set the owning side to null (unless already changed)
+            if ($session->getUser() === $this) {
+                $session->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
