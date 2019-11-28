@@ -33,8 +33,8 @@ class IndexController extends AbstractController
         
         $users = $entityManager->getRepository(User::class)->getRecent(5);
         
-        //$query = $entityManager->createQuery("SELECT DATE(u.createdAt) as date, COUNT(u.id) as value FROM App:User AS u GROUP BY date");
-        $query = $entityManager->createQuery("SELECT DATE(s.updatedAt) as date, COUNT(s.sess_id) as value FROM App:Session AS s GROUP BY date");
+        $query = $entityManager->createQuery("SELECT DATE(u.createdAt) as date, COUNT(u.id) as value FROM App:User AS u GROUP BY date");
+        //$query = $entityManager->createQuery("SELECT DATE(s.updatedAt) as date, COUNT(s.sess_id) as value FROM App:Session AS s GROUP BY date");
         $data = $query->getResult();
         
         $count = [];
