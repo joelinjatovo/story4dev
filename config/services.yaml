@@ -105,6 +105,17 @@ services:
             $em: '@doctrine.orm.entity_manager'
         tags:
            - { name: security.voter }
+    
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        arguments:
+            - 'mysql:dbname=db8uw7mq4r5zg3; host=localhost; port=3306'
+            - { db_table: 'sessions', db_username: 'uexcrcd2xgxrk', db_password: 'm6_c3p3_M2' }
+
+            # If you're using Doctrine & want to re-use that connection, then:
+            # comment-out the above 2 lines and uncomment the line below
+            - !service { class: PDO, factory: ['@database_connection', 'getWrappedConnection'] }
+            # If you get transaction issues (e.g. after login) uncomment the line below
+            - { lock_mode: 1 }
 
 #sensio_framework_extra.view.listener:
     #alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
