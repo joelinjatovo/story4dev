@@ -111,10 +111,10 @@ services:
     
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
         arguments:
-            - 'mysql:dbname=db8uw7mq4r5zg3; host=localhost; port=3306'
-            - { db_table: 'sessions', db_username: 'uexcrcd2xgxrk', db_password: 'm6_c3p3_M2' }
-            # - 'mysql:dbname=project; host=localhost; port=3308'
-            # - { db_table: 'sessions', db_username: 'root', db_password: '' }
+            # - 'mysql:dbname=db8uw7mq4r5zg3; host=localhost; port=3306'
+            # - { db_table: 'sessions', db_username: 'uexcrcd2xgxrk', db_password: 'm6_c3p3_M2' }
+            - 'mysql:dbname=project; host=localhost; port=3308'
+            - { db_table: 'sessions', db_username: 'root', db_password: '' }
 
             # If you're using Doctrine & want to re-use that connection, then:
             # comment-out the above 2 lines and uncomment the line below

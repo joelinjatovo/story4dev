@@ -21,14 +21,17 @@ jQuery(document).ready(function($){
     
     $('#signUp').click(function(e){
         e.preventDefault();
+        history.replaceState({}, null, '/register');
 	    $('#container').addClass("right-panel-active");
 	    $('#container').removeClass("forgot-panel-active");
     });
     $('#signIn').click(function(e){
+        history.replaceState({}, null, '/login');
         e.preventDefault();
 	    $('#container').removeClass("right-panel-active");
     });
     $('#forgot').click(function(e){
+        history.replaceState({}, null, '/forgot');
         e.preventDefault();
 	    $('#container').addClass("forgot-panel-active");
     });
