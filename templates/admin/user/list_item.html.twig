@@ -19,7 +19,7 @@
         <span style="width: 50px;"><span class="kt-font-bold">{{ user.address is not null ? user.address.country : '' }}</span></span>
     </td>
     <td data-field="Date" class="kt-datatable__cell">
-        <span style="width: 100px;"><span class="kt-font-bold">{{ user.createdat|ago }}</span></span>
+        <span style="width: 100px;"><span class="kt-font-bold">{{ user.lastActivityAt|ago }}</span></span>
     </td>
     <td data-field="Status" class="kt-datatable__cell">
         <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ user.statusClass }}">{{ user.status }}</span></span>
