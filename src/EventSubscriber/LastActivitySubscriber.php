@@ -9,6 +9,8 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\Security;
 
+use App\Entity\User;
+
 class LastActivitySubscriber implements EventSubscriberInterface {
 
     private $em;
