@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Events;
+namespace App\EventSubscriber;
 
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 
-use App\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+
+use App\Entity\User;
+use App\Events\UserCreatedEvent;
 
 class UserSubscriber implements EventSubscriberInterface
 {

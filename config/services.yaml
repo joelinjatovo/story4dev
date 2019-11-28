@@ -35,10 +35,13 @@ services:
         arguments:
             $user: 'App\Entity\User'
             
-    App\Events\UserSubscriber:
+    App\EventSubscriber\UserSubscriber:
         arguments:
             $twig: "@twig"
             $mailer: "@mailer"
+            
+    App\EventSubscriber\LocaleSubscriber:
+        arguments: ['%kernel.default_locale%']
 
     App\Service\FileUploader:
         arguments:
