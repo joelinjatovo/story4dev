@@ -341,6 +341,11 @@ class User implements UserInterface, \Serializable
      */
     private $activityFavorites;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastActivityAt;
+
     public function __construct()
     {
         $this->agree = true;
@@ -1322,5 +1327,30 @@ class User implements UserInterface, \Serializable
         }
 
         return $this;
+    }
+
+    public function getLastActivityAt(): ?\DateTimeInterface
+    {
+        return $this->lastActivityAt;
+    }
+
+    public function setLastActivityAt(?\DateTimeInterface $lastActivityAt): self
+    {
+        $this->lastActivityAt = $lastActivityAt;
+
+        return $this;
+    }
+
+    public function isActiveNow($minute = 2)
+    {
+        $minute = (int) $minute;
+        if( ! $minute ){
+            $minute = 2;
+        }
+        
+        // Delay during wich the user will be considered as still active
+        $delay = new \DateTime($minute . ' minutes ago');
+
+        return ( $this->getLastActivityAt() > $delay );
     }
 }
