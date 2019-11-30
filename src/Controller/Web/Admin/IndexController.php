@@ -43,7 +43,7 @@ class IndexController extends AbstractController
             . " FROM sessions AS s "
             . " GROUP BY date");
         $query->execute();
-        $data_2 = $query->fetchAll();
+        $data = $query->fetchAll();
         
         $count = [];
         $count['pinged']     = $entityManager->getRepository(User::class)->createQueryBuilder('u')->select('count(u.id)')->where('u.status = :status')->setParameter('status', User::STATUS_PING)->getQuery()->getSingleScalarResult();
