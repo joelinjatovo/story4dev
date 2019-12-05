@@ -2,7 +2,6 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.3.8",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ankitpokhrel/tus-php": "^1.0",
@@ -59,7 +58,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.3.10"
+            "php": "7.3.8"
         },
         "preferred-install": {
             "*": "dist"
