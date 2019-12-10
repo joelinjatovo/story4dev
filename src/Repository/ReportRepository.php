@@ -83,7 +83,7 @@ class ReportRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery();
     }
     
-    public function feedByProject(Project $project, ?User $user = null, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
+    public function feedByProject(Project $project, ?User $user = null, $orderBy = 'createdAt', $order = 'DESC', $limit = 0)
     {
         $queryBuilder = $this->createQueryBuilder('r');
         $queryBuilder->leftJoin('r.activity', 'a');
