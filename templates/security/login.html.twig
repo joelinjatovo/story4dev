@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>{% block title %}Connexion / Souscription - Story4Dev{% endblock %}</title>
+        <title>{% block title %}{% if active_form == 'signin' %}Connexion{% elseif active_form == 'forgot' %}Nouveau mot de passe{% else %}Souscription{% endif %} - {{ setting.get('seo_title') }}{% endblock %}</title>
         <meta name="keywords" content="{{ setting.get('seo_keywords') }}"> 
         <meta name="description" content="{{ setting.get('seo_description') }}"> 
 
