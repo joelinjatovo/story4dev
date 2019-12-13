@@ -58,6 +58,10 @@ security:
             pattern:  ^/feed
             stateless: true
             anonymous: true
+        sitemap:
+            pattern:  ^/sitemap.xml
+            stateless: true
+            anonymous: true
         main:
             user_checker: App\Security\Checker\UserChecker
             anonymous: true
@@ -81,6 +85,7 @@ security:
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         
         - { path: ^/feed, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/sitemap.xml$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         
         - { path: ^/login$,    roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
