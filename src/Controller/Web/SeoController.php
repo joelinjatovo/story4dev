@@ -34,7 +34,7 @@ class SeoController extends AbstractController
 
         $urls[] = ['loc' => $this->get('router')->generate('app_index'), 'changefreq' => 'weekly', 'priority' => '1.0'];    
         $urls[] = ['loc' => $this->get('router')->generate('app_login'), 'changefreq' => 'weekly', 'priority' => '1.0'];
-        $urls[] = ['loc' => $this->get('router')->generate('register'), 'changefreq' => 'weekly', 'priority' => '1.0'];
+        $urls[] = ['loc' => $this->get('router')->generate('app_register'), 'changefreq' => 'weekly', 'priority' => '1.0'];
         $urls[] = ['loc' => $this->get('router')->generate('app_forgot_password'), 'changefreq' => 'weekly', 'priority' => '1.0'];
 
         // Then, we will find all our articles stored in the database
