@@ -4,7 +4,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-{% for url in urls %}
+    {% for url in urls %}
     <url>
         {# check if hostname is not already in url #}
         <loc>{% if url.loc|replace({hostname:''}) == url.loc %}https://{{hostname}}{{url.loc}}{% else %}{{url.loc}}{% endif %}</loc>
@@ -18,5 +18,5 @@
             <priority>{{ url.priority }}</priority>
         {% endif %}
     </url>
-{% endfor %}
+    {% endfor %}
 </urlset>
