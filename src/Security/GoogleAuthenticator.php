@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Events\UserCreatedEvent;
 use App\Helper\MessageHelper;
 use App\Service\TokenGenerator;
 use App\Service\OptionService;
@@ -15,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
 use League\OAuth2\Client\Provider\GoogleUser;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,8 +39,9 @@ class GoogleAuthenticator extends SocialAuthenticator
     private $session;
     private $optionService;
     private $targetDirectory;
+    private $dispatcher;
 
-    public function __construct($targetDirectory, OptionService $optionService, SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating)
+    public function __construct($targetDirectory, OptionService $optionService, SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating, EventDispatcherInterface $dispatcher)
     {
         $this->clientRegistry = $clientRegistry;
         $this->em = $em;
@@ -50,6 +53,7 @@ class GoogleAuthenticator extends SocialAuthenticator
         $this->session = $session;
         $this->optionService = $optionService;
         $this->targetDirectory = $targetDirectory;
+        $this->dispatcher = $dispatcher;
     }
 
     public function supports(Request $request)
@@ -94,7 +98,7 @@ class GoogleAuthenticator extends SocialAuthenticator
             $user->setResetToken($token);
             $user->setResetedAt(new \DateTime());
             
-            $picture_url = $googleUser->getPicture();
+            $picture_url = $googleUser->getAvatar();
             $finalName = md5(uniqid(rand(), true))."_avatar.jpg";
             $newfile = $this->targetDirectory . '/user/'.$finalName;
             if ( copy($picture_url, $newfile) ) {
@@ -111,17 +115,21 @@ class GoogleAuthenticator extends SocialAuthenticator
         if($newAccount){
             $url = $this->router->generate('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
             
-            $body = $this->renderView('emails/forgot.html.twig', [
+            $body = $this->templating->render('emails/forgot.html.twig', [
                     'user'  => $user,
                     'url'   => $url,
                     'label' => "Créer mot de passe",
                 ]
             );
             
-            $message = MessageHelper::getMessage($optionService, 'Nouvelle inscription', $body, 'text/html')
+            $message = MessageHelper::getMessage($this->optionService, 'Nouvelle inscription', $body, 'text/html')
                 ->setTo($user->getEmail());
             
             $this->mailer->send($message);
+            
+            // creates the UserCreatedEvent and dispatches it
+            $event = new UserCreatedEvent($user);
+            $this->dispatcher->dispatch($event, UserCreatedEvent::NAME);
         }
 
         return $user;
@@ -209,7 +217,7 @@ class GoogleAuthenticator extends SocialAuthenticator
      */
     public function onAuthenticationSuccess(Request $request, \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token, $providerKey)
     {
-        $targetUrl = $this->router->generate('account_profile');
+        $targetUrl = $this->router->generate('app_index');
 
         return new RedirectResponse($targetUrl);
     }
