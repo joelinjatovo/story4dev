@@ -1,9 +1,9 @@
 <div class="kt-widget4__item">
     <div class="kt-widget4__pic kt-widget4__pic--icon">
-        <img src="{{ asset( activityFile.file.icone ) }}" alt="icone">  
+        <img src="{{ asset( activityFile.file.icone ) | imagine_filter('thumb') }}" alt="icone">  
     </div>
     {% if activityFile.file.image %}
-        <a href="{{ asset( activityFile.file.icone) }}" data-toggle="lightbox" data-gallery="gallery" class="kt-widget4__title">
+        <a href="{{ asset( activityFile.file.icone) | imagine_filter('big') }}" data-toggle="lightbox" data-gallery="gallery" class="kt-widget4__title">
             {{ activityFile.file.name }}
         </a>
     {% else %}

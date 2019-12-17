@@ -3,7 +3,7 @@
         <span style="width: 222px;">
             <div class="kt-user-card-v2">
                 <div class="kt-user-card-v2__pic">
-                    <img alt="avatar" src="{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') : default_avatar }}">
+                    <img alt="avatar" src="{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') | imagine_filter('thumb') : default_avatar }}">
                 </div>
                 <div class="kt-user-card-v2__details">
                     <a class="kt-user-card-v2__name" href="{{ url('admin_user_show', {'id': user.id}) }}">{{ user.fullname }}</a>

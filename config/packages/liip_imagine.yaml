@@ -23,7 +23,6 @@ liip_imagine:
             quality: 75
             filters:
                 thumbnail: { size: [150, 150], mode: outbound }
-    
         small: # The name of the filter, can be later used in the twig template 
             quality: 75 # Compression quality, this image will be 75% the quality 
             filters: 
@@ -32,22 +31,19 @@ liip_imagine:
                 thumbnail: 
                     size: [300, 300] 
                     mode: outbound 
-                    
         wide: 
             quality: 80 
             filters: 
-                relative_resize: 
+                thumbnail: 
                     size: [640, 480] 
                     mode: outbound 
-    
         large:
             filters: 
-                thumbnail: 
+                relative_resize: 
                     heighten: 480
                     allow_upscale: true
-    
         big:
             filters: 
-                thumbnail: 
+                relative_resize: 
                     heighten: 960
                     allow_upscale: true
