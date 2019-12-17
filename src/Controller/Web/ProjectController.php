@@ -17,6 +17,7 @@ use App\Entity\Activity;
 use App\Entity\Indicator;
 use App\Entity\Iteration;
 use App\Entity\Result;
+use App\Entity\ReportFile;
 use App\Entity\ActivityFile;
 use App\Entity\ProjectContribution;
 use App\Entity\Meta\ProjectMeta;
@@ -60,7 +61,7 @@ class ProjectController extends AbstractController
         $count['activities'] = $entityManager->getRepository(Activity::class)->createQueryBuilder('a')->select('count(a.id)')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
         $count['reports']    = $entityManager->getRepository(Report::class)->createQueryBuilder('r')->select('count(r.id)')->leftJoin('r.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
         $count['indicators'] = $entityManager->getRepository(Indicator::class)->createQueryBuilder('i')->select('count(i.id)')->leftJoin('i.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
-        $count['files']      = $entityManager->getRepository(ActivityFile::class)->createQueryBuilder('af')->select('count(af.id)')->leftJoin('af.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
+        $count['files']      = $entityManager->getRepository(File::class)->countByProject($project)->getSingleScalarResult();
         
         $datas = $entityManager->createQuery(
             "SELECT ite.id AS ite_id, ite.title AS iteration, SUM(res.value) AS value " .

@@ -5,6 +5,10 @@ namespace App\Repository;
 use App\Entity\File;
 use App\Entity\User;
 use App\Entity\Project;
+use App\Entity\Activity;
+use App\Entity\ActivityFile;
+use App\Entity\Report;
+use App\Entity\ReportFile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -34,32 +38,56 @@ class FileRepository extends ServiceEntityRepository
         ;
     }
     
+    public function countByProject(Project $project)
+    {
+        $em = $this->getEntityManager();
+        
+        return $em->createQuery(
+            "SELECT count(f.id) FROM " . File::class . " f " .
+            "WHERE " .
+                "(" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(af.file) FROM " . ActivityFile::class . " af " .
+                            " LEFT JOIN " . Activity::class . " act1 WITH act1 = af.activity " .
+                            " WHERE act1.project = :project" .
+                        ")" .
+                ") OR (" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(rf.file) FROM " . ReportFile::class . " rf " .
+                            " LEFT JOIN " . Report::class . " rep WITH rep = rf.report " .
+                            " LEFT JOIN " . Activity::class . " act2 WITH act2 = rep.activity " .
+                            " WHERE act2.project = :project" .
+                        ")" .
+                ")"
+        )->setParameter("project", $project);
+    }
+    
     public function findByProject(Project $project, ?User $user = null)
     {
-        if ( $user ) {
-            return $this->createQueryBuilder('f')
-                ->innerJoin('f.activityFiles', 'af')
-                ->innerJoin('af.activity', 'a')
-                ->innerJoin('a.project', 'p')
-                ->innerJoin('p.contributions', 'c')
-                ->where('a.project = :project AND ( c.user = :user OR p.author = :user )')
-                ->setParameter('project', $project)
-                ->setParameter('user', $user)
-                ->orderBy('f.id', 'ASC')
-                ->getQuery()
-            ;
-        }
+        $em = $this->getEntityManager();
         
-        return $this->createQueryBuilder('f')
-            ->innerJoin('f.activityFiles', 'af')
-            ->innerJoin('af.activity', 'a')
-            ->innerJoin('a.project', 'p')
-            ->innerJoin('p.contributions', 'c')
-            ->where('a.project = :project')
-            ->setParameter('project', $project)
-            ->orderBy('f.id', 'ASC')
-            ->getQuery()
-        ;
+        return $em->createQuery(
+            "SELECT f FROM " . File::class . " f " .
+            "WHERE " .
+                "(" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(af.file) FROM " . ActivityFile::class . " af " .
+                            " LEFT JOIN " . Activity::class . " act1 WITH act1 = af.activity " .
+                            " WHERE act1.project = :project" .
+                        ")" .
+                ") OR (" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(rf.file) FROM " . ReportFile::class . " rf " .
+                            " LEFT JOIN " . Report::class . " rep WITH rep = rf.report " .
+                            " LEFT JOIN " . Activity::class . " act2 WITH act2 = rep.activity " .
+                            " WHERE act2.project = :project" .
+                        ")" .
+                ")"
+        )->setParameter("project", $project);
     }
     
     public function findByProjectPerMonth(Project $project)
