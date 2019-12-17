@@ -80,7 +80,7 @@
                             {% for reportFile in report.reportFiles %}
                                 {% if reportFile.file %}
                                     <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Attached File">
-                                        <img src="{{ reportFile.file.name ? vich_uploader_asset(reportFile.file, 'file') : default_picture }}" alt="image">
+                                        <img src="{{ reportFile.file.name ? vich_uploader_asset(reportFile.file, 'file') | imagine_filter('thumb') : default_picture }}" alt="image">
                                     </a>
                                 {% endif %}
                             {% else %}

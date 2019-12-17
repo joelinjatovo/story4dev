@@ -7,7 +7,7 @@
                 <div class="kt-widget__label">
                     <div class="kt-widget__media">
                         <span class="kt-media kt-media--lg kt-media--circle"> 
-                        <img src="{{ project.picture ? vich_uploader_asset(project, 'pictureFile') : default_picture }}" alt="image">  
+                        <img src="{{ project.picture ? vich_uploader_asset(project, 'pictureFile') | imagine_filter('thumb') : default_picture }}" alt="image">  
                         </span>
                     </div>
                     <div class="kt-widget__info kt-margin-t-5">
@@ -112,7 +112,7 @@
                         <div class="kt-media-group">
                             {% for contribution in project.contributions.slice(0, 7) %}
                             <a href="{{ path('contribution_show', { 'slug' : contribution.project.slug, 'contribution_id': contribution.id } ) }}" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{{ contribution.user.fullname ?? contribution.user.email }}">
-                                <img src="{{ contribution.user.avatar is null ? default_avatar : vich_uploader_asset(contribution.user, 'avatarFile') }}" alt="avatar">
+                                <img src="{{ contribution.user.avatar is null ? default_avatar : vich_uploader_asset(contribution.user, 'avatarFile') | imagine_filter('thumb') }}" alt="avatar">
                             </a>
                             {% endfor %}
                             {% if project.contributions.count > 7 %}

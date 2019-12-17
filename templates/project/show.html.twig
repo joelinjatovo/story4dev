@@ -96,7 +96,7 @@
         <div class="kt-widget kt-widget--user-profile-3">
             <div class="kt-widget__top">
                 <div class="kt-widget__media" style="margin-top: 1rem;">
-                    <img style="width: 60px;" src="{{ project.picture ? vich_uploader_asset(project, 'pictureFile') : default_picture }}" alt="picture">  
+                    <img style="width: 60px;" src="{{ project.picture ? vich_uploader_asset(project, 'pictureFile') | imagine_filter('thumb') : default_picture }}" alt="picture">  
                 </div>
                 <div class="kt-widget__content">
                     <div class="kt-widget__head">

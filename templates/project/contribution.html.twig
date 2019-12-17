@@ -1,6 +1,6 @@
 <div class="kt-widget__item contribution-item" >
     <span class="kt-media kt-media--circle"> 
-        <img src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') : default_avatar }}" alt="avatar">
+        <img src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') | imagine_filter('thumb') : default_avatar }}" alt="avatar">
     </span>
     <div class="kt-widget__info">
         <div class="kt-widget__section">
