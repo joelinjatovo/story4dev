@@ -4,3 +4,5 @@
 gesdinet_jwt_refresh_token:
     path:       /api/v1/token/refresh
     controller: gesdinet.jwtrefreshtoken::refresh
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.yaml"

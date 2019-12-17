@@ -51,7 +51,7 @@ class UserSubscriber implements EventSubscriberInterface
         
         $body = $this->renderTemplate($user);
         
-        $message = (new \Swift_Message('Utilisateur ' . $user->getId() . ' created'))
+        $message = (new \Swift_Message('Nouvelle inscription sur Story4Dev'))
             ->setFrom('admin@story4dev.com')
             ->setTo('joelinjatovo@gmail.com')
             ->setBody($body, 'text/html')

@@ -2,20 +2,26 @@
 
 namespace App\Controller\Web\Admin;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Entity\User;
 use App\Entity\Report;
 use App\Form\UserType;
-use App\Service\PaginatorService;
+use App\Events\UserCreatedEvent;
+use App\Helper\MessageHelper;
 use App\Service\FormError;
+use App\Service\OptionService;
+use App\Service\PaginatorService;
+use App\Service\TokenGenerator;
 
 /**
  * @Route("/admin", name="admin_user_")
@@ -41,7 +47,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user", name="create", methods="POST")
      */
-    public function create(Request $request, FormError $formError, UserPasswordEncoderInterface $passwordEncoder)
+    public function create(Request $request, FormError $formError, UserPasswordEncoderInterface $passwordEncoder, TokenGenerator $tokenGenerator, EventDispatcherInterface $dispatcher, \Swift_Mailer $mailer, OptionService $optionService)
     {
         $password = base64_encode (random_bytes( 10 ) );
         
@@ -54,11 +60,31 @@ class UserController extends AbstractController
         
         if ( $form->isSubmitted() ) {
             if( $form->isValid() ) {
+                
+                $token = $tokenGenerator->generateToken();
+                $user->setResetToken($token);
+                $user->setResetedAt(new \DateTime());
+                
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
+                
+                $url = $this->generateUrl('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
+                $body = $this->renderView('emails/forgot.html.twig', [
+                        'user'  => $user,
+                        'url'   => $url,
+                        'label' => "Créer mot de passe",
+                    ]
+                );
+                $message = MessageHelper::getMessage($optionService, 'Nouveau mot de passe ', $body, 'text/html')
+                    ->setTo($user->getEmail());
+                $mailer->send($message);
+                
+                // creates the UserCreatedEvent and dispatches it
+                $event = new UserCreatedEvent($user);
+                $dispatcher->dispatch($event, UserCreatedEvent::NAME);
         
-                $this->addFlash('success', 'Account profile successfully updated. Password:' . $password);
+                $this->addFlash('success', 'Nouvel utilisateur créé avec succès.' );
 
                 return $this->redirectToRoute('user_show', [
                     'slug' => $user->getSlug()

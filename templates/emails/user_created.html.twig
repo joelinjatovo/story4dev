@@ -14,9 +14,11 @@
                                         <div style="color:#000000;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left">
                                           <a style="color:#1572b0;font-weight:500;font-size:17px;line-height:20px;text-decoration:none" target="_blank"> Bonjour,
                                           </a>
-                                          <p style="font-size:15px;color:#585858;line-height:20px">Quelqu'un vous a envoyé un feedback de l'application Story4Dev:</p>
+                                          <p style="font-size:15px;color:#585858;line-height:20px">Un nouvel utilisateur a été créé sur le site Story4Dev avec les informations suivantes:</p>
+                                          
                                           <p style="font-size:15px;color:#585858;line-height:20px"><strong>Nom :</strong> {{ user.fullname }}</p>
                                           <p style="font-size:15px;color:#585858;line-height:20px"><strong>Email :</strong> {{ user.email }}</p>
+                                          <p style="font-size:15px;color:#585858;line-height:20px"><strong>Via :</strong> {% if user.googleId is not null %}GOOGLE{% elseif user.facebookId is not null %}FACEBOOK{% elseif user.resetToken is not null %}ADMIN{% else %}FORM{% endif %} </p>
                                         </div>
                                     </td>
                                 </tr>

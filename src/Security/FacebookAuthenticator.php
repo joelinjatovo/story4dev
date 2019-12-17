@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Events\UserCreatedEvent;
 use App\Helper\MessageHelper;
 use App\Service\TokenGenerator;
 use App\Service\OptionService;
@@ -15,6 +16,7 @@ use App\Exception\EmailNotConfirmedException;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
 use KnpU\OAuth2ClientBundle\Client\Provider\FacebookClient;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
@@ -38,8 +40,9 @@ class FacebookAuthenticator extends SocialAuthenticator
     private $session;
     private $optionService;
     private $targetDirectory;
+    private $dispatcher;
 
-    public function __construct($targetDirectory, OptionService $optionService, SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating)
+    public function __construct($targetDirectory, OptionService $optionService, SessionInterface $session, ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TokenGenerator $tokenGenerator, \Twig\Environment $templating, EventDispatcherInterface $dispatcher)
     {
         $this->em = $em;
         $this->clientRegistry = $clientRegistry;
@@ -51,6 +54,7 @@ class FacebookAuthenticator extends SocialAuthenticator
         $this->session = $session;
         $this->optionService = $optionService;
         $this->targetDirectory = $targetDirectory;
+        $this->dispatcher = $dispatcher;
     }
 
     public function supports(Request $request)
@@ -124,17 +128,21 @@ class FacebookAuthenticator extends SocialAuthenticator
         if($newAccount){
             $url = $this->router->generate('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
  
-            $body = $this->renderView('emails/forgot.html.twig', [
+            $body = $this->templating->render('emails/forgot.html.twig', [
                     'user'  => $user,
                     'url'   => $url,
                     'label' => "Créer mot de passe",
                 ]
             );
             
-            $message = MessageHelper::getMessage($optionService, 'Nouvelle inscription', $body, 'text/html')
+            $message = MessageHelper::getMessage($this->optionService, 'Nouvelle inscription', $body, 'text/html')
                 ->setTo($user->getEmail());
             
             $this->mailer->send($message);
+            
+            // creates the UserCreatedEvent and dispatches it
+            $event = new UserCreatedEvent($user);
+            $this->dispatcher->dispatch($event, UserCreatedEvent::NAME);
         }
 
         return $user;
@@ -152,7 +160,7 @@ class FacebookAuthenticator extends SocialAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        $targetUrl = $this->router->generate('account_profile');
+        $targetUrl = $this->router->generate('app_index');
 
         return new RedirectResponse($targetUrl);
     }

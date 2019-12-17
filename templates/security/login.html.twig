@@ -3,8 +3,18 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>{% block title %}Connexion / Souscription - Story4Dev{% endblock %}</title>
-        <meta name="description" content="Latest updates and statistic charts"> 
+        <title>{% block title %}{% if active_form == 'signin' %}Connexion{% elseif active_form == 'forgot' %}Nouveau mot de passe{% elseif active_form == 'signup' %}Souscription{% else %}Accueil{% endif %} - {{ setting.get('seo_title') }}{% endblock %}</title>
+        <meta name="keywords" content="{{ setting.get('seo_keywords') }}"> 
+        
+        {% if active_form == 'signin' %}
+            <meta name="description" content="Pour se connecter à l'application, utilisez les informations de votre compte existant."> 
+        {% elseif active_form == 'forgot' %}
+            <meta name="description" content="Avez-vous oublié votre mot de passe? Vous pouvez continuer à utiliser nos applications ici."> 
+        {% elseif active_form == 'signup' %}
+            <meta name="description" content="Plusieurs projets ont été déjà créé sur Story4Dev. Inscrivez-vous ici afin de bénéficier nos offres pour la gestion de vos rapports."> 
+        {% else %}
+            <meta name="description" content="{{ setting.get('seo_description') }}"> 
+        {% endif %}
 
         <link href="{{ asset('css/fonts/poppins/poppins.css') }}" rel="stylesheet">
 

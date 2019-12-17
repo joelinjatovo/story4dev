@@ -24,7 +24,7 @@ class GoogleController extends AbstractController
     }
 
     /**
-     * Facebook redirects to back here afterwards
+     * Google redirects to back here afterwards
      *
      * @Route("/connect/google/check", name="connect_google_check")
      */
