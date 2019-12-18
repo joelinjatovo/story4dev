@@ -7,6 +7,7 @@ use App\Entity\ProjectContribution;
 use App\Entity\ActivityContribution;
 use App\Traits\TimestampableEntity;
 use App\Traits\SoftDeleteableEntity;
+use App\Validator\Constraints as AppAssert;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -86,6 +87,7 @@ class User implements UserInterface, \Serializable
     /**
      * @Assert\NotBlank
      * @Assert\Email
+     * @AppAssert\EmailBlackList
      * @Assert\Length(
      *      max = 180,
      *      maxMessage = "Your email cannot be longer than {{ limit }} characters"
