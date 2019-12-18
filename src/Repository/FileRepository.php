@@ -38,7 +38,20 @@ class FileRepository extends ServiceEntityRepository
         ;
     }
     
-    public function findByActivity(Activity $activity, $type, $limit = 0)
+    public function findByUser(User $user)
+    {
+        return $this->createQueryBuilder('f')
+            ->innerJoin('f.activityFiles', 'af')
+            ->innerJoin('af.activity', 'a')
+            ->innerJoin('a.project', 'p')
+            ->innerJoin('p.contributions', 'c')
+            ->where('c.user = :user OR p.author = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+        ;
+    }
+    
+    public function findByActivity(Activity $activity, $type = 'all', $limit = 0)
     {
         $subquery = '';
         switch($type){

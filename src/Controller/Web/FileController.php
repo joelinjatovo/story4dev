@@ -33,36 +33,27 @@ class FileController extends AbstractController
      */
     public function list(?Project $project = null, Activity $activity = null, $page = 1, Request $request, PaginatorService $paginator)
     {
+        $user = $this->getUser();
         $entityManager = $this->getDoctrine()->getManager();
-        
-        $user = $this->getuser();
-        
         $projects = $entityManager->getRepository(Project::class)->findByContributor($user)->execute();
             
-        if( $project != null ) {
-            
+        if( $activity != null ) {
+            $this->denyAccessUnlessGranted('view', $activity);
+            $query = $entityManager->getRepository(File::class)->findByActivity($activity);
+        }else if( $project != null ) {
             $this->denyAccessUnlessGranted('view', $project);
-
             $query = $entityManager->getRepository(File::class)->findByProject($project, $user);
-
-            $files = $paginator->paginate($query);
-            
-            return $this->render('file/list.html.twig', [
-                'files'    => $files,
-                'user'     => $user,
-                'project'  => $project,
-                'projects' => $projects,
-            ]);
+        } else {
+            $query = $entityManager->getRepository(File::class)->findByUser($user);
         }
-        
-        $query = $entityManager->getRepository(File::class)->findAllQuery($user);
 
         $files = $paginator->paginate($query);
         
         return $this->render('file/list.html.twig', [
             'files'    => $files,
             'user'     => $user,
-            'project'  => null,
+            'activity' => $activity,
+            'project'  => $project,
             'projects' => $projects,
         ]);
     }
