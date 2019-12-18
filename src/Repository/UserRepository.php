@@ -53,6 +53,8 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
                 ->setParameter('search', '%'.$search.'%');
         }
         
+        $qb->orderBy('u.createdAt', 'DESC');
+        
         return $qb->getQuery();
     }
     
