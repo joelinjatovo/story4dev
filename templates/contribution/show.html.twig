@@ -34,7 +34,7 @@
                 <div class="kt-widget kt-widget--user-profile-4">
                     <div class="kt-widget__head">
                         <div class="kt-widget__media">
-                            <img class="kt-widget__img" src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') : default_avatar }}" alt="image">
+                            <img class="kt-widget__img" src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') | imagine_filter('small') : default_avatar }}" alt="image">
                             <div class="kt-widget__pic kt-widget__pic--success kt-font-success kt-font-boldest kt-font-light kt-hidden">
                                 MP
                             </div>
