@@ -132,7 +132,7 @@ class ActivityController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $reports = $entityManager->getRepository(Report::class)->findByActivity($activity)->execute();
         $documents = $entityManager->getRepository(File::class)->findByActivity($activity, 'document', 10)->getResult();
-        $images   = $entityManager->getRepository(File::class)->findByActivity($activity, 'image', 20)->getResult();
+        $images   = $entityManager->getRepository(File::class)->findByActivity($activity, 'image', 50)->getResult();
 
         $data   =  $activity->getData();
         $series =  $activity->getSerie();
