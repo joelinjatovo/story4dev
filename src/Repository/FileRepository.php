@@ -38,6 +38,50 @@ class FileRepository extends ServiceEntityRepository
         ;
     }
     
+    public function findByActivity(Activity $activity, $type, $limit = 0)
+    {
+        $subquery = '';
+        switch($type){
+            case 'image':
+                $subquery = ' AND f.mimeType LIKE :mimeType';
+            break;
+            case 'document':
+                $subquery = ' AND f.mimeType NOT LIKE :mimeType';
+            break;
+        }
+        
+        $em = $this->getEntityManager();
+        
+        $query = $em->createQuery(
+            "SELECT f FROM " . File::class . " f " .
+            "WHERE " .
+                " ( (" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(af.file) FROM " . ActivityFile::class . " af " .
+                            " WHERE af.activity = :activity" .
+                        ")" .
+                ") OR (" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(rf.file) FROM " . ReportFile::class . " rf " .
+                            " LEFT JOIN " . Report::class . " rep WITH rep = rf.report " .
+                            " WHERE rep.activity = :activity" .
+                        ")" .
+                ") ) " .
+                ( ! empty( $subquery ) ? $subquery : '')
+        )->setParameter("activity", $activity);
+        
+        if( ! empty( $subquery )){
+            $query->setParameter("mimeType", 'image/%');
+        }
+        
+        if($limit > 0){
+            return $query->setMaxResults($limit);
+        }
+        return $query;
+    }
+    
     public function countByProject(Project $project)
     {
         $em = $this->getEntityManager();

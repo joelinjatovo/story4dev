@@ -1,0 +1,5 @@
+{% if file.image %}
+    <img alt="{{ file.displayName }}" src="{{ asset( file.icone | imagine_filter('small') ) }}"
+    data-image="{{ asset( file.icone | imagine_filter('big') ) }}"
+    data-description="{{ file.displayName }}">
+{% endif %}

@@ -16,6 +16,7 @@ use App\Entity\Activity;
 use App\Entity\ActivityFavorite;
 use App\Entity\Indicator;
 use App\Entity\Report;
+use App\Entity\File;
 use App\Form\ActivityType;
 use App\Form\IndicatorType;
 use App\Service\FormError;
@@ -130,18 +131,22 @@ class ActivityController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
         $reports = $entityManager->getRepository(Report::class)->findByActivity($activity)->execute();
+        $documents = $entityManager->getRepository(File::class)->findByActivity($activity, 'document', 10)->getResult();
+        $images   = $entityManager->getRepository(File::class)->findByActivity($activity, 'image', 20)->getResult();
 
         $data   =  $activity->getData();
         $series =  $activity->getSerie();
         
         return $this->render('activity/show.html.twig', [
-            'user'     => $user,
-            'project'  => $project,
-            'activity' => $activity, 
-            'reports'  => $reports, 
-            'data'     => json_encode($data),
-            '_series'  => $series,
-            'series'   => json_encode($series),
+            'user'      => $user,
+            'project'   => $project,
+            'activity'  => $activity, 
+            'reports'   => $reports, 
+            'documents' => $documents, 
+            'images'    => $images, 
+            'data'      => json_encode($data),
+            '_series'   => $series,
+            'series'    => json_encode($series),
         ]);
     }
     

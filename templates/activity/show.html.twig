@@ -3,6 +3,7 @@
 {% block title %}Activité #{{ activity.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
+<link href="{{ asset('css/gallery.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block subheader %}
@@ -323,10 +324,10 @@
             </div>
             <div class="kt-portlet__body">
                 <div class="kt-widget4" id="kt-activity-list">
-					{% for activityFile in activity.activityFiles.slice(0, 5) %}
-						{{ include('activity/activity-file.html.twig', { 'activityFile' : activityFile } ) }}
+					{% for document in documents %}
+						{{ include('activity/document.html.twig', { 'document' : document } ) }}
 					{% else %}
-                    Il n'y a pas encore de document sur cette activité.
+                    Il n'y a pas encore de document ni à cette activité ni à ses rapports.
 					{% endfor %}
                 </div>
             </div>
@@ -334,11 +335,40 @@
         <!--end:: Widgets/Notifications-->
     </div>
 </div>
+    
+<div class="row">
+    <div class="col-lg-12">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">Photos</h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <div class="kt-widget4" id="gallery" style="display:none;">
+                    {% for file in images %}
+                        {% if file.image %}
+				            {{ include('activity/image.html.twig', { 'file' : file } ) }}
+                        {% endif %}
+                    {% else %}
+                        Aucun fichier attaché ni à cette activité ni à ses rapports.
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
-
 {% block javascripts %}
+<script src="{{ asset('js/gallery.min.js') }}" type="text/javascript" ></script>
+<script src="{{ asset('js/gallery-theme-tiles.js') }}" type="text/javascript" ></script>
 <script src="{{ asset('js/admin/activity-show.js') }}" type="text/javascript" ></script>
+<script type="text/javascript"> 
+    jQuery(document).ready(function(){
+        if( jQuery("#gallery") != undefined ) jQuery("#gallery").unitegallery(); 
+    }); 
+</script>
 
 <!-- Resources -->
 <script src="{{ asset('js/am4chart/core.js') }}" type="text/javascript" ></script>

@@ -1,6 +1,10 @@
 <div class="kt-widget4__item">
     <div class="kt-widget4__pic kt-widget4__pic--icon">
-        <img src="{{ asset( file.icone ) | imagine_filter('thumb') }}" alt="icone">  
+        {% if file.image %}
+            <img src="{{ asset( file.icone ) | imagine_filter('thumb') }}" alt="icone">  
+        {% else %}
+            <img src="{{ asset( file.icone ) }}" alt="icone"> 
+        {% endif %}
     </div>				
     <a href="{{ asset( file.icone) | imagine_filter('big') }}" data-toggle="lightbox" data-gallery="gallery" class="kt-widget4__title">
         {{ file.name }}

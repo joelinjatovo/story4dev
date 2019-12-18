@@ -1,14 +1,18 @@
 <div class="kt-widget4__item">
     <div class="kt-widget4__pic kt-widget4__pic--icon">
-        <img src="{{ asset( reportFile.file.icone | imagine_filter('thumb') ) }}" alt="icone">  
+        {% if reportFile.file.image %}
+            <img src="{{ asset( reportFile.file.icone | imagine_filter('thumb') ) }}" alt="icone">  
+        {% else %}
+            <img src="{{ asset( reportFile.file.icone ) }}" alt="icone"> 
+        {% endif %}
     </div>
     {% if reportFile.file.image %}
         <a href="{{ asset( reportFile.file.icone) | imagine_filter('big') }}" data-toggle="lightbox" data-gallery="gallery" class="kt-widget4__title">
-            {{ reportFile.file.name }}
+            {{ reportFile.file.displayname }}
         </a>
     {% else %}
         <a href="{{ path( 'file_download', {id:reportFile.file.id}) }}" target="_blank"  class="kt-widget4__title">
-            {{ reportFile.file.name }}
+            {{ reportFile.file.displayname }}
         </a>
     {% endif %}
     <div class="kt-widget4__tools">
