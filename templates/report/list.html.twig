@@ -26,15 +26,10 @@
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Rapports</span>
             </div>
+            {{ include('_common/_search.html.twig') }}
+            {{ include('report/_filter.html.twig', {activity: activity, project: project}) }}
         </div>        
         <div class="kt-subheader__toolbar">
-            {% if activity is defined and activity is not null %}
-                <a href="{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
-                <a href="{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
-            {% else %}
-                <a href="{{ path('report_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
-                <a href="{{ path('report_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
-            {% endif %}
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             {% if activity is defined and activity is not null %}
                 <a href="{{ url('activity_show', { 'slug' : activity.project.slug, 'activity_id' : activity.id }) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
@@ -120,7 +115,7 @@
                     <table class="kt-datatable__table" style="display: block;">
                         <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="Rapports" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                <th data-field="Rapports" class="kt-datatable__cell kt-datatable__cell--sort">
                                     <span style="width: 250px;">Rapports</span>
                                 </th>
                                 <th data-field="Auteurs" class="kt-datatable__cell kt-datatable__cell--sort">
@@ -128,6 +123,9 @@
                                 </th>
                                 <th data-field="Date" class="kt-datatable__cell kt-datatable__cell--sort">
                                     <span style="width: 100px;">Date</span>
+                                </th>
+                                <th data-field="Date" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">Status</span>
                                 </th>
                                 <th data-field="Résultats" class="kt-datatable__cell kt-datatable__cell--sort">
                                     <span style="width: 100px;">Résultats</span>
@@ -142,7 +140,7 @@
                         </thead>
                         <tbody class="kt-datatable__body">
                             {% for report in reports %}
-                                {{ include('report/list_item.html.twig', {'report': report}) }}
+                                {{ include('report/_list-item.html.twig', {'report': report}) }}
                             {% endfor %}
                         </tbody>
                     </table>

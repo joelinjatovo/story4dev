@@ -1,5 +1,5 @@
 <tr data-row="0" class="kt-datatable__row report-item" style="left: 0px;">
-    <td data-field="Rapports" data-autohide-disabled="false" class="kt-datatable__cell">
+    <td data-field="Rapports" class="kt-datatable__cell">
         <span style="width: 250px;">
             <div class="kt-user-card-v2">
                 <div class="kt-user-card-v2__details">
@@ -26,7 +26,10 @@
         </span>
     </td>
     <td data-field="Date" class="kt-datatable__cell">
-        <span class="width: 100px; kt-font-bold">{{ report.createdat | date('Y-m-d') }}</span>
+        <span style="width: 100px;" class="kt-font-bold">{{ report.createdat | date('Y-m-d') }}</span>
+    </td>
+    <td data-field="Status" class="kt-datatable__cell">
+        <span style="width: 100px;" class="kt-font-{{ report.statusClass }} kt-font-bold">{{ report.statusLabel }}</span>
     </td>
     <td data-field="Résultats" class="kt-datatable__cell">
         <span style="width: 100px;" ><span class="kt-font-bold">{{ report.results.count }} </span>Résultats</span>
@@ -47,7 +50,7 @@
                         {% endif %}
                     {% endif %}
                 {% else %}
-                    Aucun fichier attaché à ce rapport.
+                    Aucun fichier
                 {% endfor %}
             </div>       
         </div>

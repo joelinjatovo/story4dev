@@ -48,37 +48,75 @@ class ReportRepository extends ServiceEntityRepository
             ->getQuery();
     }
     
-    public function findByActivity(Activity $activity, ?User $user = null, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
+    public function findByActivity(Activity $activity, $args = [])
     {
+        $default = [
+            'user'    => null,  
+            'orderBy' => 'createdAt',  
+            'order'   => 'ASC',  
+            'limit'   => 0,  
+            'search'  => null,  
+            'status'  => null,  
+        ];
+        $args = array_merge($default, (array) $args);
+        
         $queryBuilder = $this->createQueryBuilder('r');
         $queryBuilder->andWhere('r.activity = :activity')->setParameter('activity', $activity);
-        $queryBuilder->orderBy('r.'.$orderBy, $order);
         
-        if($user){
-            $queryBuilder->andWhere('r.author = :user')->setParameter('user', $user);
+        if( ! is_null($args['user']) && ( $args['user'] instanceof User ) ){
+            $queryBuilder->andWhere('r.author = :user')->setParameter('user', $args['user']);
         }
         
-        if($limit > 0){
-            $queryBuilder->setMaxResults($limit);
+        if( ! is_null($args['status']) && ( in_array( $args['status'] , [Report::STATUS_OPENED, Report::STATUS_CLOSED, Report::STATUS_TERMINATED]) ) ) {
+            $queryBuilder->andWhere('r.status = :status')->setParameter('status', $args['status']);
         }
+        
+        if( ! is_null($args['search']) && ! empty($args['search']) ) {
+            $queryBuilder->andWhere('r.title LIKE :search OR r.description LIKE :search')->setParameter('search', '%' . $args['search'] . '%');
+        }
+        
+        if( $args['limit'] > 0) {
+            $queryBuilder->setMaxResults((int) $args['limit']);
+        }
+        
+        $queryBuilder->orderBy('r.'.$args['orderBy'], $args['order']);
         
         return $queryBuilder->getQuery();
     }
     
-    public function findByProject(Project $project, ?User $user = null, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
+    public function findByProject(Project $project, $args = [])
     {
+        $default = [
+            'user'    => null,  
+            'orderBy' => 'createdAt',  
+            'order'   => 'ASC',  
+            'limit'   => 0,  
+            'search'  => null,  
+            'status'  => null,  
+        ];
+        $args = array_merge($default, (array) $args);
+        
         $queryBuilder = $this->createQueryBuilder('r');
         $queryBuilder->leftJoin('r.activity', 'a');
         $queryBuilder->andWhere('a.project = :project')->setParameter('project', $project);
-        $queryBuilder->orderBy('r.'.$orderBy, $order);
         
-        if($user){
+        if( ! is_null($args['user']) && ( $args['user'] instanceof User ) ){
             $queryBuilder->andWhere('r.author = :user')->setParameter('user', $user);
         }
         
-        if($limit > 0){
+        if( ! is_null($args['status']) && ( in_array( $args['status'] , [Report::STATUS_OPENED, Report::STATUS_CLOSED, Report::STATUS_TERMINATED]) ) ) {
+            $queryBuilder->andWhere('r.status = :status')->setParameter('status', $args['status']);
+        }
+        
+        if( ! is_null($args['search']) && ! empty($args['search']) ) {
+            $queryBuilder->andWhere('r.title LIKE :search OR r.description LIKE :search')->setParameter('search', '%' . $args['search'] . '%');
+        }
+        
+        if( $args['limit'] > 0) {
             $queryBuilder->setMaxResults($limit);
         }
+        
+        $queryBuilder->orderBy('r.'.$args['orderBy'], $args['order']);
         
         return $queryBuilder->getQuery();
     }

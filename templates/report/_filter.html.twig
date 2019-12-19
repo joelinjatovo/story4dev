@@ -1,0 +1,40 @@
+<div class="kt-subheader__group" id="kt_subheader_group_actions">
+    <div class="btn-toolbar kt-margin-l-20">
+        <div class="dropdown" id="kt_subheader_group_actions_status_change">
+            <button type="button" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                Filtrer par statut
+            </button>
+            <div class="dropdown-menu" style="">
+                <ul class="kt-nav">
+                    <li class="kt-nav__item">
+                        <a href="{% if activity is defined and activity is not null %}{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: type}) }}{% else %}{{ path('report_list_type', { slug: project.slug, type: type}) }}{% endif %}" class="kt-nav__link">
+                            <span class="kt-nav__link-text">Tous</span>
+                        </a>
+                    </li> 
+                    <li class="kt-nav__item">
+                        <a href="{% if activity is defined and activity is not null %}{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: type, s: search, status: 'opened'}) }}{% else %}{{ path('report_list_type', { slug: project.slug, type: type, s: search, status: 'opened'}) }}{% endif %}" class="kt-nav__link">
+                            <span class="kt-nav__link-text">Editable</span>
+                        </a>
+                    </li>                        
+                    <li class="kt-nav__item">
+                        <a href="{% if activity is defined and activity is not null %}{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: type, s: search, status: 'closed'}) }}{% else %}{{ path('report_list_type', { slug: project.slug, type: type, s: search, status: 'closed'}) }}{% endif %}" class="kt-nav__link">
+                            <span class="kt-nav__link-text">Clôturé</span>
+                        </a>
+                    </li>
+                    <li class="kt-nav__item">
+                        <a href="{% if activity is defined and activity is not null %}{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: type, s: search, status: 'terminated'}) }}{% else %}{{ path('report_list_type', { slug: project.slug, type: type, s: search, status: 'terminated'}) }}{% endif %}" class="kt-nav__link">
+                            <span class="kt-nav__link-text">Términé</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {% if activity is defined and activity is not null %}
+            <a href="{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: 'list', s: search, status: status }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> Liste</a>
+            <a href="{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: 'grid', s: search, status: status }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i>Grille</a>
+        {% else %}
+            <a href="{{ path('report_list_type', { slug: project.slug, type: 'list', s: search, status: status }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> Liste </a>
+            <a href="{{ path('report_list_type', { slug: project.slug, type: 'grid', s: search, status: status }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i>Grille</a>
+        {% endif %}
+    </div>
+</div>

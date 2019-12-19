@@ -412,9 +412,12 @@ class ReportController extends AbstractController
      * @Route("/p/{slug}/reports/{type}/{page<\d+>?1}", name="list_type", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
-    public function list(Project $project, $activity_id = 0, ?string $type, $page = 1, PaginatorService $paginator)
+    public function list(Project $project, $activity_id = 0, ?string $type, $page = 1, PaginatorService $paginator, Request $request)
     {
         $this->denyAccessUnlessGranted('view', $project);
+        
+        $search = $request->query->get('s');
+        $status = $request->query->get('status');
         
         $order_by = $project->getMeta('report_order_by', 'createdAt');
         $order    = $project->getMeta('report_order', 'DESC');
@@ -437,12 +440,12 @@ class ReportController extends AbstractController
             
             $this->denyAccessUnlessGranted('view', $activity);
             
-            $query = $entityManager->getRepository(Report::class)->findByActivity($activity, null, $order_by, $order);
+            $query = $entityManager->getRepository(Report::class)->findByActivity($activity, ['user' => null, 'orderBy' => $order_by, 'order' => $order, 'search' => $search, 'status' => $status]);
             
         }else{
             $this->denyAccessUnlessGranted('view', $project);
             
-            $query = $entityManager->getRepository(Report::class)->findByProject($project, null, $order_by, $order);
+            $query = $entityManager->getRepository(Report::class)->findByProject($project, ['user' => null, 'orderBy' => $order_by, 'order' => $order, 'search' => $search, 'status' => $status]);
         }
         
         $reports = $paginator->paginate($query, 10);
@@ -452,7 +455,10 @@ class ReportController extends AbstractController
                 'user'     => $user,
                 'project'  => $project,
                 'activity' => $activity,
-                'reports'  => $reports
+                'reports'  => $reports,
+                'status'   => $status,
+                'search'   => $search,
+                'type'     => 'list'
             ]);
         }
         
@@ -460,7 +466,10 @@ class ReportController extends AbstractController
             'user'     => $user,
             'project'  => $project,
             'activity' => $activity,
-            'reports'  => $reports
+            'reports'  => $reports,
+            'status'   => $status,
+            'search'   => $search,
+            'type'     => 'grid'
         ]);
     }
 }

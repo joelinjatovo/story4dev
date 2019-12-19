@@ -26,15 +26,10 @@
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Rapports</span>
             </div>
+            {{ include('_common/_search.html.twig', {search: search}) }}
+            {{ include('report/_filter.html.twig', {activity: activity, project: project, search: search, status: status }) }}
         </div>        
         <div class="kt-subheader__toolbar">
-            {% if activity is defined and activity is not null %}
-                <a href="{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
-                <a href="{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
-            {% else %}
-                <a href="{{ path('report_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
-                <a href="{{ path('report_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
-            {% endif %}
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             {% if activity is defined and activity is not null %}
                 <a href="{{ url('activity_show', { 'slug' : activity.project.slug, 'activity_id' : activity.id }) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
@@ -116,7 +111,7 @@
 <div class="row">
     {% for report in reports %}
         <div class="col-xl-6">
-            {{ include('report/grid_item.html.twig', {'report': report}) }}
+            {{ include('report/_grid-item.html.twig', {'report': report}) }}
         </div>
     {% endfor %}
 </div>
