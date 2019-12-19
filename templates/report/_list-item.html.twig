@@ -28,11 +28,8 @@
     <td data-field="Date" class="kt-datatable__cell">
         <span style="width: 100px;" class="kt-font-bold">{{ report.createdat | date('Y-m-d') }}</span>
     </td>
-    <td data-field="Status" class="kt-datatable__cell">
+    <td data-field="Statut" class="kt-datatable__cell">
         <span style="width: 100px;" class="kt-font-{{ report.statusClass }} kt-font-bold">{{ report.statusLabel }}</span>
-    </td>
-    <td data-field="Résultats" class="kt-datatable__cell">
-        <span style="width: 100px;" ><span class="kt-font-bold">{{ report.results.count }} </span>Résultats</span>
     </td>
     <td data-field="Documents" class="kt-datatable__cell">
         <div style="width: 200px;">

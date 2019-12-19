@@ -113,7 +113,7 @@ class ReportRepository extends ServiceEntityRepository
         }
         
         if( $args['limit'] > 0) {
-            $queryBuilder->setMaxResults($limit);
+            $queryBuilder->setMaxResults((int) $args['limit']);
         }
         
         $queryBuilder->orderBy('r.'.$args['orderBy'], $args['order']);

@@ -264,7 +264,7 @@ class ProjectController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
         $activities    = $entityManager->getRepository(Activity::class)->findByProject($project, $project->getMeta('activity_order_by', 'createdAt'), $project->getMeta('activity_order', 'DESC'), $project->getMeta('activity_count', self::RECENT_ITEMS_COUNT))->execute();
-        $reports       = $entityManager->getRepository(Report::class)->findByProject($project, null, $project->getMeta('report_order_by', 'createdAt'), $project->getMeta('report_order', 'DESC'), $project->getMeta('report_count', self::RECENT_ITEMS_COUNT))->execute();
+        $reports       = $entityManager->getRepository(Report::class)->findByProject($project, ['user' => null, 'orderBy' => $project->getMeta('report_order_by', 'createdAt'), 'order' => $project->getMeta('report_order', 'DESC'), 'limit' => $project->getMeta('report_count', self::RECENT_ITEMS_COUNT) ] )->execute();
         $contributions = $entityManager->getRepository(ProjectContribution::class)->findByProject($project, $project->getMeta('contribution_order_by', 'createdAt'), $project->getMeta('contribution_order', 'DESC'), $project->getMeta('contribution_count', self::RECENT_ITEMS_COUNT))->execute();
         $data   =  $project->getData();
         $series =  $project->getSerie();
