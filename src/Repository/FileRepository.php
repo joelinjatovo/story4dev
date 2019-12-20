@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\File;
 use App\Entity\User;
 use App\Entity\Project;
+use App\Entity\ProjectContribution;
 use App\Entity\Activity;
 use App\Entity\ActivityFile;
 use App\Entity\Report;
@@ -38,8 +39,63 @@ class FileRepository extends ServiceEntityRepository
         ;
     }
     
-    public function findByUser(User $user)
+    /**
+    * Tous les fichiers situés dans les projets
+    * sur lesquels l'utilisateur contribue
+    */
+    public function findByUser(User $user, $args = [])
     {
+        $default = [
+            'type'    => "all",  
+            'limit'   => 0,  
+        ];
+        $args = array_merge($default, (array) $args);
+        
+        $subquery = '';
+        switch($args['type']){
+            case 'image':
+                $subquery = ' AND f.mimeType LIKE :mimeType';
+            break;
+            case 'document':
+                $subquery = ' AND f.mimeType NOT LIKE :mimeType';
+            break;
+        }
+        
+        $em = $this->getEntityManager();
+        
+        $query = $em->createQuery(
+            "SELECT f FROM " . File::class . " f " .
+            "WHERE " .
+                " ( (" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(af.file) FROM " . ActivityFile::class . " af " .
+                            " LEFT JOIN " . Activity::class . " act1 WITH act1 = af.activity " .
+                            " LEFT JOIN " . ProjectContribution::class . " pc1 WITH pc1.project = act1.project " .
+                            " WHERE pc1.user = :user" .
+                        ")" .
+                ") OR (" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(rf.file) FROM " . ReportFile::class . " rf " .
+                            " LEFT JOIN " . Report::class . " rep WITH rep = rf.report " .
+                            " LEFT JOIN " . Activity::class . " act2 WITH act2 = rep.activity " .
+                            " LEFT JOIN " . ProjectContribution::class . " pc2 WITH pc2.project = act2.project " .
+                            " WHERE pc2.user = :user" .
+                        ")" .
+                ") ) " .
+                ( ! empty( $subquery ) ? $subquery : '')
+        )->setParameter("user", $user);
+        
+        if( ! empty( $subquery )){
+            $query->setParameter("mimeType", 'image/%');
+        }
+        
+        if( $args['limit'] > 0 ){
+            return $query->setMaxResults((int) $args['limit']);
+        }
+        return $query;
+        
         return $this->createQueryBuilder('f')
             ->innerJoin('f.activityFiles', 'af')
             ->innerJoin('af.activity', 'a')
@@ -51,6 +107,67 @@ class FileRepository extends ServiceEntityRepository
         ;
     }
     
+    /**
+    * Compter tous les fichiers du projet
+    */
+    public function countByProject(Project $project)
+    {
+        $em = $this->getEntityManager();
+        
+        return $em->createQuery(
+            "SELECT count(f.id) FROM " . File::class . " f " .
+            "WHERE " .
+                "(" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(af.file) FROM " . ActivityFile::class . " af " .
+                            " LEFT JOIN " . Activity::class . " act1 WITH act1 = af.activity " .
+                            " WHERE act1.project = :project" .
+                        ")" .
+                ") OR (" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(rf.file) FROM " . ReportFile::class . " rf " .
+                            " LEFT JOIN " . Report::class . " rep WITH rep = rf.report " .
+                            " LEFT JOIN " . Activity::class . " act2 WITH act2 = rep.activity " .
+                            " WHERE act2.project = :project" .
+                        ")" .
+                ")"
+        )->setParameter("project", $project);
+    }
+    
+    /**
+    * Tous les fichiers situés dans le projet
+    */
+    public function findByProject(Project $project, ?User $user = null)
+    {
+        $em = $this->getEntityManager();
+        
+        return $em->createQuery(
+            "SELECT f FROM " . File::class . " f " .
+            "WHERE " .
+                "(" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(af.file) FROM " . ActivityFile::class . " af " .
+                            " LEFT JOIN " . Activity::class . " act1 WITH act1 = af.activity " .
+                            " WHERE act1.project = :project" .
+                        ")" .
+                ") OR (" .
+                    "f IN " .
+                        "(" .
+                            "SELECT IDENTITY(rf.file) FROM " . ReportFile::class . " rf " .
+                            " LEFT JOIN " . Report::class . " rep WITH rep = rf.report " .
+                            " LEFT JOIN " . Activity::class . " act2 WITH act2 = rep.activity " .
+                            " WHERE act2.project = :project" .
+                        ")" .
+                ")"
+        )->setParameter("project", $project);
+    }
+    
+    /**
+    * Tous les fichiers situés dans l'activité
+    */
     public function findByActivity(Activity $activity, $type = 'all', $limit = 0)
     {
         $subquery = '';
@@ -95,58 +212,6 @@ class FileRepository extends ServiceEntityRepository
         return $query;
     }
     
-    public function countByProject(Project $project)
-    {
-        $em = $this->getEntityManager();
-        
-        return $em->createQuery(
-            "SELECT count(f.id) FROM " . File::class . " f " .
-            "WHERE " .
-                "(" .
-                    "f IN " .
-                        "(" .
-                            "SELECT IDENTITY(af.file) FROM " . ActivityFile::class . " af " .
-                            " LEFT JOIN " . Activity::class . " act1 WITH act1 = af.activity " .
-                            " WHERE act1.project = :project" .
-                        ")" .
-                ") OR (" .
-                    "f IN " .
-                        "(" .
-                            "SELECT IDENTITY(rf.file) FROM " . ReportFile::class . " rf " .
-                            " LEFT JOIN " . Report::class . " rep WITH rep = rf.report " .
-                            " LEFT JOIN " . Activity::class . " act2 WITH act2 = rep.activity " .
-                            " WHERE act2.project = :project" .
-                        ")" .
-                ")"
-        )->setParameter("project", $project);
-    }
-    
-    public function findByProject(Project $project, ?User $user = null)
-    {
-        $em = $this->getEntityManager();
-        
-        return $em->createQuery(
-            "SELECT f FROM " . File::class . " f " .
-            "WHERE " .
-                "(" .
-                    "f IN " .
-                        "(" .
-                            "SELECT IDENTITY(af.file) FROM " . ActivityFile::class . " af " .
-                            " LEFT JOIN " . Activity::class . " act1 WITH act1 = af.activity " .
-                            " WHERE act1.project = :project" .
-                        ")" .
-                ") OR (" .
-                    "f IN " .
-                        "(" .
-                            "SELECT IDENTITY(rf.file) FROM " . ReportFile::class . " rf " .
-                            " LEFT JOIN " . Report::class . " rep WITH rep = rf.report " .
-                            " LEFT JOIN " . Activity::class . " act2 WITH act2 = rep.activity " .
-                            " WHERE act2.project = :project" .
-                        ")" .
-                ")"
-        )->setParameter("project", $project);
-    }
-    
     public function findByProjectPerMonth(Project $project)
     {
 
@@ -169,7 +234,7 @@ class FileRepository extends ServiceEntityRepository
     {
 
         return $this->createQueryBuilder('f')
-             ->select("a.title, count(f.id) as count")
+            ->select("a.title, count(f.id) as count")
             ->leftJoin('f.activityFiles', 'af')
             ->leftJoin('af.activity', 'a')
             ->leftJoin('a.project', 'p')

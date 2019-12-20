@@ -22,8 +22,9 @@
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
-                
+                {% if is_granted('view', project) %}
+                    <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+                {% endif %}
                 {% if is_granted('edit', activity) %}
                     <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" class="btn kt-subheader__btn-primary">Modifier &nbsp;</a>
                 {% endif %}
@@ -55,36 +56,44 @@
                                     </a>
                                 </li>
                             {% endif %}
-                            <li class="kt-nav__item">
-                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">Rapport</span>
-                                </a>
-                            </li>
+                            {% if is_granted('view', activity) %}
+                                <li class="kt-nav__item">
+                                    <a href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
+                                        <span class="kt-nav__link-text">Rapport</span>
+                                    </a>
+                                </li>
+                            {% endif %}
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__head">
                                 Aller dans
                                 <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                             </li>
                             <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__item">
-                                <a href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">Les rapports</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">Les documents</span>
-                                </a>
-                            </li>
-                            <li class="kt-nav__item">
-                                <a href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                    <span class="kt-nav__link-text">Les indicateurs</span>
-                                </a>
-                            </li>
+                            {% if is_granted('view', activity) %}
+                                <li class="kt-nav__item">
+                                    <a href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
+                                        <span class="kt-nav__link-text">Les rapports</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if is_granted('view', activity) %}
+                                <li class="kt-nav__item">
+                                    <a href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
+                                        <span class="kt-nav__link-text">Les documents</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if is_granted('view', activity) %}
+                                <li class="kt-nav__item">
+                                    <a href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
+                                        <span class="kt-nav__link-text">Les indicateurs</span>
+                                    </a>
+                                </li>
+                            {% endif %}
                         </ul>
                         <!--end::Nav-->
                     </div>

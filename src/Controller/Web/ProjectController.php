@@ -41,7 +41,7 @@ class ProjectController extends AbstractController
      */
     public function dashboard(Project $project, Request $request)
     {
-        $this->denyAccessUnlessGranted('edit', $project);
+        $this->denyAccessUnlessGranted('view', $project);
         
         if ( $request->isXmlHttpRequest() ) {
             return $this->chart($project, $request);

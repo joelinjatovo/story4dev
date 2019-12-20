@@ -20,11 +20,15 @@
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ path('activity_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
-            <a href="{{ path('activity_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
-            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
-            <a href="{{ path('activity_index', { slug: project.slug }) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
+            {% if is_granted('view', project) %}
+                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
+                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
+                <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+                <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+            {% endif %}
+            {% if is_granted('edit', project) %}
+                <a href="{{ path('activity_index', { slug: project.slug }) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -61,7 +65,7 @@
                         </thead>
                         <tbody class="kt-datatable__body">
                             {% for activity in activities %}
-                                {{ include('activity/list_item.html.twig', {'activity': activity}) }}
+                                {{ include('activity/_list-item.html.twig', {'activity': activity}) }}
                             {% endfor %}
                         </tbody>
                     </table>
