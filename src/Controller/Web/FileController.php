@@ -45,20 +45,28 @@ class FileController extends AbstractController
         
         $user = $this->getUser();
         $entityManager = $this->getDoctrine()->getManager();
-        $projects = $entityManager->getRepository(Project::class)->findByContributor($user)->execute();
+        $projects = $entityManager->getRepository(Project::class)
+            ->findByContributor($user)
+            ->execute();
             
-        
+        $limit = 20;
+
         if( $activity != null ) {
             $this->denyAccessUnlessGranted('view', $activity);
-            $query = $entityManager->getRepository(File::class)->findByActivity($activity, ['type' => $filterType]);
+            $limit =  $project->getMeta('file_count', $limit);
+            $query = $entityManager->getRepository(File::class)
+                ->findByActivity($activity, ['type' => $filterType]);
         }else if( $project != null ) {
             $this->denyAccessUnlessGranted('view', $project);
-            $query = $entityManager->getRepository(File::class)->findByProject($project, ['type' => $filterType]);
+            $limit =  $project->getMeta('file_count', $limit);
+            $query = $entityManager->getRepository(File::class)
+                ->findByProject($project, ['type' => $filterType]);
         } else {
-            $query = $entityManager->getRepository(File::class)->findByUser($user, ['type' => $filterType]);
+            $query = $entityManager->getRepository(File::class)
+                ->findByUser($user, ['type' => $filterType]);
         }
 
-        $files = $paginator->paginate($query);
+        $files = $paginator->paginate($query, $limit);
         
         return $this->render($template, [
             'files'    => $files,

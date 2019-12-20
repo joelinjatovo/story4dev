@@ -40,6 +40,16 @@ class ProjectHelper {
                         'order'    => $project->getMeta('contribution_order', 'ASC'),
                         'count'    => $project->getMeta('contribution_count', 10),
                     ],
+                    'file' => [
+                        'order_by' => $project->getMeta('file_order_by', 'createdAt'),
+                        'order'    => $project->getMeta('file_order', 'ASC'),
+                        'count'    => $project->getMeta('file_count', 10),
+                    ],
+                    'indicator' => [
+                        'order_by' => $project->getMeta('indicator_order_by', 'createdAt'),
+                        'order'    => $project->getMeta('indicator_order', 'ASC'),
+                        'count'    => $project->getMeta('indicator_count', 10),
+                    ],
                 ]
             ],
             'quotas' => [

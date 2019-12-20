@@ -419,7 +419,7 @@ class ActivityController extends AbstractController
         $order    = $project->getMeta('activity_order', 'DESC');
         $query = $entityManager->getRepository(Activity::class)->findByProject($project, $order_by, $order);
         
-        $activities = $paginator->paginate($query, 10);
+        $activities = $paginator->paginate($query, $project->getMeta('activity_count', 20));
 
         if($type == 'list'){
             return $this->render('activity/list.html.twig', [

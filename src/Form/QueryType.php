@@ -17,7 +17,7 @@ class QueryType extends AbstractType
                 'placeholder' => 'Choisissez le champs à trier',
                 'choices'  => [
                     'Date' => 'createdAt',
-                    'Titre' => 'title',
+                    'Titre ou Nom' => 'title',
                 ],
             ])
             ->add('order', ChoiceType::class, [

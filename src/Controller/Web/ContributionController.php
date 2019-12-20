@@ -35,9 +35,10 @@ class ContributionController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
         
-        $query = $entityManager->getRepository(ProjectContribution::class)->findByProject($project, $order_by, $order);
+        $query = $entityManager->getRepository(ProjectContribution::class)
+            ->findByProject($project, $order_by, $order);
         
-        $contributions = $paginator->paginate($query, 10);
+        $contributions = $paginator->paginate($query, $project->getMeta('contribution_count', 20));
         
         $user = $project->getAuthor();
         

@@ -440,15 +440,29 @@ class ReportController extends AbstractController
             
             $this->denyAccessUnlessGranted('view', $activity);
             
-            $query = $entityManager->getRepository(Report::class)->findByActivity($activity, ['user' => null, 'orderBy' => $order_by, 'order' => $order, 'search' => $search, 'status' => $status]);
+            $query = $entityManager->getRepository(Report::class)
+                    ->findByActivity($activity, [
+                        'user'    => null,
+                        'orderBy' => $order_by,
+                        'order'   => $order,
+                        'search'  => $search,
+                        'status'  => $status
+                    ]);
             
         }else{
             $this->denyAccessUnlessGranted('view', $project);
             
-            $query = $entityManager->getRepository(Report::class)->findByProject($project, ['user' => null, 'orderBy' => $order_by, 'order' => $order, 'search' => $search, 'status' => $status]);
+            $query = $entityManager->getRepository(Report::class)
+                    ->findByProject($project, [
+                        'user'    => null,
+                        'orderBy' => $order_by,
+                        'order'   => $order,
+                        'search'  => $search,
+                        'status'  => $status
+                    ]);
         }
         
-        $reports = $paginator->paginate($query, 10);
+        $reports = $paginator->paginate($query, $project->getMeta('report_count', 20));
 
         if($type == 'list'){
             return $this->render('report/list.html.twig', [

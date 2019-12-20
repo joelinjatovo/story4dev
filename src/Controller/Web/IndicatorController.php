@@ -294,7 +294,7 @@ class IndicatorController extends AbstractController
             $query = $entityManager->getRepository(Indicator::class)->findByProject($project, $search);
         }
         
-        $indicators = $paginator->paginate($query, 10);
+        $indicators = $paginator->paginate($query, $project->getMeta('indicator_count', 20));
         
         if($type == 'list'){
             return $this->render('indicator/list.html.twig', [

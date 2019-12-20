@@ -24,16 +24,20 @@ class ProjectContributionRepository extends ServiceEntityRepository
     public function findByProject(Project $project, $orderBy = 'createdAt', $order = 'ASC', $limit = 0)
     {
         switch($orderBy){
+            case 'title':
+                $orderBy = 'u.fullName';
+            break;
             default:
             case 'createdAt':
-                $orderBy = 'createdAt';
+                $orderBy = 'pc.createdAt';
             break;
         }
         
         $queryBuilder = $this->createQueryBuilder('pc')
+            ->leftJoin('pc.user', 'u')
             ->where('pc.project = :project')
             ->setParameter('project', $project)
-            ->orderBy('pc.'.$orderBy, $order);
+            ->orderBy($orderBy, $order);
         
         if($limit > 0){
             $queryBuilder->setMaxResults($limit);
