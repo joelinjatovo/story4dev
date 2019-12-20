@@ -59,7 +59,7 @@ class UserSubscriber implements EventSubscriberInterface
         );
         
         $message = (new \Swift_Message('Nouvelle inscription sur Story4Dev'))
-            ->setFrom(['admin@story4dev.com' => 'EventListener - Story4Dev')
+            ->setFrom(['admin@story4dev.com' => 'EventListener - Story4Dev'])
             ->setTo('joelinjatovo@gmail.com')
             ->setBody($body, 'text/html')
         ;
@@ -78,7 +78,7 @@ class UserSubscriber implements EventSubscriberInterface
         );
         
         $message = (new \Swift_Message('Nouvelle connexion sur Story4Dev'))
-            ->setFrom(['admin@story4dev.com' => 'EventListener - Story4Dev')
+            ->setFrom(['admin@story4dev.com' => 'EventListener - Story4Dev'])
             ->setTo('joelinjatovo@gmail.com')
             ->setBody($body, 'text/html')
         ;
