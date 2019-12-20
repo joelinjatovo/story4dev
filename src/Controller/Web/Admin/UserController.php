@@ -149,7 +149,7 @@ class UserController extends AbstractController
             if( $form->isValid() ) {
                 $newStatus = $user->getStatus();
                 
-                if ( ( $oldStatus= User::STATUS_PING ) && ( $newStatus == User::STATUS_ACTIVE ) ) {
+                if ( ( $oldStatus == User::STATUS_PING ) && ( $newStatus == User::STATUS_ACTIVE ) ) {
                     $event = new UserChangedEvent($user);
                     $dispatcher->dispatch($event, UserChangedEvent::ACTIVATED);
                 }
