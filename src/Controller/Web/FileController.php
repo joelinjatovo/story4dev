@@ -33,28 +33,40 @@ class FileController extends AbstractController
      */
     public function list(?Project $project = null, Activity $activity = null, $page = 1, Request $request, PaginatorService $paginator)
     {
+        $type = $request->query->get('type');
+        $template = 'file/images-list.html.twig';
+        if($type == 'docs'){
+            $filterType = 'document';
+            $template = 'file/docs-list.html.twig';
+        }else{
+            $filterType = 'image';
+            $type = 'images';
+        }
+        
         $user = $this->getUser();
         $entityManager = $this->getDoctrine()->getManager();
         $projects = $entityManager->getRepository(Project::class)->findByContributor($user)->execute();
             
+        
         if( $activity != null ) {
             $this->denyAccessUnlessGranted('view', $activity);
-            $query = $entityManager->getRepository(File::class)->findByActivity($activity);
+            $query = $entityManager->getRepository(File::class)->findByActivity($activity, ['type' => $filterType]);
         }else if( $project != null ) {
             $this->denyAccessUnlessGranted('view', $project);
-            $query = $entityManager->getRepository(File::class)->findByProject($project, $user);
+            $query = $entityManager->getRepository(File::class)->findByProject($project, ['type' => $filterType]);
         } else {
-            $query = $entityManager->getRepository(File::class)->findByUser($user);
+            $query = $entityManager->getRepository(File::class)->findByUser($user, ['type' => $filterType]);
         }
 
         $files = $paginator->paginate($query);
         
-        return $this->render('file/list.html.twig', [
+        return $this->render($template, [
             'files'    => $files,
             'user'     => $user,
             'activity' => $activity,
             'project'  => $project,
             'projects' => $projects,
+            'type'     => $type,
         ]);
     }
     

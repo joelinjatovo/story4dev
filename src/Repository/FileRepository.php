@@ -94,17 +94,8 @@ class FileRepository extends ServiceEntityRepository
         if( $args['limit'] > 0 ){
             return $query->setMaxResults((int) $args['limit']);
         }
-        return $query;
         
-        return $this->createQueryBuilder('f')
-            ->innerJoin('f.activityFiles', 'af')
-            ->innerJoin('af.activity', 'a')
-            ->innerJoin('a.project', 'p')
-            ->innerJoin('p.contributions', 'c')
-            ->where('c.user = :user OR p.author = :user')
-            ->setParameter('user', $user)
-            ->getQuery()
-        ;
+        return $query;
     }
     
     /**
@@ -139,14 +130,30 @@ class FileRepository extends ServiceEntityRepository
     /**
     * Tous les fichiers situés dans le projet
     */
-    public function findByProject(Project $project, ?User $user = null)
+    public function findByProject(Project $project, $args = [])
     {
+        $default = [
+            'type'    => "all",  
+            'limit'   => 0,  
+        ];
+        $args = array_merge($default, (array) $args);
+        
+        $subquery = '';
+        switch($args['type']){
+            case 'image':
+                $subquery = ' AND f.mimeType LIKE :mimeType';
+            break;
+            case 'document':
+                $subquery = ' AND f.mimeType NOT LIKE :mimeType';
+            break;
+        }
+        
         $em = $this->getEntityManager();
         
-        return $em->createQuery(
+        $query = $em->createQuery(
             "SELECT f FROM " . File::class . " f " .
             "WHERE " .
-                "(" .
+                "( (" .
                     "f IN " .
                         "(" .
                             "SELECT IDENTITY(af.file) FROM " . ActivityFile::class . " af " .
@@ -161,17 +168,43 @@ class FileRepository extends ServiceEntityRepository
                             " LEFT JOIN " . Activity::class . " act2 WITH act2 = rep.activity " .
                             " WHERE act2.project = :project" .
                         ")" .
-                ")"
+                ") ) ".
+                ( ! empty( $subquery ) ? $subquery : '')
         )->setParameter("project", $project);
+        
+        if( ! empty( $subquery )){
+            $query->setParameter("mimeType", 'image/%');
+        }
+        
+        if( $args['limit'] > 0 ){
+            return $query->setMaxResults((int) $args['limit']);
+        }
+        return $query;
     }
     
     /**
     * Tous les fichiers situés dans l'activité
     */
-    public function findByActivity(Activity $activity, $type = 'all', $limit = 0)
+    public function findByActivity(Activity $activity, $args = [])
     {
+        $default = [
+            'type'    => "all",  
+            'limit'   => 0,  
+        ];
+        $args = array_merge($default, (array) $args);
+        
         $subquery = '';
-        switch($type){
+        switch($args['type']){
+            case 'image':
+                $subquery = ' AND f.mimeType LIKE :mimeType';
+            break;
+            case 'document':
+                $subquery = ' AND f.mimeType NOT LIKE :mimeType';
+            break;
+        }
+        
+        $subquery = '';
+        switch($args['type']){
             case 'image':
                 $subquery = ' AND f.mimeType LIKE :mimeType';
             break;
@@ -206,8 +239,8 @@ class FileRepository extends ServiceEntityRepository
             $query->setParameter("mimeType", 'image/%');
         }
         
-        if($limit > 0){
-            return $query->setMaxResults($limit);
+        if( $args['limit'] > 0 ){
+            return $query->setMaxResults((int) $args['limit']);
         }
         return $query;
     }

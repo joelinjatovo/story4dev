@@ -36,16 +36,16 @@
             <div class="kt-widget__files">
                 {% if file.image %}
                     <div class="kt-widget__media">
-                        <a href="{{ asset(file.icone) | imagine_filter('big') }}" data-toggle="lightbox" data-gallery="gallery"><img class="kt-widget__img kt-hidden-" src="{{ asset(file.icone) | imagine_filter('thumb') }}" alt="image"></a>
+                        <a href="{{ asset(file.icone) | imagine_filter('big') }}" ><img class="kt-widget__img kt-hidden-" src="{{ asset(file.icone) | imagine_filter('thumb') }}" alt="image"></a>
                     </div>
-                    <a href="{{ asset(file.icone) | imagine_filter('big') }}" class="kt-widget__desc" data-toggle="lightbox" data-gallery="gallery">
+                    <a href="{{ asset(file.icone) | imagine_filter('big') }}" class="kt-widget__desc">
                         {{ file.name }}
                     </a>
                 {% else %}
                     <div class="kt-widget__media">
-                        <a href="{{ asset(file.icone) }}" data-toggle="lightbox" data-gallery="gallery"><img class="kt-widget__img kt-hidden-" src="{{ asset(file.icone) }}" alt="image"></a>
+                        <a href="{{ asset(file.icone) }}"><img class="kt-widget__img kt-hidden-" src="{{ asset(file.icone) }}" alt="image"></a>
                     </div>
-                    <a href="{{ asset(file.icone) }}" class="kt-widget__desc" data-toggle="lightbox" data-gallery="gallery">
+                    <a href="{{ asset(file.icone) }}" class="kt-widget__desc" >
                         {{ file.name }}
                     </a>
                 {% endif %}

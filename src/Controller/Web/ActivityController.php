@@ -131,8 +131,8 @@ class ActivityController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
         $reports   = $entityManager->getRepository(Report::class)->findByActivity($activity, ['user' => null, 'orderBy' => $project->getMeta('report_order_by', 'createdAt'), 'order' => $project->getMeta('report_order', 'DESC'), 'limit' => $project->getMeta('report_count', 10) ] )->execute();
-        $documents = $entityManager->getRepository(File::class)->findByActivity($activity, 'document', 10)->getResult();
-        $images    = $entityManager->getRepository(File::class)->findByActivity($activity, 'image', 50)->getResult();
+        $documents = $entityManager->getRepository(File::class)->findByActivity($activity, ['type' => 'document', 'limit' => 10])->getResult();
+        $images    = $entityManager->getRepository(File::class)->findByActivity($activity, ['type' => 'image', 'limit' => 50])->getResult();
 
         $data   =  $activity->getData();
         $series =  $activity->getSerie();

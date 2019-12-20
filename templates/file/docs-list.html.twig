@@ -27,7 +27,21 @@
 {% block subcontent %}
 <div class="row" id="files-list">
     {% for file in files %}
-        {{ include('file/list_item.html.twig', {'file': file}) }}
+        {{ include('file/_doc-item.html.twig', {'file': file}) }}
     {% endfor %}    
+</div>
+    
+<div class="row">
+    <div class="col-xl-12">       
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <!--begin: Pagination-->
+                <div class="kt-pagination kt-pagination--brand">
+                    {{ include('_common/pagination.html.twig', {'pagination': files}) }}
+                </div>
+                <!--end: Pagination-->
+            </div>
+        </div>
+    </div>           
 </div>
 {% endblock %}
