@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 use App\Entity\User;
 use App\Events\UserCreatedEvent;
+use App\Events\UserLoggedInEvent;
 
 class UserSubscriber implements EventSubscriberInterface
 {
@@ -32,6 +33,7 @@ class UserSubscriber implements EventSubscriberInterface
                 ['onKernelResponsePost', -10],
             ],
             UserCreatedEvent::NAME => 'onUserCreated',
+            UserLoggedInEvent::NAME => 'onUserLoggedIn',
         ];
     }
 
@@ -49,7 +51,12 @@ class UserSubscriber implements EventSubscriberInterface
     {
         $user = $event->getUser();
         
-        $body = $this->renderTemplate($user);
+        $body = $this->twig->render(
+            'emails/user_created.html.twig',
+            array(
+                'user' => $user
+            )
+        );
         
         $message = (new \Swift_Message('Nouvelle inscription sur Story4Dev'))
             ->setFrom('admin@story4dev.com')
@@ -58,14 +65,23 @@ class UserSubscriber implements EventSubscriberInterface
         ;
         $this->mailer->send($message);
     }
-    
-    private function renderTemplate($user)
+
+    public function onUserLoggedIn(UserLoggedInEvent $event)
     {
-        return $this->twig->render(
-            'emails/user_created.html.twig',
+        $user = $event->getUser();
+        
+        $body = $this->twig->render(
+            'emails/user_logged_in.html.twig',
             array(
-                'user' => $user
+                'user' => $user,
             )
         );
+        
+        $message = (new \Swift_Message('Nouvelle connexion sur Story4Dev'))
+            ->setFrom('admin@story4dev.com')
+            ->setTo('joelinjatovo@gmail.com')
+            ->setBody($body, 'text/html')
+        ;
+        $this->mailer->send($message);
     }
 }

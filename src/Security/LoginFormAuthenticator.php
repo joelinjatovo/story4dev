@@ -3,12 +3,15 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Events\UserLoggedInEvent;
 use App\Exception\AccountDeletedException;
 use App\Exception\AccountPingedException;
 use App\Exception\AccountBlockedException;
 use App\Exception\AccountCanceledException;
 use App\Exception\EmailNotConfirmedException;
+
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,13 +38,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    private $dispatcher;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $dispatcher)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->dispatcher = $dispatcher;
     }
 
     public function supports(Request $request)
@@ -90,6 +95,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        // creates the UserLoggedInEvent and dispatches it
+        $user = $token->getUser();
+        $event = new UserLoggedInEvent($user);
+        $this->dispatcher->dispatch($event, UserLoggedInEvent::NAME);
+
         $targetPath = $this->getTargetPath($request->getSession(), $providerKey);
         if ( ! $targetPath ) {
             $targetPath = $this->urlGenerator->generate('app_index');
