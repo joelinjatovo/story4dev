@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Entity\Report;
 use App\Form\UserType;
 use App\Events\UserCreatedEvent;
+use App\Events\UserChangedEvent;
 use App\Helper\MessageHelper;
 use App\Service\FormError;
 use App\Service\OptionService;
@@ -136,19 +137,28 @@ class UserController extends AbstractController
     /**
      * @Route("/user/edit/{id}", name="update", methods="POST", requirements={"id"="\d+"})
      */
-    public function update(User $user, Request $request, FormError $formError)
+    public function update(User $user, Request $request, FormError $formError, EventDispatcherInterface $dispatcher)
     {
+        $oldStatus = $user->getStatus();
+        
         $form = $this->createForm(UserType::class, $user);
         
         $form->handleRequest($request);
         
         if ( $form->isSubmitted() ) {
             if( $form->isValid() ) {
+                $newStatus = $user->getStatus();
+                
+                if ( ( $oldStatus != User::STATUS_ACTIVE ) && ( $newStatus == User::STATUS_ACTIVE ) ) {
+                    $event = new UserChangedEvent($user);
+                    $dispatcher->dispatch($event, UserChangedEvent::ACTIVATED);
+                }
+                
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
         
-                $this->addFlash('success', 'User Information successfully updated.');
+                $this->addFlash('success', 'Les informations sur l\'utilisateur a été bien enregistré.');
 
                 return $this->redirectToRoute('admin_user_edit', [
                     'id' => $user->getId()

@@ -38,6 +38,10 @@ services:
     App\Events\UserLoggedInEvent:
         arguments:
             $user: 'App\Entity\User'
+
+    App\Events\UserChangedEvent:
+        arguments:
+            $user: 'App\Entity\User'
             
     App\EventSubscriber\UserSubscriber:
         arguments:

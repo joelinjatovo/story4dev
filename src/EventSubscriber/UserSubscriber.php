@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use App\Entity\User;
 use App\Events\UserCreatedEvent;
 use App\Events\UserLoggedInEvent;
+use App\Events\UserChangedEvent;
 
 class UserSubscriber implements EventSubscriberInterface
 {
@@ -34,6 +35,7 @@ class UserSubscriber implements EventSubscriberInterface
             ],
             UserCreatedEvent::NAME => 'onUserCreated',
             UserLoggedInEvent::NAME => 'onUserLoggedIn',
+            UserChangedEvent::ACTIVATED => 'onUserActivated',
         ];
     }
 
@@ -47,7 +49,7 @@ class UserSubscriber implements EventSubscriberInterface
         // ...
     }
 
-    public function onUserCreated(UserCreatedEvent $event)
+    public function onUserCreated(UserChangedEvent $event)
     {
         $user = $event->getUser();
         
@@ -80,6 +82,29 @@ class UserSubscriber implements EventSubscriberInterface
         $message = (new \Swift_Message('Nouvelle connexion sur Story4Dev'))
             ->setFrom(['admin@story4dev.com' => 'EventListener - Story4Dev'])
             ->setTo('joelinjatovo@gmail.com')
+            ->setBody($body, 'text/html')
+        ;
+        $this->mailer->send($message);
+    }
+
+    public function onUserActivated(UserChangedEvent $event)
+    {
+        $user = $event->getUser();
+        
+        /** Send email to admin */
+        $body = $this->twig->render('emails/user_activated-admin.html.twig',array('user' => $user));
+        $message = (new \Swift_Message('Nouveau compte activé'))
+            ->setFrom(['admin@story4dev.com' => 'EventListener - Story4Dev'])
+            ->setTo('joelinjatovo@gmail.com')
+            ->setBody($body, 'text/html')
+        ;
+        $this->mailer->send($message);
+        
+        /** Send email to client */
+        $body = $this->twig->render('emails/user_activated-user.html.twig',array('user' => $user));
+        $message = (new \Swift_Message('Inscription validée - Story4Dev'))
+            ->setFrom(['admin@story4dev.com' => 'Admin - Story4Dev'])
+            ->setTo([$user->getEmail() => $user->getFullName()])
             ->setBody($body, 'text/html')
         ;
         $this->mailer->send($message);
