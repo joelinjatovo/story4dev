@@ -192,7 +192,6 @@ class GoogleAuthenticator extends SocialAuthenticator
             $message = $exception->getMessage();
         }else{
             $message = 'Une erreur s\'est produite. Veuillez réessayer, s\'il vous plaît';
-            $message = $exception->getMessage();
         }
 
         $this->session->getFlashBag()->add('error', $message);
