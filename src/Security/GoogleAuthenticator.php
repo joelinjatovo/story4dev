@@ -223,7 +223,7 @@ class GoogleAuthenticator extends SocialAuthenticator
         $event = new UserLoggedInEvent($user);
         $this->dispatcher->dispatch($event, UserLoggedInEvent::NAME);
         
-        $targetUrl = $this->router->generate('app_index');
+        $targetUrl = $this->router->generate('account_profile');
 
         return new RedirectResponse($targetUrl);
     }
