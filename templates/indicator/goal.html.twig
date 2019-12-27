@@ -10,7 +10,8 @@
                 <div class="kt-widget31__content" style="width: 100%;">
                     <div class="kt-widget31__progress">
                         <a href="#" class="kt-widget31__stats">
-                            <span>{{ goal.indicator.progression(goal.iteration) }}%</span>
+                            {% set indicator = goal.indicator %}
+                            <span>{{ indicator | progression(goal.iteration) }}%</span>
                             <span></span>						    							 
                         </a>
                         <div class="progress progress-sm">

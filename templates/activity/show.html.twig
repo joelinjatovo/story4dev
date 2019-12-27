@@ -137,10 +137,10 @@
                                     Avancement
                                 </div>
                                 <div class="progress" style="height: 5px;width: 100%;">
-                                    <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ activity.progression }}%;" aria-valuenow="{{ activity.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar kt-bg-{{ activity|progressionClass }}" role="progressbar" style="width: {{ activity|progression }}%;" aria-valuenow="{{ activity|progression }}" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <div class="kt-widget__stats">
-                                    {{ activity.progression }}%
+                                    {{ activity|progression }}%
                                 </div>
                             </div>
                         </div>

@@ -20,12 +20,102 @@ use App\Entity\File;
 
 class AppExtension extends AbstractExtension
 {
+    protected $em;
+
+    public function __construct( \Doctrine\ORM\EntityManager $em) {
+        $this->em = $em;
+    }
+    
     public function getFilters()
     {
         return [
             new TwigFilter('html', [$this, 'formatHtml']),
             new TwigFilter('excerpt', [$this, 'formatExcerpt']),
+            new TwigFilter('result', [$this, 'getResult']),
+            new TwigFilter('goal', [$this, 'getGoal']),
+            new TwigFilter('progression', [$this, 'getProgression']),
+            new TwigFilter('progressionClass', [$this, 'getProgressionClass']),
         ];
+    }
+
+    public function getResult($entity, ?Iteration $iteration = null){
+        if($entity instanceof Indicator){
+            return $this->em->getRepository(Result::class)->getValue($entity, $iteration);
+        }
+        
+        if($entity instanceof Activity){
+            return $this->em->getRepository(Result::class)->getValue($entity, $iteration);
+        }
+        
+        if($entity instanceof Project){
+            return $this->em->getRepository(Result::class)->getValue($entity, $iteration);
+        }
+        
+        return 0;
+    }
+
+    public function getGoal($entity, ?Iteration $iteration = null){
+        if($entity instanceof Indicator){
+            return $this->em->getRepository(Goal::class)->getValue($entity, $iteration);
+        }
+        
+        if($entity instanceof Activity){
+            return $this->em->getRepository(Goal::class)->getValue($entity, $iteration);
+        }
+        
+        if($entity instanceof Project){
+            return $this->em->getRepository(Goal::class)->getValue($entity, $iteration);
+        }
+        
+        return 0;
+    }
+
+    public function getProgression($entity, ?Iteration $iteration = null){
+        if($entity instanceof Indicator){
+            $value = $this->getResult($entity, $iteration);
+            $goal  = $this->getGoal($entity, $iteration);
+            if($goal != 0){
+                return (int) ( $value / $goal * 100 ) ;
+            }else{
+                return 100;
+            }
+        }
+        
+        // Calculer la moyenne de la progression des indicateurs
+        if($entity instanceof Activity){
+            $progression = 0;
+            $indicators = $this->em->getRepository(Indicator::class)->findBy(['activity' => $entity]);
+            foreach($indicators as $indicator){
+                $progression += $this->getProgression($indicator, $iteration);
+            }
+
+            if( count($indicators) > 0 ) {
+                return (int) ( $progression / count($indicators) );
+            }
+        }
+        
+        // Calculer la moyenne de la progression des activités
+        if($entity instanceof Project){
+            $progression = 0;
+            $activities = $this->em->getRepository(Activity::class)->findBy(['project' => $entity]);
+            foreach($activities as $activity){
+                $progression += $this->getProgression($activity,  $iteration);
+            }
+
+            if( count($activities) > 0 ) {
+                return (int) ( $progression / count($activities) );
+            }
+        }
+        
+        return 0;
+    }
+
+    public function getProgressionClass($entity, ?Iteration $iteration = null){
+        $progression = $this->getProgression($entity, $iteration);
+        if($progression<=30){ return 'danger'; }
+        if($progression<=50){ return 'warning'; }
+        if($progression<=80){ return 'brand'; }
+        return 'success';
     }
 
     public function formatExcerpt($text, $length = 200, $more = '...'){

@@ -2,7 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\Activity;
 use App\Entity\Goal;
+use App\Entity\Result;
+use App\Entity\Indicator;
+use App\Entity\Iteration;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -18,33 +23,48 @@ class GoalRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Goal::class);
     }
-
-    // /**
-    //  * @return Goal[] Returns an array of Goal objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function getValue($entity, ?Iteration $iteration = null)
     {
-        return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('g.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        if($entity instanceof Indicator){
+            $qb = $this->createQueryBuilder('goa');
+            $qb->select("SUM(goa.value) as value");
+            
+            if( $iteration ) {
+                $qb->andWhere('goa.iteration = :iteration');
+                $qb->setParameter('iteration', $iteration);
+            }
+            
+            $qb->andWhere('goa.indicator = :indicator');
+            $qb->setParameter('indicator', $entity);
+            
+            $value = $qb->getQuery()->getSingleScalarResult();
+            return is_null($value)?0:$value;
+        }
+        
+        // Somme des objectifs de chaque indicateur de l'activité
+        if($entity instanceof Activity){
+            $qb = $this->createQueryBuilder('goa');
+            $qb->select("SUM(goa.value) as value");
+            $qb->leftJoin('goa.indicator', 'ind');
+            $qb->andWhere('ind.activity = :activity');
+            $qb->setParameter('activity', $entity);
+            $value = $qb->getQuery()->getSingleScalarResult();
+            return is_null($value)?0:$value;
+        }
+        
+        // Somme des objectifs de chaque indicateur du projet
+        if($entity instanceof Project){
+            $qb = $this->createQueryBuilder('goa');
+            $qb->select("SUM(goa.value) as value");
+            $qb->leftJoin('goa.indicator', 'ind');
+            $qb->leftJoin('ind.activity', 'act');
+            $qb->andWhere('act.project = :project');
+            $qb->setParameter('project', $entity);
+            $value = $qb->getQuery()->getSingleScalarResult();
+            return is_null($value)?0:$value;
+        }
+        
+        return 0;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Goal
-    {
-        return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

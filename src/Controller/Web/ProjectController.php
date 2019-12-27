@@ -67,7 +67,7 @@ class ProjectController extends AbstractController
             "SELECT ite.id AS ite_id, ite.title AS iteration, SUM(res.value) AS value " .
             "FROM " . Iteration::class . " ite " .
             "LEFT JOIN " . Activity::class . " act WITH act.project = ite.project " .
-            "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= ite.startAt AND rep.createdAt <= ite.endAt " .
+            "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND DATE(rep.createdAt) >= DATE(ite.startAt) AND DATE(rep.createdAt) <= DATE(ite.endAt) " .
             "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
             "WHERE ite.project = :project " .
             "GROUP BY ite.id " .

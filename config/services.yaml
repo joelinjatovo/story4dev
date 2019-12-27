@@ -116,6 +116,12 @@ services:
             $em: '@doctrine.orm.entity_manager'
         tags:
            - { name: security.voter }
+
+    App\Twig\AppExtension:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+        tags:
+            - { name: twig.extension }
     
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
         arguments:
