@@ -132,34 +132,10 @@ class GraphController extends AbstractController
             throw $this->createNotFoundException('The project does not match');
         }
         
-        if ( $request->isXmlHttpRequest() ) {
-            return $this->chart($project, $graph, $request);
-        }
-        
         $user = $project->getAuthor();
-        
         $entityManager = $this->getDoctrine()->getManager();
-        
-        $indicators = $entityManager->getRepository(Indicator::class)->findByProject($project)->execute();
-        
-        $datas = $entityManager->createQuery(
-            "SELECT axe.id AS axe_id, axe.title AS iteration, SUM(res.value) AS value " .
-            "FROM " . Axe::class . " axe " .
-            "LEFT JOIN " . Graph::class . " g WITH g = axe.graph " .
-            "LEFT JOIN " . Activity::class . " act WITH act.project = g.project " .
-            "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= axe.startAt AND rep.createdAt <= axe.endAt " .
-            "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
-            "WHERE axe.graph = :graph " .
-            "GROUP BY axe.id " .
-            "ORDER BY axe.id " 
-        )->setParameter("graph", $graph)->getResult();
-        
-            
-        foreach($datas as $key => $data){
-            if( !isset($data['value']) || is_null($data['value']) ){
-                $datas[$key]['value'] = 0;
-            }
-        }
+        $axeRepository       = $entityManager->getRepository(Axe::class);
+        $indicatorRepository = $entityManager->getRepository(Indicator::class);
         
         $ids = $request->query->get('indicators');
         $_indicators = [];
@@ -177,55 +153,33 @@ class GraphController extends AbstractController
                     ];
                 }
             }
-
-            if( count($_indicators) > 0 ) {
-                $datas = $entityManager->createQuery(
-                    "SELECT axe.id AS axe_id, axe.title AS iteration, SUM(res.value) AS value " .
-                    "FROM " . Axe::class . " axe " .
-                    "LEFT JOIN " . Graph::class . " g WITH g = axe.graph " .
-                    "LEFT JOIN " . Activity::class . " act WITH act.project = g.project " .
-                    "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= axe.startAt AND rep.createdAt <= axe.endAt " .
-                    "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
-                    "WHERE res.indicator IN (:indicators) " .
-                    "AND axe.graph = :graph " .
-                    "GROUP BY axe.id " .
-                    "ORDER BY axe.id " 
-                )->setParameter("indicators", $_indicators)->setParameter("graph", $graph)->getResult();
-
-                foreach($datas as $key => $data){
-                    if( !isset($data['value']) || is_null($data['value']) ){
-                        $datas[$key]['value'] = 0;
-                    }
-                }
-            }
-
-            foreach($indicators as $indicator){
-                $results = $entityManager->createQuery(
-                    "SELECT axe.id AS axe_id, axe.title AS iteration, SUM(res.value) AS i_" . $indicator->getId() . " " .
-                    "FROM " . Axe::class . " axe " .
-                    "LEFT JOIN " . Graph::class . " g WITH g = axe.graph " .
-                    "LEFT JOIN " . Activity::class . " act WITH act.project = g.project " .
-                    "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= axe.startAt AND rep.createdAt <= axe.endAt " .
-                    "LEFT JOIN " . Result::class . " res WITH res.report = rep AND res.indicator = :indicator " .
-                    "WHERE axe.graph = :graph " .
-                    "GROUP BY axe.id " .
-                    "ORDER BY axe.id " 
-                )->setParameter("indicator", $indicator)->setParameter("graph", $graph)->getResult();
-
-                foreach($results as $key => $result){
-                    $index = "i_" . $indicator->getId();
-                    if( !isset($result[$index]) || is_null($result[$index]) ){
-                        $results[$key][$index] = 0;
-                    }
-                }
-
-                $datas = array_map(function($array1,$array2){  
-                   return array_merge(isset($array1) ? $array1 : array(), isset($array2) ? $array2 : array());
-                }, $datas, $results); 
-            }
         }else{
             $ids = [];
         }
+        
+        if( count($_indicators) > 0 ) {
+            $datas = $axeRepository->getData($graph, $_indicators);
+            foreach($_indicators as $indicator){
+                $subdatas = $axeRepository->getData($graph, [$indicator], "i_" . $indicator->getId());
+                $datas = array_map(function($array1,$array2){
+                    return array_merge(isset($array1) ? $array1 : array(), isset($array2) ? $array2 : array());
+                }, $datas, $subdatas); 
+            }
+        }else{
+            $datas = $axeRepository->getData($graph);
+        }
+        
+        if ( $request->isXmlHttpRequest() ) {
+            return $this->json([
+                'success' => true,
+                'url'     => $request->getUri(),
+                'title'   => "Graphe # {$graph->getId()}  - Projet #{$project->getId()} - {$this->getUser()->getFullname()}",
+                'datas'   => $datas,
+                'series'  => $series,
+            ]);
+        }
+        
+        $indicators = $indicatorRepository->findByProject($project)->execute();
         
         return $this->render('graph/show.html.twig', [
             'user'       => $user,
@@ -235,98 +189,6 @@ class GraphController extends AbstractController
             'selectedIndicators' => $ids, 
             'datas'      => json_encode($datas),
             'series'     => json_encode($series),
-        ]);
-    }
-    
-    private function chart(Project $project, Graph $graph, Request $request)
-    {
-        $this->denyAccessUnlessGranted('edit', $project);
-        
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $ids = $request->query->get('indicators');
-
-        $indicators = [];
-        $series = [];
-        if( is_array( $ids ) && ! empty( $ids ) ) {
-            foreach($ids as $id ){
-                $id = (int) $id;
-                $indicator = $entityManager->getRepository(Indicator::class)->find($id);
-                if( $indicator ) {
-                    $indicators[] = $indicator;
-                    $series[] = [
-                        'id' => 'i_'.$indicator->getId(),
-                        'title' => $indicator->getTitle(),
-                        'unit'  => $indicator->getUnit()->getLabel(),
-                    ];
-                }
-            }
-        }
-
-        if( count($indicators) > 0 ) {
-            $datas = $entityManager->createQuery(
-                "SELECT axe.id AS axe_id, axe.title AS iteration, SUM(res.value) AS value " .
-                "FROM " . Axe::class . " axe " .
-                "LEFT JOIN " . Graph::class . " g WITH g = axe.graph " .
-                "LEFT JOIN " . Activity::class . " act WITH act.project = g.project " .
-                "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= axe.startAt AND rep.createdAt <= axe.endAt " .
-                "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
-                "WHERE res.indicator IN (:indicators) " .
-                "AND axe.graph = :graph " .
-                "GROUP BY axe.id " .
-                "ORDER BY axe.id " 
-            )->setParameter("indicators", $indicators)->setParameter("graph", $graph)->getResult();
-        }else{
-            $datas = $entityManager->createQuery(
-                "SELECT axe.id AS axe_id, axe.title AS iteration, SUM(res.value) AS value " .
-                "FROM " . Axe::class . " axe " .
-                "LEFT JOIN " . Graph::class . " g WITH g = axe.graph " .
-                "LEFT JOIN " . Activity::class . " act WITH act.project = g.project " .
-                "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= axe.startAt AND rep.createdAt <= axe.endAt " .
-                "LEFT JOIN " . Result::class . " res WITH res.report = rep " .
-                "WHERE axe.graph = :graph " .
-                "GROUP BY axe.id " .
-                "ORDER BY axe.id " 
-            )->setParameter("graph", $graph)->getResult();
-        }
-
-        foreach($datas as $key => $data){
-            if( !isset($data['value']) || is_null($data['value']) ){
-                $datas[$key]['value'] = 0;
-            }
-        }
-
-        foreach($indicators as $indicator){
-            $results = $entityManager->createQuery(
-                "SELECT axe.id AS axe_id, axe.title AS iteration, SUM(res.value) AS i_" . $indicator->getId() . " " .
-                "FROM " . Axe::class . " axe " .
-                "LEFT JOIN " . Graph::class . " g WITH g = axe.graph " .
-                "LEFT JOIN " . Activity::class . " act WITH act.project = g.project " .
-                "LEFT JOIN " . Report::class . " rep WITH rep.activity = act AND rep.createdAt >= axe.startAt AND rep.createdAt <= axe.endAt " .
-                "LEFT JOIN " . Result::class . " res WITH res.report = rep AND res.indicator = :indicator " .
-                "WHERE axe.graph = :graph " .
-                "GROUP BY axe.id " .
-                "ORDER BY axe.id " 
-            )->setParameter("indicator", $indicator)->setParameter("graph", $graph)->getResult();
-
-            foreach($results as $key => $result){
-                $index = "i_" . $indicator->getId();
-                if( !isset($result[$index]) || is_null($result[$index]) ){
-                    $results[$key][$index] = 0;
-                }
-            }
-
-            $datas = array_map(function($array1,$array2){  
-               return array_merge(isset($array1) ? $array1 : array(), isset($array2) ? $array2 : array());
-            }, $datas, $results); 
-        }
-
-        return $this->json([
-            'success' => true,
-            'url'     => $request->getUri(),
-            'title'   => "Graphe # {$graph->getId()}  - Projet #{$project->getId()} - {$this->getUser()->getFullname()}",
-            'datas'   => $datas,
-            'series'  => $series,
         ]);
     }
     

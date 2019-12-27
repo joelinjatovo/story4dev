@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Iteration;
+use App\Entity\Project;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -18,33 +20,27 @@ class IterationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Iteration::class);
     }
-
-    // /**
-    //  * @return Iteration[] Returns an array of Iteration objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function getData(Project $project, $indicators = null, $valueField = 'value')
     {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('ite');
+        $qb->select("ite.id AS ite_id, ite.title AS iteration, CASE WHEN SUM(res.value) IS NULL THEN 0 ELSE SUM(res.value) END as " . $valueField );
+        $qb->leftJoin('ite.project', 'pro');
+        $qb->leftJoin('pro.activities', 'act');
+        $qb->leftJoin('act.reports', 'rep', 'WITH', 'DATE(rep.createdAt) >= DATE(ite.startAt) AND DATE(rep.createdAt) <= DATE(ite.endAt)');
+        
+        if( is_array( $indicators ) && ( count($indicators) > 0 ) ){
+            $qb->leftJoin('rep.results', 'res', 'WITH', 'res.indicator IN (:indicators)');
+            $qb->setParameter('indicators', $indicators);
+        }else{
+            $qb->leftJoin('rep.results', 'res');
+        }
+        
+        $qb->groupBy('ite_id');
+        $qb->orderBy('ite.startAt', 'ASC');
+        $qb->where('ite.project = :project');
+        $qb->setParameter('project', $project);
 
-    /*
-    public function findOneBySomeField($value): ?Iteration
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $qb->getQuery()->getResult();
     }
-    */
 }

@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Axe;
+use App\Entity\Graph;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -18,33 +20,28 @@ class AxeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Axe::class);
     }
-
-    // /**
-    //  * @return Axe[] Returns an array of Axe objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function getData(Graph $graph, $indicators = null, $valueField = 'value')
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('axe');
+        $qb->select("axe.id AS axe_id, axe.title AS iteration, CASE WHEN SUM(res.value) IS NULL THEN 0 ELSE SUM(res.value) END as " . $valueField );
+        $qb->leftJoin('axe.graph', 'gra');
+        $qb->leftJoin('gra.project', 'pro');
+        $qb->leftJoin('pro.activities', 'act');
+        $qb->leftJoin('act.reports', 'rep', 'WITH', 'DATE(rep.createdAt) >= DATE(axe.startAt) AND DATE(rep.createdAt) <= DATE(axe.endAt)');
+        
+        if( is_array( $indicators ) && ( count($indicators) > 0 ) ){
+            $qb->leftJoin('rep.results', 'res', 'WITH', 'res.indicator IN (:indicators)');
+            $qb->setParameter('indicators', $indicators);
+        }else{
+            $qb->leftJoin('rep.results', 'res');
+        }
+        
+        $qb->groupBy('axe_id');
+        $qb->orderBy('axe.startAt', 'ASC');
+        $qb->where('axe.graph = :graph');
+        $qb->setParameter('graph', $graph);
 
-    /*
-    public function findOneBySomeField($value): ?Axe
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $qb->getQuery()->getResult();
     }
-    */
 }
