@@ -182,8 +182,20 @@ class IndicatorController extends AbstractController
             throw $this->createNotFoundException('The activity does not match');
         }
         
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $entityManager->getRepository(Goal::class);
+        
         $user = $project->getAuthor();
         
+        foreach($project->getIterations() as $iteration){
+            $goal = $repository->findOneBy(['iteration' => $iteration, 'indicator' => $indicator]);
+            if( is_null( $goal ) ) {
+                $goal = new Goal();
+                $goal->setAuthor($this->getUser());
+                $goal->setIteration($iteration);
+                $indicator->addGoal($goal);
+            }
+        }
         $form = $this->createForm(IndicatorType::class, $indicator);
         
         return $this->render('indicator/edit.html.twig', [
