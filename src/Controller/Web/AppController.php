@@ -47,7 +47,7 @@ class AppController extends AbstractController
         $entityManager->persist($download);
         $entityManager->flush();
 
-        $filePath = $this->getParameter('kernel.project_dir').'/apps/android/com.story4dev-1.1.1-release-20200116.apk';
+        $filePath = $this->getParameter('kernel.project_dir').'/apps/android/com.story4dev-1.2-2019-01-17--release-20200117.apk';
         return $this->file($filePath);
     }
 }
