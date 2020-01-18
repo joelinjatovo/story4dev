@@ -60,7 +60,7 @@ class ReportType extends AbstractType
                     return $activity->getTitle();
                 }
             ])
-            ->add('createdAt', DateType::class, [
+            ->add('createdAt', DateTimeType::class, [
                 'widget'     => 'single_text',
                 'html5'      => false,
             ])
