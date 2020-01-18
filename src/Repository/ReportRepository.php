@@ -79,7 +79,8 @@ class ReportRepository extends ServiceEntityRepository
             $queryBuilder->setMaxResults((int) $args['limit']);
         }
         
-        $queryBuilder->orderBy('r.'.$args['orderBy'], $args['order']);
+        $queryBuilder->addOrderBy('r.id','DESC')
+            ->addOrderBy('r.'.$args['orderBy'], $args['order']);
         
         return $queryBuilder->getQuery();
     }
@@ -101,7 +102,7 @@ class ReportRepository extends ServiceEntityRepository
         $queryBuilder->andWhere('a.project = :project')->setParameter('project', $project);
         
         if( ! is_null($args['user']) && ( $args['user'] instanceof User ) ){
-            $queryBuilder->andWhere('r.author = :user')->setParameter('user', $user);
+            $queryBuilder->andWhere('r.author = :user')->setParameter('user', $args['user']);
         }
         
         if( ! is_null($args['status']) && ( in_array( $args['status'] , [Report::STATUS_OPENED, Report::STATUS_CLOSED, Report::STATUS_TERMINATED]) ) ) {
@@ -116,7 +117,8 @@ class ReportRepository extends ServiceEntityRepository
             $queryBuilder->setMaxResults((int) $args['limit']);
         }
         
-        $queryBuilder->orderBy('r.'.$args['orderBy'], $args['order']);
+        $queryBuilder->addOrderBy('r.id','DESC')
+            ->addOrderBy('r.'.$args['orderBy'], $args['order']);
         
         return $queryBuilder->getQuery();
     }
