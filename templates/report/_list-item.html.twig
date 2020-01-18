@@ -26,7 +26,7 @@
         </span>
     </td>
     <td data-field="Date" class="kt-datatable__cell">
-        <span style="width: 100px;" class="kt-font-bold">{{ report.createdat | date('Y-m-d') }}</span>
+        <span style="width: 100px;" class="kt-font-bold">{{ report.createdat | date('Y-m-d H:i:s') }}</span>
     </td>
     <td data-field="Statut" class="kt-datatable__cell">
         <span style="width: 100px;" class="kt-font-{{ report.statusClass }} kt-font-bold">{{ report.statusLabel }}</span>

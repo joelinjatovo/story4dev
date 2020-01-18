@@ -67,7 +67,7 @@
                             Date de création
                         </span>
                         <div class="kt-widget__label">
-                            <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d') }}</span>
+                            <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d H:i:s') }}</span>
                         </div>
                     </div>
 
@@ -76,7 +76,7 @@
                             Date de synchronisation
                         </span>
                         <div class="kt-widget__label">
-                            <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ report.syncedat is empty ? "" : report.syncedat | date('Y-m-d') }}</span>
+                            <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ report.syncedat is empty ? "" : report.syncedat | date('Y-m-d H:i:s') }}</span>
                         </div>
                     </div>
                 </div>

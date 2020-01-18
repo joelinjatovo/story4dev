@@ -11,7 +11,7 @@
                 <span>Contributeur:</span>
                 <span class="kt-font-info">{{ report.author.fullname }}</span>
                 <span>Date du rapport:</span>
-                <span class="kt-font-info">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d') }}</span>
+                <span class="kt-font-info">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d H:i:s') }}</span>
             </div>
         </div>
     </div>						
