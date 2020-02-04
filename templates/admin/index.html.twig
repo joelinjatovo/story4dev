@@ -63,27 +63,29 @@
 {% endblock %}
 
 {% block content %}
+    
 {% if count.pinged > 0 %}
-<div class="row">
-    <div class="col-lg-12">
-        <div class="kt-portlet kt-callout kt-callout--warning kt-callout--diagonal-bg">
-			<div class="kt-portlet__body">
-				<div class="kt-callout__body">
-					<div class="kt-callout__content">
-						<h3 class="kt-callout__title">Nouvelle inscription</h3>
-						<p class="kt-callout__desc">
-							Il y a des nouveaux comptes qui attendent votre validation.
-						</p>
-					</div>
-					<div class="kt-callout__action">
-						<a href="{{ path('admin_user_list_status', { status: 'ping'} ) }}" class="btn btn-custom btn-bold btn-upper btn-font-sm  btn-warning">Lister</a>
-					</div>
-				</div>
-			</div>
-		</div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="kt-portlet kt-callout kt-callout--warning kt-callout--diagonal-bg">
+                <div class="kt-portlet__body">
+                    <div class="kt-callout__body">
+                        <div class="kt-callout__content">
+                            <h3 class="kt-callout__title">Nouvelle inscription</h3>
+                            <p class="kt-callout__desc">
+                                Il y a des nouveaux comptes qui attendent votre validation.
+                            </p>
+                        </div>
+                        <div class="kt-callout__action">
+                            <a href="{{ path('admin_user_list_status', { status: 'ping'} ) }}" class="btn btn-custom btn-bold btn-upper btn-font-sm  btn-warning">Lister</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 {% endif %}
+    
 <div class="row">
     <div class="col-xl-4 col-lg-6 order-lg-1 order-xl-1">
 		<!--begin:: Widgets/New Users-->
@@ -221,11 +223,50 @@
         </div>
     </div>
 </div>
+
+{% if is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="kt-portlet kt-callout">
+                <div class="kt-portlet__body">
+                    <div class="kt-callout__body">
+                        <div class="kt-callout__content">
+                            <h3 class="kt-callout__title">Backup SQL</h3>
+                            <p class="kt-callout__desc">
+                                Télécharger le backup de la base de données.
+                            </p>
+                        </div>
+                        <div class="kt-callout__action">
+                            <a href="{{ path('admin_backup_download', {type:'database'})}}" class="btn btn-custom btn-bold btn-upper btn-font-sm  btn-brand">Télécharger</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="kt-portlet kt-callout">
+                <div class="kt-portlet__body">
+                    <div class="kt-callout__body">
+                        <div class="kt-callout__content">
+                            <h3 class="kt-callout__title">Backup DOC</h3>
+                            <p class="kt-callout__desc">
+                                Télécharger le backup du dossier /uploads.
+                            </p>
+                        </div>
+                        <div class="kt-callout__action">
+                            <a href="{{ path('admin_backup_download', {type:'file'})}}" class="btn btn-custom btn-bold btn-upper btn-font-sm  btn-success">Télécharger</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
     
 {% endblock %}
 
 {% block javascripts %}
-    <!-- Resources -->
+<!-- Resources -->
 <script src="https://www.amcharts.com/lib/4/core.js"></script>
 <script src="https://www.amcharts.com/lib/4/charts.js"></script>
 <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
