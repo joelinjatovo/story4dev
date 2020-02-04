@@ -16,6 +16,7 @@
         "knplabs/knp-gaufrette-bundle": "^0.6.1",
         "knplabs/knp-time-bundle": "^1.9",
         "knpuniversity/oauth2-client-bundle": "^1.28",
+        "laminas/laminas-code": "^3.4",
         "league/commonmark": "^1.1",
         "league/oauth2-facebook": "^2.0",
         "league/oauth2-google": "^3.0",

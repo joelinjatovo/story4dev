@@ -14,13 +14,15 @@ class ConventionedFileNamer implements NamerInterface
     public function name($object, PropertyMapping $mapping): string
     {
         $file = $mapping->getFile($object);
-        $name = Transliterator::transliterate($mapping->getFileNamePropertyName());
+        $name = '';
+        //$name = Transliterator::transliterate($mapping->getFileNamePropertyName());
 
         // append the file extension if there is one
         if ($extension = $this->getExtension($file)) {
-            $name = sprintf('%s.%s', $name, $extension);
+            //$name = sprintf('%s.%s', $name, $extension);
+            $name = '.' . $extension;
         }
 
-        return uniqid() . '_' . $name;
+        return uniqid() . $name;
     }
 }

@@ -41,7 +41,23 @@ class ConventionedDirectoryNamer implements DirectoryNamerInterface
     {
         $fqcn = get_class($object);
         $classParts = explode('\\', $fqcn);
+        
+        switch (true) {
+            case $object instanceof \App\Entity\User:
+                $name = 'user';
+                break;
+            case $object instanceof \App\Entity\Project:
+                $name = 'project';
+                break;
+            case $object instanceof \App\Entity\File:
+                $name = 'file';
+                break;
+            default:
+                $name = 'default';
+        }
 
-        return Transliterator::transliterate(array_pop($classParts));
+        //return Transliterator::transliterate(array_pop($classParts));
+        
+        return $name;
     }
 }
