@@ -128,15 +128,7 @@ class ProjectController extends AbstractController
         $activities    = $entityManager->getRepository(Activity::class)->findByProject($project, $project->getMeta('activity_order_by', 'createdAt'), $project->getMeta('activity_order', 'DESC'), $project->getMeta('activity_count', self::RECENT_ITEMS_COUNT))->execute();
         $reports       = $entityManager->getRepository(Report::class)->findByProject($project, ['user' => null, 'orderBy' => $project->getMeta('report_order_by', 'createdAt'), 'order' => $project->getMeta('report_order', 'DESC'), 'limit' => $project->getMeta('report_count', self::RECENT_ITEMS_COUNT) ] )->execute();
         $contributions = $entityManager->getRepository(ProjectContribution::class)->findByProject($project, $project->getMeta('contribution_order_by', 'createdAt'), $project->getMeta('contribution_order', 'DESC'), $project->getMeta('contribution_count', self::RECENT_ITEMS_COUNT))->execute();
-        $data   =  $project->getData();
-        $series =  $project->getSerie();
-        $reports_count = $entityManager->getRepository(Report::class)
-            ->createQueryBuilder('r')
-            ->select('count(r.id)')
-            ->leftJoin('r.activity', 'a')
-            ->where('a.project = :project')
-            ->setParameter('project', $project)
-            ->getQuery()->getSingleScalarResult();
+        $reports_count = $entityManager->getRepository(Report::class)->countByProject($project);
         
         return $this->render('project/show.html.twig', [
             'user'          => $user, 
@@ -147,8 +139,6 @@ class ProjectController extends AbstractController
                 'contributions' => $contributions,
             ],
             'reports_count' => $reports_count,  
-            'data'          => json_encode($data),
-            'series'        => json_encode($series),
         ]);
     }
     

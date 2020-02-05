@@ -154,4 +154,15 @@ class ReportRepository extends ServiceEntityRepository
             ->orderBy('r.createdAt', 'DESC')
             ->getQuery();
     }
+    
+    public function countByProject(Project $project)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->leftJoin('r.activity', 'a')
+            ->where('a.project = :project')
+            ->setParameter('project', $project)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
