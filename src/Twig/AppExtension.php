@@ -67,7 +67,7 @@ class AppExtension extends AbstractExtension
         return [];
     }
 
-    public function getChartData($entity, $iterations){
+    public function getChartData($entity, $iterations, $withIndicator = trues){
         $datas = [];
 
         if( is_array( $entity ) ){
@@ -81,8 +81,10 @@ class AppExtension extends AbstractExtension
                     "progression" => $this->getProgression($indicators, $iteration),
                 ];
 
-                foreach($indicators as $indicator){
-                    $data['i_'.$indicator->getId()] = $this->getProgression($indicator, $iteration);
+                if( $withIndicator ) {
+                    foreach($indicators as $indicator){
+                        $data['i_'.$indicator->getId()] = $this->getProgression($indicator, $iteration);
+                    }
                 }
 
                 $datas[] = $data;
@@ -97,7 +99,7 @@ class AppExtension extends AbstractExtension
             $iterations = $this->em->getRepository(Iteration::class)->findBy(['project' => $project]);
             // Get indicators it from repository to avoid EntityNotFoundException
             $indicators = $this->em->getRepository(Indicator::class)->findBy(['activity' => $entity]);
-            return $this->getChartData($indicators, $iterations);
+            return $this->getChartData($indicators, $iterations, false);
         }
         
         return $datas;
