@@ -24,47 +24,17 @@ class GoalRepository extends ServiceEntityRepository
         parent::__construct($registry, Goal::class);
     }
     
-    public function getValue($entity, ?Iteration $iteration = null)
+    public function getValue($indicators, ?Iteration $iteration = null)
     {
-        if($entity instanceof Indicator){
-            $qb = $this->createQueryBuilder('goa');
-            $qb->select("SUM(goa.value) as value");
-            
-            if( $iteration ) {
-                $qb->andWhere('goa.iteration = :iteration');
-                $qb->setParameter('iteration', $iteration);
-            }
-            
-            $qb->andWhere('goa.indicator = :indicator');
-            $qb->setParameter('indicator', $entity);
-            
-            $value = $qb->getQuery()->getSingleScalarResult();
-            return is_null($value)?0:$value;
+        $qb = $this->createQueryBuilder('goa');
+        $qb->select("SUM(goa.value) as value");
+        $qb->andWhere('goa.indicator IN (:indicators)')->setParameter('indicators', $indicators);
+        
+        if( $iteration ) {
+            $qb->andWhere('goa.iteration = :iteration')->setParameter('iteration', $iteration);
         }
         
-        // Somme des objectifs de chaque indicateur de l'activité
-        if($entity instanceof Activity){
-            $qb = $this->createQueryBuilder('goa');
-            $qb->select("SUM(goa.value) as value");
-            $qb->leftJoin('goa.indicator', 'ind');
-            $qb->andWhere('ind.activity = :activity');
-            $qb->setParameter('activity', $entity);
-            $value = $qb->getQuery()->getSingleScalarResult();
-            return is_null($value)?0:$value;
-        }
-        
-        // Somme des objectifs de chaque indicateur du projet
-        if($entity instanceof Project){
-            $qb = $this->createQueryBuilder('goa');
-            $qb->select("SUM(goa.value) as value");
-            $qb->leftJoin('goa.indicator', 'ind');
-            $qb->leftJoin('ind.activity', 'act');
-            $qb->andWhere('act.project = :project');
-            $qb->setParameter('project', $entity);
-            $value = $qb->getQuery()->getSingleScalarResult();
-            return is_null($value)?0:$value;
-        }
-        
-        return 0;
+        $value = $qb->getQuery()->getSingleScalarResult();
+        return is_null($value)?0:$value;
     }
 }

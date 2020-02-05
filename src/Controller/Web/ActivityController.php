@@ -15,12 +15,14 @@ use App\Entity\Project;
 use App\Entity\Activity;
 use App\Entity\ActivityFavorite;
 use App\Entity\Indicator;
+use App\Entity\Iteration;
 use App\Entity\Report;
 use App\Entity\File;
 use App\Form\ActivityType;
 use App\Form\IndicatorType;
 use App\Service\FormError;
 use App\Service\PaginatorService;
+use App\Twig\AppExtension;
 
 /** 
  * @Route(name="activity_")
@@ -119,7 +121,7 @@ class ActivityController extends AbstractController
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function show(Project $project, Activity $activity)
+    public function show(Project $project, Activity $activity, \App\Twig\AppExtension $twigExtension, Request $request)
     {
         $this->denyAccessUnlessGranted('view', $activity);
         
@@ -130,12 +132,14 @@ class ActivityController extends AbstractController
         $user = $project->getAuthor();
         
         $entityManager = $this->getDoctrine()->getManager();
-        $reports   = $entityManager->getRepository(Report::class)->findByActivity($activity, ['user' => null, 'orderBy' => $project->getMeta('report_order_by', 'createdAt'), 'order' => $project->getMeta('report_order', 'DESC'), 'limit' => $project->getMeta('report_count', 10) ] )->execute();
-        $documents = $entityManager->getRepository(File::class)->findByActivity($activity, ['type' => 'document', 'limit' => 10])->getResult();
-        $images    = $entityManager->getRepository(File::class)->findByActivity($activity, ['type' => 'image', 'limit' => 50])->getResult();
+        $reports    = $entityManager->getRepository(Report::class)->findByActivity($activity, ['user' => null, 'orderBy' => $project->getMeta('report_order_by', 'createdAt'), 'order' => $project->getMeta('report_order', 'DESC'), 'limit' => $project->getMeta('report_count', 10) ] )->execute();
+        $documents  = $entityManager->getRepository(File::class)->findByActivity($activity, ['type' => 'document', 'limit' => 10])->getResult();
+        $images     = $entityManager->getRepository(File::class)->findByActivity($activity, ['type' => 'image', 'limit' => 50])->getResult();
+        $iterations = $entityManager->getRepository(Iteration::class)->findBy(['project' => $project]);
+        $indicators = $this->getIndicators($activity, $request);
 
-        $data   =  $activity->getData();
-        $series =  $activity->getSerie();
+        $data   =  $twigExtension->getChartData($indicators, $iterations);
+        $series =  $twigExtension->getChartSeries($indicators);
         
         return $this->render('activity/show.html.twig', [
             'user'      => $user,
@@ -143,11 +147,33 @@ class ActivityController extends AbstractController
             'activity'  => $activity, 
             'reports'   => $reports, 
             'documents' => $documents, 
-            'images'    => $images, 
-            'data'      => json_encode($data),
-            '_series'   => $series,
-            'series'    => json_encode($series),
+            'images'    => $images,
+            'chart'      => [
+                'data'   => $data,
+                'series' => $series,
+            ]
         ]);
+    }
+
+    private function getIndicators(Activity $activity, Request $request){
+        $entityManager = $this->getDoctrine()->getManager();
+        $indicators = [];
+
+        $ids = $request->request->get('indicators');
+        if( is_array( $ids ) && ! empty( $ids ) ) {
+            foreach($ids as $id ){
+                $indicator = $entityManager->getRepository(Indicator::class)->find((int) $id);
+                if( $indicator ) {
+                    $indicators[] = $indicator;
+                }
+            }
+        }
+
+        if( empty( $indicators ) ) {
+            $indicators = $entityManager->getRepository(Indicator::class)->findBy(['activity' => $activity]);
+        }
+
+        return $indicators;
     }
     
     /**
@@ -155,7 +181,7 @@ class ActivityController extends AbstractController
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function chart(Project $project, Activity $activity, Request $request)
+    public function chart(Project $project, Activity $activity, \App\Twig\AppExtension $twigExtension, Request $request)
     {
         $this->denyAccessUnlessGranted('view', $activity);
         
@@ -166,59 +192,15 @@ class ActivityController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         
         if ( $request->isXmlHttpRequest() ) {
-            $ids = $request->request->get('indicators');
-            
-            $indicators = [];
-            $series = [];
-            if( is_array( $ids ) && ! empty( $ids ) ) {
-                foreach($ids as $id ){
-                    $id = (int) $id;
-                    $indicator = $entityManager->getRepository(Indicator::class)->find($id);
-                    if( $indicator ) {
-                        $indicators[] = $indicator;
-                        $series[] = [
-                            'id' => 'i_'.$indicator->getId(),
-                            'title' => $indicator->getTitle(),
-                            'unit'  => $indicator->getUnit()->getLabel(),
-                        ];
-                    }
-                }
-            }
-            
-            $datas = [];
-            
-            foreach($project->getIterations() as $iteration){
-                $data = [
-                    "iteration"   => $iteration->getTitle(),
-                    "value"       => $activity->getValue($iteration),
-                    "goal"        => $activity->getGoalValue($iteration),
-                    "report"      => $activity->getReportsCount($iteration),
-                    "progression" => $activity->getProgression($iteration),
-                ];
-                
-                if( count( $indicators ) > 0 ) {
-                    $value = 0;
-                    $goal = 0;
-                    $progression = 0;
-                    foreach($indicators as $indicator){
-                        $goal += $indicator->getGoalValue($iteration);
-                        $progression += $indicator->getProgression($iteration);
+            $iterations = $entityManager->getRepository(Iteration::class)->findBy(['project' => $project]);
+            $indicators = $this->getIndicators($activity, $request);
 
-                        $i_value = $indicator->getValue($iteration);
-                        $value += $i_value;
-                        $data['i_'.$indicator->getId()] = $i_value;
-                    }
-                    $data['value'] = $value;
-                    $data['goal']  = $goal;
-                    $data['progression']  = ( $progression / count( $indicators ) );
-                }
-                
-                $datas[] = $data;
-            }
+            $data   =  $twigExtension->getChartData($indicators, $iterations);
+            $series =  $twigExtension->getChartSeries($indicators);
             
             return $this->json([
                 'success' => true,
-                'datas'   => $datas,
+                'datas'   => $data,
                 'series'  => $series,
             ]);
         }

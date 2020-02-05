@@ -229,7 +229,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <select class="form-control kt-select2" id="select_indicator"  multiple="multiple">
                             {% set i = 1 %}
-                            {% for serie in _series %}
+                            {% for serie in chart.series %}
                                 <option value="{{ serie._id }}">{{ serie.title }}</option>
                                 {% set i = i + 1 %}
                             {% endfor %}
@@ -396,7 +396,7 @@ am4core.ready(function() {
     // Create chart instance
     var chart = am4core.create("chartdiv", am4charts.XYChart);
 
-    chart.data = {{ data|raw }};
+    chart.data = {{ chart.data|json|raw }};
 
     // Create axes
     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
@@ -424,31 +424,6 @@ am4core.ready(function() {
             bullet4.circle.radius = 3;
             bullet4.circle.strokeWidth = 2;
             bullet4.circle.fill = am4core.color("#fff");
-    
-    /*
-    var series1 = chart.series.push(new am4charts.ColumnSeries());
-        series1.dataFields.valueY = "value";
-        series1.dataFields.categoryX = "iteration";
-        series1.dataFields.report = "report";
-        series1.yAxis = valueAxis1;
-        series1.name = "Résultat";
-        series1.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] unités\n[bold font-size: 18]{report}[/] rapports";
-        series1.fill = chart.colors.getIndex(0);
-        series1.strokeWidth = 0;
-        series1.clustered = false;
-        series1.columns.template.width = am4core.percent(40);
-
-    var series2 = chart.series.push(new am4charts.ColumnSeries());
-        series2.dataFields.valueY = "goal";
-        series2.dataFields.categoryX = "iteration";
-        series2.yAxis = valueAxis1;
-        series2.name = "Objectif";
-        series2.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] unités";
-        series2.fill = chart.colors.getIndex(0).lighten(0.5);
-        series2.strokeWidth = 0;
-        series2.clustered = false;
-        series2.toBack();
-        */
     
     var series3 = chart.series.push(new am4charts.LineSeries());
         series3.dataFields.valueY = "progression";
