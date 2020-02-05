@@ -67,7 +67,7 @@ class AppExtension extends AbstractExtension
         return [];
     }
 
-    public function getChartData($entity, $iterations, $withIndicator = trues){
+    public function getChartData($entity, $iterations, $withIndicator = true){
         $datas = [];
 
         if( is_array( $entity ) ){
