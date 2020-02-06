@@ -6,6 +6,7 @@ use App\Entity\Activity;
 use App\Entity\Result;
 use App\Entity\Indicator;
 use App\Entity\Iteration;
+use App\Entity\Axe;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -37,6 +38,22 @@ class ResultRepository extends ServiceEntityRepository
                 $qb->andWhere('DATE(rep.createdAt) >= DATE(ite.startAt)');
                 $qb->andWhere('DATE(rep.createdAt) <= DATE(ite.endAt)');
                 $qb->andWhere('ite = :iteration')->setParameter('iteration', $iteration);
+            }
+            
+            $value = $qb->getQuery()->getSingleScalarResult();
+            return is_null($value)?0:$value;
+    }
+    
+    public function getValueByAxe($indicators, ?Axe $axe = null)
+    {
+            $qb = $this->createQueryBuilder('res');
+            $qb->select("SUM(res.value) as value");
+            $qb->andWhere('res.indicator IN (:indicators)')->setParameter('indicators', $indicators);
+            
+            if( $axe ) {
+                $qb->leftJoin('res.report', 'rep');
+                $qb->andWhere('DATE(rep.createdAt) >= :startAt')->setParameter('startAt', $axe->getStartAt());
+                $qb->andWhere('DATE(rep.createdAt) <= :endAt')->setParameter('endAt', $axe->getEndAt());
             }
             
             $value = $qb->getQuery()->getSingleScalarResult();

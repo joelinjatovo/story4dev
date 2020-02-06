@@ -129,7 +129,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <select class="form-control kt-select2" id="select_indicator"  multiple="multiple">
                             {% for indicator in indicators %}
-                                <option value="{{ indicator.id }}" {{ indicator.id in selectedIndicators ? 'selected' : '' }}>{{ indicator.title }}</option>
+                                <option value="{{ indicator.id }}" {{ indicator in chart.indicators ? 'selected' : '' }}>{{ indicator.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -159,7 +159,7 @@ am4core.ready(function() {
     // Create chart instance
     var chart = am4core.create("chartdiv", am4charts.XYChart);
 
-    chart.data = {{ datas|raw }};
+    chart.data = {{ chart.data|json|raw }};
 
     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "iteration";
@@ -194,7 +194,7 @@ am4core.ready(function() {
     var activitySeries = [];
     activitySeries = [];
     
-    var dataSeries = {{ series|raw }};
+    var dataSeries = {{ chart.series|json|raw }};
     jQuery.each(dataSeries, function(index, value) {
         activitySeries[index] = chart.series.push(new am4charts.ColumnSeries());
         activitySeries[index].dataFields.valueY = value.id;
@@ -246,9 +246,9 @@ am4core.ready(function() {
                     console.log(t);
                     KTApp.unblock(container);
                     if(t.success===true){
-                        window.history.pushState(t.title, t.title, t.url);
+                        window.history.pushState(null, null, t.url);
                         
-                        chart.data = t.datas;
+                        chart.data = t.chart.data;
                         
                         // remove old series
                         jQuery.each(activitySeries, function(index, serie) {
@@ -261,7 +261,7 @@ am4core.ready(function() {
                         
                         // new series
                         activitySeries = [];
-                        jQuery.each(t.series, function(index, value) {
+                        jQuery.each(t.chart.series, function(index, value) {
                             activitySeries[index] = chart.series.push(new am4charts.ColumnSeries());
                             activitySeries[index].dataFields.valueY = value.id;
                             activitySeries[index].dataFields.categoryX = "iteration";

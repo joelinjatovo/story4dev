@@ -7,6 +7,7 @@ use App\Entity\Goal;
 use App\Entity\Result;
 use App\Entity\Indicator;
 use App\Entity\Iteration;
+use App\Entity\Axe;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;

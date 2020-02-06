@@ -133,63 +133,62 @@ class GraphController extends AbstractController
         }
         
         $user = $project->getAuthor();
+        
         $entityManager = $this->getDoctrine()->getManager();
-        $axeRepository       = $entityManager->getRepository(Axe::class);
-        $indicatorRepository = $entityManager->getRepository(Indicator::class);
+        $axes = $entityManager->getRepository(Axe::class)->findBy(['graph' => $graph]);
         
-        $ids = $request->query->get('indicators');
-        $_indicators = [];
-        $series = [];
-        if( is_array( $ids ) && ! empty( $ids ) ) {
-            foreach($ids as $id ){
-                $id = (int) $id;
-                $indicator = $entityManager->getRepository(Indicator::class)->find($id);
-                if( $indicator ) {
-                    $_indicators[] = $indicator;
-                    $series[] = [
-                        'id' => 'i_'.$indicator->getId(),
-                        'title' => $indicator->getTitle(),
-                        'unit'  => $indicator->getUnit()->getLabel(),
-                    ];
-                }
-            }
-        }else{
-            $ids = [];
-        }
+        $graphHelper = new \App\Helper\GraphHelper($entityManager);
         
-        if( count($_indicators) > 0 ) {
-            $datas = $axeRepository->getData($graph, $_indicators);
-            foreach($_indicators as $indicator){
-                $subdatas = $axeRepository->getData($graph, [$indicator], "i_" . $indicator->getId());
-                $datas = array_map(function($array1,$array2){
-                    return array_merge(isset($array1) ? $array1 : array(), isset($array2) ? $array2 : array());
-                }, $datas, $subdatas); 
-            }
+        $selectedIndicators = $this->getIndicators($project, $request);
+        if( empty( $selectedIndicators ) ) {
+            $data   =  $graphHelper->getChartData($project, $axes, false);
+            $series =  $graphHelper->getChartSeries($project);
         }else{
-            $datas = $axeRepository->getData($graph);
+            $data   =  $graphHelper->getChartData($selectedIndicators, $axes, true);
+            $series =  $graphHelper->getChartSeries($selectedIndicators);
         }
         
         if ( $request->isXmlHttpRequest() ) {
             return $this->json([
                 'success' => true,
                 'url'     => $request->getUri(),
-                'title'   => "Graphe # {$graph->getId()}  - Projet #{$project->getId()} - {$this->getUser()->getFullname()}",
-                'datas'   => $datas,
-                'series'  => $series,
+                'chart'   => [
+                    'data'   => $data,
+                    'series' => $series,
+                ]
             ]);
         }
         
-        $indicators = $indicatorRepository->findByProject($project)->execute();
+        $indicators = $entityManager->getRepository(Indicator::class)->findByProject($project)->execute();
         
         return $this->render('graph/show.html.twig', [
             'user'       => $user,
             'project'    => $project,
             'graph'      => $graph, 
-            'indicators' => $indicators, 
-            'selectedIndicators' => $ids, 
-            'datas'      => json_encode($datas),
-            'series'     => json_encode($series),
+            'indicators' => $indicators,
+            'chart'      => [
+                'indicators' => $selectedIndicators,
+                'data'       => $data,
+                'series'     => $series,
+            ]
         ]);
+    }
+
+    private function getIndicators(Project $project, Request $request){
+        $entityManager = $this->getDoctrine()->getManager();
+        $indicators = [];
+
+        $ids = $request->query->get('indicators');
+        if( is_array( $ids ) && ! empty( $ids ) ) {
+            foreach($ids as $id ){
+                $indicator = $entityManager->getRepository(Indicator::class)->find((int) $id);
+                if( $indicator ) {
+                    $indicators[] = $indicator;
+                }
+            }
+        }
+        
+        return $indicators;
     }
     
     /**
