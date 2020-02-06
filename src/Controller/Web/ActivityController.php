@@ -132,14 +132,33 @@ class ActivityController extends AbstractController
         $user = $project->getAuthor();
         
         $entityManager = $this->getDoctrine()->getManager();
+        
+        $iterations = $entityManager->getRepository(Iteration::class)->findBy(['project' => $project]);
+        
+        $selectedIndicators = $this->getIndicators($activity, $request);
+        if( empty( $selectedIndicators ) ) {
+            $data   =  $twigExtension->getChartData($activity, $iterations, false);
+            $series =  $twigExtension->getChartSeries($activity);
+        }else{
+            $data   =  $twigExtension->getChartData($selectedIndicators, $iterations, true);
+            $series =  $twigExtension->getChartSeries($selectedIndicators);
+        }
+        
+        if ( $request->isXmlHttpRequest() ) {
+            return $this->json([
+                'success' => true,
+                'url'     => $request->getUri(),
+                'chart'      => [
+                    'data'   => $data,
+                    'series' => $series,
+                ]
+            ]);
+        }
+        
         $reports    = $entityManager->getRepository(Report::class)->findByActivity($activity, ['user' => null, 'orderBy' => $project->getMeta('report_order_by', 'createdAt'), 'order' => $project->getMeta('report_order', 'DESC'), 'limit' => $project->getMeta('report_count', 10) ] )->execute();
         $documents  = $entityManager->getRepository(File::class)->findByActivity($activity, ['type' => 'document', 'limit' => 10])->getResult();
         $images     = $entityManager->getRepository(File::class)->findByActivity($activity, ['type' => 'image', 'limit' => 50])->getResult();
-        $iterations = $entityManager->getRepository(Iteration::class)->findBy(['project' => $project]);
-        $indicators = $this->getIndicators($activity, $request);
-
-        $data   =  $twigExtension->getChartData($indicators, $iterations);
-        $series =  $twigExtension->getChartSeries($indicators);
+        $indicators = $entityManager->getRepository(Indicator::class)->findBy(['activity' => $activity]);
         
         return $this->render('activity/show.html.twig', [
             'user'      => $user,
@@ -148,9 +167,11 @@ class ActivityController extends AbstractController
             'reports'   => $reports, 
             'documents' => $documents, 
             'images'    => $images,
+            'indicators'    => $indicators,
             'chart'      => [
-                'data'   => $data,
-                'series' => $series,
+                'indicators' => $selectedIndicators,
+                'data'       => $data,
+                'series'     => $series,
             ]
         ]);
     }
@@ -159,7 +180,7 @@ class ActivityController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $indicators = [];
 
-        $ids = $request->request->get('indicators');
+        $ids = $request->query->get('indicators');
         if( is_array( $ids ) && ! empty( $ids ) ) {
             foreach($ids as $id ){
                 $indicator = $entityManager->getRepository(Indicator::class)->find((int) $id);
@@ -168,48 +189,8 @@ class ActivityController extends AbstractController
                 }
             }
         }
-
-        if( empty( $indicators ) ) {
-            $indicators = $entityManager->getRepository(Indicator::class)->findBy(['activity' => $activity]);
-        }
-
+        
         return $indicators;
-    }
-    
-    /**
-     * @Route("/p/{slug}/activity/{activity_id}/chart", name="chart", methods="POST", requirements={"activity_id"="\d+"})
-     * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
-     */
-    public function chart(Project $project, Activity $activity, \App\Twig\AppExtension $twigExtension, Request $request)
-    {
-        $this->denyAccessUnlessGranted('view', $activity);
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-        
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        if ( $request->isXmlHttpRequest() ) {
-            $iterations = $entityManager->getRepository(Iteration::class)->findBy(['project' => $project]);
-            $indicators = $this->getIndicators($activity, $request);
-
-            $data   =  $twigExtension->getChartData($indicators, $iterations);
-            $series =  $twigExtension->getChartSeries($indicators);
-            
-            return $this->json([
-                'success' => true,
-                'datas'   => $data,
-                'series'  => $series,
-            ]);
-        }
-            
-        return $this->json([
-            'success' => false,
-            'title'   => 'Invalid Request',
-            'message' => 'An error was occured. :)',
-        ]);
     }
     
     /**
@@ -356,14 +337,14 @@ class ActivityController extends AbstractController
                         ]);
                     if($item){
                         $entityManager->remove($item);
-                        $message = 'Activité supprimé de votre favoris avec succès';
+                        $message = 'Activité supprimée de votre favoris avec succès';
                         $star = false;
                     }else{
                         $item = new ActivityFavorite();
                         $item->setUser($this->getUser());
                         $item->setActivity($activity);
                         $entityManager->persist($item);
-                        $message = 'Activité ajouté dans votre favoris avec succès';
+                        $message = 'Activité ajoutée dans votre favoris avec succès';
                         $star = true;
                     }
                     $entityManager->flush();

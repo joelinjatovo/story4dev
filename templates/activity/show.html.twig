@@ -228,10 +228,8 @@
                 <div class="form-group form-group-last row">
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <select class="form-control kt-select2" id="select_indicator"  multiple="multiple">
-                            {% set i = 1 %}
-                            {% for serie in chart.series %}
-                                <option value="{{ serie._id }}">{{ serie.title }}</option>
-                                {% set i = i + 1 %}
+                            {% for indicator in indicators %}
+                                <option value="{{ indicator.id }}" {{ indicator in chart.indicators ? 'selected' : '' }}>{{ indicator.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -388,6 +386,20 @@
 <script>
 var KTAppMessages = {"waiting": "Veuillez patientez s'il vous plaît..."};
 am4core.ready(function() {
+    
+    function drawIndicatorSerie(chart, value, yAxis){
+        var serie = chart.series.push(new am4charts.ColumnSeries());
+        serie.dataFields.valueY = value.id;
+        serie.dataFields.categoryX = "iteration";
+        serie.name = value.title;
+        serie.unit = value.unit;
+        serie.strokeWidth = 2;
+        serie.yAxis = yAxis;
+        serie.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] {unit}";
+        serie.hiddenInLegend = true; 
+        
+        return serie;
+    }
 
     // Themes begin
     am4core.useTheme(am4themes_animated);
@@ -441,7 +453,12 @@ am4core.ready(function() {
             bullet3.circle.fill = am4core.color("#fff");
 
     var ajaxRequest;
+    
+    var dataSeries = {{ chart.series|json|raw }};
     var indicatorSeries = [];
+    jQuery.each(dataSeries, function(index, value) {
+        indicatorSeries[index] = drawIndicatorSerie(chart, value, valueAxis1);
+    });
     
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -456,7 +473,6 @@ am4core.ready(function() {
       if (jQuery('#select_indicator').select2('val') != null){
             var container = jQuery("#statistic");
             var $datas = jQuery('#select_indicator').select2('data');
-            
             var ids = [];
             jQuery.each($datas, function(index, $data) {
                 ids.push(parseInt($data.id));
@@ -468,50 +484,32 @@ am4core.ready(function() {
                 ajaxRequest.abort();
             }
       
-            ajaxRequest = jQuery.post({
-                url:"{{ path('activity_chart', {slug:project.slug, activity_id: activity.id}) }}",
+            ajaxRequest = jQuery.get({
+                url:"{{ path('activity_show', {slug:project.slug, activity_id: activity.id}) }}",
                 data: {'indicators': ids},
                 error:function(d){
                     KTApp.unblock(container);
                 },
                 success:function(t,s,r,a){
-                    console.log(t);
                     KTApp.unblock(container);
                     if(t.success===true){
-                        chart.data = t.datas;
+                        // update URL
+                        window.history.pushState(null, null, t.url);
                         
                         // remove old series
                         jQuery.each(indicatorSeries, function(index, serie) {
-                            console.log(index);
-                            console.log(serie);
                             chart.series.removeIndex(
                               chart.series.indexOf(serie)
                             );
                         });
                         
-                        // new series
+                        // Update chart data
+                        chart.data = t.chart.data;
+                        
+                        // draw new indicator series
                         indicatorSeries = [];
-                        jQuery.each(t.series, function(index, value) {
-                            indicatorSeries[index] = chart.series.push(new am4charts.ColumnSeries());
-                            indicatorSeries[index].dataFields.valueY = value.id;
-                            indicatorSeries[index].dataFields.categoryX = "iteration";
-                            indicatorSeries[index].name = value.title;
-                            indicatorSeries[index].unit = value.unit;
-                            indicatorSeries[index].strokeWidth = 2;
-                            //indicatorSeries[index].tensionX = 0.7;
-                            indicatorSeries[index].yAxis = valueAxis1;
-                            indicatorSeries[index].tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] {unit}";
-                            //indicatorSeries[index].stroke = chart.colors.getIndex(0).lighten(0.5);
-                            //indicatorSeries[index].strokeDasharray = "3,3";
-                            //indicatorSeries[index].hidden = true;
-                            indicatorSeries[index].hiddenInLegend = true; 
-
-                            /*
-                            var bullet4 = indicatorSeries[index].bullets.push(new am4charts.CircleBullet());
-                                bullet4.circle.radius = 3;
-                                bullet4.circle.strokeWidth = 2;
-                                bullet4.circle.fill = am4core.color("#fff");
-                            */
+                        jQuery.each(t.chart.series, function(index, value) {
+                            indicatorSeries[index] = drawIndicatorSerie(chart, value, valueAxis1);
                         });
                         
                         chart.invalidateData();
