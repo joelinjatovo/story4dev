@@ -268,7 +268,7 @@
             <div class="kt-portlet__body"> 
                 <div class="kt-widget5">    
 					{% for report in reports %}
-						{{ include('activity/report.html.twig', { 'report' : report } ) }}
+						{{ include('activity/_report.html.twig', { 'report' : report } ) }}
 					{% else %}
                         Il n'y a pas encore des rapports sur cette activité.
 					{% endfor %}
@@ -306,7 +306,7 @@
 			<div class="kt-portlet__body">
                 <div class="kt-widget31">
 					{% for indicator in activity.indicators.slice(0, 5) %}
-						{{ include('activity/indicator.html.twig', { 'indicator' : indicator } ) }}
+						{{ include('activity/_indicator.html.twig', { 'indicator' : indicator } ) }}
 					{% else %}
                     Il n'y a pas encore des indicateurs.
 					{% endfor %}
@@ -332,7 +332,7 @@
             <div class="kt-portlet__body">
                 <div class="kt-widget4" id="kt-activity-list">
 					{% for document in documents %}
-						{{ include('activity/document.html.twig', { 'document' : document } ) }}
+						{{ include('activity/_document.html.twig', { 'document' : document } ) }}
 					{% else %}
                     Il n'y a pas encore de document ni à cette activité ni à ses rapports.
 					{% endfor %}
@@ -355,7 +355,7 @@
                 <div class="kt-widget4" id="gallery" style="display:none;">
                     {% for file in images %}
                         {% if file.image %}
-				            {{ include('activity/image.html.twig', { 'file' : file } ) }}
+				            {{ include('activity/_image.html.twig', { 'file' : file } ) }}
                         {% endif %}
                     {% else %}
                         Aucun fichier attaché ni à cette activité ni à ses rapports.

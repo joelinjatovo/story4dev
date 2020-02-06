@@ -29,12 +29,12 @@
         </div>        
         <div class="kt-subheader__toolbar">
             {% if activity is not null %}
-                <a href="{{ path('indicator_list_type', { slug: activity.project.slug, 'activity_id' : activity.id, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
-                <a href="{{ path('indicator_list_type', { slug: activity.project.slug, 'activity_id' : activity.id, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
+                <a href="{{ path('indicator_list_type', { slug: activity.project.slug, 'activity_id' : activity.id, type: 'list' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"> Liste</i></a>
+                <a href="{{ path('indicator_list_type', { slug: activity.project.slug, 'activity_id' : activity.id, type: 'grid' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i> Grille</a>
                 <a href="{{ url('activity_show', { 'slug' : activity.project.slug, 'activity_id' : activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
             {% else %}
-                <a href="{{ path('indicator_list2_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
-                <a href="{{ path('indicator_list2_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
+                <a href="{{ path('indicator_list2_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> Liste</a>
+                <a href="{{ path('indicator_list2_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i> Grille</a>
                 <a href="{{ url('project_show', { 'slug' : project.slug }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
             {% endif %}
             <div class="dropdown dropdown-inline" data-toggle="kt-tooltip" title="" data-placement="left" data-original-title="Actions">
@@ -223,10 +223,10 @@
                                     Progression générale
                                 </div>
                                 <div class="progress" style="height: 5px;width: 100%;">
-                                    <div class="progress-bar kt-bg-{{ indicator.progressionclass }}" role="progressbar" style="width: {{ indicator.progression }}%;" aria-valuenow="{{ indicator.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar kt-bg-{{ indicator|progressionClass }}" role="progressbar" style="width: {{ indicator|progression }}%;" aria-valuenow="{{ indicator|progression }}" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <div class="kt-widget__stats">
-                                    {{ indicator.progression }}% 
+                                    {{ indicator|progression }}% 
                                 </div>
                             </div> 
                         </div>
@@ -241,10 +241,10 @@
                                         {{ goal.iteration.title }}
                                     </div>
                                     <div class="progress" style="height: 5px;width: 100%;">
-                                        <div class="progress-bar kt-bg-{{ indicator.progressionclass(goal.iteration) }}" role="progressbar" style="width: {{ indicator.progression(goal.iteration) }}%;" aria-valuenow="{{ indicator.progression(goal.iteration) }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar kt-bg-{{ indicator|progressionClass(goal.iteration) }}" role="progressbar" style="width: {{ indicator|progression(goal.iteration) }}%;" aria-valuenow="{{ indicator|progression(goal.iteration) }}" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                     <div class="kt-widget__stats">
-                                        {{ indicator.progression(goal.iteration) }}% 
+                                        {{ indicator|progression(goal.iteration) }}% 
                                     </div>
                                 </div>   
                             </div>

@@ -135,7 +135,7 @@ class IndicatorController extends AbstractController
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function show(Project $project, Activity $activity, Indicator $indicator)
+    public function show(Project $project, Activity $activity, Indicator $indicator, \App\Twig\AppExtension $twigExtension)
     {
         $this->denyAccessUnlessGranted('view', $indicator);
         
@@ -152,7 +152,10 @@ class IndicatorController extends AbstractController
         $goal = new Goal();
         $form = $this->createForm(GoalType::class, $goal);
         
-        $data =  $indicator->getData();
+        $entityManager = $this->getDoctrine()->getManager();
+        $iterations = $entityManager->getRepository(Iteration::class)->findBy(['project' => $project]);
+        $data   =  $twigExtension->getChartData($indicator, $iterations, true);
+        $series =  $twigExtension->getChartSeries($indicator);
         
         return $this->render('indicator/show.html.twig', [
             'user'      => $user,
@@ -160,7 +163,7 @@ class IndicatorController extends AbstractController
             'activity'  => $activity, 
             'indicator' => $indicator, 
             'form'      => $form->createView(),
-            'data'     => json_encode($data),
+            'chart'     => ['data' => $data],
         ]);
     }
     

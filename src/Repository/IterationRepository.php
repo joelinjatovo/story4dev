@@ -20,27 +20,4 @@ class IterationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Iteration::class);
     }
-    
-    public function getData(Project $project, $indicators = null, $valueField = 'value')
-    {
-        $qb = $this->createQueryBuilder('ite');
-        $qb->select("ite.id AS ite_id, ite.title AS iteration, CASE WHEN SUM(res.value) IS NULL THEN 0 ELSE SUM(res.value) END as " . $valueField );
-        $qb->leftJoin('ite.project', 'pro');
-        $qb->leftJoin('pro.activities', 'act');
-        $qb->leftJoin('act.reports', 'rep', 'WITH', 'DATE(rep.createdAt) >= DATE(ite.startAt) AND DATE(rep.createdAt) <= DATE(ite.endAt)');
-        
-        if( is_array( $indicators ) && ( count($indicators) > 0 ) ){
-            $qb->leftJoin('rep.results', 'res', 'WITH', 'res.indicator IN (:indicators)');
-            $qb->setParameter('indicators', $indicators);
-        }else{
-            $qb->leftJoin('rep.results', 'res');
-        }
-        
-        $qb->groupBy('ite_id');
-        $qb->orderBy('ite.startAt', 'ASC');
-        $qb->where('ite.project = :project');
-        $qb->setParameter('project', $project);
-
-        return $qb->getQuery()->getResult();
-    }
 }

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Report #{{ report.id }} - Activity #{{ activity.id }} - Project #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}Rapport #{{ report.id }} - Activité #{{ activity.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
     <link href="{{ asset('css/gallery.css') }}" rel="stylesheet" type="text/css"/>
@@ -165,7 +165,7 @@
 			<div class="kt-portlet__body">
                 <div class="kt-widget31">
                     {% for result in report.results %}
-                        {{ include('report/result.html.twig', { 'result' : result } ) }}
+                        {{ include('report/_result.html.twig', { 'result' : result } ) }}
                     {% else %}
                         Ce rapport n'a pas encore de résultat.
                     {% endfor %}
@@ -185,7 +185,7 @@
                 <div class="kt-widget4">
                     {% for reportFile in report.reportFiles %}
                         {% if not reportFile.file.image %}
-                            {{ include('report/report-file.html.twig', { 'reportFile' : reportFile } ) }}
+                            {{ include('report/_document.html.twig', { 'reportFile' : reportFile } ) }}
                         {% endif %}
                     {% else %}
                         Aucun fichier attaché à ce rapport.

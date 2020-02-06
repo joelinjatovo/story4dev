@@ -86,10 +86,10 @@
                         <span class="kt-widget__subtitel">Progression</span>
                         <div class="kt-widget__progress d-flex  align-items-center">
                             <div class="progress" style="height: 5px;width: 100%;">
-                                <div class="progress-bar kt-bg-warning" role="progressbar" style="width: {{ project.progression }}%;" aria-valuenow="{{ project.progression }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar kt-bg-{{ project|progressionClass }}" role="progressbar" style="width: {{ project|progression }}%;" aria-valuenow="{{ project|progression }}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <span class="kt-widget__stat">
-                                {{ project.progression }}%
+                                {{ project|progression }}%
                             </span>
                         </div>
                     </div>

@@ -21,8 +21,8 @@
         </div>        
         <div class="kt-subheader__toolbar">
             {% if is_granted('view', project) %}
-                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
-                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
+                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> Liste</a>
+                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i> Grille</a>
                 <span class="kt-subheader__separator kt-subheader__separator--v"></span>
                 <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
             {% endif %}

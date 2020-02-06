@@ -111,6 +111,10 @@ class AppExtension extends AbstractExtension
             $indicators = $this->em->getRepository(Indicator::class)->findByProject($entity)->execute();
             return $this->getChartData($indicators, $iterations, $withIndicator);
         }
+
+        if($entity instanceof Indicator){
+            return $this->getChartData([$entity], $iterations, $withIndicator);
+        }
         
         return $datas;
     }

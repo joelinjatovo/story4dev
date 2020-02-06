@@ -96,12 +96,12 @@
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
-                            <a href="{{ path('report_list', { 'slug' : contribution.project.slug, 'slug': contribution.project.author.slug } ) }}">
+                            <a href="{{ path('report_list', { slug : contribution.project.slug } ) }}">
                                 <h3 class="kt-portlet__head-title">Rapports</h3>
                             </a>
                         </div>
                         <div class="kt-portlet__head-toolbar">
-                            <a href="{{ path('report_list', { 'slug' : contribution.project.slug, 'slug': contribution.project.author.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
+                            <a href="{{ path('report_list', { slug : contribution.project.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
                                 Tous
                             </a>
                         </div>
@@ -109,7 +109,7 @@
                     <div class="kt-portlet__body">
                         <div class="kt-widget5">
                             {% for report in reports %}
-                                {{ include('contribution/report.html.twig', { 'report' : report } ) }}
+                                {{ include('contribution/_report.html.twig', { 'report' : report } ) }}
                             {% else %}
                                 Il n'y a pas encore de rapports dans ce projet.
                             {% endfor %}

@@ -224,7 +224,7 @@
                 </div>  
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
@@ -260,9 +260,9 @@
             <div class="kt-portlet__body">
                 <div class="kt-widget5">
                     {% for activity in recent.activities %}
-                        {{ include('project/activity.html.twig', { 'activity' : activity } ) }}
+                        {{ include('project/_activity.html.twig', { 'activity' : activity } ) }}
                     {% else %}
-                        Il n'y a pas encore des activites dans ce projet.
+                        Il n'y a pas encore des activités dans ce projet.
                     {% endfor %}
                 </div>
             </div>
@@ -294,7 +294,7 @@
             <div class="kt-portlet__body">
                 <div class="kt-widget5">
                     {% for report in recent.reports %}
-                        {{ include('project/report.html.twig', { 'report' : report } ) }}
+                        {{ include('project/_report.html.twig', { 'report' : report } ) }}
                     {% else %}
                         Il n'y a pas encore de rapports dans ce projet.
                     {% endfor %}
@@ -324,7 +324,7 @@
                     <div class="kt-scroll kt-scroll--pull">
                         <div class="kt-widget__items" id="project-contributions">
                             {% for contribution in recent.contributions %}
-                                {{ include('project/contribution.html.twig', { 'contribution' : contribution } ) }}
+                                {{ include('project/_contribution.html.twig', { 'contribution' : contribution } ) }}
                             {% else %}
                                 Il n'y a pas encore des contributeurs dans ce projet.
                             {% endfor %}

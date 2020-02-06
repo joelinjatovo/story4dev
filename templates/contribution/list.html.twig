@@ -76,7 +76,7 @@
                         </thead>
                         <tbody class="kt-datatable__body" id="project-contributions">
                             {% for contribution in contributions %}
-                                {{ include('contribution/list_item.html.twig', {'contribution': contribution}) }}
+                                {{ include('contribution/_list_item.html.twig', {'contribution': contribution}) }}
                             {% endfor %}
                         </tbody>
                     </table>

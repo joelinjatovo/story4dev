@@ -159,7 +159,7 @@ class ReportController extends AbstractController
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function show(Project $project, Activity $activity, Report $report)
+    public function show(Project $project, Activity $activity, Report $report, \App\Twig\AppExtension $twigExtension)
     {
         $this->denyAccessUnlessGranted('view', $report);
         
@@ -173,14 +173,11 @@ class ReportController extends AbstractController
             throw $this->createNotFoundException('The activity does not match');
         }
         
-        $data =  $activity->getData();
-        
         return $this->render('report/show.html.twig', [
             'user'     => $user,
             'project'  => $project,
             'activity' => $activity,
             'report'   => $report,
-            'data'     => json_encode($data)
         ]);
     }
     

@@ -15,7 +15,7 @@
                             <span></span>						    							 
                         </a>
                         <div class="progress progress-sm">
-                            <div class="progress-bar bg-{{ goal.indicator.progressionclass(goal.iteration) }}" role="progressbar" style="width: {{ goal.indicator.progression(goal.iteration) }}%" aria-valuenow="{{ goal.indicator.progression(goal.iteration) }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-{{ goal.indicator|progressionClass(goal.iteration) }}" role="progressbar" style="width: {{ goal.indicator|progression(goal.iteration) }}%" aria-valuenow="{{ goal.indicator|progression(goal.iteration) }}" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>	
                 </div>						
