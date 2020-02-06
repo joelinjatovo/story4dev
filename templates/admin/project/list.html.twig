@@ -113,7 +113,7 @@
                         </thead>
                         <tbody class="kt-datatable__body">
                             {% for project in projects %}
-                                {{ include('admin/project/list_item.html.twig', {project: project}) }}
+                                {{ include('admin/project/_list_item.html.twig', {project: project}) }}
                             {% endfor %}
                         </tbody>
                     </table>

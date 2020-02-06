@@ -95,20 +95,28 @@
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
-                            <a href="{{ path('account_reports', { 'slug': user.slug } ) }}">
-                                <h3 class="kt-portlet__head-title">Rapports</h3>
-                            </a>
+                            {% if is_granted('list_reports', user) %}
+                                <a href="{{ path('account_reports', { 'slug': user.slug } ) }}">
+                                    <h3 class="kt-portlet__head-title">Rapports</h3>
+                                </a>
+                            {% else %}
+                                <a href="#">
+                                    <h3 class="kt-portlet__head-title">Rapports</h3>
+                                </a>
+                            {% endif %}
                         </div>
                         <div class="kt-portlet__head-toolbar">
-                            <a href="{{ path('account_reports', { 'slug': user.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
-                                Tous
-                            </a>
+                            {% if is_granted('list_reports', user) %}
+                                <a href="{{ path('account_reports', { 'slug': user.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
+                                    Tous
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="kt-portlet__body">
                         <div class="kt-widget5">
                             {% for report in reports %}
-                                {{ include('user/report.html.twig', { 'report' : report } ) }}
+                                {{ include('user/_report.html.twig', { 'report' : report } ) }}
                             {% else %}
                                 Il n'a pas encore effectué de rapport.
                             {% endfor %}

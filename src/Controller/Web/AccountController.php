@@ -186,12 +186,10 @@ class AccountController extends AbstractController
      */
     public function reports(User $user, $page = 1, PaginatorService $paginator)
     {
-        if($this->getUser() != $user ){
-            throw $this->createNotFoundException('The current user does not match');
-        }
-
+        $this->denyAccessUnlessGranted('list_reports', $user);
+        
         $entityManager = $this->getDoctrine()->getManager();
-        $query = $entityManager->getRepository(Report::class)->findByUser($this->getUser());
+        $query = $entityManager->getRepository(Report::class)->findByUser($user);
         
         $reports = $paginator->paginate($query, 10);
         

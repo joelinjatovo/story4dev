@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes rapports  - {{ app.user.fullname }}{% endblock %}
+{% block title %}Rapports - {{ user.fullname }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,7 +9,7 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Mes rapports</h3>
+            <h3 class="kt-subheader__title">Rapports de : {{ user.fullname }}</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__group" id="kt_subheader_search">
                 <span class="kt-subheader__desc" id="kt_subheader_total">{{ reports.count }} Total </span>
@@ -24,7 +24,7 @@
 <div class="row">
     {% for report in reports %}
         <div class="col-xl-6">
-            {{ include('account/report_item.html.twig', {'report': report}) }}
+            {{ include('account/_report_item.html.twig', {'report': report}) }}
         </div>
     {% endfor %}
 </div>
