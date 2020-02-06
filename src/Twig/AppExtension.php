@@ -59,9 +59,15 @@ class AppExtension extends AbstractExtension
             return $series;
         }
         
-        if($entity instanceof Activity && $entity->getProject()){
+        if($entity instanceof Activity){
             // Get indicators it from repository to avoid EntityNotFoundException
             $indicators = $this->em->getRepository(Indicator::class)->findBy(['activity' => $entity]);
+            return $this->getChartSeries($indicators);
+        }
+        
+        if($entity instanceof Project){
+            // Get indicators it from repository to avoid EntityNotFoundException
+            $indicators = $this->em->getRepository(Indicator::class)->findByProject($entity)->execute();
             return $this->getChartSeries($indicators);
         }
 
@@ -97,6 +103,12 @@ class AppExtension extends AbstractExtension
         if($entity instanceof Activity){
             // Get indicators it from repository to avoid EntityNotFoundException
             $indicators = $this->em->getRepository(Indicator::class)->findBy(['activity' => $entity]);
+            return $this->getChartData($indicators, $iterations, $withIndicator);
+        }
+
+        if($entity instanceof Project){
+            // Get indicators it from repository to avoid EntityNotFoundException
+            $indicators = $this->em->getRepository(Indicator::class)->findByProject($entity)->execute();
             return $this->getChartData($indicators, $iterations, $withIndicator);
         }
         

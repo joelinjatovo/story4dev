@@ -39,79 +39,72 @@ class ProjectController extends AbstractController
      * @Route("/p/{slug}/dashboard", name="dashboard", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
-    public function dashboard(Project $project, Request $request)
+    public function dashboard(Project $project, \App\Twig\AppExtension $twigExtension, Request $request)
     {
         $this->denyAccessUnlessGranted('view', $project);
         
         $user = $project->getAuthor();
         
         $entityManager = $this->getDoctrine()->getManager();
-        $indicatorRepository = $entityManager->getRepository(Indicator::class);
-        $iterationRepository = $entityManager->getRepository(Iteration::class);
-        $fileRepository      = $entityManager->getRepository(File::class);
-        $reportRepository    = $entityManager->getRepository(Report::class);
-        $userRepository      = $entityManager->getRepository(User::class);
-        $activityRepository  = $entityManager->getRepository(Activity::class);
         
-        $ids = $request->query->get('indicators');
-        $_indicators = [];
-        $series = [];
-        if( is_array( $ids ) && ! empty( $ids ) ) {
-            foreach($ids as $id ){
-                $id = (int) $id;
-                $indicator = $indicatorRepository->find($id);
-                if( $indicator ) {
-                    $_indicators[] = $indicator;
-                    $series[] = [
-                        'id' => 'i_'.$indicator->getId(),
-                        'title' => $indicator->getTitle(),
-                        'unit'  => $indicator->getUnit()->getLabel(),
-                    ];
-                }
-            }
-        }else{
-            $ids = [];
-        }
+        $iterations = $entityManager->getRepository(Iteration::class)->findBy(['project' => $project]);
         
-        if( count($_indicators) > 0 ) {
-            $datas = $iterationRepository->getData($project, $_indicators);
-            foreach($_indicators as $indicator){
-                $subdatas = $iterationRepository->getData($project, [$indicator], "i_" . $indicator->getId());
-                $datas = array_map(function($array1,$array2){
-                    return array_merge(isset($array1) ? $array1 : array(), isset($array2) ? $array2 : array());
-                }, $datas, $subdatas); 
-            }
+        $selectedIndicators = $this->getIndicators($project, $request);
+        if( empty( $selectedIndicators ) ) {
+            $data   =  $twigExtension->getChartData($project, $iterations, false);
+            $series =  $twigExtension->getChartSeries($project);
         }else{
-            $datas = $iterationRepository->getData($project);
+            $data   =  $twigExtension->getChartData($selectedIndicators, $iterations, true);
+            $series =  $twigExtension->getChartSeries($selectedIndicators);
         }
         
         if ( $request->isXmlHttpRequest() ) {
             return $this->json([
                 'success' => true,
                 'url'     => $request->getUri(),
-                'title'   => "Dashboard - Projet #{$project->getId()} - {$this->getUser()->getFullname()}",
-                'datas'   => $datas,
-                'series'  => $series,
+                'chart'      => [
+                    'data'   => $data,
+                    'series' => $series,
+                ]
             ]);
         }
         
         $count = [];
-        $count['activities'] = $activityRepository->createQueryBuilder('a')->select('count(a.id)')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
-        $count['reports']    = $reportRepository->createQueryBuilder('r')->select('count(r.id)')->leftJoin('r.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
-        $count['indicators'] = $indicatorRepository->createQueryBuilder('i')->select('count(i.id)')->leftJoin('i.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
-        $count['files']      = $fileRepository->countByProject($project)->getSingleScalarResult();
+        $count['activities'] = $entityManager->getRepository(Activity::class)->createQueryBuilder('a')->select('count(a.id)')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
+        $count['reports']    = $entityManager->getRepository(Report::class)->createQueryBuilder('r')->select('count(r.id)')->leftJoin('r.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
+        $count['indicators'] = $entityManager->getRepository(Indicator::class)->createQueryBuilder('i')->select('count(i.id)')->leftJoin('i.activity', 'a')->where('a.project = :project')->setParameter('project', $project)->getQuery()->getSingleScalarResult();
+        $count['files']      = $entityManager->getRepository(File::class)->countByProject($project)->getSingleScalarResult();
         
-        $indicators = $indicatorRepository->findByProject($project)->execute();
+        $indicators = $entityManager->getRepository(Indicator::class)->findByProject($project)->execute();
         
         return $this->render('project/dashboard.html.twig', [
-            'user'    => $user, 
-            'project' => $project,
-            'count'   => $count,
+            'user'       => $user, 
+            'project'    => $project,
+            'count'      => $count,
             'indicators' => $indicators,
-            'selectedIndicators' => $ids,
-            'datas' => json_encode($datas),
-            'series' => json_encode($series),
+            'chart'      => [
+                'indicators' => $selectedIndicators,
+                'data'       => $data,
+                'series'     => $series,
+            ]
         ]);
+    }
+
+    private function getIndicators(Project $project, Request $request){
+        $entityManager = $this->getDoctrine()->getManager();
+        $indicators = [];
+
+        $ids = $request->query->get('indicators');
+        if( is_array( $ids ) && ! empty( $ids ) ) {
+            foreach($ids as $id ){
+                $indicator = $entityManager->getRepository(Indicator::class)->find((int) $id);
+                if( $indicator ) {
+                    $indicators[] = $indicator;
+                }
+            }
+        }
+        
+        return $indicators;
     }
     
     /**
