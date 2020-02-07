@@ -33,6 +33,9 @@ class AccessLogSubscriber implements EventSubscriberInterface {
         $user = null;
         if ($this->security->getToken()) {
             $user = $this->security->getToken()->getUser();
+            if ( ! $user instanceof User ) {
+                $user = null;
+            }
         }
         
         $request = $event->getRequest();
