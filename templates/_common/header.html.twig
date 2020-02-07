@@ -5,8 +5,37 @@
     <div class="kt-header-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_header_menu_wrapper">
         <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout- "  >
             <ul class="kt-menu__nav ">
-                {% if project is defined and project is not null and ( project.id > 0 ) %}
-                <li class="kt-menu__item"  aria-haspopup="true"><a href="{{ path( 'project_show', { slug : project.slug } ) }}" class="kt-menu__link "><h4 style="margin: 0;">{{ project.title }}</h4></a></li>
+                {% if is_granted('ROLE_USER') %}
+                    <li class="kt-menu__item"  aria-haspopup="true">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-pill {% if project is defined and project is not null and ( project.id > 0 ) %}btn-brand{% else %}btn-default{% endif %} dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {% if project is defined and project is not null and ( project.id > 0 ) %}
+                                    {{ project.title }}
+                                {% else %}
+                                    Vos projets
+                                {% endif %}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md" style="">
+                                <ul class="kt-nav kt-nav--bold kt-nav--md-space kt-margin-t-20 kt-margin-b-20">
+                                    {% for project in header.myprojects(app.user) %}
+                                        <li class="kt-nav__item">
+                                            <a class="kt-nav__link active" href="{{ path('project_show', { slug : project.slug}) }}">
+                                                <span class="kt-nav__link-icon"><i class="flaticon2-user"></i></span>
+                                                <span class="kt-nav__link-text">{{ project.title }}</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="kt-nav__item">
+                                            <a class="kt-nav__link active" href="#">
+                                                <span class="kt-nav__link-icon"><i class="flaticon2-user"></i></span>
+                                                <span class="kt-nav__link-text">Vous n'avez pas encore de projet.</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
                 {% endif %}
             </ul>
         </div>
