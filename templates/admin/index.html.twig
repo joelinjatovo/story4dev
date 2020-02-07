@@ -102,7 +102,7 @@
                     {% for user in users %}
                         <div class="kt-widget4__item">
                             <div class="kt-widget4__pic kt-widget4__pic--pic">
-                                <img src="{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') : default_avatar }}" alt="avatar">   
+                                <img src="{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') | imagine_filter('thumb') : default_avatar }}" alt="avatar">   
                             </div>
                             <div class="kt-widget4__info">
                                 <a href="{{ path('admin_user_show', { id : user.id }) }}" class="kt-widget4__username">
