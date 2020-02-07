@@ -25,7 +25,7 @@
                             <div class="kt-menu__wrapper">
                                 <ul class="kt-menu__subnav">
                                     <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true" ><span class="kt-menu__link"><span class="kt-menu__link-text">Mes Projects</span></span></li>
-                                    {% for project in header.myprojects %}
+                                    {% for project in header.myprojects(app.user) %}
                                         <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('project_show', { slug : project.slug}) }}" class="kt-menu__link "><span class="kt-menu__link-text">{{ project.title }}</span></a></li>
                                     {% else %}
                                         <li class="kt-menu__item " aria-haspopup="true" >

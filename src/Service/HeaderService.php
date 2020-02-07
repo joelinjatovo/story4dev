@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
 use App\Entity\Project;
+use App\Entity\User;
 
 class HeaderService
 {
@@ -18,8 +19,12 @@ class HeaderService
         $this->user = $security->getUser();
     }
     
-    public function getProjects()
+    public function getProjects(?User $user = null)
     {
+        if( $user ){
+            return $this->em->getRepository(Project::class)->findByAuthor($user)->execute();
+        }
+        
         if( $this->user ){
             return $this->em->getRepository(Project::class)->findByAuthor($this->user)->execute();
         }
@@ -27,8 +32,12 @@ class HeaderService
         return null;
     }
     
-    public function getMyProjects()
+    public function getMyProjects(?User $user = null)
     {
+        if( $user ){
+            return $this->em->getRepository(Project::class)->findByContributor($user)->execute();
+        }
+        
         if( $this->user ){
             return $this->em->getRepository(Project::class)->findByContributor($this->user)->execute();
         }
