@@ -12,11 +12,11 @@
             <h3 class="kt-subheader__title">Toutes les activités</h3>
             <div class="kt-subheader__breadcrumbs">
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="{{ path('project_list', { page : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
-                <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="{{ path('project_show', { slug: project.slug })}}" class="kt-subheader__breadcrumbs-link">{{ project.title }}</a>
-                <span class="kt-subheader__breadcrumbs-separator"></span>
-                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Activités</span>
+                <a href="{{ path('project_list') }}" class="kt-subheader__breadcrumbs-link kt-hidden">Projets</a>
+                <span class="kt-subheader__breadcrumbs-separator kt-hidden"></span>
+                <a href="{{ path('project_show', { slug: project.slug })}}" class="kt-subheader__breadcrumbs-link kt-hidden">{{ project.title }}</a>
+                <span class="kt-subheader__breadcrumbs-separator kt-hidden"></span>
+                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active kt-hidden">Activités</span>
             </div>
         </div>        
         <div class="kt-subheader__toolbar">

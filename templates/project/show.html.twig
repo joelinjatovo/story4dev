@@ -30,32 +30,44 @@
                     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
                         <!--begin::Nav-->
                         <ul class="kt-nav">
-                            {% if is_granted('edit', project) %}
                                 <li class="kt-nav__head">
                                     Nouveau                                 
                                     <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                                 </li>
                                 <li class="kt-nav__separator"></li>
-                                <li class="kt-nav__item">
-                                    <a href="{{ path('activity_index', { 'slug' : project.slug } ) }}" class="kt-nav__link">
-                                        <i class="kt-nav__link-icon flaticon-map"></i>
-                                        <span class="kt-nav__link-text">Activité</span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <a href="{{ path('graph_index', { 'slug' : project.slug } ) }}" class="kt-nav__link">
-                                        <i class="kt-nav__link-icon flaticon-map"></i>
-                                        <span class="kt-nav__link-text">Graphe</span>
-                                    </a>
-                                </li>
-                                <li class="kt-nav__item">
-                                    <button class="kt-nav__link" data-toggle="modal" data-target="#kt_modal_activities">
-                                        <i class="kt-nav__link-icon flaticon2-checking"></i>
-                                        <span class="kt-nav__link-text">Rapport</span>
-                                    </button>
-                                </li>
+                                {% if is_granted('create_activity', project) %}
+                                    <li class="kt-nav__item">
+                                        <a href="{{ path('activity_index', { 'slug' : project.slug } ) }}" class="kt-nav__link">
+                                            <i class="kt-nav__link-icon flaticon-map"></i>
+                                            <span class="kt-nav__link-text">Activité</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if is_granted('edit', project) %}
+                                    <li class="kt-nav__item">
+                                        <button class="kt-nav__link" data-toggle="modal" data-target="#kt_modal_activities_indicator">
+                                            <i class="kt-nav__link-icon flaticon2-checking"></i>
+                                            <span class="kt-nav__link-text">Indicateur</span>
+                                        </button>
+                                    </li>
+                                {% endif %}
+                                {% if is_granted('edit', project) %}
+                                    <li class="kt-nav__item">
+                                        <button class="kt-nav__link" data-toggle="modal" data-target="#kt_modal_activities_report">
+                                            <i class="kt-nav__link-icon flaticon2-checking"></i>
+                                            <span class="kt-nav__link-text">Rapport</span>
+                                        </button>
+                                    </li>
+                                {% endif %}
+                                {% if is_granted('edit', project) %}
+                                    <li class="kt-nav__item">
+                                        <a href="{{ path('graph_index', { 'slug' : project.slug } ) }}" class="kt-nav__link">
+                                            <i class="kt-nav__link-icon flaticon-map"></i>
+                                            <span class="kt-nav__link-text">Graphe</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
                                 <li class="kt-nav__separator"></li>
-                            {% endif %}
                             <li class="kt-nav__head">
                                 Aller dans                                   
                                 <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
@@ -77,6 +89,12 @@
                                 <a href="{{ path('contribution_list', { 'slug' : project.slug } ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-group"></i>
                                     <span class="kt-nav__link-text">Les contributeurs</span>
+                                </a>
+                            </li>                        
+                            <li class="kt-nav__item">
+                                <a href="{{ path('graph_list', { 'slug' : project.slug } ) }}" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-chart"></i>
+                                    <span class="kt-nav__link-text">Les graphes</span>
                                 </a>
                             </li>
                         </ul>
@@ -197,11 +215,46 @@
 {% endif %}
     
 <!-- begin: Modal -->
-<div class="modal fade" id="kt_modal_activities" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="kt_modal_activities_report" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Choisissez une activité pour créer un rapport</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="kt-notification-v2">
+                    {% for activity in project.activities %}
+                        <a href="{{ path('report_index', { 'activity_id' : activity.id, slug: project.slug } ) }}" class="kt-notification-v2__item">
+                            <div class="kt-notification-v2__itek-wrapper">
+                                <div class="kt-notification-v2__item-title">
+                                    {{ activity.title }}
+                                </div>
+                                <div class="kt-notification-v2__item-desc">
+                                    {{ activity.author.fullname }}
+                                </div>
+                            </div>	
+                        </a>
+                    {% else %}
+                        Aucunes activités trouvées sur ce projet.
+                    {% endfor %}
+                </div>  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end: Modal -->
+    
+<!-- begin: Modal -->
+<div class="modal fade" id="kt_modal_activities_indicator" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Choisissez une activité pour créer un indicateur</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 </button>
             </div>

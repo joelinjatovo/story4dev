@@ -15,6 +15,7 @@ class ProjectVoter extends Voter
     const VIEW   = 'view';
     const EDIT   = 'edit';
     const REMOVE = 'remove';
+    const CREATE_ACTIVITY = 'create_activity';
 
     private $security;
     private $em;
@@ -28,7 +29,7 @@ class ProjectVoter extends Voter
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::VIEW, self::EDIT, self::REMOVE])) {
+        if (!in_array($attribute, [self::VIEW, self::EDIT, self::REMOVE, self::CREATE_ACTIVITY])) {
             return false;
         }
 
@@ -65,9 +66,16 @@ class ProjectVoter extends Voter
                 return $this->canEdit($project, $user);
             case self::REMOVE:
                 return $this->canRemove($project, $user);
+            case self::CREATE_ACTIVITY:
+                return $this->canCreateActivity($project, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
+    }
+
+    private function canCreateActivity(Project $project, User $user)
+    {
+        return $this->canEdit($project, $user);
     }
 
     private function canView(Project $project, User $user)
