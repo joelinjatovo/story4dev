@@ -13,7 +13,7 @@
             <h3 class="kt-subheader__title">Détail de l'activité</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__breadcrumbs">
-                <a href="{{ path('project_list', { 'page' : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projects</a>
+                <a href="{{ path('project_list', { 'page' : 1 }) }}" class="kt-subheader__breadcrumbs-link">Projets</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="{{ path('project_show', { slug: activity.project.slug })}}" class="kt-subheader__breadcrumbs-link">{{ activity.project.title }}</a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
@@ -29,7 +29,7 @@
                     <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" class="btn kt-subheader__btn-primary">Modifier &nbsp;</a>
                 {% endif %}
                 
-                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip" title="" data-placement="left" data-original-title="Quick actions">
+                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip" title="" data-placement="left" data-original-title="Actions">
                     <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

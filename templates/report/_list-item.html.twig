@@ -3,7 +3,7 @@
         <span style="width: 250px;">
             <div class="kt-user-card-v2">
                 <div class="kt-user-card-v2__details">
-                    <a class="kt-user-card-v2__name" href="{{ path('report_show', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id }) }}">{{ report.title }}</a>
+                    <a class="kt-user-card-v2__name" href="{{ is_granted('view', report) ? path('report_show', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id }) : '#' }}">{{ report.title }}</a>
                     <span class="kt-user-card-v2__email">{{ report.description|excerpt(50) }}</span>
                 </div>
             </div>
