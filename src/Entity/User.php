@@ -353,6 +353,11 @@ class User implements UserInterface, \Serializable
      */
     private $sessions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AccessLog", mappedBy="user")
+     */
+    private $accessLogs;
+
     public function __construct()
     {
         $this->agree = true;
@@ -377,6 +382,7 @@ class User implements UserInterface, \Serializable
         $this->indicatorFavorites = new ArrayCollection();
         $this->activityFavorites = new ArrayCollection();
         $this->sessions = new ArrayCollection();
+        $this->accessLogs = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -1387,6 +1393,37 @@ class User implements UserInterface, \Serializable
             // set the owning side to null (unless already changed)
             if ($session->getUser() === $this) {
                 $session->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AccessLog[]
+     */
+    public function getAccessLogs(): Collection
+    {
+        return $this->accessLogs;
+    }
+
+    public function addAccessLog(AccessLog $accessLog): self
+    {
+        if (!$this->accessLogs->contains($accessLog)) {
+            $this->accessLogs[] = $accessLog;
+            $accessLog->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccessLog(AccessLog $accessLog): self
+    {
+        if ($this->accessLogs->contains($accessLog)) {
+            $this->accessLogs->removeElement($accessLog);
+            // set the owning side to null (unless already changed)
+            if ($accessLog->getUser() === $this) {
+                $accessLog->setUser(null);
             }
         }
 

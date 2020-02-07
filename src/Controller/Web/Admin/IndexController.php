@@ -33,16 +33,8 @@ class IndexController extends AbstractController
         
         $users = $entityManager->getRepository(User::class)->getRecent(5);
         
-        $query = $entityManager->createQuery("SELECT DATE(r.createdAt) as date, COUNT(r.id) as value FROM App:Report AS r GROUP BY date");
+        $query = $entityManager->createQuery("SELECT DATE(al.createdAt) as date, COUNT(al.id) as value FROM App:AccessLog AS al GROUP BY date");
         $data = $query->getResult();
-        /*
-        $query = $entityManager->getConnection()->prepare(
-            "SELECT DATE(FROM_UNIXTIME(s.sess_time)) as date, COUNT(s.sess_id) as value "
-            . " FROM sessions AS s "
-            . " GROUP BY date");
-        $query->execute();
-        $data = $query->fetchAll();
-        */
         
         $count = [];
         $count['pinged']     = $entityManager->getRepository(User::class)->createQueryBuilder('u')->select('count(u.id)')->where('u.status = :status')->setParameter('status', User::STATUS_PING)->getQuery()->getSingleScalarResult();
