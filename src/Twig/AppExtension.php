@@ -237,7 +237,10 @@ class AppExtension extends AbstractExtension
             if($goal != 0){
                 return (int) ( $value / $goal * 100 ) ;
             }else{
-                return 100;
+                // Make as 100% when goal is 0 and value is > 0
+                if( $value > 0) return 100;
+                
+                return 0;
             }
         }
         
