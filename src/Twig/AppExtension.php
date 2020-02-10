@@ -5,6 +5,8 @@ namespace App\Twig;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
+use App\Entity\IndicatorFavorite;
+use App\Entity\ActivityFavorite;
 use App\Entity\Iteration;
 use App\Entity\Periodicity;
 use App\Entity\Unit;
@@ -36,6 +38,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('goal', [$this, 'getGoal']),
             new TwigFilter('progression', [$this, 'getProgression']),
             new TwigFilter('progressionClass', [$this, 'getProgressionClass']),
+            new TwigFilter('favorite', [$this, 'isFavorite']),
         ];
     }
 
@@ -277,13 +280,28 @@ class AppExtension extends AbstractExtension
         return 'success';
     }
 
+    public function isFavorite($entity, User $user){
+        if($entity instanceof Activity){
+            $item = $this->em->getRepository(ActivityFavorite::class)->findOneBy(['user'=> $user, 'activity' => $entity]);
+            if($item){
+                return true;
+            }
+        }
+        if($entity instanceof Indicator){
+            $item = $this->em->getRepository(IndicatorFavorite::class)->findOneBy(['user'=> $user, 'indicator' => $entity]);
+            if($item){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function formatExcerpt($text, $length = 200, $more = '...'){
         $text = strip_tags($text);
         if( strlen($text) > $length ){
-            return mb_substr($text, 0, $length).$more;
+            $text = mb_substr($text, 0, $length).$more;
         }
-        
-        return $text;
+        return html_entity_decode($text);
     }
     
     public function formatHtml($html)

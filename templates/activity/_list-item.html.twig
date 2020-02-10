@@ -24,33 +24,33 @@
         </span>
     </td>
     <td data-field="Indicateurs" class="kt-datatable__cell">
-        <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'slug' : activity.project.slug} ) }}" style="width: 100px;"><span class="kt-font-bold">{{ activity.indicators.count }} </span>Indicateurs</a>
+        <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'slug' : activity.project.slug} ) }}" style="width: 100px;" data-toggle="kt-tooltip" data-placement="top" data-original-title="Nombre d'indicateur sur cette activité"><span class="kt-font-bold">{{ activity.indicators.count }} </span>Indicateurs</a>
     </td>
     <td data-field="Rapports" class="kt-datatable__cell">
-        <a style="width: 100px;" href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : activity.project.slug} ) }}"><span class="kt-font-bold">{{ activity.reports.count }} </span>Rapports</a>
+        <a style="width: 100px;" href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : activity.project.slug} ) }}" data-toggle="kt-tooltip" data-placement="top" data-original-title="Nombre de rapport effectué sur cette activité"><span class="kt-font-bold">{{ activity.reports.count }} </span>Rapports</a>
     </td>
     <td data-field="Documents" class="kt-datatable__cell">
-        <a style="width: 100px;" href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}"><span class="kt-font-bold">{{ activity.activityFiles.count }} </span>Documents</a>
+        <a style="width: 100px;" href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" data-toggle="kt-tooltip" data-placement="top" data-original-title="Nombre de document attaché à cette activité"><span class="kt-font-bold">{{ activity.activityFiles.count }} </span>Documents</a>
     </td>
     <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 150px;">
             {% if is_granted('star', activity) %}
-                <a data-id="{{ activity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-star">
-                    <i class="la la-star"></i>
+                <a data-id="{{ activity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-star" data-toggle="kt-tooltip" data-placement="top" data-original-title="{{ activity|favorite(app.user) ? 'Supprimer des favoris' : 'Ajouter aux favoris' }}">
+                    <i class="la {{ activity|favorite(app.user) ? 'la-star' : 'la-star-o' }}"></i>
                 </a>
             {% endif %}
             {% if is_granted('edit', activity) %}
-                <a href="{{ path('activity_edit', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                <a href="{{ path('activity_edit', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="Modifier">
                     <i class="la la-edit"></i>
                 </a>
             {% endif %}
             {% if is_granted('view', activity) %}
-                <a href="{{ path('activity_show', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                <a href="{{ path('activity_show', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="Voir plus de détail">
                     <i class="la la-eye"></i>
                 </a>
             {% endif %}
             {% if is_granted('remove', activity) %}
-                <a title="Supprimer cette activité" data-id="{{ activity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+                <a title="Supprimer cette activité" data-id="{{ activity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove" data-toggle="kt-tooltip" data-placement="top" data-original-title="Supprimer">
                     <i class="la la-trash"></i>
                 </a>
             {% endif %}

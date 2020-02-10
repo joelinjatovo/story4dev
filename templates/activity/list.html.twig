@@ -133,10 +133,13 @@ jQuery(document).ready(function($){
             if(data.success){
                 if(data.star){
                     $this.find('i').removeClass('la-star-o').addClass('la-star');
+                    $this.attr('data-original-title', 'Supprimer des favoris');
+                    toastr.success(data.message);
                 }else{
                     $this.find('i').removeClass('la-star').addClass('la-star-o');
+                    $this.attr('data-original-title', 'Ajouter aux favoris');
+                    toastr.warning(data.message);
                 }
-                toastr.success(data.message);
             }else{
                 toastr.error(data.message, data.title);
             }

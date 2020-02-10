@@ -9,6 +9,11 @@
                         </a>                         
                         <div class="kt-widget__action">
                             <div class="kt-portlet__head-toolbar">
+                                {% if is_granted('star', activity) %}
+                                    <a data-id="{{ activity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-star" data-toggle="kt-tooltip" data-placement="top" data-original-title="{{ activity|favorite(app.user) ? 'Supprimer des favoris' : 'Ajouter aux favoris' }}">
+                                        <i class="la {{ activity|favorite(app.user) ? 'la-star' : 'la-star-o' }}"></i>
+                                    </a>
+                                {% endif %}
                                 <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
                                     <i class="flaticon-more-1"></i>
                                 </a>

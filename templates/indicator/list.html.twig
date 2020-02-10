@@ -253,22 +253,22 @@
                                     <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
                                         <span style="overflow: visible; position: relative; width: 150px;">
                                             {% if is_granted('star', indicator) %}
-                                                <a data-id="{{ indicator.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-star">
-                                                    <i class="la la-star"></i>
+                                                <a data-id="{{ indicator.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-star" data-toggle="kt-tooltip" data-placement="top" data-original-title="{{ indicator|favorite(app.user) ? 'Supprimer des favoris' : 'Ajouter aux favoris' }}">
+                                                    <i class="la {{ indicator|favorite(app.user) ? 'la-star' : 'la-star-o' }}"></i>
                                                 </a>
                                             {% endif %}
                                             {% if is_granted('edit', indicator) %}
-                                                <a href="{{ path('indicator_edit', { 'slug': indicator.activity.project.slug, 'activity_id': indicator.activity.id, 'indicator_id': indicator.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                <a href="{{ path('indicator_edit', { 'slug': indicator.activity.project.slug, 'activity_id': indicator.activity.id, 'indicator_id': indicator.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="Modifier">
                                                     <i class="la la-edit"></i>
                                                 </a>
                                             {% endif %}
                                             {% if is_granted('view', indicator) %}
-                                                <a href="{{ path('indicator_show', { 'slug': indicator.activity.project.slug, 'activity_id': indicator.activity.id, 'indicator_id': indicator.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                <a href="{{ path('indicator_show', { 'slug': indicator.activity.project.slug, 'activity_id': indicator.activity.id, 'indicator_id': indicator.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="Afficher le détail">
                                                     <i class="la la-eye"></i>
                                                 </a>
                                             {% endif %}
                                             {% if is_granted('remove', indicator) %}
-                                                <a title="Supprimer ce rapport" data-id="{{ indicator.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+                                                <a title="Supprimer ce rapport" data-id="{{ indicator.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove" data-toggle="kt-tooltip" data-placement="top" data-original-title="Supprimer">
                                                     <i class="la la-trash"></i>
                                                 </a>
                                             {% endif %}
@@ -341,10 +341,13 @@ jQuery(document).ready(function($){
             if(data.success){
                 if(data.star){
                     $this.find('i').removeClass('la-star-o').addClass('la-star');
+                    $this.attr('data-original-title', 'Supprimer des favoris');
+                    toastr.success(data.message);
                 }else{
                     $this.find('i').removeClass('la-star').addClass('la-star-o');
+                    $this.attr('data-original-title', 'Ajouter aux favoris');
+                    toastr.warning(data.message);
                 }
-                toastr.success(data.message);
             }else{
                 toastr.error(data.message, data.title);
             }
