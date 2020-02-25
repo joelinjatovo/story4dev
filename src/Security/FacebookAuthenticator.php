@@ -4,7 +4,6 @@ namespace App\Security;
 
 use App\Entity\User;
 use App\Events\UserCreatedEvent;
-use App\Events\UserLoggedInEvent;
 use App\Helper\MessageHelper;
 use App\Service\TokenGenerator;
 use App\Service\OptionService;
@@ -161,11 +160,6 @@ class FacebookAuthenticator extends SocialAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        // creates the UserLoggedInEvent and dispatches it
-        $user = $token->getUser();
-        $event = new UserLoggedInEvent($user);
-        $this->dispatcher->dispatch($event, UserLoggedInEvent::NAME);
-        
         $targetUrl = $this->router->generate('account_profile');
 
         return new RedirectResponse($targetUrl);

@@ -3,7 +3,6 @@
 namespace App\Security;
 
 use App\Entity\User;
-use App\Events\UserLoggedInEvent;
 use App\Exception\AccountDeletedException;
 use App\Exception\AccountPingedException;
 use App\Exception\AccountBlockedException;
@@ -95,11 +94,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        // creates the UserLoggedInEvent and dispatches it
-        $user = $token->getUser();
-        $event = new UserLoggedInEvent($user);
-        $this->dispatcher->dispatch($event, UserLoggedInEvent::NAME);
-
         $targetPath = $this->getTargetPath($request->getSession(), $providerKey);
         if ( ! $targetPath ) {
             $targetPath = $this->urlGenerator->generate('app_index');

@@ -7,10 +7,11 @@ use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Http\SecurityEvents;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 use App\Entity\User;
 use App\Events\UserCreatedEvent;
-use App\Events\UserLoggedInEvent;
 use App\Events\UserChangedEvent;
 
 class UserSubscriber implements EventSubscriberInterface
@@ -28,24 +29,35 @@ class UserSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::RESPONSE => [
-                ['onKernelResponsePre', 10],
-                ['onKernelResponsePost', -10],
-            ],
+            SecurityEvents::INTERACTIVE_LOGIN => 'onUserLoggedIn',
             UserCreatedEvent::NAME => 'onUserCreated',
-            UserLoggedInEvent::NAME => 'onUserLoggedIn',
             UserChangedEvent::ACTIVATED => 'onUserActivated',
         ];
     }
 
-    public function onKernelResponsePre(ResponseEvent $event)
+    public function onUserLoggedIn(InteractiveLoginEvent $event)
     {
-        // ...
-    }
-
-    public function onKernelResponsePost(ResponseEvent $event)
-    {
-        // ...
+        /** @var User $user */
+        $user = $event->getAuthenticationToken()->getUser();
+        
+        // Check if user is logged in
+        if (!$user instanceof User) {
+            return;
+        }
+        
+        $body = $this->twig->render(
+            'emails/user_logged_in.html.twig',
+            array(
+                'user' => $user,
+            )
+        );
+        
+        $message = (new \Swift_Message('Nouvelle connexion sur Story4Dev'))
+            ->setFrom(['admin@story4dev.com' => 'EventListener - Story4Dev'])
+            ->setTo('joelinjatovo@gmail.com')
+            ->setBody($body, 'text/html')
+        ;
+        $this->mailer->send($message);
     }
 
     public function onUserCreated(UserCreatedEvent $event)
@@ -60,25 +72,6 @@ class UserSubscriber implements EventSubscriberInterface
         );
         
         $message = (new \Swift_Message('Nouvelle inscription sur Story4Dev'))
-            ->setFrom(['admin@story4dev.com' => 'EventListener - Story4Dev'])
-            ->setTo('joelinjatovo@gmail.com')
-            ->setBody($body, 'text/html')
-        ;
-        $this->mailer->send($message);
-    }
-
-    public function onUserLoggedIn(UserLoggedInEvent $event)
-    {
-        $user = $event->getUser();
-        
-        $body = $this->twig->render(
-            'emails/user_logged_in.html.twig',
-            array(
-                'user' => $user,
-            )
-        );
-        
-        $message = (new \Swift_Message('Nouvelle connexion sur Story4Dev'))
             ->setFrom(['admin@story4dev.com' => 'EventListener - Story4Dev'])
             ->setTo('joelinjatovo@gmail.com')
             ->setBody($body, 'text/html')
