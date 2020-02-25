@@ -49,7 +49,7 @@ class AppExtension extends AbstractExtension
     public function getCountryByIp($ip){
         $record = $this->geoip->getCountry($ip);
         if( $record ) {
-            return $record->country->isoCode;
+            return $record->country->name;
         }
         return '';
     }
@@ -57,7 +57,7 @@ class AppExtension extends AbstractExtension
     public function getCityByIp($ip){
         $record = $this->geoip->getCity($ip);
         if( $record ) {
-            return $record->city->isoCode;
+            return $record->city->name;
         }
         return '';
     }
