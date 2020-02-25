@@ -226,16 +226,18 @@
             <div class="modal-body">
                 <div class="kt-notification-v2">
                     {% for activity in project.activities %}
-                        <a href="{{ path('report_index', { 'activity_id' : activity.id, slug: project.slug } ) }}" class="kt-notification-v2__item">
-                            <div class="kt-notification-v2__itek-wrapper">
-                                <div class="kt-notification-v2__item-title">
-                                    {{ activity.title }}
-                                </div>
-                                <div class="kt-notification-v2__item-desc">
-                                    {{ activity.author.fullname }}
-                                </div>
-                            </div>	
-                        </a>
+                        {% if is_granted('create_report', activity) %}
+                            <a href="{{ path('report_index', { 'activity_id' : activity.id, slug: project.slug } ) }}" class="kt-notification-v2__item">
+                                <div class="kt-notification-v2__itek-wrapper">
+                                    <div class="kt-notification-v2__item-title">
+                                        {{ activity.title }}
+                                    </div>
+                                    <div class="kt-notification-v2__item-desc">
+                                        {{ activity.author.fullname }}
+                                    </div>
+                                </div>	
+                            </a>
+                        {% endif %}
                     {% else %}
                         Aucunes activités trouvées sur ce projet.
                     {% endfor %}
@@ -261,16 +263,18 @@
             <div class="modal-body">
                 <div class="kt-notification-v2">
                     {% for activity in project.activities %}
-                        <a href="{{ path('report_index', { 'activity_id' : activity.id, slug: project.slug } ) }}" class="kt-notification-v2__item">
-                            <div class="kt-notification-v2__itek-wrapper">
-                                <div class="kt-notification-v2__item-title">
-                                    {{ activity.title }}
-                                </div>
-                                <div class="kt-notification-v2__item-desc">
-                                    {{ activity.author.fullname }}
-                                </div>
-                            </div>	
-                        </a>
+                        {% if is_granted('create_indicator', activity) %}
+                            <a href="{{ path('indicator_index', { 'activity_id' : activity.id, slug: project.slug } ) }}" class="kt-notification-v2__item">
+                                <div class="kt-notification-v2__itek-wrapper">
+                                    <div class="kt-notification-v2__item-title">
+                                        {{ activity.title }}
+                                    </div>
+                                    <div class="kt-notification-v2__item-desc">
+                                        {{ activity.author.fullname }}
+                                    </div>
+                                </div>	
+                            </a>
+                        {% endif %}
                     {% else %}
                         Aucunes activités trouvées sur ce projet.
                     {% endfor %}
