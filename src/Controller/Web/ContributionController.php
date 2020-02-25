@@ -264,8 +264,8 @@ class ContributionController extends AbstractController
                     return $this->json([
                         'success' => true,
                         'status'  => 'success',
-                        'html'    => $this->renderView('project/contribution.html.twig', [ 'contribution' => $contribution]),
-                        'table'   => $this->renderView('contribution/list_item.html.twig', [ 'contribution' => $contribution]),
+                        'html'    => $this->renderView('project/_contribution.html.twig', [ 'contribution' => $contribution]),
+                        'table'   => $this->renderView('contribution/_list_item.html.twig', [ 'contribution' => $contribution]),
                     ]);
                 }
             }

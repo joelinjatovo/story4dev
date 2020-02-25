@@ -21,6 +21,7 @@
                                           <p style="font-size:15px;color:#585858;line-height:20px"><strong>Email :</strong> {{ user.email }}</p>
                                           <p style="font-size:15px;color:#585858;line-height:20px"><strong>Browser :</strong> {{ app.request.headers.get('User-Agent')}} </p>
                                           <p style="font-size:15px;color:#585858;line-height:20px"><strong>IP :</strong> {{ app.request.server.get("REMOTE_ADDR") }}</p>
+                                          <p style="font-size:15px;color:#585858;line-height:20px"><strong>GeoIP :</strong> {{ app.request.server.get("REMOTE_ADDR")|geoIpCountry }}</p>
                                         </div>
                                     </td>
                                 </tr>

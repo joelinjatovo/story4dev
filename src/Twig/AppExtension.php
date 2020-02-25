@@ -23,9 +23,11 @@ use App\Entity\File;
 class AppExtension extends AbstractExtension
 {
     protected $em;
+    protected $geoip;
 
-    public function __construct( \Doctrine\ORM\EntityManager $em) {
+    public function __construct( \Doctrine\ORM\EntityManager $em, \App\Service\GeoIpService $geoip) {
         $this->em = $em;
+        $this->geoip = $geoip;
     }
     
     public function getFilters()
@@ -39,9 +41,27 @@ class AppExtension extends AbstractExtension
             new TwigFilter('progression', [$this, 'getProgression']),
             new TwigFilter('progressionClass', [$this, 'getProgressionClass']),
             new TwigFilter('favorite', [$this, 'isFavorite']),
+            new TwigFilter('geoIpCountry', [$this, 'getCountryByIp']),
+            new TwigFilter('geoIpCity', [$this, 'getCityByIp']),
         ];
     }
 
+    public function getCountryByIp($ip){
+        $record = $this->geoip->getCountry($ip);
+        if( $record ) {
+            return $record->country->isoCode;
+        }
+        return '';
+    }
+
+    public function getCityByIp($ip){
+        $record = $this->geoip->getCity($ip);
+        if( $record ) {
+            return $record->city->isoCode;
+        }
+        return '';
+    }
+    
     public function getJson($data){
         return json_encode($data);
     }

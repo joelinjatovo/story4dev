@@ -17,7 +17,6 @@ class UserSubscriber implements EventSubscriberInterface
 {
     
     protected $twig;
-    
     protected $mailer;
     
     public function __construct(\Twig\Environment $twig, \Swift_Mailer $mailer)

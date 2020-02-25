@@ -51,6 +51,10 @@ services:
     App\EventSubscriber\LocaleSubscriber:
         arguments: ['%kernel.default_locale%']
 
+    App\Service\GeoIpService:
+        arguments:
+            $geoDirectory: '%kernel.project_dir%/geo'
+
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%upload_directory%'
