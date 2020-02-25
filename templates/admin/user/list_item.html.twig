@@ -15,9 +15,6 @@
             </div>
         </span>
     </td>
-    <td data-field="Country" class="kt-datatable__cell">
-        <span style="width: 50px;"><span class="kt-font-bold">{{ user.address is not null ? user.address.country : '' }}</span></span>
-    </td>
     <td data-field="Date" class="kt-datatable__cell">
         <span style="width: 100px;"><span class="kt-font-bold">{{ user.lastActivityAt ? user.lastActivityAt|ago : '-' }}</span></span>
     </td>

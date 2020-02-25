@@ -26,9 +26,6 @@
             <span style="width: 120px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.admin?'danger':'success' }}">{{ contribution.admin?'Admin':'Contributeur' }}</span></span>
         {% endif %}
     </td>
-    <td data-field="Country" class="kt-datatable__cell">
-        <span style="width: 50px;"><span class="kt-font-bold">{{ contribution.user.address is not null ? contribution.user.address.country : '' }}</span></span>
-    </td>
     <td data-field="Date" class="kt-datatable__cell">
         <span style="width: 100px;"><span class="kt-font-bold">{{ contribution.user.createdat|ago }}</span></span>
     </td>
