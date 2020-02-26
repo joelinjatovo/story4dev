@@ -30,6 +30,7 @@
                     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
                         <!--begin::Nav-->
                         <ul class="kt-nav">
+                            {% if is_granted('edit', project) %}
                                 <li class="kt-nav__head">
                                     Nouveau                                 
                                     <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
@@ -68,6 +69,7 @@
                                     </li>
                                 {% endif %}
                                 <li class="kt-nav__separator"></li>
+                            {% endif %}
                             <li class="kt-nav__head">
                                 Aller dans                                   
                                 <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
