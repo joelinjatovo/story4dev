@@ -53,7 +53,7 @@
                                         {% endif %}
                                         {% if is_granted('remove', activity) %}
                                             <li class="kt-nav__item">
-                                                <a data-id={{ activity.id }} href="#" class="kt-nav__link btn-remove">
+                                                <a data-id="{{ activity.id }}" href="#" class="kt-nav__link btn-remove">
                                                     <i class="kt-nav__link-icon flaticon-delete"></i>
                                                     <span class="kt-nav__link-text">Supprimer</span>
                                                 </a>
