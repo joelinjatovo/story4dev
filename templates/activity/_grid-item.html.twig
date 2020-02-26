@@ -35,7 +35,7 @@
                                                 </a>
                                             </li>
                                         {% endif %}
-                                        {% if is_granted('edit', activity) %}
+                                        {% if is_granted('create_indicator', activity) %}
                                             <li class="kt-nav__item">
                                                 <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" class="kt-nav__link">
                                                     <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
