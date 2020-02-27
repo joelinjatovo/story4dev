@@ -6,6 +6,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\Security;
 
@@ -22,7 +23,7 @@ class AccessLogSubscriber implements EventSubscriberInterface {
         $this->security = $security;
     }
 
-    public function onCoreController(FilterControllerEvent $event){
+    public function onTerminate(TerminateEvent $event){
         // Check that the current request is a "MASTER_REQUEST"
         // Ignore any sub-request
         if ($event->getRequestType() !== HttpKernel::MASTER_REQUEST) {
@@ -54,9 +55,7 @@ class AccessLogSubscriber implements EventSubscriberInterface {
 
     public static function getSubscribedEvents() {
         return [
-            // must be registered before (i.e. with a higher priority than) the default Locale listener
-            //KernelEvents::TERMINATE => [['onTerminate', 20]],
-            KernelEvents::CONTROLLER => 'onCoreController',
+            KernelEvents::TERMINATE  => 'onTerminate',
         ];
     }
 

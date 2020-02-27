@@ -37,6 +37,13 @@ class UserSubscriber implements EventSubscriberInterface
 
     public function onUserLoggedIn(InteractiveLoginEvent $event)
     {
+        /** Do not notify on authenticated by API-TOKEN */
+        $request = $event->getRequest();
+        $uri = $request->getUri();
+        if( ( strpos($uri, '/api/v1/') !== false ) && ( strpos($uri, '/api/v1/token') !== false ) ) {
+            return;
+        }
+        
         /** @var User $user */
         $user = $event->getAuthenticationToken()->getUser();
         
@@ -49,6 +56,7 @@ class UserSubscriber implements EventSubscriberInterface
             'emails/user_logged_in.html.twig',
             array(
                 'user' => $user,
+                'uri' => $uri,
             )
         );
         
