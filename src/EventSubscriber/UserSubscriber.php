@@ -40,7 +40,7 @@ class UserSubscriber implements EventSubscriberInterface
         /** Do not notify on authenticated by API-TOKEN */
         $request = $event->getRequest();
         $uri = $request->getUri();
-        if( ( strpos($uri, '/api/v1/') !== false ) && ( strpos($uri, '/api/v1/token') !== false ) ) {
+        if( ( strpos($uri, '/api/v1/') !== false ) && ( strpos($uri, '/api/v1/token') === false ) ) {
             return;
         }
         
