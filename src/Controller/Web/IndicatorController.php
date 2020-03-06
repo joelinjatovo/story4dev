@@ -49,6 +49,7 @@ class IndicatorController extends AbstractController
         $indicator = new Indicator();
         foreach($project->getIterations() as $iteration){
             $goal = new Goal();
+            $goal->setValue(0);
             $goal->setAuthor($this->getUser());
             $goal->setIteration($iteration);
             $indicator->addGoal($goal);
@@ -194,6 +195,7 @@ class IndicatorController extends AbstractController
             $goal = $repository->findOneBy(['iteration' => $iteration, 'indicator' => $indicator]);
             if( is_null( $goal ) ) {
                 $goal = new Goal();
+                $goal->setValue(0);
                 $goal->setAuthor($this->getUser());
                 $goal->setIteration($iteration);
                 $indicator->addGoal($goal);
@@ -235,6 +237,12 @@ class IndicatorController extends AbstractController
         $form->handleRequest($request);
 
         if ( $form->isSubmitted() && $form->isValid() ) {
+            foreach($indicator->getGoals() as $goal){
+                $value = $goal->getValue();
+                if( is_null($value) ) {
+                    $goal->setValue(0);
+                }
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($indicator);
             $entityManager->flush();
