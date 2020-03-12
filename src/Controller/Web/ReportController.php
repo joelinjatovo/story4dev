@@ -182,6 +182,51 @@ class ReportController extends AbstractController
     }
     
     /**
+     * @Route("/p/{slug}/activity/{activity_id}/report/{report_id}/pdf", name="pdf", methods="GET", requirements={"activity_id"="\d+", "report_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
+     * @Entity("report", options={"mapping": {"report_id": "id"}})
+     */
+    public function pdf(Project $project, Activity $activity, Report $report, \App\Twig\AppExtension $twigExtension)
+    {
+        $this->denyAccessUnlessGranted('view', $report);
+        
+        if($activity->getProject() != $project ){
+            throw $this->createNotFoundException('The project does not match');
+        }
+        
+        $user = $project->getAuthor();
+
+        if($report->getActivity() != $activity ){
+            throw $this->createNotFoundException('The activity does not match');
+        }
+        
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('report/pdf.html.twig', [
+            'user'     => $user,
+            'project'  => $project,
+            'activity' => $activity,
+            'report'   => $report,
+        ]);
+        
+        $myProjectDirectory = 'C:\wamp64\www\story4dev.com';
+        //$pdf = new \Knp\Snappy\Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-i386'); //Snappy Pdf
+        //$pdf = new \Knp\Snappy\Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-amd64'); //Snappy Pdf
+        
+        $pdf = new \Knp\Snappy\Pdf('C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'); //Snappy Pdf
+
+        $pdfContents = $pdf->getOutputFromHtml($html);
+
+        // Send it to the browser
+        $response = new Response($pdfContents);
+        $response->headers->set('Content-type', 'application/octect-stream');
+        $response->headers->set('Content-Disposition', sprintf('attachment; filename="%s"', "Your report.pdf"));
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+
+        return $response;
+    }
+    
+    /**
      * @Route("/p/{slug}/activity/{activity_id}/report/edit/{report_id}", name="edit", methods="GET", requirements={"activity_id"="\d+", "report_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
