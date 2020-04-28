@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'basepdf.html.twig' %}
 
 {% block title %}Rapport #{{ report.id }} - Activité #{{ activity.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
-    <link href="{{ asset('css/gallery.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ absolute_url(asset('css/gallery.css')) }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block subheader %}

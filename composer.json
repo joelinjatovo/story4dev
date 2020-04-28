@@ -8,6 +8,7 @@
         "doctrine/annotations": "^1.6",
         "doctrine/doctrine-bundle": "^1.11",
         "doctrine/orm": "^2.6",
+        "dompdf/dompdf": "^0.8.5",
         "friendsofsymfony/ckeditor-bundle": "^2.1",
         "friendsofsymfony/rest-bundle": "^2.5",
         "gesdinet/jwt-refresh-token-bundle": "^0.7.1",

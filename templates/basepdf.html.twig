@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Application{% endblock %} - {{ setting.get('seo_title') }}</title>
+        <meta name="keywords" content="{{ setting.get('seo_keywords') }}"> 
+        <meta name="description" content="{{ setting.get('seo_description') }}"> 
+
+        <!--begin::Fonts -->
+        <link href="{{ absolute_url(asset('css/fonts/poppins/poppins.css')) }}" rel="stylesheet">
+        <link href="{{ absolute_url(asset('css/fonts/roboto/roboto.css')) }}" rel="stylesheet">
+        <!--end::Fonts -->
+
+        <!--begin::Global Theme Styles(used by all pages) -->
+        <link href="{{ absolute_url(asset('css/vendors.bundle.css')) }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ absolute_url(asset('css/style.bundle.css')) }}" rel="stylesheet" type="text/css"/>
+        <!--end::Global Theme Styles -->
+        
+        <!--begin::Layout Skins & Vendor Skins(used by this page) -->
+        {% block stylesheets %}
+        <link href="{{ absolute_url(asset('css/fullcalendar.bundle.css')) }}" rel="stylesheet" type="text/css"/>
+        {% endblock %}
+        <!--end::Layout Skins & Vendor Skins -->
+
+        <link rel="shortcut icon" href="{{ absolute_url(asset('images/favicon.ico')) }}" />
+    </head>
+    <body id="page-body" class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-aside--minimize kt-page--loading">
+        <div class="kt-grid kt-grid--hor kt-grid--root">
+            <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
+			    <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+                    
+                    <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+                        <!-- begin:: Content -->
+                        <div class="kt-container kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+                            {% block content %}{% endblock %}
+                        </div>
+                        <!-- end:: Content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

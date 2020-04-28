@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Doctrine\Common\Collections\ArrayCollection;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 
 use App\Entity\User;
 use App\Entity\Result;
@@ -187,7 +188,7 @@ class ReportController extends AbstractController
      * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function pdf(Project $project, Activity $activity, Report $report, \App\Twig\AppExtension $twigExtension)
+    public function pdf(Project $project, Activity $activity, Report $report, \App\Twig\AppExtension $twigExtension, \Knp\Snappy\Pdf $knpSnappy)
     {
         $this->denyAccessUnlessGranted('view', $report);
         
@@ -208,12 +209,25 @@ class ReportController extends AbstractController
             'activity' => $activity,
             'report'   => $report,
         ]);
+
+        return new PdfResponse(
+            $knpSnappy->getOutputFromHtml($html),
+            'file.pdf'
+        );
         
-        $myProjectDirectory = 'C:\wamp64\www\story4dev.com';
+        /*
+        return $this->render('report/pdf.html.twig', [
+            'user'     => $user,
+            'project'  => $project,
+            'activity' => $activity,
+            'report'   => $report,
+        ]);
+        */
+        
+        //$myProjectDirectory = 'C:\wamp64\www\story4dev.com';
         //$pdf = new \Knp\Snappy\Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-i386'); //Snappy Pdf
-        //$pdf = new \Knp\Snappy\Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-amd64'); //Snappy Pdf
-        
-        $pdf = new \Knp\Snappy\Pdf('C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'); //Snappy Pdf
+        //$pdf = new \Knp\Snappy\Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'); //Snappy Pdf
+        $pdf = new \Knp\Snappy\Pdf(); //Snappy Pdf
 
         $pdfContents = $pdf->getOutputFromHtml($html);
 
