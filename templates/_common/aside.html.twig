@@ -17,7 +17,7 @@
                     <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--submenu-fullheight kt-menu__item--open kt-menu__item--here kt-hidden" aria-haspopup="true"  data-ktmenu-submenu-toggle="click" data-ktmenu-dropdown-toggle-class="kt-aside-menu-overlay--on">
                         <a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
                             <i class="kt-menu__link-icon flaticon2-layers-1"></i>
-                            <span class="kt-menu__link-text">Mes Projects</span>
+                            <span class="kt-menu__link-text">{% trans %}my.projects{% endtrans %}</span>
                             <i class="kt-menu__ver-arrow la la-angle-right"></i>
                         </a>
                         <div class="kt-menu__submenu ">
@@ -29,7 +29,7 @@
                                         <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('project_show', { slug : project.slug}) }}" class="kt-menu__link "><span class="kt-menu__link-text">{{ project.title }}</span></a></li>
                                     {% else %}
                                         <li class="kt-menu__item " aria-haspopup="true" >
-                                            <a>Vous n'avez ni de projet ni de contribution.</a>
+                                            <a>{% trans %}aside.no.projects{% endtrans %}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>
@@ -47,21 +47,21 @@
                         <div class="kt-menu__submenu ">
                             <span class="kt-menu__arrow"></span>
                             <ul class="kt-menu__subnav">
-                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" title="{{ project.title }}" ><span class="kt-menu__link"><span class="kt-menu__link-text">Mon projet</span></span></li>
+                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" title="{{ project.title }}" ><span class="kt-menu__link"><span class="kt-menu__link-text">{% trans %}my.project{% endtrans %}</span></span></li>
                                 {% if is_granted('view', project) %}
-                                    <li class="kt-menu__item "><a  href="{{ path('project_dashboard', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-dashboard"><span></span></i><span class="kt-menu__link-text">Tableau de bord</span></a></li>
+                                    <li class="kt-menu__item "><a  href="{{ path('project_dashboard', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-dashboard"><span></span></i><span class="kt-menu__link-text">{% trans %}dashboard{% endtrans %}</span></a></li>
                                 {% endif %}
                                 {% if is_granted('view', project) %}
-                                    <li class="kt-menu__item "><a  href="{{ path('activity_list', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Activités</span></a></li>
+                                    <li class="kt-menu__item "><a  href="{{ path('activity_list', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">{% trans %}activities{% endtrans %}</span></a></li>
                                 {% endif %}
                                 {% if is_granted('view', project) %}
-                                    <li class="kt-menu__item "><a  href="{{ path('indicator_list2', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Indicateurs</span></a></li>
+                                    <li class="kt-menu__item "><a  href="{{ path('indicator_list2', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">{% trans %}indicators{% endtrans %}</span></a></li>
                                 {% endif %}
                                 {% if is_granted('view', project) %}
-                                    <li class="kt-menu__item "><a  href="{{ path('report_list', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Rapports</span></a></li>
+                                    <li class="kt-menu__item "><a  href="{{ path('report_list', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">{% trans %}reports{% endtrans %}</span></a></li>
                                 {% endif %}
                                 {% if is_granted('view', project) %}
-                                    <li class="kt-menu__item "><a  href="{{ path('contribution_list', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-group"><span></span></i><span class="kt-menu__link-text">Contributeurs</span></a></li>
+                                    <li class="kt-menu__item "><a  href="{{ path('contribution_list', { 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-group"><span></span></i><span class="kt-menu__link-text">{% trans %}contributors{% endtrans %}</span></a></li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -77,18 +77,18 @@
                         <div class="kt-menu__submenu ">
                             <span class="kt-menu__arrow"></span>
                             <ul class="kt-menu__subnav">
-                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" aria-haspopup="true"  data-ktmenu-link-redirect="1" title="{{ activity.title }}"><span class="kt-menu__link"><span class="kt-menu__link-text">Activité</span></span></li>
+                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" aria-haspopup="true"  data-ktmenu-link-redirect="1" title="{{ activity.title }}"><span class="kt-menu__link"><span class="kt-menu__link-text">{% trans %}activity{% endtrans %}</span></span></li>
                                 {% if is_granted('create_report', activity) %}
-                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-plus"><span></span></i><span class="kt-menu__link-text">Ajouter un rapport</span></a></li>
+                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-plus"><span></span></i><span class="kt-menu__link-text">{% trans %}add.report{% endtrans %}</span></a></li>
                                 {% endif %}
                                 {% if is_granted('view', activity) %}
-                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-spoon"><span></span></i><span class="kt-menu__link-text">Documents</span></a></li>
+                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-spoon"><span></span></i><span class="kt-menu__link-text">{% trans %}documents{% endtrans %}</span></a></li>
                                 {% endif %}
                                 {% if is_granted('view', activity) %}
-                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">Rapports</span></a></li>
+                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-rocket"><span></span></i><span class="kt-menu__link-text">{% trans %}reports{% endtrans %}</span></a></li>
                                 {% endif %}
                                 {% if is_granted('view', activity) %}
-                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('indicator_list', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-shield"><span></span></i><span class="kt-menu__link-text">Indicateurs</span></a></li>
+                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('indicator_list', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-shield"><span></span></i><span class="kt-menu__link-text">{% trans %}indicators{% endtrans %}</span></a></li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -104,12 +104,12 @@
                         <div class="kt-menu__submenu ">
                             <span class="kt-menu__arrow"></span>
                             <ul class="kt-menu__subnav">
-                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" title="{{ project.title }}" ><span class="kt-menu__link"><span class="kt-menu__link-text">Graphes</span></span></li>
+                                <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom" title="{{ project.title }}" ><span class="kt-menu__link"><span class="kt-menu__link-text">{% trans %}graphs{% endtrans %}</span></span></li>
                                 {% for graph in project.graphs %}
                                     <li class="kt-menu__item "><a  href="{{ path('graph_show', { slug : project.slug, graph_id: graph.id } ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-bar-chart"><span></span></i><span class="kt-menu__link-text">{{ graph.title }}</span></a></li>
                                 {% else %}
                                     <li class="kt-menu__item " aria-haspopup="true" >
-                                        <a>Il n'y a pas encore de graphe.</a>
+                                        <a>{% trans %}aside.no.graphs{% endtrans %}</a>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -120,20 +120,20 @@
                     <li class="kt-menu__item kt-menu__item--submenu kt-menu__item--bottom-2" aria-haspopup="true" data-ktmenu-submenu-toggle="click">
                         <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
                             <i class="kt-menu__link-icon flaticon2-trash"></i>
-                            <span class="kt-menu__link-text">Corbeilles</span>
+                            <span class="kt-menu__link-text">{% trans %}trashes{% endtrans %}</span>
                             <i class="kt-menu__ver-arrow la la-angle-right"></i>
                         </a>
                         <div class="kt-menu__submenu kt-menu__submenu--up">
                             <span class="kt-menu__arrow"></span>
                             <ul class="kt-menu__subnav">
                                 <li class="kt-menu__item  kt-menu__item--parent kt-menu__item--bottom-2" aria-haspopup="true">
-                                    <span class="kt-menu__link"><span class="kt-menu__link-text">Corbeilles</span></span>
+                                    <span class="kt-menu__link"><span class="kt-menu__link-text">{% trans %}trashes{% endtrans %}</span></span>
                                 </li>
-                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'users' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Utilisateurs</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'projects' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Projets</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'activities' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Activités</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'reports' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Rapports</span></a></li>
-                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'indicators' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Indicateurs</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'users' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">{% trans %}users{% endtrans %}</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'projects' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">{% trans %}projects{% endtrans %}</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'activities' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">{% trans %}activities{% endtrans %}</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'reports' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">{% trans %}reports{% endtrans %}</span></a></li>
+                                <li class="kt-menu__item " aria-haspopup="true"><a href="{{ path('admin_trash_list', {type: 'indicators' } ) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">{% trans %}indicators{% endtrans %}</span></a></li>
                             </ul>
                         </div>
                     </li>
@@ -141,45 +141,45 @@
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--submenu-fullheight kt-menu__item--bottom-1" aria-haspopup="true"  data-ktmenu-submenu-toggle="click" data-ktmenu-dropdown-toggle-class="kt-aside-menu-overlay--on">
                         <a  href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon2-gear"></i>
-                            <span class="kt-menu__link-text">Paramètres</span>
+                            <span class="kt-menu__link-text">{% trans %}settings{% endtrans %}</span>
                             <i class="kt-menu__ver-arrow la la-angle-right"></i>
                         </a>
                         <div class="kt-menu__submenu">
                             <span class="kt-menu__arrow"></span>
                             <div class="kt-menu__wrapper">
                                 <ul class="kt-menu__subnav">
-                                    <li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true" ><span class="kt-menu__link"><span class="kt-menu__link-text">Paramètres</span></span></li>
-                                    <li class="kt-menu__item" aria-haspopup="true" ><a href="{{ url( 'admin_settings_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-gear"></i><span class="kt-menu__link-text">Général</span></a></li>
+                                    <li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true" ><span class="kt-menu__link"><span class="kt-menu__link-text">{% trans %}settings{% endtrans %}</span></span></li>
+                                    <li class="kt-menu__item" aria-haspopup="true" ><a href="{{ url( 'admin_settings_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-gear"></i><span class="kt-menu__link-text">{% trans %}general{% endtrans %}</span></a></li>
 
                                     <li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true" ><span class="kt-menu__link"><span class="kt-menu__link-text">Ajouter</span></span></li>
-                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_unit_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-connectdevelop"></i><span class="kt-menu__link-text">Unité de mesure</span></a></li>
-                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_periodicity_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-calendar"></i><span class="kt-menu__link-text">Périodicité</span></a></li>
+                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_unit_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-connectdevelop"></i><span class="kt-menu__link-text">{% trans %}unit{% endtrans %}</span></a></li>
+                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_periodicity_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-calendar"></i><span class="kt-menu__link-text">{% trans %}periodicity{% endtrans %}</span></a></li>
                                 
-                                    <li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"  data-ktmenu-link-redirect="1"><span class="kt-menu__link"><span class="kt-menu__link-text">Utilisateurs</span></span></li>
-                                    <li class="kt-menu__item" aria-haspopup="true"  data-ktmenu-link-redirect="1"><a  href="{{ path('admin_user_list') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">Tous</span></a></li>
+                                    <li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"  data-ktmenu-link-redirect="1"><span class="kt-menu__link"><span class="kt-menu__link-text">{% trans %}users{% endtrans %}</span></span></li>
+                                    <li class="kt-menu__item" aria-haspopup="true"  data-ktmenu-link-redirect="1"><a  href="{{ path('admin_user_list') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">{% trans %}button.all1{% endtrans %}</span></a></li>
                                     <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true"  data-ktmenu-submenu-toggle="click" data-ktmenu-submenu-mode="accordion">
                                         <a  href="javascript:;" class="kt-menu__link kt-menu__toggle">
                                             <i class="kt-menu__link-icon la la-list"></i>
-                                            <span class="kt-menu__link-text">Statut</span>
+                                            <span class="kt-menu__link-text">{% trans %}status.title{% endtrans %}</span>
                                             <i class="kt-menu__ver-arrow la la-angle-right"></i>
                                         </a>
                                         <div class="kt-menu__submenu">
                                             <span class="kt-menu__arrow"></span>
                                             <ul class="kt-menu__subnav">
-                                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_status', { status: 'ping'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-computer"></i><span class="kt-menu__link-text">En cours</span><span class="kt-menu__link-badge kt-hidden"><span class="kt-badge kt-badge--warning">10</span></span></a></li>
-                                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_status', { status: 'active'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-signs-2"></i><span class="kt-menu__link-text">Actives</span><span class="kt-menu__link-badge kt-hidden"><span class="kt-badge kt-badge--danger">6</span></span></a></li>
-                                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_status', { status: 'blocked'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-clipboard"></i><span class="kt-menu__link-text">Bloqués</span><span class="kt-menu__link-badge kt-hidden"><span class="kt-badge kt-badge--success">2</span></span></a></li>
-                                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_status', { status: 'canceled'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-multimedia-2"></i><span class="kt-menu__link-text">Annulés</span><span class="kt-menu__link-badge kt-hidden"><span class="kt-badge kt-badge--info kt-badge--inline">245</span></span></a></li>
+                                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_status', { status: 'ping'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-computer"></i><span class="kt-menu__link-text">{% trans %}status.pings{% endtrans %}</span><span class="kt-menu__link-badge kt-hidden"><span class="kt-badge kt-badge--warning">10</span></span></a></li>
+                                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_status', { status: 'active'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-signs-2"></i><span class="kt-menu__link-text">{% trans %}status.actives{% endtrans %}</span><span class="kt-menu__link-badge kt-hidden"><span class="kt-badge kt-badge--danger">6</span></span></a></li>
+                                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_status', { status: 'blocked'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-clipboard"></i><span class="kt-menu__link-text">{% trans %}status.blocks{% endtrans %}</span><span class="kt-menu__link-badge kt-hidden"><span class="kt-badge kt-badge--success">2</span></span></a></li>
+                                                <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_status', { status: 'canceled'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-multimedia-2"></i><span class="kt-menu__link-text">c</span><span class="kt-menu__link-badge kt-hidden"><span class="kt-badge kt-badge--info kt-badge--inline">245</span></span></a></li>
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_role', { role: 'admin'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">Administrateurs</span></a></li>
-                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_role', { role: 'user'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">Clients</span></a></li>
-                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_user_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-plus"></i><span class="kt-menu__link-text">Ajouter</span></a></li>
+                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_role', { role: 'admin'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">{% trans %}role.admins{% endtrans %}</span></a></li>
+                                    <li class="kt-menu__item " aria-haspopup="true" ><a  href="{{ path('admin_user_list_role', { role: 'user'} ) }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">{% trans %}role.customers{% endtrans %}</span></a></li>
+                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_user_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-plus"></i><span class="kt-menu__link-text">{% trans %}button.add{% endtrans %}</span></a></li>
                                     
-                                    <li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"  data-ktmenu-link-redirect="1"><span class="kt-menu__link"><span class="kt-menu__link-text">Projets</span></span></li>
-                                    <li class="kt-menu__item" aria-haspopup="true"  data-ktmenu-link-redirect="1"><a  href="{{ path('admin_project_list') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">Tous</span></a></li>
-                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_project_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-plus"></i><span class="kt-menu__link-text">Ajouter</span></a></li>
+                                    <li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"  data-ktmenu-link-redirect="1"><span class="kt-menu__link"><span class="kt-menu__link-text">{% trans %}projects{% endtrans %}</span></span></li>
+                                    <li class="kt-menu__item" aria-haspopup="true"  data-ktmenu-link-redirect="1"><a  href="{{ path('admin_project_list') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-list"></i><span class="kt-menu__link-text">{% trans %}button.all1{% endtrans %}</span></a></li>
+                                    <li class="kt-menu__item" aria-haspopup="true" ><a  href="{{ path('admin_project_index') }}" class="kt-menu__link "><i class="kt-menu__link-icon la la-plus"></i><span class="kt-menu__link-text">{% trans %}button.add{% endtrans %}</span></a></li>
                                 </ul>
                             </div>
                         </div>

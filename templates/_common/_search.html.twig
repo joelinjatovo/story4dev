@@ -4,7 +4,7 @@
             {% if app.request.get('status') is not empty %}
                 <input type="hidden" name="status" value="{{ app.request.get('status') }}" >
             {% endif %}
-            <input type="text" name="s" class="form-control" placeholder="Rechercher..." id="generalSearch" value="{{ search is defined and search is not null ? search : '' }}" maxlength="20">
+            <input type="text" name="s" class="form-control" placeholder="{% trans %}_search.placeholder{% endtrans %}" id="generalSearch" value="{{ search is defined and search is not null ? search : '' }}" maxlength="20">
             <span class="kt-input-icon__icon kt-input-icon__icon--right">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
