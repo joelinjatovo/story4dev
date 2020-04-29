@@ -163,10 +163,6 @@ return [
         'customer' => 'Client',
         'customers' => 'Clients',
     ],
-    'settings' => [
-        'title' => 'Paramètres',
-        'profil' => 'Paramètres du compte',
-    ],
     'signin' => [
         'title' => 'Connexion',
         'subtitle' => '&nbsp;',
@@ -235,6 +231,8 @@ return [
     'results' => 'Résultats',
     'setting' => 'Paramètre',
     'settings' => 'Paramètres',
+    'settings.title' => 'Paramètres',
+    'settings.profil' => 'Paramètres du compte',
     'trash' => 'Corbeille',
     'trashes' => 'Corbeilles',
     'unit' => 'Unité de mesure',
