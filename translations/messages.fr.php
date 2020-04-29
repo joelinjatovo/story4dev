@@ -18,7 +18,10 @@ return [
         'add' => 'Ajouter',
         'all1' => 'Tous',
         'all2' => 'Toutes',
+        'action' => 'Action',
+        'actions' => 'Actions',
         'cancel' => 'Annuler',
+        'logout' => 'Déconnexion',
         'ok' => 'Ok',
         'send' => 'Envoyer',
         'select' => 'Séléctionner',
@@ -39,9 +42,29 @@ return [
         'feedback' => 'Feedback',
         'help' => 'Guide d\'utilisation',
     ],
+    'header' => [
+        'no' => [
+            'projects' => 'Vous n\'avez pas encore de projet.',
+        ],
+        'settings' => 'Paramètres du compte',
+        'projects' => [
+            'subtitle' => 'Tous mes projets et contributions',
+        ],
+        'reports' => [
+            'subtitle' => 'Tous mes rapports d\'activité',
+        ],
+        'files' => [
+            'subtitle' => 'Tous mes fichiers',
+        ],
+    ],
     'my' => [
-        'projects' => 'Mes Projets',
+        'profil' => 'Mon Profil',
         'project' => 'Mon Projet',
+        'projects' => 'Mes Projets',
+        'report' => 'Mon Rapport',
+        'reports' => 'Mes Rapports',
+        'file' => 'Mon fichier',
+        'files' => 'Mes fichiers',
     ],
     'overlay' => [
         'left' => [
@@ -81,6 +104,10 @@ return [
         'customer' => 'Client',
         'customers' => 'Clients',
     ],
+    'settings' => [
+        'title' => 'Paramètres',
+        'profil' => 'Paramètres du compte',
+    ],
     'signin' => [
         'title' => 'Connexion',
         'subtitle' => '&nbsp;',
@@ -107,7 +134,10 @@ return [
     ],
     'activity' => 'Activité',
     'activities' => 'Activités',
+    'administration' => 'Administration',
+    'administrations' => 'Administrations',
     'confirmation' => 'Confirmation',
+    'console' => 'Console',
     'contributor' => 'Contributeur',
     'contributors' => 'Contributeurs',
     'dashboard' => 'Tableau de bord',
@@ -119,6 +149,8 @@ return [
     'graphs' => 'Graphes',
     'indicator' => 'Indicateur',
     'indicators' => 'Indicateurs',
+    'list' => 'Liste',
+    'lists' => 'Listes',
     'periodicity' => 'Périodicité',
     'password' => 'Mot de passe',
     'please_wait' => 'Veuillez patienter s\'il vous plaît...',

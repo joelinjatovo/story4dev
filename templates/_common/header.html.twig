@@ -12,7 +12,7 @@
                                 {% if project is defined and project is not null and ( project.id > 0 ) %}
                                     {{ project.title }}
                                 {% else %}
-                                    Vos projets
+                                    {% trans %}my.projects{% endtrans %}
                                 {% endif %}
                             </button>
                             <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md" style="">
@@ -30,7 +30,7 @@
                                         <li class="kt-nav__item">
                                             <a class="kt-nav__link active" href="#">
                                                 <span class="kt-nav__link-icon"><i class="flaticon2-user"></i></span>
-                                                <span class="kt-nav__link-text">Vous n'avez pas encore de projet.</span>
+                                                <span class="kt-nav__link-text">{% trans %}header.no.projects{% endtrans %}</span>
                                             </a>
                                         </li>
                                     {% endfor %}
@@ -55,7 +55,7 @@
                     <form>
                         <div class="kt-head kt-head--skin-light">
                             <h3 class="kt-head__title">
-                                Actions
+                                {% trans %}button.actions{% endtrans %}
                             </h3>
                         </div>
                         <div class="kt-grid-nav kt-grid-nav--skin-light">
@@ -70,8 +70,8 @@
                                             </g>
                                         </svg>
                                     </span>
-                                    <span class="kt-grid-nav__title">Utilisateurs</span>
-                                    <span class="kt-grid-nav__desc">Listes</span>
+                                    <span class="kt-grid-nav__title">{% trans %}users{% endtrans %}</span>
+                                    <span class="kt-grid-nav__desc">{% trans %}lists{% endtrans %}</span>
                                 </a>
                                 <a href="{{ path('admin_index') }}" class="kt-grid-nav__item">
                                     <span class="kt-grid-nav__icon">
@@ -83,8 +83,8 @@
                                             </g>
                                         </svg>
                                     </span>
-                                    <span class="kt-grid-nav__title">Administration</span>
-                                    <span class="kt-grid-nav__desc">Console</span>
+                                    <span class="kt-grid-nav__title">{% trans %}administration{% endtrans %}</span>
+                                    <span class="kt-grid-nav__desc">{% trans %}console{% endtrans %}</span>
                                 </a>
                             </div>
                         </div>
@@ -153,10 +153,10 @@
                             </div>
                             <div class="kt-notification__item-details">
                                 <div class="kt-notification__item-title kt-font-bold">
-                                    Mon Profil
+                                    {% trans %}my.profil{% endtrans %}
                                 </div>
                                 <div class="kt-notification__item-time">
-                                    Paramètres du compte
+                                    {% trans %}settings.profil{% endtrans %}
                                 </div>
                             </div>
                         </a>
@@ -166,10 +166,10 @@
                             </div>
                             <div class="kt-notification__item-details">
                                 <div class="kt-notification__item-title kt-font-bold">
-                                    Mes Projets
+                                    {% trans %}my.projects{% endtrans %}
                                 </div>
                                 <div class="kt-notification__item-time">
-                                    Tous mes projets et contributions
+                                    {% trans %}header.projects.subtitle{% endtrans %}
                                 </div>
                             </div>
                         </a>
@@ -179,10 +179,10 @@
                             </div>
                             <div class="kt-notification__item-details">
                                 <div class="kt-notification__item-title kt-font-bold">
-                                    Mes rapports
+                                    {% trans %}my.reports{% endtrans %}
                                 </div>
                                 <div class="kt-notification__item-time">
-                                    Tous mes rapports d'activité
+                                    {% trans %}header.reports.subtitle{% endtrans %}
                                 </div>
                             </div>
                         </a>
@@ -192,15 +192,15 @@
                             </div>
                             <div class="kt-notification__item-details">
                                 <div class="kt-notification__item-title kt-font-bold">
-                                    Mes fichiers
+                                    {% trans %}my.files{% endtrans %}
                                 </div>
                                 <div class="kt-notification__item-time">
-                                    Tous mes fichiers
+                                    {% trans %}header.files.subtitle{% endtrans %}
                                 </div>
                             </div>
                         </a>
                         <div class="kt-notification__custom kt-space-between">
-                            <a href="{{ path('app_logout') }}"class="btn btn-label btn-label-brand btn-sm btn-bold">Déconnexion</a>
+                            <a href="{{ path('app_logout') }}"class="btn btn-label btn-label-brand btn-sm btn-bold">{% trans %}button.logout{% endtrans %}</a>
                         </div>
                     </div>
                 </div>
