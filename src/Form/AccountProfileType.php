@@ -18,10 +18,10 @@ class AccountProfileType extends AbstractType
                 'required' => false,
                 'allow_delete' => true, 
             ])
-            ->add('fullname')
-            ->add('company')
-            ->add('phone')
-            ->add('website')
+            ->add('fullname', null, ['label' => 'form.label.fullname'])
+            ->add('company', null, ['label' => 'form.label.company'])
+            ->add('phone', null, ['label' => 'form.label.phone'])
+            ->add('website', null, ['label' => 'form.label.website'])
         ;
     }
 

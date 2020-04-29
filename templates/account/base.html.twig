@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon profil - {{ app.user.fullname }} {% endblock %}
+{% block title %}{% trans %}my.profil{% endtrans %} - {{ app.user.fullname }} {% endblock %}
 
 {% block content %}
 <div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
@@ -40,15 +40,15 @@
                     <div class="kt-widget__body">
                         <div class="kt-widget__content">
                             <div class="kt-widget__info">
-                                <span class="kt-widget__label">Email:</span>
+                                <span class="kt-widget__label">{% trans %}email{% endtrans %}:</span>
                                 <a href="#" class="kt-widget__data">{{ user.email }}</a>
                             </div>
                             <div class="kt-widget__info">
-                                <span class="kt-widget__label">Téléphone:</span>
+                                <span class="kt-widget__label">{% trans %}phone{% endtrans %}:</span>
                                 <a href="#" class="kt-widget__data">{{ user.phone ?? 'Inconnu' }}</a>
                             </div>
                             <div class="kt-widget__info">
-                                <span class="kt-widget__label">Location:</span>
+                                <span class="kt-widget__label">{% trans %}location{% endtrans %}:</span>
                                 <span class="kt-widget__data">{{ user.address ? user.address.country : 'Inconnu' }}</span>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                                         </svg>
                                     </span>
                                     <span class="kt-widget__desc">
-                                        Information                                                     
+                                        {% trans %}information{% endtrans %}
                                     </span>
                                 </span>    
                             </a>
@@ -81,7 +81,7 @@
                                         </svg>
                                     </span>
                                     <span class="kt-widget__desc">
-                                        Compte
+                                        {% trans %}account{% endtrans %}
                                     </span>
                                 </span>
                             </a>
@@ -98,7 +98,7 @@
                                         </svg>
                                     </span>
                                     <span class="kt-widget__desc">
-                                        Mot de passe
+                                        {% trans %}password{% endtrans %}
                                     </span>
                                 </span> 
                             </a>
@@ -116,15 +116,15 @@
                 <div class="kt-widget1 kt-widget1--fit">
                     <div class="kt-widget1__item">
                         <div class="kt-widget1__info">
-                            <h3 class="kt-widget1__title">Rapports</h3>
-                            <span class="kt-widget1__desc">Nombre total de rapport effectué</span>
+                            <h3 class="kt-widget1__title">{% trans %}reports{% endtrans %}</h3>
+                            <span class="kt-widget1__desc">{% trans %}count.report{% endtrans %}</span>
                         </div> 
                         <span class="kt-widget1__number kt-font-brand">{{ user.reports.count }}</span>
                     </div>
                     <div class="kt-widget1__item">
                         <div class="kt-widget1__info">
-                            <h3 class="kt-widget1__title">Contributions</h3>
-                            <span class="kt-widget1__desc">Nombre de projet contribué</span>
+                            <h3 class="kt-widget1__title">{% trans %}contributions{% endtrans %}</h3>
+                            <span class="kt-widget1__desc">{% trans %}count.project{% endtrans %}</span>
                         </div>			
                         <span class="kt-widget1__number kt-font-danger">{{ user.projectContributions.count }}</span>
                     </div>

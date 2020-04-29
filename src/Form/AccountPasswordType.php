@@ -20,6 +20,7 @@ class AccountPasswordType extends AbstractType
     {
         $builder
             ->add('password', PasswordType::class, [
+                'label' => 'form.label.password.old',
                 'constraints' => [
                     new NotBlank(),
                     new Length(['min' => 3]),
@@ -27,11 +28,11 @@ class AccountPasswordType extends AbstractType
             ])
             ->add('newpassword', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
+                'invalid_message' => 'form.label.password.validation',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
-                'first_options'  => ['label' => 'Password'],
-                'second_options' => ['label' => 'Confirm Password'],
+                'first_options'  => ['label' => 'form.label.password.new'],
+                'second_options' => ['label' => 'form.label.password.confirm'],
                 'constraints' => [
                     new NotBlank(),
                     new Length(['min' => 3]),

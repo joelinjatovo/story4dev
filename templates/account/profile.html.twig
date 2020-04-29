@@ -7,7 +7,7 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Profil</h3>
+            <h3 class="kt-subheader__title">{% trans %}profil{% endtrans %}</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__group" id="kt_subheader_search">
                 <span class="kt-subheader__desc" id="kt_subheader_total">{{ user.fullname }}</span>
@@ -15,7 +15,7 @@
         </div>        
         <div class="kt-subheader__toolbar">
             <div class="btn-group">
-                <button form="account_profile" type="submit" class="btn btn-brand btn-bold">Enregistrer</button>
+                <button form="account_profile" type="submit" class="btn btn-brand btn-bold">{% trans %}button.save{% endtrans %}</button>
             </div>
         </div>
     </div>
@@ -28,7 +28,7 @@
         <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Information personnelle <small> modifier les informations basique du compte</small></h3>
+                    <h3 class="kt-portlet__head-title">{% trans %}form.title.account.profil{% endtrans %}</h3>
                 </div>
             </div>
             {{ form_start( form, { 'method' : 'POST', 'attr' : {'id': 'account_profile', 'class' : 'kt-form kt-form--label-right' } } ) }}
@@ -38,11 +38,11 @@
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Info:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">{% trans %}form.info{% endtrans %}:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Avatar</label>
+                                <label class="col-xl-3 col-lg-3 col-form-label">{% trans %}form.avatar{% endtrans %}</label>
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="kt-avatar kt-avatar--outline" id="kt_user_avatar">
                                         <div class="kt-avatar__holder" style="background-image: url('{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') | imagine_filter('thumb') : default_avatar }}');"></div>
@@ -57,13 +57,13 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.fullname, "Nom complet *", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.fullname, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     {{ form_widget( form.fullname, { 'attr' : { 'class' : 'form-control', 'required' : 'required' } } ) }}
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.company, "Nom de votre entreprise", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.company, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     {{ form_widget( form.company, { 'attr' : { 'class' : 'form-control' } } ) }}
                                     <span class="form-text text-muted"></span>
@@ -73,20 +73,20 @@
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Contact Détails:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">{% trans %}form.label.contact{% endtrans %}:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Adresse Email</label>
+                                <label class="col-xl-3 col-lg-3 col-form-label">{% trans %}form.label.email{% endtrans %}</label>
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
-                                        <input type="text" class="form-control" value="{{ user.email }}" placeholder="Email" aria-describedby="basic-addon1" readonly>
+                                        <input type="text" class="form-control" value="{{ user.email }}" placeholder="{% trans %}email{% endtrans %}" aria-describedby="basic-addon1" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.phone, "Téléphone", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.phone, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
@@ -96,7 +96,7 @@
                                 </div>
                             </div>
                             <div class="form-group form-group-last row">
-                                {{ form_label( form.website, "Site web", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.website, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
@@ -114,8 +114,8 @@
                             <div class="col-lg-3 col-xl-3">
                             </div>
                             <div class="col-lg-9 col-xl-9">
-                                <button type="submit" class="btn btn-success">Enregister</button>&nbsp;
-                                <button type="reset" class="btn btn-secondary">Annuler</button>
+                                <button type="submit" class="btn btn-success">{% trans %}button.save{% endtrans %}</button>&nbsp;
+                                <button type="reset" class="btn btn-secondary">{% trans %}button.cancel{% endtrans %}</button>
                             </div>
                         </div>
                     </div>
