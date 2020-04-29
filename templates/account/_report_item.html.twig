@@ -20,29 +20,18 @@
                     </div>
                 </div>
                 <div class="kt-portlet__head-toolbar">
-                    <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
-                        <i class="flaticon-more-1"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
-                        <ul class="kt-nav">
-                            {% if is_granted('view', report) %}
-                            <li class="kt-nav__item">
-                                <a href="{{ path('report_show', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-line-chart"></i>
-                                    <span class="kt-nav__link-text">{% trans %}button.details{% endtrans %}</span>
-                                </a>
-                            </li>
-                            {% endif %}
-                            {% if is_granted('edit', report) %}
-                                <li class="kt-nav__item">
-                                    <a href="{{ path('report_edit', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
-                                        <i class="kt-nav__link-icon flaticon2-settings"></i>
-                                        <span class="kt-nav__link-text">{% trans %}button.edit{% endtrans %}</span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </div>
+                    {% if is_granted('view', report) %}
+                        <a href="{{ path('report_show', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="btn btn-outline-brand btn-elevate btn-pill">
+                            <i class="flaticon2-line-chart"></i>
+                            <span class="kt-nav__link-text">{% trans %}button.details{% endtrans %}</span>
+                        </a>
+                    {% endif %}
+                    {% if is_granted('edit', report) %}
+                        <a href="{{ path('report_edit', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="btn btn-brand btn-elevate btn-pill">
+                            <i class="flaticon2-settings"></i>
+                            <span class="kt-nav__link-text">{% trans %}button.edit{% endtrans %}</span>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
 
@@ -82,11 +71,11 @@
                             {% for reportFile in report.reportFiles %}
                                 {% if reportFile.file %}
                                     {% if reportFile.file.image %}
-                                        <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{% trans %}image{% endtrans %}">
+                                        <a href="#" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{% trans %}attachment{% endtrans %}">
                                             <img src="{{ asset( reportFile.file.icone ) | imagine_filter('thumb') }}" alt="{% trans %}image{% endtrans %}">
                                         </a>
                                     {% else %}
-                                        <a href="{{ path( 'file_download', {id:reportFile.file.id}) }}" target="_blank" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Cliquez pour le télécharger.">
+                                        <a href="{{ path( 'file_download', {id:reportFile.file.id}) }}" target="_blank" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{% trans %}button.click.to.download{% endtrans %}">
                                             <img src="{{ asset( reportFile.file.icone ) }}" alt="{% trans %}image{% endtrans %}">
                                         </a>
                                     {% endif %}
