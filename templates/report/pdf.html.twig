@@ -3,7 +3,7 @@
 {% block title %}Rapport #{{ report.id }} - Activité #{{ activity.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
-    <link href="{{ absolute_url(asset('css/gallery.css')) }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ absolute_url(asset('css/invoice-2.css')) }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block subheader %}
@@ -117,175 +117,111 @@
 {% endblock %}
 
 {% block content %}
-<div class="kt-portlet ">
-    <div class="kt-portlet__body">
-        <div class="kt-widget kt-widget--user-profile-3">
-            <div class="kt-widget__top">
-                <div class="kt-widget__content">
-                    <div class="kt-widget__head">
-                        <div class="kt-widget__user">
-                            <a href="#" class="kt-widget__username" style="margin-right: 10px;">{{ report.title }}</a>
-                            <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-{{ report.statusClass }} report-status">{{ report.statuslabel }}</span>
-                            {% if is_granted('edit', report) %}
-                                <div class="dropdown dropdown-inline kt-margin-l-5" data-toggle="kt-tooltip-" title="Changer label" data-placement="right">
-                                    <a href="#" class="btn btn-clean btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-caret-down"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-md dropdown-menu-fit dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-227px, 33px, 0px);">
-                                        <ul class="kt-nav">
-                                            <li class="kt-nav__head">
-                                                Changer le statut:
-                                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Cliquer pour changer le statut..."></i>
-                                            </li>
-                                            <li class="kt-nav__separator">
-                                            </li>
-                                            <li class="kt-nav__item">
-                                                <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="opened">
-                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-success kt-badge--inline kt-badge--lg kt-badge--bold">Editable</span></span>
-                                                </a>
-                                            </li>
-                                            <li class="kt-nav__item">
-                                                <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="closed">
-                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-warning kt-badge--inline kt-badge--lg kt-badge--bold">Clôturé</span></span>
-                                                </a>
-                                            </li>
-                                            <li class="kt-nav__item">
-                                                <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="terminated">
-                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-danger kt-badge--inline kt-badge--lg kt-badge--bold">Términé</span></span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            {% endif %}
+<div class="kt-portlet">
+	<div class="kt-portlet__body kt-portlet__body--fit">
+		<div class="kt-invoice-2">
+			<div class="kt-invoice__head">
+                <div class="kt-invoice__container">
+                    <div class="kt-invoice__brand">
+						<h1 class="kt-invoice__title">{{ report.title }}</h1>
+					</div>
+					
+                    <div class="kt-invoice__items">
+                        <div class="kt-invoice__item">
+                            <span class="kt-invoice__subtitle" style="width: 100%;">Date de création</span>
+                            <span class="kt-invoice__text" style="width: 100%;">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d H:i:s') }}</span>
+                        </div>
+                        <div class="kt-invoice__item">
+                            <span class="kt-invoice__subtitle" style="width: 100%;">Date de synchronisation</span>
+                            <span class="kt-invoice__text" style="width: 100%;">{{ report.syncedat is empty ? "" : report.syncedat | date('Y-m-d H:i:s') }}</span>
+                        </div>
+                        <div class="kt-invoice__item">
+                            <span class="kt-invoice__subtitle" style="width: 100%;">Localisation</span>
+                            <span class="kt-invoice__text" style="width: 100%;">{{ report.latitude }},{{ report.longitude }}</span>
                         </div>
                     </div>
-                    <div class="kt-widget__subhead"></div>
-                    <div class="kt-widget__info">
-                        <div class="kt-widget__desc">
-                            {{ report.description|html|raw }}
+                </div>
+			</div>	
+            
+			<div class="kt-invoice__body">
+                <div class="kt-invoice__container">
+                    <h3>Description</h3>
+                    <div style="color: #000;" style="border-top: 1px solid #ebedf2;">{{ report.description|html|raw }}</div>
+                </div>
+			</div>
+            
+            {% if report.results %}
+                <div class="kt-invoice__body">
+                    <div class="kt-invoice__container">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Indicateurs</th>
+                                        <th>Résultats</th>
+                                        <th>Totaux</th>
+                                        <th>Objectifs</th>
+                                        <th>Avancements</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for result in report.results %}
+                                        <tr>
+                                            <td>{{ result.indicator.title }}</td>
+                                            <td style="font-weight: 500;">{{ result.value }} {{ result.indicator.unit.label }}</td>
+                                            <td style="font-weight: 500;">{{ result.indicator|result }} {{ result.indicator.unit.label }}</td>
+                                            <td style="font-weight: 500;">{{ result.indicator|goal }} {{ result.indicator.unit.label }}</td>
+                                            <td class="kt-font-{{ result.indicator|progressionClass }} kt-font-lg">{{ result.indicator|progression }}%</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="kt-widget__stats d-flex align-items-center flex-fill">
-                            <div class="kt-widget__item">
-                                <span class="kt-widget__date">
-                                    Date de création
-                                </span>
-                                <div class="kt-widget__label">
-                                    <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d H:i:s') }}</span>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+            {% endif %}
+            
+            {% if report.reportFiles %}
+                <div class="kt-invoice__body">
+                    <div class="kt-invoice__container">
+                        <h3>Documents</h3>
+                        <ul>
+                            {% for reportFile in report.reportFiles %}
+                                {% if not reportFile.file.image %}
+                                    <li><a href="{{ absolute_url(path( 'file_download', {id:reportFile.file.id})) }}" target="_blank" >{{ reportFile.file.displayname }}</a></li>
+                                {% endif %}
+                            {% else %}
+                                Aucun fichier attaché à ce rapport.
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
 
-                            <div class="kt-widget__item">
-                                <span class="kt-widget__date">
-                                    Date de synchronisation
-                                </span>
-                                <div class="kt-widget__label">
-                                    <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ report.syncedat is empty ? "" : report.syncedat | date('Y-m-d H:i:s') }}</span>
-                                </div>
-                            </div>
+            {% if report.reportFiles %}
+                <div class="kt-invoice__body">
+                    <div class="kt-invoice__container">
+                        <h3>Photos</h3>
+                        <div id="gallery">
+                            {% for reportFile in report.reportFiles %}
+                                {% if reportFile.file.image %}
+                                    <img alt="{{ report.title }}" src="{{ asset( reportFile.file.icone | imagine_filter('small') ) }}"
+                                    data-image="{{ asset( reportFile.file.icone | imagine_filter('big') ) }}"
+                                    data-description="{{ report.title }}">
+                                {% endif %}
+                            {% else %}
+                                Aucun fichier attaché à ce rapport.
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            {% endif %}
+
+		</div>
+	</div>
 </div>
-    
-<div class="row">
-    <div class="col-lg-6">
-        <!--begin:: Widgets/Order Statistics-->
-        <div class="kt-portlet kt-portlet--height-fluid">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">
-                        Indicateurs
-                    </h3>
-                </div>
-            </div>
-			<div class="kt-portlet__body">
-                <div class="kt-widget31">
-                    {% for result in report.results %}
-                        {{ include('report/_result.html.twig', { 'result' : result } ) }}
-                    {% else %}
-                        Ce rapport n'a pas encore de résultat.
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        <!--end:: Widgets/Order Statistics-->
-    </div>
-    <div class="col-lg-6">
-        <div class="kt-portlet kt-portlet--height-fluid">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Documents</h3>
-                </div>
-            </div>
-            <div class="kt-portlet__body">
-                <div class="kt-widget4">
-                    {% for reportFile in report.reportFiles %}
-                        {% if not reportFile.file.image %}
-                            {{ include('report/_document.html.twig', { 'reportFile' : reportFile } ) }}
-                        {% endif %}
-                    {% else %}
-                        Aucun fichier attaché à ce rapport.
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="kt-portlet kt-portlet--height-fluid">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Photos</h3>
-                </div>
-            </div>
-            <div class="kt-portlet__body">
-                <div class="kt-widget4" id="gallery" style="display:none;">
-                    {% for reportFile in report.reportFiles %}
-                        {% if reportFile.file.image %}
-                            <img alt="{{ report.title }}" src="{{ asset( reportFile.file.icone | imagine_filter('small') ) }}"
-                            data-image="{{ asset( reportFile.file.icone | imagine_filter('big') ) }}"
-                            data-description="{{ report.title }}">
-                        {% endif %}
-                    {% else %}
-                        Aucun fichier attaché à ce rapport.
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-xl-6">
-        <div class="kt-portlet kt-portlet--height-fluid">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">
-                        Localisation
-                    </h3>
-                </div>
-            </div>
-            <div class="kt-portlet__body kt-portlet__body--fluid">
-                <iframe src="https://maps.google.com/maps?q={{ report.latitude }},{{ report.longitude }}&hl=fr;z=14&output=embed" width="100%" height="450" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-            </div>
-        </div>
-    </div>
-</div>
-    
 {% endblock %}
 
 
 {% block javascripts %}
-<script src="{{ asset('js/gallery.min.js') }}" type="text/javascript" ></script>
-<script src="{{ asset('js/gallery-theme-tiles.js') }}" type="text/javascript" ></script>
-<script src="{{ asset('js/report.js') }}" type="text/javascript" ></script>
-<script type="text/javascript">
-    if( ( jQuery("#gallery") != undefined ) && ( jQuery("#gallery img").length > 0 ) ) {
-        jQuery("#gallery").unitegallery(); 
-    }
-</script>
 {% endblock %}

@@ -215,29 +215,13 @@ class ReportController extends AbstractController
             'file.pdf'
         );
         
-        /*
+        
         return $this->render('report/pdf.html.twig', [
             'user'     => $user,
             'project'  => $project,
             'activity' => $activity,
             'report'   => $report,
         ]);
-        */
-        
-        //$myProjectDirectory = 'C:\wamp64\www\story4dev.com';
-        //$pdf = new \Knp\Snappy\Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-i386'); //Snappy Pdf
-        //$pdf = new \Knp\Snappy\Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'); //Snappy Pdf
-        $pdf = new \Knp\Snappy\Pdf(); //Snappy Pdf
-
-        $pdfContents = $pdf->getOutputFromHtml($html);
-
-        // Send it to the browser
-        $response = new Response($pdfContents);
-        $response->headers->set('Content-type', 'application/octect-stream');
-        $response->headers->set('Content-Disposition', sprintf('attachment; filename="%s"', "Your report.pdf"));
-        $response->headers->set('Content-Transfer-Encoding', 'binary');
-
-        return $response;
     }
     
     /**
