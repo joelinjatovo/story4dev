@@ -1,5 +1,3 @@
-
-
 <div style="visibility:hidden; opacity:0; display: none;" class="dropzone-container" aria-modal="true" role="dialog">
     <button class="btn-close" type="button" aria-label="Close Modal" title="Close Modal"><span aria-hidden="true">×</span></button>
     <div class="file-selector-inner">
@@ -9,12 +7,12 @@
                     <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x nav-tabs-line-right" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#kt_portlet_base_demo_2_3_tab_content" role="tab">
-                                <i class="fa fa-calendar-check-o" aria-hidden="true"></i>Téléverser
+                                <i class="fa fa-calendar-check-o" aria-hidden="true"></i>{% trans %}button.upload{% endtrans %}
                             </a>
                         </li>
                         <li class="nav-item kt-hidden">
                             <a class="nav-link" data-toggle="tab" href="#kt_portlet_base_demo_2_2_tab_content" role="tab">
-                                <i class="fa fa-bar-chart" aria-hidden="true"></i>Select
+                                <i class="fa fa-bar-chart" aria-hidden="true"></i>{% trans %}button.select{% endtrans %}
                             </a>
                         </li>
                     </ul>
@@ -25,13 +23,13 @@
                     <div class="tab-pane active" id="kt_portlet_base_demo_2_3_tab_content" role="tabpanel" style="height: 100%;">
                         <div class="dropzone dropzone-default dropzone-success dz-clickable"  style="height: 100%;">
                             <div class="dropzone-msg dz-message needsclick">
-                                <h3 class="dropzone-msg-title">Déposer les fichiers ici ou cliquer pour téléverser.</h3>
-                                <span class="dropzone-msg-desc">Seuls les fichiers image, pdf, word, powerpoint et excel sont autorisés pour le téléversement.</span>
+                                <h3 class="dropzone-msg-title">{% trans %}dropzone.title{% endtrans %}</h3>
+                                <span class="dropzone-msg-desc">{% trans %}dropzone.subtitle{% endtrans %}</span>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane kt-hidden" id="kt_portlet_base_demo_2_2_tab_content" role="tabpanel" style="height: 100%;">
-                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        &nbsp;
                     </div>
                 </div>      
             </div>
