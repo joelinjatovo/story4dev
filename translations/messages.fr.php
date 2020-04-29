@@ -39,6 +39,11 @@ return [
         'terms_and_conditions' => 'J\'accepte <a href="%link%" class="kt-link kt-login__link kt-font-bold" style="margin:0; padding:0;">les termes and conditions</a>',
         'button' => 'S\'inscrire',
     ],
+    'reset' => [
+        'title' => 'Mot de passe',
+        'subtitle' => 'Créer votre nouveau mot de passe dans ce formulaire.',
+        'button' => 'Créer le mot de passe',
+    ],
     'overlay' => [
         'left' => [
             'title' => 'Bienvenue!',
