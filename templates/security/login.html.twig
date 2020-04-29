@@ -3,15 +3,21 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>{% block title %}{% if active_form == 'signin' %}Connexion{% elseif active_form == 'forgot' %}Nouveau mot de passe{% elseif active_form == 'signup' %}Souscription{% else %}Accueil{% endif %} - {{ setting.get('seo_title') }}{% endblock %}</title>
+        <title>{% block title %}
+            {% if active_form == 'signin' %}{% trans %}page.title.signin{% endtrans %}
+            {% elseif active_form == 'forgot' %}{% trans %}page.title.forgot{% endtrans %}
+            {% elseif active_form == 'signup' %}{% trans %}page.title.signup{% endtrans %}
+            {% else %}{% trans %}page.title.home{% endtrans %}
+            {% endif %}
+            - {{ setting.get('seo_title') }}{% endblock %}</title>
         <meta name="keywords" content="{{ setting.get('seo_keywords') }}"> 
         
         {% if active_form == 'signin' %}
-            <meta name="description" content="Pour se connecter à l'application, utilisez les informations de votre compte existant."> 
+            <meta name="description" content="{% trans %}page.description.signin{% endtrans %}"> 
         {% elseif active_form == 'forgot' %}
-            <meta name="description" content="Avez-vous oublié votre mot de passe? Vous pouvez continuer à utiliser nos applications ici."> 
+            <meta name="description" content="{% trans %}page.description.forgot{% endtrans %}"> 
         {% elseif active_form == 'signup' %}
-            <meta name="description" content="Plusieurs projets ont été déjà créé sur Story4Dev. Inscrivez-vous ici afin de bénéficier nos offres pour la gestion de vos rapports."> 
+            <meta name="description" content="{% trans %}page.description.signup{% endtrans %}"> 
         {% else %}
             <meta name="description" content="{{ setting.get('seo_description') }}"> 
         {% endif %}
@@ -35,51 +41,51 @@
         <div class="container {{ active_form == 'signup' ? 'right-panel-active' : '' }} {{ active_form == 'forgot' ? 'forgot-panel-active' : '' }}" id="container">
             <div class="form-container sign-up-container">
                 <form action="/register" method="post" id="sign-up-form">
-                    <h1>Souscription</h1>
-                    <p>Entrer les accès pour votre compte</p>
+                    <h1>{% trans %}signup.title{% endtrans %}</h1>
+                    <p>{% trans %}signup.subtitle{% endtrans %}</p>
                     <div class="input-group f_row">
-                        <label>Email *</label>
+                        <label>{% trans %}email{% endtrans %} *</label>
                         <input type="text" class="input-field" name="email" autocomplete="off">
                         <u></u>
                     </div>
                     <div class="input-group f_row">
-                        <label>Mot de passe *</label>
+                        <label>{% trans %}password{% endtrans %} *</label>
                         <input type="password" class="input-field" id="password" name="password">
                         <u></u>
                     </div>
                     <div class="input-group f_row last">
-                        <label>Confirmation *</label>
+                        <label>{% trans %}confirmation{% endtrans %} *</label>
                         <input type="password" class="input-field" name="password_confirm">
                         <u></u>
                     </div>
                     <div class="row kt-login__extra">
                         <div class="col kt-align-left">
                             <label class="kt-checkbox">
-                                <input type="checkbox" name="agree">J'accepte <a href="#" class="kt-link kt-login__link kt-font-bold" style="margin:0; padding:0;">les termes and conditions</a>.
+                                <input type="checkbox" name="agree">{% trans with {'%link%': '#'} %}signup.terms_and_conditions{% endtrans %}
                                 <span></span>
                             </label>
                             <span class="form-text text-muted"></span>
                         </div>
                     </div>
-                    <button>S'inscrire</button>
+                    <button>{% trans %}signup.button{% endtrans %}</button>
                 </form>
             </div>
             <div class="form-container sign-in-container">
                 <form action="/login" method="post" id="sign-in-form">
-                    <h1>Connexion</h1>
-                    <p>&nbsp;</p>
+                    <h1>{% trans %}signin.title{% endtrans %}</h1>
+                    <p>{% trans %}signin.subtitle{% endtrans %}</p>
                     <div class="social-container kt-hidden">
                         <a href="{{ path('connect_facebook_start') }}" class="social"><i class="fab fa-facebook-f"></i></a>
                         <a href="{{ path('connect_google_start') }}" class="social"><i class="fab fa-google-plus-g"></i></a>
                     </div>
-                    <p class="kt-hidden" style="margin-top: 0;">ou utiliser votre compte existant</p>
+                    <p class="kt-hidden" style="margin-top: 0;">{% trans %}signin.separator{% endtrans %}</p>
                     <div class="input-group f_row {{ last_username is null ? '' : 'focus' }}">
-                        <label>Email</label>
+                        <label>{% trans %}email{% endtrans %}</label>
                         <input value="{{ last_username }}" class="input-field" type="text" name="email"  autocomplete="off" />
                         <u></u>
                     </div>
                     <div class="input-group f_row last">
-                        <label>Mot de passe</label>
+                        <label>{% trans %}password{% endtrans %}</label>
                         <input type="password" class="input-field" name="password" />
                         <u></u>
                     </div>
@@ -89,47 +95,47 @@
                         <span></span>
                     </label>
                     -->
-                    <a href="javascript:;" id="forgot">Mot de passe oublié?</a>
-                    <button>Se connecter</button>
+                    <a href="javascript:;" id="forgot">{% trans %}signin.forgot{% endtrans %}</a>
+                    <button>{% trans %}signin.button{% endtrans %}</button>
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" >
                 </form>
             </div>
             <div class="form-container forgot-container">
                 <form action="/forgot" method="post" id="forgot-form">
-                    <h1>Réinitialiser le mot de passe</h1>
-                    <p>Un email sera envoyé dans votre boite email avec un lien permettant de réinitialiser votre mot de passe.</p>
+                    <h1>{% trans %}forgot.title{% endtrans %}</h1>
+                    <p>{% trans %}forgot.subtitle{% endtrans %}</p>
                     <div class="input-group f_row last">
-                        <label>Email</label>
+                        <label>{% trans %}email{% endtrans %}</label>
                         <input class="input-field" type="text" name="email" autocomplete="off" />
                         <u></u>
                     </div>
-                    <button>Envoyer</button>
-                    <a href="javascript:;" id="cancelForgot">Annuler</a>
+                    <button>{% trans %}forgot.button1{% endtrans %}</button>
+                    <a href="javascript:;" id="cancelForgot">{% trans %}forgot.button2{% endtrans %}</a>
                 </form>
             </div>
             <div class="form-container message-container">
                 <div class="message">
                     <h1 id="message-title"></h1>
                     <p id="message-content"></p>
-                    <button class="ghost" id="btnOk">OK</button>
+                    <button class="ghost" id="btnOk">{% trans %}button.ok{% endtrans %}</button>
                 </div>
             </div>
             <div class="overlay-container">
                 <div class="overlay">
                     <div class="overlay-panel overlay-left">
-                        <h1 class="hidden-mobile">Bienvenu!</h1>
-                        <p class="hidden-mobile">Pour se connecter à l'application, utiliser les informations de votre compte existant.</p>
-                        <button class="ghost" id="signIn">Se connecter</button>
-                        <p class="hidden-mobile kt-hidden">ou pour s'inscrire, utiliser</p>
+                        <h1 class="hidden-mobile">{% trans %}overlay.left.title{% endtrans %}</h1>
+                        <p class="hidden-mobile">{% trans %}overlay.left.subtitle{% endtrans %}</p>
+                        <button class="ghost" id="signIn">{% trans %}overlay.left.button{% endtrans %}</button>
+                        <p class="hidden-mobile kt-hidden">{% trans %}overlay.left.separator{% endtrans %}</p>
                         <div class="social-container hidden-mobile kt-hidden">
                             <a href="{{ path('connect_facebook_start') }}" class="social"><i class="fab fa-facebook-f"></i></a>
                             <a href="{{ path('connect_google_start') }}" class="social"><i class="fab fa-google-plus-g"></i></a>
                         </div>
                     </div>
                     <div class="overlay-panel overlay-right">
-                        <h1 class="hidden-mobile">Bonjour!</h1>
-                        <p class="hidden-mobile">Enregistrer les informations de votre compte pour commencer votre journée avec nous</p>
-                        <button class="ghost" id="signUp">S'inscrire</button>
+                        <h1 class="hidden-mobile">{% trans %}overlay.right.title{% endtrans %}</h1>
+                        <p class="hidden-mobile">{% trans %}overlay.right.subtitle{% endtrans %}</p>
+                        <button class="ghost" id="signUp">{% trans %}overlay.right.button{% endtrans %}</button>
                     </div>
                 </div>
             </div>
@@ -137,7 +143,7 @@
 
         {% block javascripts %}
             <script>
-                var KTAppMessages = {"waiting": "Veuillez patientez s'il vous plaît..."};
+                var KTAppMessages = {"waiting": "{% trans %}please_wait{% endtrans %}"};
                 var KTAppOptions = {"colors":{"state":{"brand":"#22b9ff","light":"#ffffff","dark":"#282a3c","primary":"#5867dd","success":"#34bfa3","info":"#36a3f7","warning":"#ffb822","danger":"#fd3995"},"base":{"label":["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape":["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};
             </script>
             <script src="{{ asset('js/vendors.bundle.js') }}" type="text/javascript" ></script>

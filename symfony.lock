@@ -99,9 +99,6 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
-    "dompdf/dompdf": {
-        "version": "v0.8.5"
-    },
     "egulias/email-validator": {
         "version": "2.1.10"
     },
@@ -309,9 +306,6 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.2.2"
-    },
-    "phenx/php-font-lib": {
-        "version": "0.5.2"
     },
     "php": {
         "version": "7.3.12"
