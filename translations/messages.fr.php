@@ -34,6 +34,11 @@ return [
         'button1' => 'Envoyer',
         'button2' => 'Annuler',
     ],
+    'footer' => [
+        'apps' => 'Applications',
+        'feedback' => 'Feedback',
+        'help' => 'Guide d\'utilisation',
+    ],
     'my' => [
         'projects' => 'Mes Projets',
         'project' => 'Mon Projet',
