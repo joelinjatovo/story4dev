@@ -1,6 +1,6 @@
 <div class="kt-widget4__item">
     <div class="kt-widget4__pic kt-widget4__pic--icon">
-        <img src="{{ asset( document.icone ) }}" alt="icone">  
+        <img src="{{ asset( document.icone ) }}" alt="{% trans %}icon{% endtrans %}">  
     </div>
     <a href="{{ path( 'file_download', {id: document.id }) }}" target="_blank" class="kt-widget4__title">
         {{ document.name }}

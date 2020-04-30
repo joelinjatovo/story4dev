@@ -19,4 +19,9 @@ class BaseController extends AbstractController
     {
         return $this->translator->trans($message, $args, $domain);
     }
+
+    public function transChoice($message, $count, $args = [], $domain = 'messages')
+    {
+        return $this->translator->trans($message, $count, $args, $domain);
+    }
 }

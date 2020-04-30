@@ -1,9 +1,9 @@
 <div class="kt-widget4__item">
     <div class="kt-widget4__pic kt-widget4__pic--icon">
         {% if activityFile.file.image %}
-            <img src="{{ asset( activityFile.file.icone ) | imagine_filter('thumb') }}" alt="icone">  
+            <img src="{{ asset( activityFile.file.icone ) | imagine_filter('thumb') }}" alt="{% trans %}icon{% endtrans %}">  
         {% else %}
-            <img src="{{ asset( activityFile.file.icone ) }}" alt="icone"> 
+            <img src="{{ asset( activityFile.file.icone ) }}" alt="{% trans %}icon{% endtrans %}"> 
         {% endif %}
     </div>
     {% if activityFile.file.image %}

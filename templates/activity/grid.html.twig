@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Activités - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}activity{% endtrans %} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,25 +9,25 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Toutes les activités</h3>
+            <h3 class="kt-subheader__title">{% trans %}all.activities{% endtrans %}</h3>
             <div class="kt-subheader__breadcrumbs">
                 <span class="kt-subheader__breadcrumbs-separator kt-hidden"></span>
-                <a href="{{ path('project_list') }}" class="kt-subheader__breadcrumbs-link kt-hidden">Projets</a>
+                <a href="{{ path('project_list') }}" class="kt-subheader__breadcrumbs-link kt-hidden">{% trans %}projects{% endtrans %}</a>
                 <span class="kt-subheader__breadcrumbs-separator kt-hidden"></span>
                 <a href="{{ path('project_show', { slug: project.slug })}}" class="kt-subheader__breadcrumbs-link kt-hidden">{{ project.title }}</a>
                 <span class="kt-subheader__breadcrumbs-separator kt-hidden"></span>
-                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active kt-hidden">Activités</span>
+                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active kt-hidden">{% trans %}activities{% endtrans %}</span>
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
             {% if is_granted('view', project) %}
-                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> Liste</a>
-                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i> Grille</a>
+                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> {% trans %}list{% endtrans %}</a>
+                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i> {% trans %}grid{% endtrans %}</a>
                 <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-                <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+                <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}button.back{% endtrans %}</a>
             {% endif %}
             {% if is_granted('edit', project) %}
-                <a href="{{ path('activity_index', { slug: project.slug }) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
+                <a href="{{ path('activity_index', { slug: project.slug }) }}" class="btn btn-label-brand btn-bold">{% trans %}button.add{% endtrans %}</a>
             {% endif %}
         </div>
     </div>
@@ -65,12 +65,12 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var $this = $(this);
             swal.fire({
-                title:"Vous êtes sûre?",
-                text:"Vous ne pourez pas revenir en arrière après!\nToutes les rapports ainsi que les données rattachées à cette activité vont être supprimés aussi.",
+                title:"{% trans %}swal.remove.title{% endtrans %}",
+                text:"{% trans %}swal.remove.content.activity{% endtrans %}",
                 type:"warning",
                 showCancelButton:!0,
-                confirmButtonText:"Oui, supprimez la!",
-                cancelButtonText:"Annuler"
+                confirmButtonText:"{% trans %}button.confirm.delete2{% endtrans %}",
+                cancelButtonText:"{% trans %}button.cancel{% endtrans %}"
             }).then(function(e){
                 if(e.value){
                     KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
@@ -86,7 +86,7 @@ jQuery(document).ready(function($){
                     })
                     .fail(function() {
                         KTApp.unblockPage();
-                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+                        toastr.error("{% trans %}swal.error{% endtrans %}");
                     });
                 }
             })
@@ -101,11 +101,11 @@ jQuery(document).ready(function($){
             if(data.success){
                 if(data.star){
                     $this.find('i').removeClass('la-star-o').addClass('la-star');
-                    $this.attr('data-original-title', 'Supprimer des favoris');
+                    $this.attr('data-original-title', '{% trans %}button.unstar{% endtrans %}');
                     toastr.success(data.message);
                 }else{
                     $this.find('i').removeClass('la-star').addClass('la-star-o');
-                    $this.attr('data-original-title', 'Ajouter aux favoris');
+                    $this.attr('data-original-title', '{% trans %}button.star{% endtrans %}');
                     toastr.warning(data.message);
                 }
             }else{
@@ -114,7 +114,7 @@ jQuery(document).ready(function($){
         })
         .fail(function() {
             KTApp.unblockPage();
-            toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+            toastr.error("{% trans %}swal.error{% endtrans %}");
         });
     });
 });
