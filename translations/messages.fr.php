@@ -35,6 +35,23 @@ return [
         'select' => 'Séléctionner',
         'upload' => 'Téléverser',
     ],
+    'controller' => [
+        'account' => [
+            'success' => 'Votre compte a été bien mis à jour.',
+        ],
+        'error' => [
+            'password.old' => 'Votre ancien mot de passe incorrect.',
+            'request' => 'Votre demande est invalide! %error%',
+        ],
+        'success' => [
+            'request' => 'Votre ',
+        ],
+    ],
+    'count' => [
+        'title' => 'Nombre',
+        'report' => 'Nombre de rapport',
+        'project' => 'Nombre de projet',
+    ],
     'date' => [
         'created' => 'Date de création',
         'synced' => 'Date de synchronisation',
@@ -43,10 +60,10 @@ return [
         'title' => 'Déposer les fichiers ici ou cliquer pour téléverser.',
         'subtitle' => 'Seuls les fichiers image, pdf, word, powerpoint et excel sont autorisés pour le téléversement.',
     ],
-    'count' => [
-        'title' => 'Nombre',
-        'report' => 'Nombre de rapport',
-        'project' => 'Nombre de projet',
+    'email' => [
+        'subject' => [
+            'confirmation' => 'Modification adresse email - Confirmation',
+        ],
     ],
     'form' => [
         'avatar' => 'Avatar',

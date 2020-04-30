@@ -9,7 +9,7 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 use App\Entity\User;
 
-class AccountProfileType extends AbstractType
+class AccountProfilType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

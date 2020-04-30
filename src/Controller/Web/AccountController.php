@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Entity\User;
 use App\Entity\Report;
-use App\Form\AccountProfileType;
+use App\Form\AccountProfilType;
 use App\Form\AccountInfoType;
 use App\Form\AccountPasswordType;
 use App\Service\PaginatorService;
@@ -23,16 +23,16 @@ use App\Service\TokenGenerator;
  *
  * @IsGranted("ROLE_USER") 
  */
-class AccountController extends AbstractController
+class AccountController extends BaseController
 {
     /**
-     * @Route("/account/profile", name="profile")
+     * @Route("/account/profil", name="profile")
      */
-    public function profile(Request $request)
+    public function profil(Request $request)
     {
         $user = $this->getUser();
         
-        $form = $this->createForm(AccountProfileType::class, $user);
+        $form = $this->createForm(AccountProfilType::class, $user);
         
         $form->handleRequest($request);
         
@@ -42,13 +42,13 @@ class AccountController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
         
-                $this->addFlash('success', 'Votre compte a été bien mis à jour.');
+                $this->addFlash('success', $this->trans('controller.account.success'));
             }else{
-                $this->addFlash('error', 'Votre demande est invalide! ' . $form->getErrors(true, true));
+                $this->addFlash('error', $this->trans('controller.error.request', ['%error%' => $form->getErrors(true, true)]));
             }
         }
         
-        return $this->render('account/profile.html.twig', [
+        return $this->render('account/profil.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
@@ -83,7 +83,7 @@ class AccountController extends AbstractController
 
                     $url = $this->generateUrl('app_confirm', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
 
-                    $message = (new \Swift_Message('Modification adresse email - Confirmation'))
+                    $message = (new \Swift_Message($this->trans('email.subject.confirmation')))
                         ->setFrom(array('joelinjatovo@gmail.com'=> 'Admin'))
                         ->setTo($user->getEmail());
                     
@@ -103,13 +103,13 @@ class AccountController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
         
-                $this->addFlash('success', 'Votre compte a été bien mis à jour.');
+                $this->addFlash('success', $this->trans('controller.account.success'));
                 
                 if($user->getEmail() != $oldEmail){
                     return $this->redirectToRoute('app_logout');
                 }
             }else{
-                $this->addFlash('error', 'Votre demande est invalide! ' . $form->getErrors(true, true));
+                $this->addFlash('error', $this->trans('controller.error.request', ['%error%' => $form->getErrors(true, true)]));
             }
         }
         
@@ -145,15 +145,13 @@ class AccountController extends AbstractController
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($user);
                     $entityManager->flush();
-
-                    $this->addFlash('success', 'Votre compte a été bien changé.');
+                    
+                    $this->addFlash('success', $this->trans('controller.account.success'));
                 } else {
-                    $this->addFlash('error', 'Ancien mot de passe incorrect.');
+                    $this->addFlash('error', $this->trans('controller.error.password.old'));
                 }
-        
-                $this->addFlash('success', 'Votre compte a été bien mis à jour.');
             }else{
-                $this->addFlash('error', 'Votre demande est invalide! ' . $form->getErrors(true, true));
+                $this->addFlash('error', $this->trans('controller.error.request', ['%error%' => $form->getErrors(true, true)]));
             }
         }
         
