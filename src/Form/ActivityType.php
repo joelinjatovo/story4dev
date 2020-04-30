@@ -17,15 +17,16 @@ class ActivityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
+            ->add('title', null, ['label' => 'form.label.title.activity'])
             ->add('description', CKEditorType::class, [
+                'label' => 'form.label.description.activity',
                 'config' => array(
                     'uiColor' => '#ffffff',
                 ),
             ])
-            ->add('contactemail')
-            ->add('contactphone')
-            ->add('contactaddress')
+            ->add('contactemail', null, ['label' => 'form.label.email.contact'])
+            ->add('contactphone', null, ['label' => 'form.label.phone.contact'])
+            ->add('contactaddress', null, ['label' => 'form.label.address.contact'])
             ->add('project', EntityType::class, [
                 'class' => Project::class,
                 'choice_label' => function ($project) {
@@ -42,7 +43,7 @@ class ActivityType extends AbstractType
                 'by_reference' => false,
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Save activity'
+                'label' => 'button.save.activity'
             ])
         ;
     }

@@ -98,13 +98,13 @@
 								<div class="kt-section__body">
 									<h3 class="kt-section__title kt-section__title-lg">{% trans %}about{% endtrans %}:</h3>
 									<div class="form-group row">
-                    					{{ form_label( form.title, "Nom de l'activité", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.title, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											{{ form_widget( form.title, { 'attr' : { 'class' : 'form-control' } } ) }}
 										</div>
 									</div>
 									<div class="form-group row">
-                    					{{ form_label( form.description, "Description de l'activité", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.description, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											{{ form_widget( form.description, { 'attr' : { 'class' : 'form-control' } } ) }}
 										</div>
@@ -114,9 +114,9 @@
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-hidden"></div>
                             <div class="kt-section kt-hidden">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Détails du contact:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">{% trans %}form.label.contact{% endtrans %}:</h3>
                                     <div class="form-group row">
-										{{ form_label( form.contactemail,  "Email du contact", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+										{{ form_label( form.contactemail,  null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											<div class="input-group">
 												<div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
@@ -125,7 +125,7 @@
 										</div>
 									</div>
                                     <div class="form-group row">
-										{{ form_label( form.contactphone,  "Téléphone du contact", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+										{{ form_label( form.contactphone, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											<div class="input-group">
 												<div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
@@ -134,7 +134,7 @@
 										</div>
 									</div>
                                     <div class="form-group row">
-										{{ form_label( form.contactaddress,  "Adresse du contact", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+										{{ form_label( form.contactaddress, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											<div class="input-group">
 												<div class="input-group-prepend"><span class="input-group-text"><i class="la la-map"></i></span></div>
@@ -147,8 +147,8 @@
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                             <div class="kt-section kt-section--last">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Attacher des fichiers:</h3>
-                                    <button class="btn btn-label-success btn-bold btn-sm btn-upload">Téléverser un fichier</button>
+									<h3 class="kt-section__title kt-section__title-lg">{% trans %}button.attach.files{% endtrans %}:</h3>
+                                    <button class="btn btn-label-success btn-bold btn-sm btn-upload">{% trans %}button.upload.file{% endtrans %}</button>
 									<div class="kt-widget4" id="file-list" data-name="activity[activityFiles]" data-count="{{ activity.activityFiles.count }}">
                                         {% set i = 0 %}
                                         {% for activityFile in activity.activityFiles %}

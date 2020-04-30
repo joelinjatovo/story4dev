@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Activité #{{ activity.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}activity{% endtrans %} #{{ activity.id }} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 <link href="{{ asset('css/gallery.css') }}" rel="stylesheet" type="text/css"/>
@@ -10,10 +10,10 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Détail de l'activité</h3>
+            <h3 class="kt-subheader__title">{% trans %}activity.detail{% endtrans %}</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__breadcrumbs">
-                <a href="{{ path('project_list') }}" class="kt-subheader__breadcrumbs-link kt-hidden">Projets</a>
+                <a href="{{ path('project_list') }}" class="kt-subheader__breadcrumbs-link kt-hidden">{% trans %}projects{% endtrans %}</a>
                 <span class="kt-subheader__breadcrumbs-separator kt-hidden"></span>
                 <a href="{{ path('project_show', { slug: activity.project.slug })}}" class="kt-subheader__breadcrumbs-link kt-hidden">{{ activity.project.title }}</a>
                 <span class="kt-subheader__breadcrumbs-separator kt-hidden"></span>
@@ -23,10 +23,10 @@
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
                 {% if is_granted('view', project) %}
-                    <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+                    <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}button.back{% endtrans %}</a>
                 {% endif %}
                 {% if is_granted('edit', activity) %}
-                    <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" class="btn kt-subheader__btn-primary">Modifier &nbsp;</a>
+                    <a href="{{ path('activity_edit', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" class="btn kt-subheader__btn-primary">{% trans %}button.edit{% endtrans %} &nbsp;</a>
                 {% endif %}
                 
                 <div class="dropdown dropdown-inline" data-toggle="kt-tooltip" title="" data-placement="left" data-original-title="Actions">
@@ -44,7 +44,7 @@
                         <!--begin::Nav-->
                         <ul class="kt-nav">
                             <li class="kt-nav__head">
-                                Nouveau
+                                {% trans %}button.new{% endtrans %}
                                 <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                             </li>
                             <li class="kt-nav__separator"></li>
@@ -52,7 +52,7 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('activity_index', { 'slug' : activity.project.slug } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon-map"></i>
-                                        <span class="kt-nav__link-text">Activité</span>
+                                        <span class="kt-nav__link-text">{% trans %}activity{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -60,7 +60,7 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                        <span class="kt-nav__link-text">Indicateur</span>
+                                        <span class="kt-nav__link-text">{% trans %}indicator{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -68,13 +68,13 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                        <span class="kt-nav__link-text">Rapport</span>
+                                        <span class="kt-nav__link-text">{% trans %}report{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__head">
-                                Aller dans
+                                {% trans %}button.go.to{% endtrans %}
                                 <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                             </li>
                             <li class="kt-nav__separator"></li>
@@ -82,7 +82,7 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                        <span class="kt-nav__link-text">Les rapports</span>
+                                        <span class="kt-nav__link-text">{% trans %}reports{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -90,7 +90,7 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                        <span class="kt-nav__link-text">Les documents</span>
+                                        <span class="kt-nav__link-text">{% trans %}documents{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -98,7 +98,7 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-                                        <span class="kt-nav__link-text">Les indicateurs</span>
+                                        <span class="kt-nav__link-text">{% trans %}indicators{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -106,7 +106,7 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('graph_list', { 'slug' : activity.project.slug } ) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-chart"></i>
-                                        <span class="kt-nav__link-text">Les graphes</span>
+                                        <span class="kt-nav__link-text">{% trans %}graphs{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -150,7 +150,7 @@
                         <div class="kt-widget__item">
                             <div class="kt-widget__progress-" style="width: 90%;">
                                 <div class="kt-widget__text">
-                                    Avancement
+                                    {% trans %}progression{% endtrans %}
                                 </div>
                                 <div class="progress" style="height: 5px;width: 100%;">
                                     <div class="progress-bar kt-bg-{{ activity|progressionClass }}" role="progressbar" style="width: {{ activity|progression }}%;" aria-valuenow="{{ activity|progression }}" aria-valuemin="0" aria-valuemax="100"></div>
@@ -167,7 +167,7 @@
                                     <i class="flaticon-piggy-bank"></i>
                                 </div>
                                 <div class="kt-widget__details">
-                                    <span class="kt-widget__title">Budget</span>
+                                    <span class="kt-widget__title">{% trans %}budget{% endtrans %}</span>
                                     <span class="kt-widget__value">{{ activity.budget }}</span>
                                 </div>
                             </div>
@@ -178,8 +178,8 @@
                                 <i class="flaticon-file-2"></i>
                             </div>
                             <div class="kt-widget__details">
-                                <span class="kt-widget__title">{{ activity.reports.count }} Rapports</span>
-                                <a href="#reports" class="kt-widget__value kt-font-brand">Voir la liste</a>
+                                <span class="kt-widget__title">{% transchoice activity.reports.count %}choice.report{% endtranschoice %}</span>
+                                <a href="#reports" class="kt-widget__value kt-font-brand">{% trans %}button.view.list{% endtrans %}</a>
                             </div>
                         </div>
 
@@ -188,8 +188,8 @@
                                 <i class="flaticon-confetti"></i>
                             </div>
                             <div class="kt-widget__details">
-                                <span class="kt-widget__title">{{ activity.indicators.count }} Indicateurs</span>
-                                <a href="#indicators" class="kt-widget__value kt-font-brand">Voir la liste</a>
+                                <span class="kt-widget__title">{% transchoice activity.indicators.count %}choice.indicator{% endtranschoice %}</span>
+                                <a href="#indicators" class="kt-widget__value kt-font-brand">{% trans %}button.view.list{% endtrans %}</a>
                             </div>
                         </div>
                     </div>
@@ -205,33 +205,33 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title">
-                        Statistiques
+                        {% trans %}statistics{% endtrans %}
                     </h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-actions">
 						<div class="dropdown dropdown-inline">
 							<a href="#" class="btn btn-default btn-pill btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="flaticon2-settings"></i> Exporter 
+								<i class="flaticon2-settings"></i> {% trans %}button.export{% endtrans %} 
 							</a>
 							<div class="dropdown-menu dropdown-menu-right" x-placement="top-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(32px, 0px, 0px);">
 								<ul class="kt-nav" id="chart-selector">
                                     <li class="kt-nav__item" data-click="PNG">
                                         <a href="#" class="kt-nav__link">
                                             <i class="kt-nav__link-icon flaticon2-line-chart"></i>
-                                            <span class="kt-nav__link-text">Image</span>
+                                            <span class="kt-nav__link-text">{% trans %}image{% endtrans %}</span>
                                         </a>
                                     </li>
                                     <li class="kt-nav__item" data-click="PDF">
                                         <a href="#" class="kt-nav__link">
                                             <i class="kt-nav__link-icon flaticon2-send"></i>
-                                            <span class="kt-nav__link-text">PDF</span>
+                                            <span class="kt-nav__link-text">{% trans %}PDF{% endtrans %}</span>
                                         </a>
                                     </li>
                                     <li class="kt-nav__item" data-click="PRINT">
                                         <a href="#" class="kt-nav__link">
                                             <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
-                                            <span class="kt-nav__link-text">Impression</span>
+                                            <span class="kt-nav__link-text">{% trans %}print{% endtrans %}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -263,12 +263,12 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <a href="{{ path('report_list2', { activity_id : activity.id, slug : activity.project.slug } ) }}">
-                        <h3 class="kt-portlet__head-title">Rapports</h3>
+                        <h3 class="kt-portlet__head-title">{% trans %}reports{% endtrans %}</h3>
                     </a>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <a href="{{ path('report_list2', { activity_id : activity.id, slug : activity.project.slug } ) }}" class="btn btn-label-brand btn-bold btn-sm">
-                        Tous
+                        {% trans %}button.all1{% endtrans %}
                     </a>
                     <a href="{{ path('report_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="btn btn-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
@@ -286,7 +286,7 @@
 					{% for report in reports %}
 						{{ include('activity/_report.html.twig', { 'report' : report } ) }}
 					{% else %}
-                        Il n'y a pas encore des rapports sur cette activité.
+                        {% trans %}no.reports.activity{% endtrans %}
 					{% endfor %}
                 </div>            
             </div>
@@ -304,7 +304,7 @@
 				</div>
                 <div class="kt-portlet__head-toolbar">
                     <a href="{{ path('indicator_list', { activity_id: activity.id, slug : activity.project.slug } ) }}" class="btn btn-label-brand btn-bold btn-sm">
-                        Tous
+                        {% trans %}button.all1{% endtrans %}
                     </a>
                     {% if is_granted('create_indicator', activity) %}
                         <a href="{{ path('indicator_index', { 'activity_id' : activity.id, 'slug' : project.slug } ) }}" class="btn btn-icon">
@@ -324,7 +324,7 @@
 					{% for indicator in activity.indicators.slice(0, 5) %}
 						{{ include('activity/_indicator.html.twig', { 'indicator' : indicator } ) }}
 					{% else %}
-                    Il n'y a pas encore des indicateurs.
+                        {% trans %}no.indicators{% endtrans %}
 					{% endfor %}
 				</div>
 			</div>
@@ -336,12 +336,12 @@
         <div class="kt-portlet kt-portlet--height-fluid" id="documents">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label"><a href="{{ path('file_list_activity', { activity_id : activity.id, slug : activity.project.slug } ) }}" >
-                        <h3 class="kt-portlet__head-title">Documents</h3>
+                        <h3 class="kt-portlet__head-title">{% trans %}documents{% endtrans %}</h3>
                     </a>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <a href="{{ path('file_list_activity', { activity_id : activity.id, slug : activity.project.slug } ) }}" class="btn btn-label-brand btn-bold btn-sm">
-                        Tous
+                        {% trans %}button.all1{% endtrans %}
                     </a>
                 </div>
             </div>
@@ -350,7 +350,7 @@
 					{% for document in documents %}
 						{{ include('activity/_document.html.twig', { 'document' : document } ) }}
 					{% else %}
-                    Il n'y a pas encore de document ni à cette activité ni à ses rapports.
+                        {% trans %}no.document.activity{% endtrans %}
 					{% endfor %}
                 </div>
             </div>
@@ -364,7 +364,7 @@
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Photos</h3>
+                    <h3 class="kt-portlet__head-title">{% trans %}photos{% endtrans %}</h3>
                 </div>
             </div>
             <div class="kt-portlet__body">
@@ -374,7 +374,7 @@
 				            {{ include('activity/_image.html.twig', { 'file' : file } ) }}
                         {% endif %}
                     {% else %}
-                        Aucun fichier attaché ni à cette activité ni à ses rapports.
+                        {% trans %}no.file.activity{% endtrans %}
                     {% endfor %}
                 </div>
             </div>
