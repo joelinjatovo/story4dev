@@ -6,5 +6,5 @@ web_controller:
     resource: ../../src/Controller/Web/
     type: annotation
     prefix:
-        fr: '' # don't prefix URLs for English, the default locale
+        fr: '' # don't prefix URLs for French, the default locale
         en: '/en'

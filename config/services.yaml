@@ -46,6 +46,9 @@ services:
             
     App\EventSubscriber\LocaleSubscriber:
         arguments: ['%kernel.default_locale%']
+            
+    App\EventSubscriber\UserLocaleSubscriber:
+        arguments: ['@session']
 
     App\Service\GeoIpService:
         arguments:

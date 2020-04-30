@@ -96,7 +96,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         $targetPath = $this->getTargetPath($request->getSession(), $providerKey);
         if ( ! $targetPath ) {
-            $targetPath = $this->urlGenerator->generate('app_index');
+            $targetPath = $this->urlGenerator->generate('app_index', ['_locale' => $request->getLocale()]);
         }
         
         if ( $request->isXmlHttpRequest() ) {
