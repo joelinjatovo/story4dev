@@ -68,6 +68,8 @@ class AppExtension extends AbstractExtension
 
     public function getChartSeries($entity){
         if( is_array( $entity ) ){
+            $series = [];
+            
             $indicators = $entity;
             foreach($indicators as $indicator){
                 $title = $indicator->getTitle();

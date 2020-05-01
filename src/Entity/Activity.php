@@ -416,6 +416,14 @@ class Activity
         return $this;
     }
 
+    /**
+     * @return boolean
+     */
+    public function hasParent()
+    {
+        return !is_null($this->getParent()) && ($this->getParent()->getId() > 0);
+    }
+
     public function getParent(): ?self
     {
         return $this->parent;
@@ -426,6 +434,14 @@ class Activity
         $this->parent = $parent;
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasChild()
+    {
+        return $this->getChildren()->count() > 0;
     }
 
     /**

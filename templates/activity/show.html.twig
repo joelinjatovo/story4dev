@@ -255,7 +255,6 @@
         </div>
     </div>
 </div>
-
 	
 <div class="row">
     <div class="col-lg-12">
@@ -381,12 +380,124 @@
         </div>
     </div>
 </div>
+	
+{% if activity.hasChild %}
+    <div class="row">
+        <div class="col-xl-8 col-lg-12 order-lg-1 order-xl-1">
+            <div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <a href="{{ path('report_list2', { activity_id : activity.id, slug : activity.project.slug } ) }}">
+                            <h3 class="kt-portlet__head-title">{% trans %}activities.child{% endtrans %}</h3>
+                        </a>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <a href="#" class="btn btn-label-brand btn-bold btn-sm">
+                            {% trans %}button.all1{% endtrans %}
+                        </a>
+                        <a href="#" class="btn btn-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+                                    <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                    <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
+                                </g>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body--fit">
+                    <div class="kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--loaded" >
+                        <table class="kt-datatable__table" style="display: block;">
+                            <thead class="kt-datatable__head">
+                                <tr class="kt-datatable__row" style="left: 0px;">
+                                    <th data-field="{% trans %}activities{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                        <span style="width: 222px;">{% trans %}activities.child{% endtrans %}</span>
+                                    </th>
+                                    <th data-field="{% trans %}progressions{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                        <span style="width: 222px;">{% trans %}progressions{% endtrans %}</span>
+                                    </th>
+                                    <th data-field="{% trans %}indicators{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                        <span style="width: 100px;">{% trans %}indicators{% endtrans %}</span>
+                                    </th>
+                                    <th data-field="{% trans %}reports{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                        <span style="width: 100px;">{% trans %}reports{% endtrans %}</span>
+                                    </th>
+                                    <th data-field="{% trans %}documents{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                        <span style="width: 100px;">{% trans %}documents{% endtrans %}</span>
+                                    </th>
+                                    <th data-field="{% trans %}actions{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                        <span style="width: 100px;">{% trans %}actions{% endtrans %}</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="kt-datatable__body">
+                                {% for _activity in activity.children %}
+                                    <tr data-row="0" class="kt-datatable__row activity-item" style="left: 0px;">
+                                        <td data-field="{% trans %}user{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell">
+                                            <span style="width: 222px;">
+                                                <div class="kt-user-card-v2">
+                                                    <div class="kt-user-card-v2__details">
+                                                        <a class="kt-user-card-v2__name" href="{{ path('activity_show', { 'slug': _activity.project.slug, 'activity_id': _activity.id }) }}">{{ _activity.title }}</a>
+                                                        <span class="kt-user-card-v2__email">{{ _activity.description|excerpt(50) }}</span>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </td>
+                                        <td data-field="{% trans %}progression{% endtrans %}" class="kt-datatable__cell">
+                                            <span style="width: 222px;">
+                                                <div class="kt-widget__item">
+                                                    <div class="kt-widget__progress-" style="width: 90%;">
+                                                        <div class="progress" style="height: 5px;width: 100%;">
+                                                            <div class="progress-bar kt-bg-{{ _activity|progressionClass }}" role="progressbar" style="width: {{ _activity|progression }}%;" aria-valuenow="{{ _activity|progression }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                        <div class="kt-widget__stats">
+                                                            {{ _activity|progression }}%
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </td>
+                                        <td data-field="{% trans %}indicators{% endtrans %}" class="kt-datatable__cell">
+                                            <a style="width: 100px;" href="{{ path('indicator_list', { 'activity_id' : _activity.id, 'slug' : _activity.project.slug} ) }}" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}count.indicator.activity{% endtrans %}"><span class="kt-font-bold">{{ _activity.indicators.count }} </span>{% trans %}indicators{% endtrans %}</a>
+                                        </td>
+                                        <td data-field="{% trans %}reports{% endtrans %}" class="kt-datatable__cell">
+                                            <a style="width: 100px;" href="{{ path('report_list2', { 'activity_id' : _activity.id, 'slug' : _activity.project.slug} ) }}" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}count.report.activity{% endtrans %}"><span class="kt-font-bold">{{ _activity.reports.count }} </span>{% trans %}reports{% endtrans %}</a>
+                                        </td>
+                                        <td data-field="{% trans %}documents{% endtrans %}" class="kt-datatable__cell">
+                                            <a style="width: 100px;" href="{{ path('file_list_activity', { 'activity_id' : _activity.id, 'slug' : _activity.project.slug } ) }}" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}count.document.activity{% endtrans %}"><span class="kt-font-bold">{{ _activity.activityFiles.count }} </span>{% trans %}documents{% endtrans %}</a>
+                                        </td>
+                                        <td data-field="{% trans %}actions{% endtrans %}" class="kt-datatable__cell">
+                                            <span style="overflow: visible; position: relative; width: 100px;">
+                                                {% if is_granted('edit', _activity) %}
+                                                    <a href="{{ path('activity_edit', { 'slug': _activity.project.slug, 'activity_id': _activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}button.edit{% endtrans %}">
+                                                        <i class="la la-edit"></i>
+                                                    </a>
+                                                {% endif %}
+                                                {% if is_granted('view', _activity) %}
+                                                    <a href="{{ path('activity_show', { 'slug': _activity.project.slug, 'activity_id': _activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}button.view.more.detail{% endtrans %}">
+                                                        <i class="la la-eye"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
 {% endblock %}
 
 {% block javascripts %}
 <script src="{{ asset('js/gallery.min.js') }}" type="text/javascript" ></script>
 <script src="{{ asset('js/gallery-theme-tiles.js') }}" type="text/javascript" ></script>
-<script src="{{ asset('js/admin/activity-show.js') }}" type="text/javascript" ></script>
+<script src="{{ asset('js/admin/_activity-show.js') }}" type="text/javascript" ></script>
 <script type="text/javascript"> 
     jQuery(document).ready(function(){
         if( jQuery("#gallery") != undefined ) jQuery("#gallery").unitegallery(); 

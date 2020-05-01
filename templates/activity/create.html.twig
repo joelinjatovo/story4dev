@@ -109,6 +109,16 @@
 											{{ form_widget( form.description, { 'attr' : { 'class' : 'form-control' } } ) }}
 										</div>
 									</div>
+                                    {% if activity.hasChild %}
+					                   <input type="hidden" name="activity[parent]" value="" >
+                                    {% else %}
+                                        <div class="form-group row">
+                                            {{ form_label( form.parent, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                                            <div class="col-lg-9 col-xl-6">
+                                                {{ form_widget( form.parent, { 'attr' : { 'class' : 'form-control' } } ) }}
+                                            </div>
+                                        </div>
+                                    {% endif %}
 								</div>
 							</div>
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-hidden"></div>
@@ -165,7 +175,6 @@
 						</div>
 						<div class="col-xl-2"></div>
 					</div>
-					<input type="hidden" name="activity[project]" value="{{ project.id }}" >
 					{{ form_row( form._token ) }}
 				{{ form_end( form, {'render_rest': false}) }}
 			</div>

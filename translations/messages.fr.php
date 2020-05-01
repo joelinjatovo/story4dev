@@ -105,6 +105,7 @@ return [
             'address.contact' => 'Adresse du contact',
             'company' => 'Nom de votre entreprise',
             'contact' => 'Détails du contact',
+            'parent.activity' => 'Activité parente',
             'title.activity' => 'Titre de l\'activité',
             'description.activity' => 'Description de l\'activité',
             'email' => 'Adresse email',
@@ -126,7 +127,8 @@ return [
             'username' => 'Vous allez être déconnecté si vous modifier ce champ.',
         ],
         'placeholder' => [
-            'language' => 'Sélectionnez votre langue',
+            'language' => 'Séléctionnez votre langue',
+            'activity' => 'Séléctionner une activité parente',
         ],
         'title' => [
             'activity' => [
@@ -264,9 +266,11 @@ return [
     'all.activities' => 'Toutes les activités',
     'about' => 'A-propos',
     'account' => 'Compte',
-    'activity.detail' => 'Détail de l\'activité',
     'activity' => 'Activité',
+    'activity.child' => 'Sous activité',
+    'activity.detail' => 'Détail de l\'activité',
     'activities' => 'Activités',
+    'activities.child' => 'Sous activités',
     'administration' => 'Administration',
     'administrations' => 'Administrations',
     'attachment' => 'Fichier attaché',
@@ -304,6 +308,7 @@ return [
     'please_wait' => 'Veuillez patienter s\'il vous plaît...',
     'profil' => 'Profile',
     'progression' => 'Avancement',
+    'progressions' => 'Avancements',
     'project' => 'Projet',
     'projects' => 'Projets',
     'print' => 'Impression',

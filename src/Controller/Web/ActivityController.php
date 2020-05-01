@@ -42,7 +42,7 @@ class ActivityController extends AbstractController
         $user = $project->getAuthor();
         
         $activity = new Activity();
-        $form = $this->createForm(ActivityType::class, $activity);
+        $form = $this->createForm(ActivityType::class, $activity, array( 'project' => $project));
 
         return $this->render('activity/create.html.twig', [
             'user'     => $user, 
@@ -63,7 +63,7 @@ class ActivityController extends AbstractController
         $user = $project->getAuthor();
         
         $activity = new Activity();
-        $form = $this->createForm(ActivityType::class, $activity);
+        $form = $this->createForm(ActivityType::class, $activity, array( 'project' => $project));
         
         $form->handleRequest($request);
         if ( $form->isSubmitted() && $form->isValid() ) {
@@ -208,7 +208,7 @@ class ActivityController extends AbstractController
         
         $user = $project->getAuthor();
         
-        $form = $this->createForm(ActivityType::class, $activity);
+        $form = $this->createForm(ActivityType::class, $activity, array( 'project' => $project));
 
         return $this->render('activity/edit.html.twig', [
             'user'     => $user,
@@ -233,7 +233,7 @@ class ActivityController extends AbstractController
         
         $user = $project->getAuthor();
         
-        $form = $this->createForm(ActivityType::class, $activity);
+        $form = $this->createForm(ActivityType::class, $activity, array( 'project' => $project));
         
         $form->handleRequest($request);
 

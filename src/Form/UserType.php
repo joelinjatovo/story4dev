@@ -32,17 +32,17 @@ class UserType extends AbstractType
             ->add('status', ChoiceType::class, [
                 'choices'  => [
                     'En cours de validation' => User::STATUS_PING,
-                    'Active'                 => User::STATUS_ACTIVE,
-                    'Bloqué'                 => User::STATUS_BLOCKED,
-                    'Annulé'                 => User::STATUS_CANCELED,
+                    'Active' => User::STATUS_ACTIVE,
+                    'Bloqué' => User::STATUS_BLOCKED,
+                    'Annulé' => User::STATUS_CANCELED,
                 ],
             ])
             ->add('roles', ChoiceType::class, [
                 'multiple' => true,
                 'expanded' => true, // render check-boxes
                 'choices'  => [
-                    'Client'     => 'ROLE_USER',
-                    'Admin'      => 'ROLE_ADMIN',
+                    'Client' => 'ROLE_USER',
+                    'Admin' => 'ROLE_ADMIN',
                     'SuperAdmin' => 'ROLE_SUPER_ADMIN',
                 ],
             ])
