@@ -183,6 +183,16 @@ class Project
      */
     private $graphs;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="children")
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="parent")
+     */
+    private $children;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -194,6 +204,7 @@ class Project
         $this->units = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->graphs = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -600,6 +611,65 @@ class Project
             // set the owning side to null (unless already changed)
             if ($graph->getProject() === $this) {
                 $graph->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasParent()
+    {
+        return !is_null($this->getParent()) && ($this->getParent()->getId() > 0);
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasChild()
+    {
+        return $this->getChildren()->count() > 0;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    public function addChild(self $child): self
+    {
+        if (!$this->children->contains($child)) {
+            $this->children[] = $child;
+            $child->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChild(self $child): self
+    {
+        if ($this->children->contains($child)) {
+            $this->children->removeElement($child);
+            // set the owning side to null (unless already changed)
+            if ($child->getParent() === $this) {
+                $child->setParent(null);
             }
         }
 

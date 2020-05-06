@@ -322,6 +322,8 @@ return [
     'progression' => 'Avancement',
     'progressions' => 'Avancements',
     'project' => 'Projet',
+    'project.child' => 'Sous projet',
+    'project.childs' => 'Sous projets',
     'projects' => 'Projets',
     'print' => 'Impression',
     'pdf' => 'PDF',
