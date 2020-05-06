@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Activity;
 use App\Entity\Indicator;
 use App\Entity\Unit;
+use App\Repository\ActivityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,10 +19,27 @@ class IndicatorType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        
+        $project = isset($options['project'])?$options['project']:null;
+        
         $builder
             ->add('title')
             ->add('activity', EntityType::class, [
+                'label' => 'form.label.indicator.activity',
+                'placeholder' => 'form.placeholder.activity',
                 'class' => Activity::class,
+                'query_builder' => function (ActivityRepository $er) use ($project) {
+                    $query = $er->createQueryBuilder('a');
+                    
+                    if( $project ) {
+                        $query->andWhere('a.project = :project')
+                            ->setParameter('project', $project);
+                    }
+                    
+                    return $query->distinct('a.id')
+                        ->orderBy('a.title', 'ASC');
+                    
+                },
                 'choice_label' => function ($activity) {
                     return $activity->getTitle();
                 }

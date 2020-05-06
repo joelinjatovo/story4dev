@@ -5,6 +5,7 @@ namespace App\Controller\Web;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -34,78 +35,43 @@ use App\Service\PaginatorService;
 class ReportController extends AbstractController
 {
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/report", name="index", methods="GET", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/report", name="index", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function index(Project $project, Activity $activity)
+    public function index(Project $project)
     {
-        $this->denyAccessUnlessGranted('view', $activity);
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-        
-        $user = $project->getAuthor();
-        
-        $report = new Report();
-        $report->setActivity($activity);
-        $report->setAuthor($this->getUser());
-        
+        //$this->denyAccessUnlessGranted('view', $activity);
+
         $entityManager = $this->getDoctrine()->getManager();
         
-        $favorites = $entityManager
-            ->getRepository(IndicatorFavorite::class)
-            ->findFavorite($activity, $this->getUser())
-            ->getScalarResult();
-        $favorites = array_column($favorites, "id");
-        
-        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity, 'favorites' => $favorites ));
+        $report = new Report();
+        $form = $this->createForm(ReportType::class, $report, array( 'project' => $project, 'user' => $this->getUser() ));
         
         return $this->render('report/create.html.twig', [
-            'user'     => $user, 
             'project'  => $project, 
-            'activity' => $activity,
             'report'   => $report,
             'form'     => $form->createView()
         ]);
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/report", name="create", methods="POST", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/report", name="create", methods="POST")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function create(Project $project, Activity $activity, Request $request): Response
+    public function create(Project $project, Request $request): Response
     {
-        $this->denyAccessUnlessGranted('view', $activity);
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-        
-        $user = $project->getAuthor();
+        //$this->denyAccessUnlessGranted('view', $activity);
 
-        $report = new Report();
-        
         $entityManager = $this->getDoctrine()->getManager();
         
-        $favorites = $entityManager
-            ->getRepository(IndicatorFavorite::class)
-            ->findFavorite($activity, $this->getUser())
-            ->getScalarResult();
-        $favorites = array_column($favorites, "id");
-        
-        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity, 'favorites' => $favorites ));
+        $report = new Report();
+        $form = $this->createForm(ReportType::class, $report, array( 'project' => $project, 'user' => $this->getUser() ));
         
         $form->handleRequest($request);
         if ( $form->isSubmitted() ) {
             if( $form->isValid()) {
-                
-                $report->setActivity($activity);
                 $report->setAuthor($this->getUser());
                 $report->setIp($request->getClientIp());
-                
                 foreach ($report->getResults() as $result) {
                     $result->setAuthor($this->getUser());
                     $entityManager->persist($result);
@@ -115,98 +81,44 @@ class ReportController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Votre rapport a été bien enregistré.');
-                
-                $action = strtolower( $request->request->get('submit') );
-                switch($action){
-                    case 'save-exit':
-                        return $this->redirectToRoute('activity_show', [
-                            'slug'  => $project->getSlug(),
-                            'activity_id' => $activity->getId(), 
-                        ]);
-                    case 'save-continue':
-                        return $this->redirectToRoute('report_show', [
-                            'slug'  => $project->getSlug(),
-                            'activity_id' => $activity->getId(), 
-                            'report_id'   => $report->getId(), 
-                        ]);
-                    case 'save-edit':
-                        return $this->redirectToRoute('report_edit', [
-                            'slug'  => $project->getSlug(),
-                            'activity_id' => $activity->getId(), 
-                            'report_id'   => $report->getId(), 
-                        ]);
-                    case 'save-create':
-                    case 'save-default':
-                    default:
-                        return $this->redirectToRoute('report_index', [
-                            'slug'  => $project->getSlug(),
-                            'activity_id' => $activity->getId(), 
-                        ]);
-                }
             }else{
                 $this->addFlash('error', "Votre rapport n'a pas été enregistré. Veuillez réessayer!");
             }
         }
         
         return $this->redirectToRoute('report_index', [
-            'slug'  => $project->getSlug(),
-            'activity_id' => $activity->getId(), 
+            'slug' => $project->getSlug(),
         ]);
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/report/{report_id}", name="show", methods="GET", requirements={"activity_id"="\d+", "report_id"="\d+"})
+     * @Route("/p/{slug}/report/{report_id}", name="show", methods="GET", requirements={"report_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function show(Project $project, Activity $activity, Report $report, \App\Twig\AppExtension $twigExtension)
+    public function show(Project $project, Report $report, \App\Twig\AppExtension $twigExtension)
     {
         $this->denyAccessUnlessGranted('view', $report);
         
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-        
-        $user = $project->getAuthor();
-
-        if($report->getActivity() != $activity ){
-            throw $this->createNotFoundException('The activity does not match');
-        }
-        
         return $this->render('report/show.html.twig', [
-            'user'     => $user,
             'project'  => $project,
-            'activity' => $activity,
             'report'   => $report,
         ]);
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/report/{report_id}/pdf", name="pdf", methods="GET", requirements={"activity_id"="\d+", "report_id"="\d+"})
+     * @Route("/p/{slug}/report/{report_id}/pdf", name="pdf", methods="GET", requirements={"report_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function pdf(Project $project, Activity $activity, Report $report, \App\Twig\AppExtension $twigExtension, \Knp\Snappy\Pdf $knpSnappy)
+    public function pdf(Project $project, Report $report, \App\Twig\AppExtension $twigExtension, \Knp\Snappy\Pdf $knpSnappy)
     {
         $this->denyAccessUnlessGranted('view', $report);
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-        
-        $user = $project->getAuthor();
-
-        if($report->getActivity() != $activity ){
-            throw $this->createNotFoundException('The activity does not match');
-        }
         
         // Retrieve the HTML generated in our twig file
         $html = $this->renderView('report/pdf.html.twig', [
             'user'     => $user,
             'project'  => $project,
-            'activity' => $activity,
             'report'   => $report,
         ]);
 
@@ -214,89 +126,45 @@ class ReportController extends AbstractController
             $knpSnappy->getOutputFromHtml($html),
             'file.pdf'
         );
-        
-        
-        return $this->render('report/pdf.html.twig', [
-            'user'     => $user,
-            'project'  => $project,
-            'activity' => $activity,
-            'report'   => $report,
-        ]);
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/report/edit/{report_id}", name="edit", methods="GET", requirements={"activity_id"="\d+", "report_id"="\d+"})
+     * @Route("/p/{slug}/report/edit/{report_id}", name="edit", methods="GET", requirements={"report_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function edit(Project $project, Activity $activity, Report $report)
+    public function edit(Project $project, Report $report)
     {
         $this->denyAccessUnlessGranted('edit', $report);
         
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-
-        if($report->getActivity() != $activity ){
-            throw $this->createNotFoundException('The activity does not match');
-        }
-        
-        $user = $project->getAuthor();
-        
         $entityManager = $this->getDoctrine()->getManager();
         
-        $favorites = $entityManager
-            ->getRepository(IndicatorFavorite::class)
-            ->findFavorite($activity, $this->getUser())
-            ->getScalarResult();
-        $favorites = array_column($favorites, "id");
-        
-        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity, 'favorites' => $favorites ));
+        $form = $this->createForm(ReportType::class, $report, array( 'project' => $project, 'user' => $this->getUser() ));
         
         return $this->render('report/edit.html.twig', [
-            'user'     => $user, 
             'project'  => $project, 
-            'activity' => $activity,
             'report'   => $report, 
             'form'     => $form->createView()
         ]);
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/report/edit/{report_id}", name="update", methods="POST", requirements={"activity_id"="\d+", "report_id"="\d+"})
+     * @Route("/p/{slug}/report/edit/{report_id}", name="update", methods="POST", requirements={"report_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("report", options={"mapping": {"report_id": "id"}})
      */
-    public function update(Project $project, Activity $activity, Report $report, Request $request)
+    public function update(Project $project, Report $report, Request $request)
     {
         $this->denyAccessUnlessGranted('edit', $report);
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
 
-        if($report->getActivity() != $activity ){
-            throw $this->createNotFoundException('The activity does not match');
-        }
-        
-        $user = $project->getAuthor();
+        $entityManager = $this->getDoctrine()->getManager();
         
         $originalResults = new ArrayCollection();
         foreach ($report->getResults() as $result) {
             $originalResults->add($result);
         }
         
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $favorites = $entityManager
-            ->getRepository(IndicatorFavorite::class)
-            ->findFavorite($activity, $this->getUser())
-            ->getScalarResult();
-        $favorites = array_column($favorites, "id");
-        
-        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity, 'favorites' => $favorites ));
+        $form = $this->createForm(ReportType::class, $report, array( 'project' => $project, 'user' => $this->getUser() ));
         
         $form->handleRequest($request);
         
@@ -332,34 +200,6 @@ class ReportController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Votre rapport a été bien modifié avec succès.');
-                
-                $action = strtolower( $request->request->get('submit') );
-                switch($action){
-                    case 'save-exit':
-                        return $this->redirectToRoute('activity_show', [
-                            'slug'  => $project->getSlug(),
-                            'activity_id' => $activity->getId(), 
-                        ]);
-                    case 'save-continue':
-                    case 'save-edit':
-                        return $this->redirectToRoute('report_edit', [
-                            'slug'  => $project->getSlug(),
-                            'activity_id' => $activity->getId(), 
-                            'report_id'   => $report->getId(), 
-                        ]);
-                    case 'save-create':
-                        return $this->redirectToRoute('report_index', [
-                            'slug'  => $project->getSlug(),
-                            'activity_id' => $activity->getId(), 
-                        ]);
-                    case 'save-default':
-                    default:
-                        return $this->redirectToRoute('report_show', [
-                            'slug'  => $project->getSlug(),
-                            'activity_id' => $activity->getId(), 
-                            'report_id'   => $report->getId(), 
-                        ]);
-                }
             }else{
                 $this->addFlash('error', "Votre rapport n'a pas été modifié. Une erreur s'est produite.");
             }
@@ -367,7 +207,6 @@ class ReportController extends AbstractController
         
         return $this->redirectToRoute('report_edit', [
             'slug'  => $project->getSlug(),
-            'activity_id' => $activity->getId(),
             'report_id'   => $report->getId(), 
         ]);
     }
@@ -446,13 +285,11 @@ class ReportController extends AbstractController
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/reports/{page<\d+>?1}", name="list2", methods="GET", requirements={"activity_id"="\d+"})
-     * @Route("/p/{slug}/activity/{activity_id}/reports/{type}/{page<\d+>?1}", name="list2_type", methods="GET", requirements={"activity_id"="\d+"})
      * @Route("/p/{slug}/reports/{page<\d+>?1}", name="list", methods="GET")
      * @Route("/p/{slug}/reports/{type}/{page<\d+>?1}", name="list_type", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
-    public function list(Project $project, $activity_id = 0, ?string $type, $page = 1, PaginatorService $paginator, Request $request)
+    public function list(Project $project, ?string $type, $page = 1, PaginatorService $paginator, Request $request, SessionInterface $session)
     {
         $this->denyAccessUnlessGranted('view', $project);
         
@@ -462,10 +299,9 @@ class ReportController extends AbstractController
         $order_by = $project->getMeta('report_order_by', 'createdAt');
         $order    = $project->getMeta('report_order', 'DESC');
         
-        $user = $project->getAuthor();
-
         $entityManager = $this->getDoctrine()->getManager();
 
+        $activity_id = 0;
         $activity = null;
         if( $activity_id > 0 ){
             $activity = $entityManager->getRepository(Activity::class)->find($activity_id);
@@ -504,9 +340,14 @@ class ReportController extends AbstractController
         
         $reports = $paginator->paginate($query, $project->getMeta('report_count', 20));
 
+        if(empty($type)){
+            $type = $session->get('list_type');
+        }else{
+            $session->set('list_type', $type);
+        }
+        
         if($type == 'list'){
             return $this->render('report/list.html.twig', [
-                'user'     => $user,
                 'project'  => $project,
                 'activity' => $activity,
                 'reports'  => $reports,
@@ -517,7 +358,6 @@ class ReportController extends AbstractController
         }
         
         return $this->render('report/grid.html.twig', [
-            'user'     => $user,
             'project'  => $project,
             'activity' => $activity,
             'reports'  => $reports,

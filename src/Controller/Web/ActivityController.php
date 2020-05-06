@@ -5,10 +5,12 @@ namespace App\Controller\Web;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 use App\Entity\User;
 use App\Entity\Project;
@@ -370,7 +372,7 @@ class ActivityController extends AbstractController
      * @Route("/p/{slug}/activities/{type}/{page<\d+>?1}", name="list_type", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
-    public function list(Project $project, ?string $type, $page = 1, PaginatorService $paginator)
+    public function list(Project $project, ?string $type, $page = 1, PaginatorService $paginator, SessionInterface $session)
     {
         $this->denyAccessUnlessGranted('view', $project);
         
@@ -384,6 +386,12 @@ class ActivityController extends AbstractController
         
         $activities = $paginator->paginate($query, $project->getMeta('activity_count', 20));
 
+        if(empty($type)){
+            $type = $session->get('list_type');
+        }else{
+            $session->set('list_type', $type);
+        }
+        
         if($type == 'list'){
             return $this->render('activity/list.html.twig', [
                 'user'       => $user,

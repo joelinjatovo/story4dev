@@ -86,7 +86,7 @@ class AppExtension extends AbstractExtension
         
         if($entity instanceof Activity){
             // Get indicators it from repository to avoid EntityNotFoundException
-            $indicators = $this->em->getRepository(Indicator::class)->findBy(['activity' => $entity]);
+            $indicators = $this->em->getRepository(Indicator::class)->findByActivity($entity)->execute();
             return $this->getChartSeries($indicators);
         }
         
@@ -127,7 +127,7 @@ class AppExtension extends AbstractExtension
 
         if($entity instanceof Activity){
             // Get indicators it from repository to avoid EntityNotFoundException
-            $indicators = $this->em->getRepository(Indicator::class)->findBy(['activity' => $entity]);
+            $indicators = $this->em->getRepository(Indicator::class)->findByActivity($entity)->execute();
             return $this->getChartData($indicators, $iterations, $withIndicator);
         }
 
@@ -170,7 +170,7 @@ class AppExtension extends AbstractExtension
             break;
             case $entity instanceof Activity:
                 // Get indicators it from repository to avoid EntityNotFoundException
-                $indicators = $this->em->getRepository(Indicator::class)->findBy(['activity' => $entity]);
+                $indicators = $this->em->getRepository(Indicator::class)->findByActivity($entity)->execute();
             break;
             case $entity instanceof Project:
                 // Get indicators it from repository to avoid EntityNotFoundException
@@ -211,7 +211,7 @@ class AppExtension extends AbstractExtension
             break;
             case $entity instanceof Activity:
                 // Get indicators it from repository to avoid EntityNotFoundException
-                $indicators = $this->em->getRepository(Indicator::class)->findBy(['activity' => $entity]);
+                $indicators = $this->em->getRepository(Indicator::class)->findByActivity($entity)->execute();
             break;
             case $entity instanceof Project:
                 // Get indicators it from repository to avoid EntityNotFoundException
@@ -270,7 +270,7 @@ class AppExtension extends AbstractExtension
         if($entity instanceof Activity){
             $progression = 0;
             // Get indicators it from repository to avoid EntityNotFoundException
-            $indicators = $this->em->getRepository(Indicator::class)->findBy(['activity' => $entity]);
+            $indicators = $this->em->getRepository(Indicator::class)->findByActivity($entity)->execute();
             foreach($indicators as $indicator){
                 $progression += $this->getProgression($indicator, $iteration);
             }

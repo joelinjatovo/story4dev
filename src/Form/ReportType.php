@@ -24,6 +24,10 @@ class ReportType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $project = isset($options['project'])?$options['project']:null;
+        $user = isset($options['user'])?$options['user']:null;
+        $favorites = isset($options['favorites'])?$options['favorites']:[];
+        
         $builder
             ->add('title')
             ->add('description', CKEditorType::class, [
@@ -37,8 +41,9 @@ class ReportType extends AbstractType
             ->add('results', CollectionType::class, [
                 'entry_type' => ResultType::class,
                 'entry_options' => [
-                    'activity' => isset($options['activity'])?$options['activity']:null,
-                    'favorites' => isset($options['favorites'])?$options['favorites']:array(),
+                    'project' => $project,
+                    'user' => $user,
+                    'favorites' => $favorites,
                     'label' => false,
                 ],
                 'allow_add' => true,
@@ -81,9 +86,9 @@ class ReportType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Report::class,
-            'activity'   => null,
-            'author'     => null,
-            'favorites' => array(),
+            'project' => null,
+            'user' => null,
+            'favorites' => [],
         ]);
     }
 }

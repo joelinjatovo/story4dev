@@ -6,7 +6,25 @@
 {% endblock %}
 
 {% block subheader %}
-<br>
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">{{ graph.title }}</h3>
+            <a href="{{ path('graph_index', { slug: project.slug }) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <a href="{{ url('graph_show', { slug : graph.project.slug, graph_id : graph.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                <div class="btn-group">
+                    <button type="submit" form="graph" name="submit" value="save-default" class="btn btn-brand">
+                        <i class="la la-check"></i> 
+                        <span class="kt-hidden-mobile">Enregister</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block headtitle %}

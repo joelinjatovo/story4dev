@@ -6,7 +6,9 @@ return [
         'placeholder' => 'Rechercher...',
     ],
     'add' => [
-        'report' => 'Ajouter un rapport'
+        'indicator' => 'Ajouter un indicateur',
+        'project' => 'Ajouter un projet',
+        'report' => 'Ajouter un rapport',
     ],
     'aside' => [
         'no' => [
@@ -94,6 +96,12 @@ return [
         'title' => 'Déposer les fichiers ici ou cliquer pour téléverser.',
         'subtitle' => 'Seuls les fichiers image, pdf, word, powerpoint et excel sont autorisés pour le téléversement.',
     ],
+    'editing' => [
+        'activity' => 'Modification activité',
+        'indicator' => 'Modification indicateur',
+        'project' => 'Modification projet',
+        'report' => 'Modification rapport',
+    ],
     'email' => [
         'subject' => [
             'confirmation' => 'Modification adresse email - Confirmation',
@@ -111,6 +119,7 @@ return [
             'email' => 'Adresse email',
             'email.contact' => 'Email du contact',
             'fullname' => 'Nom complet *',
+            'indicator.activity' => 'Activité concernée',
             'language' => 'Language',
             'username' => 'Nom d\'utilisateur',
             'password.old' => 'Ancien mot de passe',
@@ -128,7 +137,8 @@ return [
         ],
         'placeholder' => [
             'language' => 'Séléctionnez votre langue',
-            'activity' => 'Séléctionner une activité parente',
+            'activity' => 'Séléctionner une activité',
+            'activity.parent' => 'Séléctionner une activité parente',
         ],
         'title' => [
             'activity' => [
@@ -178,7 +188,8 @@ return [
         'files' => 'Mes fichiers',
     ],
     'new' => [
-        'activity' => 'Nouvelle activité'
+        'activity' => 'Nouvelle activité',
+        'indicator' => 'Nouvel indicateur',
     ],
     'no' => [
         'document' => [
@@ -273,6 +284,7 @@ return [
     'activities.child' => 'Sous activités',
     'administration' => 'Administration',
     'administrations' => 'Administrations',
+    'application' => 'Application',
     'attachment' => 'Fichier attaché',
     'back' => 'Retours',
     'budget' => 'Budget',

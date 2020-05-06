@@ -13,9 +13,14 @@
         <!--end::Fonts -->
 
         <!--begin::Global Theme Styles(used by all pages) -->
-        <link href="{{ asset('css/vendors.bundle.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('css/vendors-2.bundle.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('css/style-2.bundle.css') }}" rel="stylesheet" type="text/css"/>
         <!--end::Global Theme Styles -->
+        
+        <link href="{{ asset('css/skins/header/base/light.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('css/skins/header/menu/light.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('css/skins/brand/dark.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('css/skins/aside/dark.css') }}" rel="stylesheet" type="text/css"/>
         
         <!--begin::Layout Skins & Vendor Skins(used by this page) -->
         {% block stylesheets %}
@@ -25,7 +30,7 @@
 
         <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     </head>
-    <body id="page-body" class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-aside--minimize kt-page--loading">
+    <body id="page-body" class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled kt-aside--fixed">
         <!-- begin:: Dropzone -->
         {% block dropzone %}
             {{ include('_common/dropzone.html.twig') }}
@@ -99,13 +104,14 @@
 
         <!-- begin::Global Config(global config for global JS sciprts) -->
         <script>
-            var KTAppOptions = {"colors":{"state":{"brand":"#22b9ff","light":"#ffffff","dark":"#282a3c","primary":"#5867dd","success":"#34bfa3","info":"#36a3f7","warning":"#ffb822","danger":"#fd3995"},"base":{"label":["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape":["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};
+            //var KTAppOptions = {"colors":{"state":{"brand":"#22b9ff","light":"#ffffff","dark":"#282a3c","primary":"#5867dd","success":"#34bfa3","info":"#36a3f7","warning":"#ffb822","danger":"#fd3995"},"base":{"label":["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape":["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};
+            var KTAppOptions = {"colors": {"state":{"brand": "#5d78ff","dark": "#282a3c","light": "#ffffff","primary": "#5867dd","success": "#34bfa3","info": "#36a3f7","warning": "#ffb822","danger": "#fd3995"},"base": {"label": ["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape": ["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};
         </script>
         <!-- end::Global Config -->
 
         <!--begin::Global Theme Bundle(used by all pages) -->
-        <script src="{{ asset('js/vendors.bundle.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('js/scripts.bundle.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('js/vendors-2.bundle.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('js/scripts-2.bundle.js') }}" type="text/javascript" ></script>
         <!--end::Global Theme Bundle -->
 
         <!--begin::Page Scripts & Vendor Scripts(used by this page) -->

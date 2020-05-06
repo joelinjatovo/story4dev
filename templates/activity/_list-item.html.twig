@@ -24,13 +24,13 @@
         </span>
     </td>
     <td data-field="{% trans %}indicators{% endtrans %}" class="kt-datatable__cell">
-        <a href="{{ path('indicator_list', { 'activity_id' : activity.id, 'slug' : activity.project.slug} ) }}" style="width: 100px;" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}count.indicator.activity{% endtrans %}"><span class="kt-font-bold">{{ activity.indicators.count }} </span>{% trans %}indicators{% endtrans %}</a>
+        <a href="{{ path('indicator_list', { activity: activity.id, slug: activity.project.slug} ) }}" style="width: 100px;" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}count.indicator.activity{% endtrans %}"><span class="kt-font-bold">{{ activity.indicators.count }} </span>{% trans %}indicators{% endtrans %}</a>
     </td>
     <td data-field="{% trans %}reports{% endtrans %}" class="kt-datatable__cell">
-        <a style="width: 100px;" href="{{ path('report_list2', { 'activity_id' : activity.id, 'slug' : activity.project.slug} ) }}" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}count.report.activity{% endtrans %}"><span class="kt-font-bold">{{ activity.reports.count }} </span>{% trans %}reports{% endtrans %}</a>
+        <a style="width: 100px;" href="{{ path('report_list', {activity : activity.id, slug: activity.project.slug} ) }}" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}count.report.activity{% endtrans %}"><span class="kt-font-bold">{{ activity.reports.count }} </span>{% trans %}reports{% endtrans %}</a>
     </td>
     <td data-field="{% trans %}documents{% endtrans %}" class="kt-datatable__cell">
-        <a style="width: 100px;" href="{{ path('file_list_activity', { 'activity_id' : activity.id, 'slug' : activity.project.slug } ) }}" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}count.document.activity{% endtrans %}"><span class="kt-font-bold">{{ activity.activityFiles.count }} </span>{% trans %}documents{% endtrans %}</a>
+        <a style="width: 100px;" href="{{ path('file_list_project', { activity: activity.id, slug: activity.project.slug } ) }}" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}count.document.activity{% endtrans %}"><span class="kt-font-bold">{{ activity.activityFiles.count }} </span>{% trans %}documents{% endtrans %}</a>
     </td>
     <td data-field="{% trans %}actions{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 150px;">
@@ -40,12 +40,12 @@
                 </a>
             {% endif %}
             {% if is_granted('edit', activity) %}
-                <a href="{{ path('activity_edit', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}button.edit{% endtrans %}">
+                <a href="{{ path('activity_edit', { slug: activity.project.slug, activity_id: activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}button.edit{% endtrans %}">
                     <i class="la la-edit"></i>
                 </a>
             {% endif %}
             {% if is_granted('view', activity) %}
-                <a href="{{ path('activity_show', { 'slug': activity.project.slug, 'activity_id': activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}button.view.more.detail{% endtrans %}">
+                <a href="{{ path('activity_show', { slug: activity.project.slug, activity_id: activity.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}button.view.more.detail{% endtrans %}">
                     <i class="la la-eye"></i>
                 </a>
             {% endif %}

@@ -51,7 +51,7 @@ class ActivityType extends AbstractType
             ->add('parent', EntityType::class, [
                 'class' => Activity::class,
                 'label' => 'form.label.parent.activity',
-                'placeholder' => 'form.placeholder.activity',
+                'placeholder' => 'form.placeholder.activity.parent',
                 'query_builder' => function (ActivityRepository $er) use ($project, $entity) {
                     $query = $er->createQueryBuilder('a')
                         ->where('a.parent IS NULL');

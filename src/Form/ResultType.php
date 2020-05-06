@@ -18,9 +18,9 @@ class ResultType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $favorites = isset($options['favorites']) ? $options['favorites'] : array();
-        
-        $activity = isset($options['activity'])?$options['activity']:null;
+        $project = isset($options['project'])?$options['project']:null;
+        $user = isset($options['user'])?$options['user']:null;
+        $favorites = isset($options['favorites'])?$options['favorites']:[];
         
         $builder
             ->add('id', HiddenType::class)
@@ -33,16 +33,17 @@ class ResultType extends AbstractType
                 'placeholder' => 'Sélectionner un indicateur',
                 'required' => true,
                 'class' => Indicator::class,
-                'query_builder' => function (IndicatorRepository $er) use ($activity) {
-                    if( ! $activity ) {
+                'query_builder' => function (IndicatorRepository $er) use ($project) {
+                    if( ! $project ) {
                         return $er->createQueryBuilder('i')
                             ->orderBy('i.title', 'ASC');
                     }
                     
                     return $er->createQueryBuilder('i')
-                        ->where('i.activity = :activity')
-                        ->setParameter('activity', $activity)
-                        ->orderBy('i.title', 'ASC');
+                            ->join('i.activity', 'a')
+                            ->where('a.project = :project')
+                            ->setParameter('project', $project)
+                            ->orderBy('i.title', 'ASC');
                     
                 },
                 'choice_label' => function ($indicator) {
@@ -59,9 +60,9 @@ class ResultType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Result::class,
-            'activity'   => null,
-            'author'     => null,
-            'favorites' => array(),
+            'project' => null,
+            'user' => null,
+            'favorites' => [],
         ]);
     }
 }

@@ -10,25 +10,45 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">{% trans %}new.activity{% endtrans %}</h3>
-            <div class="kt-subheader__breadcrumbs">
-                <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="{{ path('project_list', { page : 1 }) }}" class="kt-subheader__breadcrumbs-link">{% trans %}projects{% endtrans %}</a>
-                <span class="kt-subheader__breadcrumbs-separator"></span>
-                <a href="{{ path('project_show', { slug: project.slug })}}" class="kt-subheader__breadcrumbs-link">{{ project.title }}</a>
-                <span class="kt-subheader__breadcrumbs-separator"></span>
-                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{% trans %}new.activity{% endtrans %}</span>
-            </div>
         </div>        
         <div class="kt-subheader__toolbar">
-            {% if is_granted('view', project) %}
-                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-list"></i></a>
-                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-secondary btn-lg btn-icon btn-circle"><i class="la la-th-large"></i></a>
-                <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-                <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}button.back{% endtrans %}</a>
-            {% endif %}
-            {% if is_granted('edit', project) %}
-                <a href="{{ path('activity_index', { slug: project.slug }) }}" class="btn btn-label-brand btn-bold">{% trans %}button.add{% endtrans %}</a>
-            {% endif %}
+            <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}button.back{% endtrans %}</span></a>
+            <div class="btn-group">
+                <button type="submit" form="activity" name="submit" value="save-default" class="btn btn-brand">
+                    <i class="la la-check"></i> 
+                    <span class="kt-hidden-mobile">{% trans %}button.save{% endtrans %}</span>
+                </button>
+                <button type="button" class="btn btn-brand dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <ul class="kt-nav">
+                        <li class="kt-nav__item">
+                            <button type="submit" form="activity" name="submit" value="save-continue" class="kt-nav__link">
+                                <i class="kt-nav__link-icon flaticon2-reload"></i>
+                                <span class="kt-nav__link-text">{% trans %}button.save.and.continue{% endtrans %}</span>
+                            </button>
+                        </li>
+                        <li class="kt-nav__item">
+                            <button type="submit" form="activity" name="submit" value="save-edit" class="kt-nav__link">
+                                <i class="kt-nav__link-icon flaticon2-edit"></i>
+                                <span class="kt-nav__link-text">{% trans %}button.save.and.edit{% endtrans %}</span>
+                            </button>
+                        </li>
+                        <li class="kt-nav__item">
+                            <button type="submit" form="activity" name="submit" value="save-create" class="kt-nav__link">
+                                <i class="kt-nav__link-icon flaticon2-add-1"></i>
+                                <span class="kt-nav__link-text">{% trans %}button.save.and.add{% endtrans %}</span>
+                            </button>
+                        </li>
+                        <li class="kt-nav__item">
+                            <button type="submit" form="activity" name="submit" value="save-exit" class="kt-nav__link">
+                                <i class="kt-nav__link-icon flaticon-close"></i>
+                                <span class="kt-nav__link-text">{% trans %}button.save.and.quit{% endtrans %}</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -39,56 +59,6 @@
    	<div class="col-lg-12">	
 		<!--begin::Portlet-->
 		<div class="kt-portlet kt-portlet--last kt-portlet--head-lg kt-portlet--responsive-mobile" id="kt_page_portlet">
-			<div class="kt-portlet__head kt-portlet__head--lg" style="">
-				<div class="kt-portlet__head-label">
-                    {% block headtitle %}
-					   <h3 class="kt-portlet__head-title">{% trans %}form.title.activity.create{% endtrans %}</h3>
-                    {% endblock %}
-				</div>
-				<div class="kt-portlet__head-toolbar">
-                    {% if activity is defined and activity is not null and (activity.id>0) %}
-					   <a href="{{ url('activity_show', { slug : activity.project.slug, activity_id : activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}button.back{% endtrans %}</span></a>
-                    {% else %}
-                        <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-long-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}button.back{% endtrans %}</span></a>
-                    {% endif %}
-					<div class="btn-group">
-						<button type="submit" form="activity" name="submit" value="save-default" class="btn btn-brand">
-							<i class="la la-check"></i> 
-							<span class="kt-hidden-mobile">{% trans %}button.save{% endtrans %}</span>
-						</button>
-						<button type="button" class="btn btn-brand dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						</button>
-						<div class="dropdown-menu dropdown-menu-right">
-							<ul class="kt-nav">
-								<li class="kt-nav__item">
-									<button type="submit" form="activity" name="submit" value="save-continue" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-reload"></i>
-										<span class="kt-nav__link-text">{% trans %}button.save.and.continue{% endtrans %}</span>
-									</button>
-								</li>
-								<li class="kt-nav__item">
-									<button type="submit" form="activity" name="submit" value="save-edit" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-edit"></i>
-										<span class="kt-nav__link-text">{% trans %}button.save.and.edit{% endtrans %}</span>
-									</button>
-								</li>
-								<li class="kt-nav__item">
-									<button type="submit" form="activity" name="submit" value="save-create" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-add-1"></i>
-										<span class="kt-nav__link-text">{% trans %}button.save.and.add{% endtrans %}</span>
-									</button>
-								</li>
-								<li class="kt-nav__item">
-									<button type="submit" form="activity" name="submit" value="save-exit" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon-close"></i>
-										<span class="kt-nav__link-text">{% trans %}button.save.and.quit{% endtrans %}</span>
-									</button>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div class="kt-portlet__body">
 				{{ form_start( form, { 'method' : 'POST', 'attr' : { 'id' : 'activity', 'class' : 'kt-form' } } ) }}
 					<div class="row">
@@ -175,6 +145,7 @@
 						</div>
 						<div class="col-xl-2"></div>
 					</div>
+                    <input type="hidden" name="activity[project]" value="{{ project.id }}" >
 					{{ form_row( form._token ) }}
 				{{ form_end( form, {'render_rest': false}) }}
 			</div>

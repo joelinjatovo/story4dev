@@ -5,6 +5,7 @@ namespace App\Controller\Web;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -32,17 +33,12 @@ class IndicatorController extends AbstractController
 {
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/indicator", name="index", methods="GET", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/indicator", name="index", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function index(Project $project, Activity $activity)
+    public function index(Project $project)
     {
-        $this->denyAccessUnlessGranted('create_indicator', $activity);
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
+        //$this->denyAccessUnlessGranted('create_indicator', $activity);
         
         $user = $project->getAuthor();
 
@@ -55,98 +51,62 @@ class IndicatorController extends AbstractController
             $indicator->addGoal($goal);
         }
 
-        $form = $this->createForm(IndicatorType::class, $indicator);
+        $form = $this->createForm(IndicatorType::class, $indicator, ['project' => $project]);
 
         return $this->render('indicator/create.html.twig', [
             'user'      => $user,
             'project'   => $project,
-            'activity'  => $activity, 
             'indicator' => $indicator,
             'form'      => $form->createView() 
         ]);
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/indicator", name="create", methods="POST", requirements={"activity_id"="\d+"})
+     * @Route("/p/{slug}/indicator", name="create", methods="POST")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function create(Project $project, Activity $activity, Request $request, FormError $formError)
+    public function create(Project $project, Request $request, FormError $formError)
     {
-        $this->denyAccessUnlessGranted('create_indicator', $activity);
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
+        //$this->denyAccessUnlessGranted('create_indicator', $activity);
         
         $user = $project->getAuthor();
 
         $indicator = new Indicator();
-        $form = $this->createForm(IndicatorType::class, $indicator);
+        $form = $this->createForm(IndicatorType::class, $indicator, ['project' => $project]);
         
         $form->handleRequest($request);
-        if ( $form->isSubmitted() && $form->isValid() ) {
-            $indicator->setAuthor($this->getUser());
-            
-            foreach($indicator->getGoals() as $goal){
-                $goal->setAuthor($this->getUser());
-            }
-            
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($indicator);
+        if ( $form->isSubmitted()) {
+            if ( $form->isValid() ) {
+                $indicator->setAuthor($this->getUser());
 
-            $entityManager->flush();
-        
-            $this->addFlash('success', 'L\'indicateur a été bien sauvegardé avec succès.');
+                foreach($indicator->getGoals() as $goal){
+                    $goal->setAuthor($this->getUser());
+                }
 
-            $args = [
-                'slug'  => $project->getSlug(),
-                'activity_id' => $activity->getId(),
-            ];
-            
-            $action = strtolower( $request->request->get('submit') );
-            switch($action){
-                case 'save-continue':
-                    $args['indicator_id'] = $indicator->getId();
-                    return $this->redirectToRoute('indicator_show', $args);
-                case 'save-edit':
-                    $args['indicator_id'] = $indicator->getId();
-                    return $this->redirectToRoute('indicator_edit', $args);
-                case 'save-exit':
-                    return $this->redirectToRoute('activity_show', $args);
-                case 'save-create':
-                case 'save-default':
-                default:
-                    return $this->redirectToRoute('indicator_index', $args);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($indicator);
+
+                $entityManager->flush();
+
+                $this->addFlash('success', 'L\'indicateur a été bien sauvegardé avec succès.');
+            }else{
+                $this->addFlash('error', "L'indicateur n'a pas été sauvegardé. Une erreur s'est produite.");
             }
-            
         }
-        
-        $this->addFlash('error', "L'indicateur n'a pas été sauvegardé. Une erreur s'est produite.");
 
         return $this->redirectToRoute('indicator_index', [
             'slug'  => $project->getSlug(),
-            'activity_id' => $activity->getId(), 
         ]);
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/indicator/{indicator_id}", name="show", methods="GET", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
+     * @Route("/p/{slug}/indicator/{indicator_id}", name="show", methods="GET", requirements={"indicator_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function show(Project $project, Activity $activity, Indicator $indicator, \App\Twig\AppExtension $twigExtension)
+    public function show(Project $project, Indicator $indicator, \App\Twig\AppExtension $twigExtension)
     {
         $this->denyAccessUnlessGranted('view', $indicator);
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-        
-        if($indicator->getActivity() != $activity ){
-            throw $this->createNotFoundException('The activity does not match');
-        }
         
         $user = $project->getAuthor();
         
@@ -161,7 +121,6 @@ class IndicatorController extends AbstractController
         return $this->render('indicator/show.html.twig', [
             'user'      => $user,
             'project'   => $project,
-            'activity'  => $activity, 
             'indicator' => $indicator, 
             'form'      => $form->createView(),
             'chart'     => ['data' => $data],
@@ -169,22 +128,13 @@ class IndicatorController extends AbstractController
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/indicator/edit/{indicator_id}", name="edit", methods="GET", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
+     * @Route("/p/{slug}/indicator/edit/{indicator_id}", name="edit", methods="GET", requirements={"indicator_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function edit(Project $project, Activity $activity, Indicator $indicator)
+    public function edit(Project $project, Indicator $indicator)
     {
         $this->denyAccessUnlessGranted('edit', $indicator);
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-        
-        if($indicator->getActivity() != $activity ){
-            throw $this->createNotFoundException('The activity does not match');
-        }
         
         $entityManager = $this->getDoctrine()->getManager();
         $repository = $entityManager->getRepository(Goal::class);
@@ -206,29 +156,19 @@ class IndicatorController extends AbstractController
         return $this->render('indicator/edit.html.twig', [
             'user'      => $user,
             'project'   => $project,
-            'activity'  => $activity, 
             'indicator' => $indicator, 
             'form'      => $form->createView() 
         ]);
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/indicator/edit/{indicator_id}", name="update", methods="POST", requirements={"activity_id"="\d+", "indicator_id"="\d+"})
+     * @Route("/p/{slug}/indicator/edit/{indicator_id}", name="update", methods="POST", requirements={"indicator_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function update(Project $project, Activity $activity, Indicator $indicator, Request $request, FormError $formError)
+    public function update(Project $project, Indicator $indicator, Request $request, FormError $formError)
     {
         $this->denyAccessUnlessGranted('edit', $indicator);
-        
-        if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
-        }
-        
-        if($indicator->getActivity() != $activity ){
-            throw $this->createNotFoundException('The activity does not match');
-        }
         
         $user = $project->getAuthor();
         
@@ -236,64 +176,41 @@ class IndicatorController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ( $form->isSubmitted() && $form->isValid() ) {
-            foreach($indicator->getGoals() as $goal){
-                $value = $goal->getValue();
-                if( is_null($value) ) {
-                    $goal->setValue(0);
+        if ( $form->isSubmitted() ) {
+            if ( $form->isValid() ) {
+                foreach($indicator->getGoals() as $goal){
+                    $value = $goal->getValue();
+                    if( is_null($value) ) {
+                        $goal->setValue(0);
+                    }
                 }
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($indicator);
+                $entityManager->flush();
+
+                $this->addFlash('success', "l'indicateur a été bien modifié avec succès.");
+            }else{
+                $this->addFlash('error', "Les modifications n'ont pas été sauvegardée. Une erreur s'est produite. Veuillez réessayer!");
             }
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($indicator);
-            $entityManager->flush();
-        
-            $this->addFlash('success', "l'indicateur a été bien modifié avec succès.");
-            
-            $args = [
-                'slug'  => $project->getSlug(),
-                'activity_id' => $activity->getId(),
-                'indicator_id' => $indicator->getId()
-            ];
-            
-            $action = strtolower( $request->request->get('submit') );
-            switch($action){
-                case 'save-continue':
-                    return $this->redirectToRoute('indicator_show', $args);
-                case 'save-exit':
-                    return $this->redirectToRoute('activity_show', $args);
-                case 'save-create':
-                    return $this->redirectToRoute('indicator_index', $args);
-                case 'save-edit':
-                case 'save-default':
-                default:
-                    return $this->redirectToRoute('indicator_edit', $args);
-            }
-            
-            return $this->redirectToRoute('indicator_edit', $args);
         }
-        
-        $this->addFlash('error', "Les modifications n'ont pas été sauvegardée. Une erreur s'est produite. Veuillez réessayer!");
 
         return $this->redirectToRoute('indicator_edit', [
             'slug'  => $project->getSlug(),
-            'activity_id'  => $activity->getId(),
             'indicator_id' => $indicator->getId()
         ]);
     }
     
     /**
-     * @Route("/p/{slug}/activity/{activity_id}/indicators/{page<\d+>?1}", name="list", methods="GET")
-     * @Route("/p/{slug}/activity/{activity_id}/indicators/{type}/{page<\d+>?1}", name="list_type", methods="GET")
-     * @Route("/p/{slug}/indicators/{page<\d+>?1}", name="list2", methods="GET")
-     * @Route("/p/{slug}/indicators/{type}/{page<\d+>?1}", name="list2_type", methods="GET")
+     * @Route("/p/{slug}/indicators/{page<\d+>?1}", name="list", methods="GET")
+     * @Route("/p/{slug}/indicators/{type}/{page<\d+>?1}", name="list_type", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
-     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      * @Entity("indicator", options={"mapping": {"indicator_id": "id"}})
      */
-    public function list(Project $project, ?Activity $activity, ?string $type, $page = 1, PaginatorService $paginator, Request $request)
+    public function list(Project $project, ?string $type, $page = 1, PaginatorService $paginator, Request $request, SessionInterface $session)
     {
         $this->denyAccessUnlessGranted('view', $project);
         
+        $activity = null;
         if($activity){
             if($activity->getProject() != $project ){
                 throw $this->createNotFoundException('The project does not match');
@@ -318,6 +235,12 @@ class IndicatorController extends AbstractController
         }
         
         $indicators = $paginator->paginate($query, $project->getMeta('indicator_count', 20));
+        
+        if(empty($type)){
+            $type = $session->get('list_type');
+        }else{
+            $session->set('list_type', $type);
+        }
         
         if($type == 'list'){
             return $this->render('indicator/list.html.twig', [
@@ -381,7 +304,7 @@ class IndicatorController extends AbstractController
             if( $id > 0 ) {
                 $entityManager = $this->getDoctrine()->getManager();
                 $indicator = $entityManager->getRepository(Indicator::class)->find($id);
-                if( $indicator ){
+                if( $indicator ) {
                     $this->denyAccessUnlessGranted('star', $indicator);
 
                     $item = $entityManager
