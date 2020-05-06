@@ -46,30 +46,31 @@
 
     <!-- begin:: Header Topbar -->
     <div class="kt-header__topbar">
+        {% set _currentRoute  = app.request.attributes.get('_route') %}
+        {% set _currentParams = app.request.attributes.get('_route_params') %}
+        {% set _currentLocale = _currentParams['_locale'] ?: 1 %}
         <div class="kt-header__topbar-item kt-header__topbar-item--langs kt-hidden">
             <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
                 <span class="kt-header__topbar-icon kt-header__topbar-icon--brand">
-                    <img class="" src="{{ asset('images/flag/flag-en.svg') }}" alt="" />
+                    {% if _currentLocale == 'en' %}
+                        <img class="" src="{{ asset('images/flag/flag-en.svg') }}" alt="" />
+                    {% else %}
+                        <img class="" src="{{ asset('images/flag/flag-france.svg') }}" alt="" />
+                    {% endif %}
                 </span>	
             </div>
             <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                 <ul class="kt-nav kt-margin-t-10 kt-margin-b-10">
-                    <li class="kt-nav__item kt-nav__item--active">
-                        <a href="#" class="kt-nav__link">
-                            <span class="kt-nav__link-icon"><img src="{{ asset('images/flag/flag-usa.svg') }}" alt="" /></span>
+                    <li class="kt-nav__item {{ _currentLocale == 'fr' ? 'kt-nav__item--active' : '' }}">
+                        <a href="{{ path(_currentRoute, _currentParams|merge({_locale: 'fr'})) }}" class="kt-nav__link">
+                            <span class="kt-nav__link-icon"><img src="{{ asset('images/flag/flag-france.svg') }}" alt="" /></span>
+                            <span class="kt-nav__link-text">France</span>
+                        </a>
+                    </li>
+                    <li class="kt-nav__item {{ _currentLocale == 'en' ? 'kt-nav__item--active' : '' }}">
+                        <a href="{{ path(_currentRoute, _currentParams|merge({_locale: 'en'})) }}" class="kt-nav__link">
+                            <span class="kt-nav__link-icon"><img src="{{ asset('images/flag/flag-en.svg') }}" alt="" /></span>
                             <span class="kt-nav__link-text">English</span>
-                        </a>
-                    </li>
-                    <li class="kt-nav__item">
-                        <a href="#" class="kt-nav__link">
-                            <span class="kt-nav__link-icon"><img src="{{ asset('images/flag/flag-spain.svg') }}" alt="" /></span>
-                            <span class="kt-nav__link-text">Spanish</span>
-                        </a>
-                    </li>
-                    <li class="kt-nav__item">
-                        <a href="#" class="kt-nav__link">
-                            <span class="kt-nav__link-icon"><img src="{{ asset('images/flag/flag-germany.svg') }}" alt="" /></span>
-                            <span class="kt-nav__link-text">German</span>
                         </a>
                     </li>
                 </ul>
