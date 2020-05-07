@@ -36,6 +36,82 @@ class ProjectController extends AbstractController
     const RECENT_ITEMS_COUNT = 10;
     
     /**
+     * @Route("/p/{slug}/project", name="index", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
+     */
+    public function index(Project $project)
+    {
+        $user = $this->getUser();
+        
+        $_project = $project->duplicate();
+        $_project->setParent($project); // Set as child project
+        $form = $this->createForm(ProjectType::class, $_project);
+        
+        return $this->render('project/create.html.twig', [
+            'user' => $user,
+            'project' => $project,
+            '_project' => $_project,
+            'form' => $form->createView()
+        ]);
+    }
+    
+    /**
+     * @Route("/p/{slug}/project", name="create", methods="POST")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
+     */
+    public function create(Request $request, Project $project)
+    {
+        $user = $this->getUser();
+        
+        $_project = $project->duplicate(); 
+        $form = $this->createForm(ProjectType::class, $_project);
+        
+        $form->handleRequest($request);
+        
+        if ( $form->isSubmitted() ) {
+            if ( $form->isValid() ) {
+                
+                $_project->setParent($project); // Set as child project
+
+                if( $_project->getAuthor() == null ) {
+                    $_project->setAuthor( $this->getUser() );
+                }
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($_project);
+
+                if( $project->getAuthor() ) {
+                    $contribution = new ProjectContribution();
+                    $contribution->setUser( $project->getAuthor() );
+                    $contribution->setProject( $_project );
+                    $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
+                    $contribution->setRoles(['ROLE_ADMIN']);
+                    $entityManager->persist( $contribution );
+                }
+                
+                if( $project->getAuthor() != $_project->getAuthor()) {
+                    $contribution = new ProjectContribution();
+                    $contribution->setUser( $_project->getAuthor() );
+                    $contribution->setProject( $_project );
+                    $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
+                    $contribution->setRoles(['ROLE_ADMIN']);
+                    $entityManager->persist( $contribution );
+                }
+
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Sous projet créé avec succès.');
+            }else{
+                $this->addFlash('error', 'Une erreur s\'est produite.');
+            }
+        }
+
+        return $this->redirectToRoute('project_index', [
+            'slug'  => $project->getSlug(),
+        ]);
+    }
+    
+    /**
      * @Route("/p/{slug}/dashboard", name="dashboard", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
@@ -161,6 +237,7 @@ class ProjectController extends AbstractController
         return $this->render('project/edit.html.twig', [
             'user'    => $user, 
             'project' => $project, 
+            '_project' => $project, 
             'fields'  => $fields,
             'form'    => $form->createView()
         ]);
@@ -196,93 +273,73 @@ class ProjectController extends AbstractController
         
         $form->handleRequest($request);
         
-        if ( $form->isSubmitted() && $form->isValid() ) {
-            
-            $entityManager = $this->getDoctrine()->getManager();
-            
-            // remove the relationship
-            foreach ($originalIterations as $iteration) {
-                $removed = true;
-                foreach($project->getIterations() as $updated_iteration){
-                    if ( ( $updated_iteration->getId() > 0 ) && ($updated_iteration->getId() === $iteration->getId()) ) {
-                        $removed = false;
-                        break;
-                    }
-                }
-                
-                if($removed === true){
-                    if( ! $iteration->hasGoals() ) {
-                        $project->removeIteration($iteration);
-                        $entityManager->remove($iteration);
-                    }else{
-                        $project->addIteration($iteration);
-                        $this->addFlash('error', 'On ne peut pas supprimer l\'itération suivante: '.$iteration->getTitle());
-                    }
-                }
-            }
-            
-            // set author for new iteration
-            foreach($project->getIterations() as $updated_iteration){
-                if($updated_iteration->getAuthor()==null){
-                    $updated_iteration->setAuthor($this->getUser());
-                }
-            }
-            
-            // save project meta data
-            try{
-                foreach($fields as $group => $metas){
-                    $postValues = $form[$group]->getData();
-                    foreach($postValues as $key => $queryMetas){
-                        if(is_array($queryMetas)){
-                            foreach($queryMetas as  $postKey => $metavalue){
-                                $metakey = $key.'_'.$postKey;
-                                $meta = $project->updateMeta($metakey, $metavalue);
+        if ( $form->isSubmitted() ) {
+            if ( $form->isValid() ) {
 
-                                $entityManager->persist($meta);
-                            }
+                $entityManager = $this->getDoctrine()->getManager();
+
+                // remove the relationship
+                foreach ($originalIterations as $iteration) {
+                    $removed = true;
+                    foreach($project->getIterations() as $updated_iteration){
+                        if ( ( $updated_iteration->getId() > 0 ) && ($updated_iteration->getId() === $iteration->getId()) ) {
+                            $removed = false;
+                            break;
+                        }
+                    }
+
+                    if($removed === true){
+                        if( ! $iteration->hasGoals() ) {
+                            $project->removeIteration($iteration);
+                            $entityManager->remove($iteration);
                         }else{
-                            $metakey = $group.'_'.$key;
-                            $meta = $project->updateMeta($metakey, $queryMetas);
-                            $entityManager->persist($meta);
+                            $project->addIteration($iteration);
+                            $this->addFlash('error', 'On ne peut pas supprimer l\'itération suivante: '.$iteration->getTitle());
                         }
                     }
                 }
-            }catch(\Exception $e){
-            }
 
-            $entityManager->persist($project);
-            $entityManager->flush();
-        
-            $this->addFlash('success', 'Votre modification a été bien sauvegardé.');
-            
-            $args = [
-                'slug' => $project->getSlug(), 
-            ];
+                // set author for new iteration
+                foreach($project->getIterations() as $updated_iteration){
+                    if($updated_iteration->getAuthor()==null){
+                        $updated_iteration->setAuthor($this->getUser());
+                    }
+                }
 
-            $action = strtolower( $request->request->get('submit') );
-            switch($action){
-                case 'save-create':
-                    return $this->redirectToRoute('admin_project_create');
-                case 'save-continue':
-                case 'save-edit':
-                    return $this->redirectToRoute('project_edit', $args);
-                case 'save-exit':
-                case 'save-default':
-                default:
-                    return $this->redirectToRoute('project_show', $args);
+                // save project meta data
+                try{
+                    foreach($fields as $group => $metas){
+                        $postValues = $form[$group]->getData();
+                        foreach($postValues as $key => $queryMetas){
+                            if(is_array($queryMetas)){
+                                foreach($queryMetas as  $postKey => $metavalue){
+                                    $metakey = $key.'_'.$postKey;
+                                    $meta = $project->updateMeta($metakey, $metavalue);
+
+                                    $entityManager->persist($meta);
+                                }
+                            }else{
+                                $metakey = $group.'_'.$key;
+                                $meta = $project->updateMeta($metakey, $queryMetas);
+                                $entityManager->persist($meta);
+                            }
+                        }
+                    }
+                }catch(\Exception $e){
+                }
+
+                $entityManager->persist($project);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Votre modification a été bien sauvegardé.');
+
+            }else{
+                $this->addFlash('error', 'Votre modification n\'a pas été sauvegardé. Une erreur s\'est produite. ' . $form->getErrors());
             }
-            
-            return $this->redirectToRoute('project_edit', $args);
-            
         }
-        
-        $this->addFlash('error', 'Votre modification n\'a pas été sauvegardé. Une erreur s\'est produite. ' . $form->getErrors());
-        
-        return $this->render('project/edit.html.twig', [
-            'user'    => $user, 
-            'project' => $project, 
-            'fields'  => $fields,
-            'form'    => $form->createView()
+
+        return $this->redirectToRoute('project_edit', [
+            'slug'  => $project->getSlug(),
         ]);
     }
     
@@ -322,12 +379,16 @@ class ProjectController extends AbstractController
      * @Route("/projects/{page<\d+>?1}", name="list", methods="GET")
      * @Route("/u/{slug}/projects/{page<\d+>?1}", name="list2", methods="GET")
      * @Entity("user", options={"mapping": {"slug": "slug"}})
+     * @Route("/p/{slug}/projects/{page<\d+>?1}", name="list_child", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
-    public function list(?User $user = null, PaginatorService $paginator, int $page)
+    public function list(?User $user = null, ?Project $project = null, PaginatorService $paginator, int $page)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        if( $user && ( $this->isGranted('ROLE_ADMIN') ||  ( $user == $this->getUser() ) ) ) {
+        if($project){
+            $query = $entityManager->getRepository(Project::class)->findByParent($project);
+        }elseif( $user && ( $this->isGranted('ROLE_ADMIN') || ( $user == $this->getUser() ) ) ) {
             $query = $entityManager->getRepository(Project::class)->findByContributor($user);
         }else{
             $query = $entityManager->getRepository(Project::class)->findByContributor($this->getUser());
@@ -336,7 +397,8 @@ class ProjectController extends AbstractController
         $projects = $paginator->paginate($query, 10);
         
         return $this->render('project/list.html.twig', [
-            'user'     => $user,
+            'user' => $user,
+            'project' => $project, 
             'projects' => $projects, 
         ]);
     }

@@ -37,8 +37,16 @@ class ProjectRepository extends AppRepository
     public function findByAuthor(User $user)
     {
         return $this->createQueryBuilder('p')
-            ->where('p.author = :query')
-            ->setParameter('query', $user)
+            ->where('p.author = :user')
+            ->setParameter('user', $user)
+            ->getQuery();
+    }
+    
+    public function findByParent(Project $project)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.parent = :project')
+            ->setParameter('project', $project)
             ->getQuery();
     }
     

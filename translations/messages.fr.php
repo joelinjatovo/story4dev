@@ -190,6 +190,7 @@ return [
     'new' => [
         'activity' => 'Nouvelle activité',
         'indicator' => 'Nouvel indicateur',
+        'project' => 'Nouveau projet',
     ],
     'no' => [
         'document' => [

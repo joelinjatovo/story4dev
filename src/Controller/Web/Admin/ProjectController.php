@@ -33,7 +33,7 @@ class ProjectController extends AbstractController
         
         return $this->render('project/create.html.twig', [
             'user'    => $user,
-            'project' => $project,
+            '_project' => $project,
             'form'    => $form->createView()
         ]);
     }
@@ -41,7 +41,7 @@ class ProjectController extends AbstractController
     /**
      * @Route("/admin/project", name="create", methods="POST")
      */
-    public function create(Request $request): Response
+    public function create(Request $request)
     {
         $user = $this->getUser();
         
@@ -51,56 +51,32 @@ class ProjectController extends AbstractController
         
         $form->handleRequest($request);
         
-        if ( $form->isSubmitted() && $form->isValid() ) {
+        if ( $form->isSubmitted() ) {
+            if ( $form->isValid() ) {
+                if( $project->getAuthor() == null ) {
+                    $project->setAuthor( $this->getUser() );
+                }
 
-            if( $project->getAuthor() == null ) {
-                $project->setAuthor( $this->getUser() );
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($project);
+
+                $contribution = new ProjectContribution();
+                $contribution->setUser( $project->getAuthor() );
+                $contribution->setProject( $project );
+                $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
+                $contribution->setRoles(['ROLE_ADMIN']);
+                $entityManager->persist( $contribution );
+
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Projet créé avec succès.');
+
+            }else{
+                $this->addFlash('error', 'Une erreur s\'est produite.');
             }
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($project);
-            
-            $contribution = new ProjectContribution();
-            $contribution->setUser( $project->getAuthor() );
-            $contribution->setProject( $project );
-            $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
-            $contribution->setRoles(['ROLE_ADMIN']);
-            $entityManager->persist( $contribution );
-
-            $entityManager->flush();
-        
-            $this->addFlash('success', 'Projet créé avec succès.');
-            
-            $args = [
-                'slug' => $project->getSlug(), 
-            ];
-            
-            $action = strtolower( $request->request->get('submit') );
-            switch($action){
-                case 'save-edit':
-                    return $this->redirectToRoute('project_edit', $args);
-                case 'save-continue':
-                case 'save-exit':
-                    return $this->redirectToRoute('project_show', $args);
-                case 'save-create':
-                case 'save-default':
-                default:
-                    return $this->redirectToRoute('admin_project_create');
-            }
-
-            return $this->redirectToRoute('project_edit', [
-                'slug' => $project->getSlug(), 
-            ]);
-            
         }
         
-        $this->addFlash('error', 'Une erreur s\'est produite.');
-
-        return $this->render('project/create.html.twig', [
-            'user'    => $user,
-            'project' => $project,
-            'form'    => $form->createView()
-        ]);
+        return $this->redirectToRoute('admin_project_index');
     }
     
     /**

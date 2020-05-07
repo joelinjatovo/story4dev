@@ -675,4 +675,19 @@ class Project
 
         return $this;
     }
+
+    public function duplicate(): self
+    {
+        $project = new Project();
+        $project->setStartAt($this->getStartAt());
+        $project->setEndAt($this->getEndAt());
+        $project->setAuthor($this->getAuthor());
+        $project->setPeriodicity($this->getPeriodicity());
+        foreach($this->getIterations() as $iteration){
+            $new_iteration = $iteration->duplicate();
+            $new_iteration->setProject($project);
+            $project->addIteration($new_iteration);
+        }
+        return $project;
+    }
 }

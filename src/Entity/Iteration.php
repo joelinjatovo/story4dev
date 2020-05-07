@@ -185,4 +185,13 @@ class Iteration
 
         return $this;
     }
+
+    public function duplicate(): self
+    {
+        $iteration = new Iteration();
+        $iteration->setStartAt($this->getStartAt());
+        $iteration->setEndAt($this->getEndAt());
+        $iteration->setAuthor($this->getAuthor());
+        return $iteration;
+    }
 }

@@ -68,53 +68,27 @@ class ActivityController extends AbstractController
         $form = $this->createForm(ActivityType::class, $activity, array( 'project' => $project));
         
         $form->handleRequest($request);
-        if ( $form->isSubmitted() && $form->isValid() ) {
+        if ( $form->isSubmitted() ) {
+            if ( $form->isValid() ) {
+                if($activity->getAddress() && $activity->getAddress()->isEmpty() ) {
+                    $activity->setAddress(null);
+                }
 
-            if($activity->getAddress() && $activity->getAddress()->isEmpty() ) {
-                $activity->setAddress(null);
+                $activity->setAuthor($this->getUser());
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($activity);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Activité créée avec succès.');
+
+            }else{
+                $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
             }
-
-            $activity->setAuthor($this->getUser());
-            
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($activity);
-            $entityManager->flush();
-        
-            $this->addFlash('success', 'Activité créée avec succès.');
-
-            $action = strtolower( $request->request->get('submit') );
-            switch($action){
-                case 'save-exit':
-                    return $this->redirectToRoute('project_show', [
-                        'slug' => $project->getSlug(), 
-                    ]);
-                case 'save-continue':
-                    return $this->redirectToRoute('activity_show', [
-                        'slug' => $project->getSlug(), 
-                        'activity_id' => $activity->getId(), 
-                    ]);
-                case 'save-edit':
-                    return $this->redirectToRoute('activity_edit', [
-                        'slug' => $project->getSlug(), 
-                        'activity_id' => $activity->getId(), 
-                    ]);
-                case 'save-create':
-                case 'save-default':
-                default:
-                    return $this->redirectToRoute('activity_index', [
-                        'slug' => $project->getSlug(), 
-                    ]);
-            }
-
         }
         
-        $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
-
-        return $this->render('activity/create.html.twig', [
-            'user'     => $user, 
-            'project'  => $project, 
-            'activity' => $activity, 
-            'form'     => $form->createView()
+        return $this->redirectToRoute('activity_index', [
+            'slug'  => $project->getSlug(),
         ]);
     }
     
@@ -239,45 +213,16 @@ class ActivityController extends AbstractController
         
         $form->handleRequest($request);
 
-        if ( $form->isSubmitted() && $form->isValid() ) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($activity);
-            $entityManager->flush();
-        
-            $this->addFlash('success', 'Votre modification a été bien sauvegardé.');
-
-            $action = strtolower( $request->request->get('submit') );
-            switch($action){
-                case 'save-exit':
-                    return $this->redirectToRoute('project_show', [
-                        'slug' => $project->getSlug(), 
-                    ]);
-                case 'save-create':
-                    return $this->redirectToRoute('activity_create', [
-                        'slug' => $project->getSlug(), 
-                    ]);
-                case 'save-continue':
-                    return $this->redirectToRoute('activity_show', [
-                        'slug' => $project->getSlug(), 
-                        'activity_id' => $activity->getId(), 
-                    ]);
-                case 'save-edit':
-                case 'save-default':
-                default:
-                    return $this->redirectToRoute('activity_edit', [
-                        'slug' => $project->getSlug(), 
-                        'activity_id' => $activity->getId(), 
-                    ]);
-
+        if ( $form->isSubmitted() ) {
+            if ( $form->isValid() ) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($activity);
+                $entityManager->flush();
+                $this->addFlash('success', 'Votre modification a été bien sauvegardé.');
+            }else{
+                $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
             }
-
-            return $this->redirectToRoute('activity_edit', [
-                'slug' => $project->getSlug(), 
-                'activity_id' => $activity->getId(), 
-            ]);
         }
-
-        $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
 
         return $this->redirectToRoute('activity_edit', [
             'slug' => $project->getSlug(), 

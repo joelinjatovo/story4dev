@@ -1,14 +1,28 @@
 {% extends 'project/create.html.twig' %}
 
-{% block title %}Modification du projet #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
+{% block title %}{% trans %}editing.project{% endtrans %} #{{ _project.id }} - {{ app.user.fullname }} {% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
 
 {% block subheader %}
-<br>
-{% endblock %}
-
-{% block headtitle %}
-   <h3 class="kt-portlet__head-title">Modifier Projet <small>modifier les informations puis enregistrer</small></h3>
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">{% trans %}editing.project{% endtrans %}</h3>
+        </div>        
+        <div class="kt-subheader__toolbar">
+            <a href="{{ path('project_show', { slug : _project.slug } ) }}" class="btn btn-clean kt-margin-r-10">
+                <i class="la la-arrow-left"></i>
+                <span class="kt-hidden-mobile">{% trans %}button.back{% endtrans %}</span>
+            </a>
+            <div class="btn-group">
+                <button type="submit" form="project" name="submit" value="save-default" class="btn btn-brand">
+                    <i class="la la-check"></i> 
+                    <span class="kt-hidden-mobile">{% trans %}button.save{% endtrans %}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

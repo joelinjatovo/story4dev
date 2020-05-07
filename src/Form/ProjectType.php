@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Project;
 use App\Entity\User;
 use App\Entity\Periodicity;
+use App\Repository\ProjectRepository;
 use App\Form\FloatType;
 use App\Form\AddressType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
@@ -77,6 +78,12 @@ class ProjectType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Save project'
+            ])
+            ->add('parent', EntityType::class, [
+                'class' => Project::class,
+                'choice_label' => function ($project) {
+                    return $project->getTitle();
+                }
             ])
         ;
         
