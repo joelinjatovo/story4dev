@@ -679,6 +679,7 @@ class Project
     public function duplicate(): self
     {
         $project = new Project();
+        $project->setCurrency($this->getCurrency());
         $project->setStartAt($this->getStartAt());
         $project->setEndAt($this->getEndAt());
         $project->setAuthor($this->getAuthor());

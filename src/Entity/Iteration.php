@@ -189,6 +189,7 @@ class Iteration
     public function duplicate(): self
     {
         $iteration = new Iteration();
+        $iteration->setTitle($this->getTitle());
         $iteration->setStartAt($this->getStartAt());
         $iteration->setEndAt($this->getEndAt());
         $iteration->setAuthor($this->getAuthor());
