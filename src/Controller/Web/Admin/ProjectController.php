@@ -56,7 +56,7 @@ class ProjectController extends AbstractController
                 if( $project->getAuthor() == null ) {
                     $project->setAuthor( $this->getUser() );
                 }
-
+                
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($project);
 

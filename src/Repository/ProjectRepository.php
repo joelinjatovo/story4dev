@@ -42,10 +42,20 @@ class ProjectRepository extends AppRepository
             ->getQuery();
     }
     
+    public function findByChild(Project $project)
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.childs', 'p1')
+            ->where('p1 = :project')
+            ->setParameter('project', $project)
+            ->getQuery();
+    }
+    
     public function findByParent(Project $project)
     {
         return $this->createQueryBuilder('p')
-            ->where('p.parent = :project')
+            ->join('p.parents', 'p1')
+            ->where('p1 = :project')
             ->setParameter('project', $project)
             ->getQuery();
     }

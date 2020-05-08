@@ -147,6 +147,11 @@ class Activity
      */
     private $children;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="activities")
+     */
+    private $category;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -471,6 +476,18 @@ class Activity
                 $child->setParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

@@ -184,14 +184,30 @@ class Project
     private $graphs;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="children")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Project", inversedBy="parents", cascade={"persist","remove"})
+     * @ORM\JoinTable(name="project_project",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="project_parent", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="project_child", referencedColumnName="id")
+     *   }
+     * )
      */
-    private $parent;
+    private $childs;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="parent")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Project", mappedBy="childs", cascade={"persist","remove"})
+     * @ORM\JoinTable(name="project_project",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="project_child", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="project_parent", referencedColumnName="id")
+     *   }
+     * )
      */
-    private $children;
+    private $parents;
 
     public function __construct()
     {
@@ -204,7 +220,8 @@ class Project
         $this->units = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->graphs = new ArrayCollection();
-        $this->children = new ArrayCollection();
+        $this->childs = new ArrayCollection();
+        $this->parents = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -617,65 +634,6 @@ class Project
         return $this;
     }
 
-    /**
-     * @return boolean
-     */
-    public function hasParent()
-    {
-        return !is_null($this->getParent()) && ($this->getParent()->getId() > 0);
-    }
-
-    public function getParent(): ?self
-    {
-        return $this->parent;
-    }
-
-    public function setParent(?self $parent): self
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function hasChild()
-    {
-        return $this->getChildren()->count() > 0;
-    }
-
-    /**
-     * @return Collection|self[]
-     */
-    public function getChildren(): Collection
-    {
-        return $this->children;
-    }
-
-    public function addChild(self $child): self
-    {
-        if (!$this->children->contains($child)) {
-            $this->children[] = $child;
-            $child->setParent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChild(self $child): self
-    {
-        if ($this->children->contains($child)) {
-            $this->children->removeElement($child);
-            // set the owning side to null (unless already changed)
-            if ($child->getParent() === $this) {
-                $child->setParent(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function duplicate(): self
     {
         $project = new Project();
@@ -690,5 +648,59 @@ class Project
             $project->addIteration($new_iteration);
         }
         return $project;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getChilds(): Collection
+    {
+        return $this->childs;
+    }
+
+    public function addChild(self $child): self
+    {
+        if (!$this->childs->contains($child)) {
+            $this->childs[] = $child;
+        }
+
+        return $this;
+    }
+
+    public function removeChild(self $child): self
+    {
+        if ($this->childs->contains($child)) {
+            $this->childs->removeElement($child);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getParents(): Collection
+    {
+        return $this->parents;
+    }
+
+    public function addParent(self $parent): self
+    {
+        if (!$this->parents->contains($parent)) {
+            $this->parents[] = $parent;
+            $parent->addChild($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParent(self $parent): self
+    {
+        if ($this->parents->contains($parent)) {
+            $this->parents->removeElement($parent);
+            $parent->removeChild($this);
+        }
+
+        return $this;
     }
 }

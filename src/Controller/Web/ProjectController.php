@@ -43,8 +43,7 @@ class ProjectController extends AbstractController
     {
         $user = $this->getUser();
         
-        $_project = $project->duplicate();
-        $_project->setParent($project); // Set as child project
+        $_project = new Project();
         $form = $this->createForm(ProjectType::class, $_project);
         
         return $this->render('project/create.html.twig', [
@@ -63,7 +62,7 @@ class ProjectController extends AbstractController
     {
         $user = $this->getUser();
         
-        $_project = $project->duplicate(); 
+        $_project = new Project();
         $form = $this->createForm(ProjectType::class, $_project);
         
         $form->handleRequest($request);
@@ -379,16 +378,12 @@ class ProjectController extends AbstractController
      * @Route("/projects/{page<\d+>?1}", name="list", methods="GET")
      * @Route("/u/{slug}/projects/{page<\d+>?1}", name="list2", methods="GET")
      * @Entity("user", options={"mapping": {"slug": "slug"}})
-     * @Route("/p/{slug}/projects/{page<\d+>?1}", name="list_child", methods="GET")
-     * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
-    public function list(?User $user = null, ?Project $project = null, PaginatorService $paginator, int $page)
+    public function list(?User $user = null, PaginatorService $paginator, int $page)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
-        if($project){
-            $query = $entityManager->getRepository(Project::class)->findByParent($project);
-        }elseif( $user && ( $this->isGranted('ROLE_ADMIN') || ( $user == $this->getUser() ) ) ) {
+        if( $user && ( $this->isGranted('ROLE_ADMIN') || ( $user == $this->getUser() ) ) ) {
             $query = $entityManager->getRepository(Project::class)->findByContributor($user);
         }else{
             $query = $entityManager->getRepository(Project::class)->findByContributor($this->getUser());
@@ -398,6 +393,42 @@ class ProjectController extends AbstractController
         
         return $this->render('project/list.html.twig', [
             'user' => $user,
+            'project' => $project, 
+            'projects' => $projects, 
+        ]);
+    }
+    
+    /**
+     * @Route("/p/{slug}/parents/{page<\d+>?1}", name="parents", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
+     */
+    public function parents(Project $project, PaginatorService $paginator, int $page)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $query = $entityManager->getRepository(Project::class)->findByChild($project);
+
+        $projects = $paginator->paginate($query, 10);
+        
+        return $this->render('project/list.html.twig', [
+            'project' => $project, 
+            'projects' => $projects, 
+        ]);
+    }
+    
+    /**
+     * @Route("/p/{slug}/childs/{page<\d+>?1}", name="childs", methods="GET")
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
+     */
+    public function childs(Project $project, PaginatorService $paginator, int $page)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $query = $entityManager->getRepository(Project::class)->findByParent($project);
+
+        $projects = $paginator->paginate($query, 10);
+        
+        return $this->render('project/list.html.twig', [
             'project' => $project, 
             'projects' => $projects, 
         ]);

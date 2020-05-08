@@ -103,6 +103,31 @@
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                             <div class="kt-section">
 								<div class="kt-section__body">
+									<h3 class="kt-section__title kt-section__title-lg">Rélations:</h3>
+                                    <div class="form-group row">
+                                        {{ form_label( form.parents, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                        <div class="col-lg-9 col-xl-6">
+                                            <div class="kt-checkbox-list">
+                                                {% for child in form.parents.children %}
+                                                    <label for="{{child.vars.id}}" class="kt-checkbox">
+                                                        <input type="checkbox" form="project" 
+                                                               id="{{child.vars.id}}" 
+                                                               name="{{child.vars.full_name}}" 
+                                                               {% if child.vars.required %}required="required"{% endif %} 
+                                                               {% if child.vars.checked %}checked="checked"{% endif %} 
+                                                               value="{{ child.vars.value }}">
+                                                        {{ child.vars.label }}
+                                                        <span></span>
+                                                    </label>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+								</div>
+							</div>
+                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                            <div class="kt-section">
+								<div class="kt-section__body">
 									<h3 class="kt-section__title kt-section__title-lg">Détails:</h3>
 									{% if not _project.id > 0 %}
 										<div class="form-group row">

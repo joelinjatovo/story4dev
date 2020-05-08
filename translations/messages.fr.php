@@ -316,6 +316,7 @@ return [
     'location' => 'Localisation',
     'locations' => 'Localisations',
     'periodicity' => 'Périodicité',
+    'parents' => 'Main projects',
     'password' => 'Mot de passe',
     'phone' => 'Téléphone',
     'please_wait' => 'Veuillez patienter s\'il vous plaît...',
