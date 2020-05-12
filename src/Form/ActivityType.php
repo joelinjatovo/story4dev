@@ -48,32 +48,6 @@ class ActivityType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
             ])
-            ->add('parent', EntityType::class, [
-                'class' => Activity::class,
-                'label' => 'form.label.parent.activity',
-                'placeholder' => 'form.placeholder.activity.parent',
-                'query_builder' => function (ActivityRepository $er) use ($project, $entity) {
-                    $query = $er->createQueryBuilder('a')
-                        ->where('a.parent IS NULL');
-                    
-                    if( $project ) {
-                        $query->andWhere('a.project = :project')
-                            ->setParameter('project', $project);
-                    }
-                    
-                    if($entity && $entity->getId() > 0){
-                        $query->andWhere('a != :entity')
-                            ->setParameter('entity', $entity);
-                    }
-                    
-                    return $query->distinct('a.id')
-                        ->orderBy('a.title', 'ASC');
-                    
-                },
-                'choice_label' => function ($activity) {
-                    return $activity->getTitle();
-                }
-            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'button.save.activity'
             ])

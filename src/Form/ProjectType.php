@@ -79,15 +79,6 @@ class ProjectType extends AbstractType
             ->add('submit', SubmitType::class, [
                 'label' => 'Save project'
             ])
-            ->add('parents', EntityType::class, [
-                'class' => Project::class,
-                'by_reference' => false,
-                'multiple' => true,
-                'expanded' => true,
-                'choice_label' => function ($project) {
-                    return $project->getTitle();
-                }
-            ])
         ;
         
         $fields = isset($options['fields'])?$options['fields']:null;

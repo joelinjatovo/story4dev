@@ -33,7 +33,7 @@ class ProjectController extends AbstractController
         
         return $this->render('project/create.html.twig', [
             'user'    => $user,
-            '_project' => $project,
+            'project' => $project,
             'form'    => $form->createView()
         ]);
     }

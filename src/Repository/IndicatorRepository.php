@@ -35,7 +35,7 @@ class IndicatorRepository extends ServiceEntityRepository
         if( empty( $search ) ){
             return $this->createQueryBuilder('i')
                 ->join('i.activity', 'a')
-                ->where('i.activity = :activity OR a.parent = :activity')
+                ->where('i.activity = :activity')
                 ->setParameter('activity', $activity)
                 ->orderBy('i.title', 'ASC')
                 ->getQuery();
@@ -43,7 +43,7 @@ class IndicatorRepository extends ServiceEntityRepository
         
         return $this->createQueryBuilder('i')
             ->join('i.activity', 'a')
-            ->where('(i.activity = :activity OR a.parent = :activity) AND i.title LIKE :search')
+            ->where('i.activity = :activity AND i.title LIKE :search')
             ->setParameter('activity', $activity)
             ->setParameter('search', '%'.$search.'%')
             ->orderBy('i.title', 'ASC')

@@ -46,7 +46,7 @@
                                         <label class="col-xl-3 col-lg-3 col-form-label">Logo du projet</label>
                                         <div class="col-lg-9 col-xl-6">
                                             <div class="kt-avatar kt-avatar--outline" id="kt_project_piture">
-                                                <div class="kt-avatar__holder" style="background-image: url('{{ _project.picture ? vich_uploader_asset(_project, 'pictureFile') : default_picture }}');"></div>
+                                                <div class="kt-avatar__holder" style="background-image: url('{{ project.picture ? vich_uploader_asset(project, 'pictureFile') : default_picture }}');"></div>
                                                 <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Changer le logo du projet">
                                                     <i class="fa fa-pen"></i>
                                                     <input type="file" name="project[pictureFile][file]" accept=".png, .jpg, .jpeg">
@@ -103,33 +103,8 @@
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                             <div class="kt-section">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Rélations:</h3>
-                                    <div class="form-group row">
-                                        {{ form_label( form.parents, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
-                                        <div class="col-lg-9 col-xl-6">
-                                            <div class="kt-checkbox-list">
-                                                {% for child in form.parents.children %}
-                                                    <label for="{{child.vars.id}}" class="kt-checkbox">
-                                                        <input type="checkbox" form="project" 
-                                                               id="{{child.vars.id}}" 
-                                                               name="{{child.vars.full_name}}" 
-                                                               {% if child.vars.required %}required="required"{% endif %} 
-                                                               {% if child.vars.checked %}checked="checked"{% endif %} 
-                                                               value="{{ child.vars.value }}">
-                                                        {{ child.vars.label }}
-                                                        <span></span>
-                                                    </label>
-                                                {% endfor %}
-                                            </div>
-                                        </div>
-                                    </div>
-								</div>
-							</div>
-                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
-                            <div class="kt-section">
-								<div class="kt-section__body">
 									<h3 class="kt-section__title kt-section__title-lg">Détails:</h3>
-									{% if not _project.id > 0 %}
+									{% if not project.id > 0 %}
 										<div class="form-group row">
 											{{ form_label( form.author, "Administrateur", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
 											<div class="col-lg-9 col-xl-6">
@@ -174,7 +149,7 @@
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Suivis des indicateurs</label>
                                             <div data-repeater-list="project[iterations]" class="col-lg-9">
-                                                {% if _project.iterations is empty %}
+                                                {% if project.iterations is empty %}
 													<div data-repeater-item="" class="kt-margin-b-10">
                                                         <div class="form-group row">
                                                             <div class="col-lg-3">
@@ -247,7 +222,7 @@
                                     </div>
 								</div>
 							</div>
-                            {% if _project.id > 0 %}
+                            {% if project.id > 0 %}
                                 <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                                 <div class="kt-section">
                                     <div class="kt-section__body">
@@ -335,7 +310,7 @@
 						</div>
 						<div class="col-xl-2"></div>
 					</div>
-					{% if _project.id > 0 %}
+					{% if project.id > 0 %}
 						<input type="hidden" name="project[author]" value="{{ user.id }}">
 					{% endif %}
 					{{ form_row( form._token ) }}

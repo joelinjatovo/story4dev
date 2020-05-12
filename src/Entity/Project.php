@@ -183,32 +183,6 @@ class Project
      */
     private $graphs;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Project", inversedBy="parents", cascade={"persist","remove"})
-     * @ORM\JoinTable(name="project_project",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="project_parent", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="project_child", referencedColumnName="id")
-     *   }
-     * )
-     */
-    private $childs;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Project", mappedBy="childs", cascade={"persist","remove"})
-     * @ORM\JoinTable(name="project_project",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="project_child", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="project_parent", referencedColumnName="id")
-     *   }
-     * )
-     */
-    private $parents;
-
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
@@ -220,8 +194,6 @@ class Project
         $this->units = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->graphs = new ArrayCollection();
-        $this->childs = new ArrayCollection();
-        $this->parents = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -629,76 +601,6 @@ class Project
             if ($graph->getProject() === $this) {
                 $graph->setProject(null);
             }
-        }
-
-        return $this;
-    }
-
-    public function duplicate(): self
-    {
-        $project = new Project();
-        $project->setCurrency($this->getCurrency());
-        $project->setStartAt($this->getStartAt());
-        $project->setEndAt($this->getEndAt());
-        $project->setAuthor($this->getAuthor());
-        $project->setPeriodicity($this->getPeriodicity());
-        foreach($this->getIterations() as $iteration){
-            $new_iteration = $iteration->duplicate();
-            $new_iteration->setProject($project);
-            $project->addIteration($new_iteration);
-        }
-        return $project;
-    }
-
-    /**
-     * @return Collection|self[]
-     */
-    public function getChilds(): Collection
-    {
-        return $this->childs;
-    }
-
-    public function addChild(self $child): self
-    {
-        if (!$this->childs->contains($child)) {
-            $this->childs[] = $child;
-        }
-
-        return $this;
-    }
-
-    public function removeChild(self $child): self
-    {
-        if ($this->childs->contains($child)) {
-            $this->childs->removeElement($child);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|self[]
-     */
-    public function getParents(): Collection
-    {
-        return $this->parents;
-    }
-
-    public function addParent(self $parent): self
-    {
-        if (!$this->parents->contains($parent)) {
-            $this->parents[] = $parent;
-            $parent->addChild($this);
-        }
-
-        return $this;
-    }
-
-    public function removeParent(self $parent): self
-    {
-        if ($this->parents->contains($parent)) {
-            $this->parents->removeElement($parent);
-            $parent->removeChild($this);
         }
 
         return $this;

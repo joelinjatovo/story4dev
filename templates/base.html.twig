@@ -17,10 +17,12 @@
         <link href="{{ asset('css/style-2.bundle.css') }}" rel="stylesheet" type="text/css"/>
         <!--end::Global Theme Styles -->
         
+        {% block theme %}
         <link href="{{ asset('css/skins/header/base/light.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('css/skins/header/menu/light.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('css/skins/brand/dark.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('css/skins/aside/dark.css') }}" rel="stylesheet" type="text/css"/>
+        {% endblock %}
         
         <!--begin::Layout Skins & Vendor Skins(used by this page) -->
         {% block stylesheets %}

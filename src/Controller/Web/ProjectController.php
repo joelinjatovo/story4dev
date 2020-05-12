@@ -36,81 +36,6 @@ class ProjectController extends AbstractController
     const RECENT_ITEMS_COUNT = 10;
     
     /**
-     * @Route("/p/{slug}/project", name="index", methods="GET")
-     * @Entity("project", options={"mapping": {"slug": "slug"}})
-     */
-    public function index(Project $project)
-    {
-        $user = $this->getUser();
-        
-        $_project = new Project();
-        $form = $this->createForm(ProjectType::class, $_project);
-        
-        return $this->render('project/create.html.twig', [
-            'user' => $user,
-            'project' => $project,
-            '_project' => $_project,
-            'form' => $form->createView()
-        ]);
-    }
-    
-    /**
-     * @Route("/p/{slug}/project", name="create", methods="POST")
-     * @Entity("project", options={"mapping": {"slug": "slug"}})
-     */
-    public function create(Request $request, Project $project)
-    {
-        $user = $this->getUser();
-        
-        $_project = new Project();
-        $form = $this->createForm(ProjectType::class, $_project);
-        
-        $form->handleRequest($request);
-        
-        if ( $form->isSubmitted() ) {
-            if ( $form->isValid() ) {
-                
-                $_project->setParent($project); // Set as child project
-
-                if( $_project->getAuthor() == null ) {
-                    $_project->setAuthor( $this->getUser() );
-                }
-
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($_project);
-
-                if( $project->getAuthor() ) {
-                    $contribution = new ProjectContribution();
-                    $contribution->setUser( $project->getAuthor() );
-                    $contribution->setProject( $_project );
-                    $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
-                    $contribution->setRoles(['ROLE_ADMIN']);
-                    $entityManager->persist( $contribution );
-                }
-                
-                if( $project->getAuthor() != $_project->getAuthor()) {
-                    $contribution = new ProjectContribution();
-                    $contribution->setUser( $_project->getAuthor() );
-                    $contribution->setProject( $_project );
-                    $contribution->setStatus( ProjectContribution::STATUS_ACTIVE );
-                    $contribution->setRoles(['ROLE_ADMIN']);
-                    $entityManager->persist( $contribution );
-                }
-
-                $entityManager->flush();
-
-                $this->addFlash('success', 'Sous projet créé avec succès.');
-            }else{
-                $this->addFlash('error', 'Une erreur s\'est produite.');
-            }
-        }
-
-        return $this->redirectToRoute('project_index', [
-            'slug'  => $project->getSlug(),
-        ]);
-    }
-    
-    /**
      * @Route("/p/{slug}/dashboard", name="dashboard", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
@@ -236,7 +161,6 @@ class ProjectController extends AbstractController
         return $this->render('project/edit.html.twig', [
             'user'    => $user, 
             'project' => $project, 
-            '_project' => $project, 
             'fields'  => $fields,
             'form'    => $form->createView()
         ]);
@@ -393,43 +317,6 @@ class ProjectController extends AbstractController
         
         return $this->render('project/list.html.twig', [
             'user' => $user,
-            'project' => $project, 
-            'projects' => $projects, 
-        ]);
-    }
-    
-    /**
-     * @Route("/p/{slug}/parents/{page<\d+>?1}", name="parents", methods="GET")
-     * @Entity("project", options={"mapping": {"slug": "slug"}})
-     */
-    public function parents(Project $project, PaginatorService $paginator, int $page)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $query = $entityManager->getRepository(Project::class)->findByChild($project);
-
-        $projects = $paginator->paginate($query, 10);
-        
-        return $this->render('project/list.html.twig', [
-            'project' => $project, 
-            'projects' => $projects, 
-        ]);
-    }
-    
-    /**
-     * @Route("/p/{slug}/childs/{page<\d+>?1}", name="childs", methods="GET")
-     * @Entity("project", options={"mapping": {"slug": "slug"}})
-     */
-    public function childs(Project $project, PaginatorService $paginator, int $page)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        
-        $query = $entityManager->getRepository(Project::class)->findByParent($project);
-
-        $projects = $paginator->paginate($query, 10);
-        
-        return $this->render('project/list.html.twig', [
-            'project' => $project, 
             'projects' => $projects, 
         ]);
     }
