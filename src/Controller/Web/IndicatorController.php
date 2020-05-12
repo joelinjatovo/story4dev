@@ -210,7 +210,11 @@ class IndicatorController extends AbstractController
     {
         $this->denyAccessUnlessGranted('view', $project);
         
-        $activity = null;
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $activity_id = (int) $request->query->get('activity_id');
+        $activity = $entityManager->getRepository(Activity::class)->find($activity_id);
         if($activity){
             if($activity->getProject() != $project ){
                 throw $this->createNotFoundException('The project does not match');
@@ -220,8 +224,6 @@ class IndicatorController extends AbstractController
         }
         
         $user = $project->getAuthor();
-        
-        $entityManager = $this->getDoctrine()->getManager();
         
         $search = $request->query->get('s');
         if( strlen($search) > 20 ) {
@@ -242,12 +244,14 @@ class IndicatorController extends AbstractController
             $session->set('list_type', $type);
         }
         
+        $activities = $entityManager->getRepository(Activity::class)->findBy(['project' => $project], ['title' => 'ASC']);
         if($type == 'list'){
             return $this->render('indicator/list.html.twig', [
                 'user'       => $user,
                 'project'    => $project,
                 'activity'   => $activity,
                 'indicators' => $indicators,
+                'activities' => $activities,
                 'search' => $search,
             ]);
         }
@@ -257,6 +261,7 @@ class IndicatorController extends AbstractController
             'project'    => $project,
             'activity'   => $activity,
             'indicators' => $indicators,
+            'activities' => $activities,
             'search' => $search,
         ]);
     }

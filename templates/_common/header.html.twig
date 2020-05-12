@@ -49,7 +49,7 @@
         {% set _currentRoute  = app.request.attributes.get('_route') %}
         {% set _currentParams = app.request.attributes.get('_route_params') %}
         {% set _currentLocale = _currentParams['_locale'] ?: 1 %}
-        <div class="kt-header__topbar-item kt-header__topbar-item--langs kt-hidden">
+        <div class="kt-header__topbar-item kt-header__topbar-item--langs">
             <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
                 <span class="kt-header__topbar-icon kt-header__topbar-icon--brand">
                     {% if _currentLocale == 'en' %}

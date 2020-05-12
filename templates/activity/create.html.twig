@@ -18,36 +18,6 @@
                     <i class="la la-check"></i> 
                     <span class="kt-hidden-mobile">{% trans %}button.save{% endtrans %}</span>
                 </button>
-                <button type="button" class="btn btn-brand dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <ul class="kt-nav">
-                        <li class="kt-nav__item">
-                            <button type="submit" form="activity" name="submit" value="save-continue" class="kt-nav__link">
-                                <i class="kt-nav__link-icon flaticon2-reload"></i>
-                                <span class="kt-nav__link-text">{% trans %}button.save.and.continue{% endtrans %}</span>
-                            </button>
-                        </li>
-                        <li class="kt-nav__item">
-                            <button type="submit" form="activity" name="submit" value="save-edit" class="kt-nav__link">
-                                <i class="kt-nav__link-icon flaticon2-edit"></i>
-                                <span class="kt-nav__link-text">{% trans %}button.save.and.edit{% endtrans %}</span>
-                            </button>
-                        </li>
-                        <li class="kt-nav__item">
-                            <button type="submit" form="activity" name="submit" value="save-create" class="kt-nav__link">
-                                <i class="kt-nav__link-icon flaticon2-add-1"></i>
-                                <span class="kt-nav__link-text">{% trans %}button.save.and.add{% endtrans %}</span>
-                            </button>
-                        </li>
-                        <li class="kt-nav__item">
-                            <button type="submit" form="activity" name="submit" value="save-exit" class="kt-nav__link">
-                                <i class="kt-nav__link-icon flaticon-close"></i>
-                                <span class="kt-nav__link-text">{% trans %}button.save.and.quit{% endtrans %}</span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
@@ -79,16 +49,6 @@
 											{{ form_widget( form.description, { 'attr' : { 'class' : 'form-control' } } ) }}
 										</div>
 									</div>
-                                    {% if activity.hasChild %}
-					                   <input type="hidden" name="activity[parent]" value="" >
-                                    {% else %}
-                                        <div class="form-group row">
-                                            {{ form_label( form.parent, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
-                                            <div class="col-lg-9 col-xl-6">
-                                                {{ form_widget( form.parent, { 'attr' : { 'class' : 'form-control' } } ) }}
-                                            </div>
-                                        </div>
-                                    {% endif %}
 								</div>
 							</div>
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-hidden"></div>

@@ -24,7 +24,7 @@ class ReportType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $project = isset($options['project'])?$options['project']:null;
+        $activity = isset($options['activity'])?$options['activity']:null;
         $user = isset($options['user'])?$options['user']:null;
         $favorites = isset($options['favorites'])?$options['favorites']:[];
         
@@ -41,7 +41,7 @@ class ReportType extends AbstractType
             ->add('results', CollectionType::class, [
                 'entry_type' => ResultType::class,
                 'entry_options' => [
-                    'project' => $project,
+                    'activity' => $activity,
                     'user' => $user,
                     'favorites' => $favorites,
                     'label' => false,
@@ -86,7 +86,7 @@ class ReportType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Report::class,
-            'project' => null,
+            'activity' => null,
             'user' => null,
             'favorites' => [],
         ]);

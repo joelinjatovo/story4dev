@@ -18,7 +18,7 @@ class ResultType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $project = isset($options['project'])?$options['project']:null;
+        $activity = isset($options['activity'])?$options['activity']:null;
         $user = isset($options['user'])?$options['user']:null;
         $favorites = isset($options['favorites'])?$options['favorites']:[];
         
@@ -33,16 +33,15 @@ class ResultType extends AbstractType
                 'placeholder' => 'Sélectionner un indicateur',
                 'required' => true,
                 'class' => Indicator::class,
-                'query_builder' => function (IndicatorRepository $er) use ($project) {
-                    if( ! $project ) {
+                'query_builder' => function (IndicatorRepository $er) use ($activity) {
+                    if( ! $activity ) {
                         return $er->createQueryBuilder('i')
                             ->orderBy('i.title', 'ASC');
                     }
                     
                     return $er->createQueryBuilder('i')
-                            ->join('i.activity', 'a')
-                            ->where('a.project = :project')
-                            ->setParameter('project', $project)
+                            ->where('i.activity = :activity')
+                            ->setParameter('activity', $activity)
                             ->orderBy('i.title', 'ASC');
                     
                 },
@@ -60,7 +59,7 @@ class ResultType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Result::class,
-            'project' => null,
+            'activity' => null,
             'user' => null,
             'favorites' => [],
         ]);

@@ -35,37 +35,58 @@ use App\Service\PaginatorService;
 class ReportController extends AbstractController
 {
     /**
-     * @Route("/p/{slug}/report", name="index", methods="GET")
+     * @Route("/p/{slug}/report", name="activities", methods="GET")
      * @Entity("project", options={"mapping": {"slug": "slug"}})
      */
-    public function index(Project $project)
+    public function activities(Project $project)
     {
-        //$this->denyAccessUnlessGranted('view', $activity);
+        $this->denyAccessUnlessGranted('view', $project);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $activities = $entityManager->getRepository(Activity::class)->findBy(['project' => $project], ['title' => 'ASC']);
+      
+        return $this->render('report/activities.html.twig', [
+            'project'  => $project, 
+            'activities' => $activities
+        ]);
+    }
+    
+    /**
+     * @Route("/p/{slug}/activity/{activity_id}/report", name="index", methods="GET", requirements={"activity_id"="\d+"})
+     * @Entity("project", options={"mapping": {"slug": "slug"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
+     */
+    public function index(Project $project, Activity $activity)
+    {
+        $this->denyAccessUnlessGranted('view', $activity);
 
         $entityManager = $this->getDoctrine()->getManager();
         
         $report = new Report();
-        $form = $this->createForm(ReportType::class, $report, array( 'project' => $project, 'user' => $this->getUser() ));
+        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity, 'user' => $this->getUser() ));
         
         return $this->render('report/create.html.twig', [
             'project'  => $project, 
             'report'   => $report,
+            'activity' => $activity,
             'form'     => $form->createView()
         ]);
     }
     
     /**
-     * @Route("/p/{slug}/report", name="create", methods="POST")
+     * @Route("/p/{slug}/activity/{activity_id}/report", name="create", methods="POST", requirements={"activity_id"="\d+"})
      * @Entity("project", options={"mapping": {"slug": "slug"}})
+     * @Entity("activity", options={"mapping": {"activity_id": "id"}})
      */
-    public function create(Project $project, Request $request): Response
+    public function create(Project $project, Activity $activity, Request $request): Response
     {
-        //$this->denyAccessUnlessGranted('view', $activity);
+        $this->denyAccessUnlessGranted('view', $activity);
 
         $entityManager = $this->getDoctrine()->getManager();
         
         $report = new Report();
-        $form = $this->createForm(ReportType::class, $report, array( 'project' => $project, 'user' => $this->getUser() ));
+        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $activity, 'user' => $this->getUser() ));
         
         $form->handleRequest($request);
         if ( $form->isSubmitted() ) {
@@ -88,6 +109,7 @@ class ReportController extends AbstractController
         
         return $this->redirectToRoute('report_index', [
             'slug' => $project->getSlug(),
+            'activity_id' => $activity->getId(),
         ]);
     }
     
@@ -139,11 +161,12 @@ class ReportController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
         
-        $form = $this->createForm(ReportType::class, $report, array( 'project' => $project, 'user' => $this->getUser() ));
+        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $report->getActivity(), 'user' => $this->getUser() ));
         
         return $this->render('report/edit.html.twig', [
-            'project'  => $project, 
-            'report'   => $report, 
+            'project'  => $project,
+            'activity' => $report->getActivity(),
+            'report'   => $report,
             'form'     => $form->createView()
         ]);
     }
@@ -164,14 +187,12 @@ class ReportController extends AbstractController
             $originalResults->add($result);
         }
         
-        $form = $this->createForm(ReportType::class, $report, array( 'project' => $project, 'user' => $this->getUser() ));
+        $form = $this->createForm(ReportType::class, $report, array( 'activity' => $report->getActivity(), 'user' => $this->getUser() ));
         
         $form->handleRequest($request);
         
         if ( $form->isSubmitted() ) {
             if( $form->isValid()) {
-                $report->setActivity($activity);
-                
                 // remove the relationship
                 foreach ($originalResults as $result) {
                     $removed = true;
