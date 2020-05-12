@@ -326,6 +326,7 @@ return [
     'project' => 'Projet',
     'project.child' => 'Sous projet',
     'project.childs' => 'Sous projets',
+    'project.parents' => 'Main projets',
     'projects' => 'Projets',
     'print' => 'Impression',
     'pdf' => 'PDF',
