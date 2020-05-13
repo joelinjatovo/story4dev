@@ -4,63 +4,30 @@
 {% endblock %}
 
 {% block subheader %}
-<br>
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Ajouter un utilisateur</h3>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+               <a href="{{ url('admin_user_list') }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                <div class="btn-group">
+                <button type="submit" form="user" name="submit" value="save-default" class="btn btn-brand">
+                    <i class="la la-check"></i> 
+                    <span class="kt-hidden-mobile">{% trans %}button.save{% endtrans %}</span>
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-xl-12">
 		<div class="kt-portlet kt-portlet--last kt-portlet--head-lg kt-portlet--responsive-mobile" id="kt_page_portlet">
-			<div class="kt-portlet__head kt-portlet__head--lg" style="">
-				<div class="kt-portlet__head-label">
-                    {% block headtitle %}
-                        <h3 class="kt-portlet__head-title">Ajouter un utilisateur <small>Entrer les informations du compte puis enregistrer</small></h3>
-                    {% endblock %}
-				</div>
-				<div class="kt-portlet__head-toolbar">
-					<a href="{{ path('admin_user_list') }}" class="btn btn-clean kt-margin-r-10">
-						<i class="la la-arrow-left"></i>
-						<span class="kt-hidden-mobile">Retours</span>
-					</a>
-					<div class="btn-group">
-						<button type="submit" form="user" name="submit" value="save-default" class="btn btn-brand">
-							<i class="la la-check"></i> 
-							<span class="kt-hidden-mobile">Enregister</span>
-						</button>
-						<button type="button" class="btn btn-brand dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						</button>
-						<div class="dropdown-menu dropdown-menu-right">
-							<ul class="kt-nav">
-								<li class="kt-nav__item">
-									<button type="submit" form="user" name="submit" value="save-continue" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-reload"></i>
-										<span class="kt-nav__link-text">Save &amp; continue</span>
-									</button>
-								</li>
-								<li class="kt-nav__item">
-									<button type="submit" form="user" name="submit" value="save-exit" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-power"></i>
-										<span class="kt-nav__link-text">Save &amp; exit</span>
-									</button>
-								</li>
-								<li class="kt-nav__item">
-									<button type="submit" form="user" name="submit" value="save-edit" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-edit-interface-symbol-of-pencil-tool"></i>
-										<span class="kt-nav__link-text">Save &amp; edit</span>
-									</button>
-								</li>
-								<li class="kt-nav__item">
-									<button type="submit" form="user" name="submit" value="save-create" class="kt-nav__link">
-										<i class="kt-nav__link-icon flaticon2-add-1"></i>
-										<span class="kt-nav__link-text">Save &amp; add new</span>
-									</button>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-
             {{ form_start( form, { 'method' : 'POST', 'attr' : {'class' : 'kt-form kt-form--label-right', 'id': 'user' } } ) }}
                 <div class="kt-portlet__body">
                     <div class="kt-section kt-section--first">
