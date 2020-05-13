@@ -3,30 +3,6 @@
 {% block title %}Indicateurs {% if activity is not null %}- Activité#{{ activity.id }}{% endif %} - Projet#{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
-<style>
-.alert.alert-custom.alert-white {
-    background-color: #fff;
-    border-color: #fff;
-}
-.alert.alert-custom.alert-shadow {
-    -webkit-box-shadow: 0 0 30px 0 rgba(82,63,105,.05);
-    box-shadow: 0 0 30px 0 rgba(82,63,105,.05);
-}
-.alert.alert-custom {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: stretch;
-    -ms-flex-align: stretch;
-    align-items: stretch;
-    padding: 1.5rem;
-}
-.alert.alert-white {
-    background-color: #fff;
-    border-color: #fff;
-    color: #464e5f;
-}
-</style>
 {% endblock %}
 
 {% block subheader %}
@@ -34,7 +10,7 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Tous les indicateurs</h3>
-            <a href="{{ path('indicator_index', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold">{% trans %}button.add{% endtrans %}</a>
+            <a href="{{ path('indicator_index', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold"><i class="la la-plus"></i> {% trans %}button.add{% endtrans %}</a>
         </div>        
         <div class="kt-subheader__toolbar">
             <a href="{{ path('indicator_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> Liste</a>
@@ -46,24 +22,24 @@
 {% endblock %}
 
 {% block content %}
-
 <!--begin::Notice-->
 <div class="alert alert-custom alert-white alert-shadow gutter-b" role="alert">
 	<div class="alert-text">
         <form class="form" id="filter">
-            <div class="form-group row">
+            <div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-12">
                     {{ include('_common/_search.html.twig') }}
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12">
                     <select class="form-control select2" id="kt_select2" name="activity_id">
-                        {% for activity in activities %}
-                            <option value="{{ activity.id }}">{{ activity.title }}</option>
+                        <option>Toutes</option>
+                        {% for _activity in activities %}
+                            <option value="{{ _activity.id }}" {{ activity != null and activity.id == _activity.id ? 'selected="selected"' : '' }}>{{ _activity.title }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12">
-                    <button type="submit" class="btn btn-label-primary font-weight-bold" data-toggle="modal" data-target="#kt_filter_modal">Filtrer</button>
+                    <button type="submit" class="btn btn-label-primary font-weight-bold"><i class="la la-filter"></i> Filtrer</button>
                 </div>
             </div>
         </form>
@@ -181,9 +157,8 @@
 {% block javascripts %}
 <script type="text/javascript">
 jQuery(document).ready(function($){
-    
     $('#kt_select2').select2({
-        placeholder: "Select",
+        placeholder: "Selectionner une activité",
     });
     $(document).on('click', '.btn-remove', function(e){
         e.preventDefault();

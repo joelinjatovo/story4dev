@@ -11,15 +11,14 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Détail du rapport</h3>
-            <a href="{{ path('report_index', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold">{% trans %}button.add{% endtrans %}</a>
+            <a href="{{ path('report_activities', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold"><i class="la la-plus"></i> {% trans %}button.add{% endtrans %}</a>
         </div>        
         <div class="kt-subheader__toolbar">
             <a href="{{ url('report_list', { slug: project.slug, activity: report.activity.id }) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+            <a href="{{ path('report_pdf', { slug: project.slug, report_id: report.id}) }}" class="btn btn-label-warning btn-bold"><i class="la la-download"></i> PDF</a>
             {% if is_granted('edit', report) %}
-                <a href="{{ path('report_edit', { slug: project.slug, report_id: report.id}) }}" class="btn btn-label-brand btn-bold">Modifier</a>
+                <a href="{{ path('report_edit', { slug: project.slug, report_id: report.id}) }}" class="btn btn-label-brand btn-bold"><i class="la la-edit"></i> Modifier</a>
             {% endif %}
-            <div class="kt-subheader__wrapper">
-            </div>
         </div>
     </div>
 </div>

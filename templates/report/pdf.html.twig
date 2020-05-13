@@ -1,6 +1,6 @@
 {% extends 'basepdf.html.twig' %}
 
-{% block title %}Rapport #{{ report.id }} - Activité #{{ activity.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}Rapport #{{ report.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
     <link href="{{ absolute_url(asset('css/invoice-2.css')) }}" rel="stylesheet" type="text/css"/>

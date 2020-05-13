@@ -139,7 +139,6 @@ class ReportController extends AbstractController
         
         // Retrieve the HTML generated in our twig file
         $html = $this->renderView('report/pdf.html.twig', [
-            'user'     => $user,
             'project'  => $project,
             'report'   => $report,
         ]);
@@ -322,8 +321,8 @@ class ReportController extends AbstractController
         
         $entityManager = $this->getDoctrine()->getManager();
 
-        $activity_id = 0;
-        $activity = null;
+        $activity_id = (int) $request->query->get('activity_id');
+        $activity = $entityManager->getRepository(Activity::class)->find($activity_id);
         if( $activity_id > 0 ){
             $activity = $entityManager->getRepository(Activity::class)->find($activity_id);
 
@@ -367,10 +366,13 @@ class ReportController extends AbstractController
             $session->set('list_type', $type);
         }
         
+        $activities = $entityManager->getRepository(Activity::class)->findBy(['project' => $project], ['title' => 'ASC']);
+        
         if($type == 'list'){
             return $this->render('report/list.html.twig', [
                 'project'  => $project,
                 'activity' => $activity,
+                'activities' => $activities,
                 'reports'  => $reports,
                 'status'   => $status,
                 'search'   => $search,
@@ -381,6 +383,7 @@ class ReportController extends AbstractController
         return $this->render('report/grid.html.twig', [
             'project'  => $project,
             'activity' => $activity,
+            'activities' => $activities,
             'reports'  => $reports,
             'status'   => $status,
             'search'   => $search,

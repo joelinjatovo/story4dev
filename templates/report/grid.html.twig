@@ -14,8 +14,7 @@
             <div class="kt-subheader__group" id="kt_subheader_search">
                 <span class="kt-subheader__desc" id="kt_subheader_total">{{ reports.count }} Rapports </span>
             </div>
-            {{ include('_common/_search.html.twig') }}
-            {{ include('report/_filter.html.twig', {activity: activity, project: project}) }}
+            <a href="{{ path('report_activities', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold"><i class="la la-plus"></i> {% trans %}button.add{% endtrans %}</a>
         </div>
         <div class="kt-subheader__toolbar">
             <a href="{{ path('report_list_type', { slug: project.slug, type: 'list', s: search, status: status }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> Liste </a>
@@ -27,6 +26,39 @@
 {% endblock %}
 
 {% block content %}
+<!--begin::Notice-->
+<div class="alert alert-custom alert-white alert-shadow gutter-b" role="alert">
+	<div class="alert-text">
+        <form class="form" id="filter">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    {{ include('_common/_search.html.twig') }}
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <select class="form-control select2" id="kt_select2_activity" name="activity_id">
+                        <option>Toutes</option>
+                        {% for _activity in activities %}
+                            <option value="{{ _activity.id }}" {{ activity != null and activity.id == _activity.id ? 'selected="selected"' : '' }}>{{ _activity.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <select class="form-control select2" id="kt_select2_status" name="status">
+                        <option>Tous</option>
+                        <option value="opened">Editable</option>
+                        <option value="closed">Clôturé</option>
+                        <option value="terminated">Términé</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <button type="submit" class="btn btn-label-primary font-weight-bold"><i class="la la-filter"></i> Filtrer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--end::Notice-->
+
 <div class="row">
     {% for report in reports %}
         <div class="col-xl-6">
@@ -54,23 +86,29 @@
 {% block javascripts %}
 <script type="text/javascript">
 jQuery(document).ready(function($){
-toastr.options = {
-"closeButton": false,
-"debug": false,
-"newestOnTop": false,
-"progressBar": false,
-"positionClass": "toast-top-right",
-"preventDuplicates": false,
-"onclick": null,
-"showDuration": "300",
-"hideDuration": "1000",
-"timeOut": "5000",
-"extendedTimeOut": "1000",
-"showEasing": "swing",
-"hideEasing": "linear",
-"showMethod": "fadeIn",
-"hideMethod": "fadeOut"
-};
+    $('#kt_select2_activity').select2({
+        placeholder: "Selectionner une activité",
+    });
+    $('#kt_select2_status').select2({
+        placeholder: "Selectionner un status",
+    });
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
     $(document).on('click', '.btn-remove', function(e){
         e.preventDefault();
         var $this = $(this);

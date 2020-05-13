@@ -9,7 +9,7 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Tous les indicateurs</h3>
-            <a href="{{ path('indicator_index', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold">{% trans %}button.add{% endtrans %}</a>
+            <a href="{{ path('indicator_index', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold"><i class="la la-plus"></i> {% trans %}button.add{% endtrans %}</a>
         </div>        
         <div class="kt-subheader__toolbar">
             <a href="{{ path('indicator_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> Liste</a>
@@ -21,6 +21,31 @@
 {% endblock %}
 
 {% block content %}
+<!--begin::Notice-->
+<div class="alert alert-custom alert-white alert-shadow gutter-b" role="alert">
+	<div class="alert-text">
+        <form class="form" id="filter">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    {{ include('_common/_search.html.twig') }}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <select class="form-control select2" id="kt_select2" name="activity_id">
+                        <option>Toutes</option>
+                        {% for _activity in activities %}
+                            <option value="{{ _activity.id }}" {{ activity != null and activity.id == _activity.id ? 'selected="selected"' : '' }}>{{ _activity.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <button type="submit" class="btn btn-label-primary font-weight-bold"><i class="la la-filter"></i> Filtrer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--end::Notice-->
+
 <div class="row">
 	<div class="col-xl-12 col-lg-12">
 		<div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
@@ -139,7 +164,10 @@
 
 {% block javascripts %}
 <script type="text/javascript">
-jQuery(document).ready(function($){
+jQuery(document).ready(function($){jQuery(document).ready(function($){
+    $('#kt_select2').select2({
+        placeholder: "Selectionner une activité",
+    });
     $(document).on('click', '.btn-remove', function(e){
         e.preventDefault();
         var $this = $(this);
