@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvel indicateur - Projet #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
+{% block title %}{% trans %}new.indicator{% endtrans %} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
 
 {% block stylesheets %}{% endblock %}
 
@@ -37,9 +37,9 @@
 						<div class="col-xl-8">
 							<div class="kt-section kt-section--first">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Info:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">{% trans %}info{% endtrans %}:</h3>
 									<div class="form-group row">
-                    					{{ form_label( form.title, "Nom de l'indicateur", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.title, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											{{ form_widget( form.title, { 'attr' : { 'class' : 'form-control', 'required':'true' } } ) }}
 										</div>
@@ -51,17 +51,17 @@
                                         </div>
                                     </div>
 									<div class="form-group form-group-last row">
-                    					{{ form_label( form.unit, "Unité de l'indicateur", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.unit, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
 											{{ form_widget( form.unit, { 'attr' : { 'class' : 'form-control', 'required':'true' } } ) }}
 										</div>
 									</div>
 									<div class="form-group row kt-hidden">
-										<label class="col-3 col-form-label">Méthode de calcul</label>
+										<label class="col-3 col-form-label">{% trans %}calcul.method{% endtrans %}</label>
 										<div class="col-9">
 											<div class="kt-checkbox-inline">
 												<label class="kt-checkbox">
-                                                    {{ form_widget( form.cummulative ) }} Cumulé 
+                                                    {{ form_widget( form.cummulative ) }} {% trans %}cumul{% endtrans %} 
 												<span></span>
 												</label>
 											</div>
@@ -72,7 +72,7 @@
 							<div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
 							<div class="kt-section kt-section--first">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Objectifs:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">{% trans %}goals{% endtrans %}:</h3>
 									{%- set i = 0 -%}
 									{% for goal in form.goals %}
 										<div class="form-group row">

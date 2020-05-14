@@ -23,7 +23,7 @@ class IndicatorType extends AbstractType
         $project = isset($options['project'])?$options['project']:null;
         
         $builder
-            ->add('title')
+            ->add('title', null, ['label' => 'form.label.indicator.title'])
             ->add('activity', EntityType::class, [
                 'label' => 'form.label.indicator.activity',
                 'placeholder' => 'form.placeholder.activity',
@@ -45,6 +45,7 @@ class IndicatorType extends AbstractType
                 }
             ])
             ->add('unit', EntityType::class, [
+                'label' => 'form.label.indicator.unit',
                 'class' => Unit::class,
                 'choice_label' => function ($unit) {
                     return $unit->getTitle();
@@ -63,7 +64,7 @@ class IndicatorType extends AbstractType
                 'required' => false,
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Save indicator'
+                'label' => 'button.save'
             ])
         ;
     }

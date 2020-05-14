@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Indicateurs {% if activity is not null %}- Activité#{{ activity.id }}{% endif %} - Projet#{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}indicators{% endtrans %} {% if activity is not null %}- {% trans %}activity{% endtrans %}#{{ activity.id }}{% endif %} - {% trans %}project{% endtrans %}#{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}{% endblock %}
 
@@ -8,13 +8,13 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Tous les indicateurs</h3>
+            <h3 class="kt-subheader__title">{% trans %}all.indicators{% endtrans %}</h3>
             <a href="{{ path('indicator_index', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold"><i class="la la-plus"></i> {% trans %}button.add{% endtrans %}</a>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ path('indicator_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> Liste</a>
-            <a href="{{ path('indicator_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i> Grille</a>
-            <a href="{{ url('project_show', { 'slug' : project.slug }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+            <a href="{{ path('indicator_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> {% trans %}list{% endtrans %}</a>
+            <a href="{{ path('indicator_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i> {% trans %}grid{% endtrans %}</a>
+            <a href="{{ url('project_show', { 'slug' : project.slug }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}button.back{% endtrans %}</span></a>
         </div>
     </div>
 </div>
@@ -31,14 +31,14 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12">
                     <select class="form-control select2" id="kt_select2" name="activity_id">
-                        <option>Toutes</option>
+                        <option>{% trans %}all2{% endtrans %}</option>
                         {% for _activity in activities %}
                             <option value="{{ _activity.id }}" {{ activity != null and activity.id == _activity.id ? 'selected="selected"' : '' }}>{{ _activity.title }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12">
-                    <button type="submit" class="btn btn-label-primary font-weight-bold"><i class="la la-filter"></i> Filtrer</button>
+                    <button type="submit" class="btn btn-label-primary font-weight-bold"><i class="la la-filter"></i> {% trans %}button.filter{% endtrans %}</button>
                 </div>
             </div>
         </form>
@@ -54,29 +54,29 @@
                     <table class="kt-datatable__table" style="display: block;">
                         <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="Indicateurs" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 250px;">Indicateurs</span>
+                                <th data-field="{% trans %}indicators{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 250px;">{% trans %}indicators{% endtrans %}</span>
                                 </th>
                                 {% if activity is null %}
-                                    <th data-field="Activités" class="kt-datatable__cell kt-datatable__cell--sort">
-                                        <span style="width: 222px;">Activités</span>
+                                    <th data-field="{% trans %}activities{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                        <span style="width: 222px;">{% trans %}activities{% endtrans %}</span>
                                     </th>
                                 {% endif %}
-                                <th data-field="Avancements" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Avancements</span>
+                                <th data-field="{% trans %}progressions{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">{% trans %}progressions{% endtrans %}</span>
                                 </th>
-                                <th data-field="Résultats" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Résultats</span>
+                                <th data-field="{% trans %}results{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}results{% endtrans %}</span>
                                 </th>
-                                <th data-field="Actions" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 150px;">Actions</span>
+                                <th data-field="{% trans %}actions{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 150px;">{% trans %}actions{% endtrans %}</span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody class="kt-datatable__body">
                             {% for indicator in indicators %}
                                 <tr data-row="0" class="kt-datatable__row indicator-item" style="left: 0px;">
-                                    <td data-field="Rapports" data-autohide-disabled="false" class="kt-datatable__cell">
+                                    <td data-field="{% trans %}indicators{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell">
                                         <span style="width: 250px;">
                                             <div class="kt-user-card-v2">
                                                 <div class="kt-user-card-v2__details">
@@ -87,7 +87,7 @@
                                         </span>
                                     </td>
                                     {% if activity is null %}
-                                        <td data-field="Activities" class="kt-datatable__cell">
+                                        <td data-field="{% trans %}activities{% endtrans %}" class="kt-datatable__cell">
                                             <span style="width: 222px;">
                                                 <div class="kt-user-card-v2">
                                                     <div class="kt-user-card-v2__details">
@@ -97,7 +97,7 @@
                                             </span>
                                         </td>
                                     {% endif %}
-                                    <td data-field="Avancements" class="kt-datatable__cell">
+                                    <td data-field="{% trans %}progressions{% endtrans %}" class="kt-datatable__cell">
                                         <span style="width: 222px;">
                                             <div class="kt-widget__item">
                                                 <div class="kt-widget__progress-" style="width: 90%;">
@@ -111,28 +111,28 @@
                                             </div>
                                         </span>
                                     </td>
-                                    <td data-field="Résultats" class="kt-datatable__cell">
+                                    <td data-field="{% trans %}result{% endtrans %}" class="kt-datatable__cell">
                                         <span style="width: 100px;" ><span class="kt-font-bold">{{ indicator.results.count }} </span>Résultats</span>
                                     </td>
-                                    <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
+                                    <td data-field="{% trans %}action{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell">
                                         <span style="overflow: visible; position: relative; width: 150px;">
                                             {% if is_granted('star', indicator) %}
-                                                <a data-id="{{ indicator.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-star" data-toggle="kt-tooltip" data-placement="top" data-original-title="{{ indicator|favorite(app.user) ? 'Supprimer des favoris' : 'Ajouter aux favoris' }}">
+                                                <a data-id="{{ indicator.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-star" data-toggle="kt-tooltip" data-placement="top" data-original-title="{{ indicator|favorite(app.user) ? 'unstar' | trans : 'star' | trans }}">
                                                     <i class="la {{ indicator|favorite(app.user) ? 'la-star' : 'la-star-o' }}"></i>
                                                 </a>
                                             {% endif %}
                                             {% if is_granted('edit', indicator) %}
-                                                <a href="{{ path('indicator_edit', { 'slug': indicator.activity.project.slug, 'activity_id': indicator.activity.id, 'indicator_id': indicator.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="Modifier">
+                                                <a href="{{ path('indicator_edit', { 'slug': indicator.activity.project.slug, 'activity_id': indicator.activity.id, 'indicator_id': indicator.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}button.edit{% endtrans %}">
                                                     <i class="la la-edit"></i>
                                                 </a>
                                             {% endif %}
                                             {% if is_granted('view', indicator) %}
-                                                <a href="{{ path('indicator_show', { 'slug': indicator.activity.project.slug, 'activity_id': indicator.activity.id, 'indicator_id': indicator.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="Afficher le détail">
+                                                <a href="{{ path('indicator_show', { 'slug': indicator.activity.project.slug, 'activity_id': indicator.activity.id, 'indicator_id': indicator.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}button.detail{% endtrans %}">
                                                     <i class="la la-eye"></i>
                                                 </a>
                                             {% endif %}
                                             {% if is_granted('remove', indicator) %}
-                                                <a title="Supprimer ce rapport" data-id="{{ indicator.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove" data-toggle="kt-tooltip" data-placement="top" data-original-title="Supprimer">
+                                                <a title="{% trans %}button.delete{% endtrans %}" data-id="{{ indicator.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove" data-toggle="kt-tooltip" data-placement="top" data-original-title="{% trans %}button.delete{% endtrans %}">
                                                     <i class="la la-trash"></i>
                                                 </a>
                                             {% endif %}
@@ -172,12 +172,12 @@ jQuery(document).ready(function($){jQuery(document).ready(function($){
         e.preventDefault();
         var $this = $(this);
             swal.fire({
-                title:"Vous êtes sûre?",
-                text:"Vous ne pourez pas revenir en arrière après!",
+                title:"{% trans %}swal.remove.title{% endtrans %}",
+                text:"{% trans %}swal.remove.content.indicator{% endtrans %}",
                 type:"warning",
                 showCancelButton:!0,
-                confirmButtonText:"Oui, supprimez le!",
-                cancelButtonText:"Annuler"
+                confirmButtonText:"{% trans %}button.confirm.delete1{% endtrans %}",
+                cancelButtonText:"{% trans %}button.cancel{% endtrans %}"
             }).then(function(e){
                 if(e.value){
                     KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
@@ -193,7 +193,7 @@ jQuery(document).ready(function($){jQuery(document).ready(function($){
                     })
                     .fail(function() {
                         KTApp.unblockPage();
-                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+                        toastr.error("{% trans %}swal.error{% endtrans %}");
                     });
                 }
             })
@@ -208,11 +208,11 @@ jQuery(document).ready(function($){jQuery(document).ready(function($){
             if(data.success){
                 if(data.star){
                     $this.find('i').removeClass('la-star-o').addClass('la-star');
-                    $this.attr('data-original-title', 'Supprimer des favoris');
+                    $this.attr('data-original-title', '{% trans %}button.unstar{% endtrans %}');
                     toastr.success(data.message);
                 }else{
                     $this.find('i').removeClass('la-star').addClass('la-star-o');
-                    $this.attr('data-original-title', 'Ajouter aux favoris');
+                    $this.attr('data-original-title', '{% trans %}button.star{% endtrans %}');
                     toastr.warning(data.message);
                 }
             }else{
@@ -221,7 +221,7 @@ jQuery(document).ready(function($){jQuery(document).ready(function($){
         })
         .fail(function() {
             KTApp.unblockPage();
-            toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+            toastr.error("{% trans %}swal.error{% endtrans %}");
         });
     });
 });

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Indicateur #{{ indicator.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}indicator{% endtrans %} #{{ indicator.id }} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}{% endblock %}
 
@@ -8,17 +8,17 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Détail indicateur</h3>
+            <h3 class="kt-subheader__title">{% trans %}indicator.detail{% endtrans %}</h3>
             {% if is_granted('create_indicator', indicator.activity) %}
                 <a href="{{ path('indicator_index', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold">{% trans %}button.add{% endtrans %}</a>
             {% endif %}
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a href="{{ url('indicator_list', { slug: project.slug, activity : indicator.activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                <a href="{{ url('indicator_list', { slug: project.slug, activity : indicator.activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}button.bqck{% endtrans %}</span></a>
                 {% if is_granted('edit', indicator) %}
                     <a href="{{ path('indicator_edit', { indicator_id: indicator.id, slug : project.slug } ) }}" class="btn kt-subheader__btn-primary">
-                        Modifier &nbsp;
+                        {% trans %}button.edit{% endtrans %}
                     </a>
                 {% endif %}
             </div>
@@ -93,7 +93,7 @@ am4core.ready(function() {
         series1.dataFields.categoryX = "iteration";
         series1.dataFields.unit = "unit";
         series1.yAxis = valueAxis1;
-        series1.name = "Résultat";
+        series1.name = "{% trans %}result{% endtrans %}";
         series1.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] {unit}";
         series1.fill = chart.colors.getIndex(0);
         series1.strokeWidth = 0;
@@ -105,7 +105,7 @@ am4core.ready(function() {
         series2.dataFields.categoryX = "iteration";
         series2.dataFields.unit = "unit";
         series2.yAxis = valueAxis1;
-        series2.name = "Objectif";
+        series2.name = "{% trans %}goal{% endtrans %}";
         series2.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] {unit}";
         series2.fill = chart.colors.getIndex(0).lighten(0.5);
         series2.strokeWidth = 0;
@@ -115,7 +115,7 @@ am4core.ready(function() {
     var series3 = chart.series.push(new am4charts.LineSeries());
         series3.dataFields.valueY = "progression";
         series3.dataFields.categoryX = "iteration";
-        series3.name = "Progression";
+        series3.name = "{% trans %}progression{% endtrans %}";
         series3.strokeWidth = 2;
         series3.yAxis = valueAxis2;
         series3.tooltipText = "{name}\n[bold font-size: 20]{valueY}%[/]";

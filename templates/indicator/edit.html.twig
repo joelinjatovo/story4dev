@@ -1,6 +1,6 @@
 {% extends 'indicator/create.html.twig' %}
 
-{% block title %}Indicateur #{{ indicator.id }} - Project #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
+{% block title %}{% trans %}indicator{% endtrans %} #{{ indicator.id }} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
 
 {% block stylesheets %}{% endblock %}
 
@@ -15,11 +15,11 @@
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a href="{{ url('indicator_show', { slug: project.slug, indicator_id: indicator.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                <a href="{{ url('indicator_show', { slug: project.slug, indicator_id: indicator.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}button.back{% endtrans %}</span></a>
                 <div class="btn-group">
                 <button type="submit" form="indicator" name="submit" value="save-default" class="btn btn-brand">
                     <i class="la la-check"></i> 
-                    <span class="kt-hidden-mobile">{% trans %}button.save{% endtrans %}</span>
+                    <span class="kt-hidden-mobile">{% trans %}button.update{% endtrans %}</span>
                 </button>
             </div>
             </div>
