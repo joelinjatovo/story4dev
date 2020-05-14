@@ -1,9 +1,9 @@
 <tr data-row="0" class="kt-datatable__row" style="left: 0px;" data-id="{{ contribution.id }}">
-    <td data-field="User" data-autohide-disabled="false" class="kt-datatable__cell">
+    <td data-field="{% trans %}user{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="width: 222px;">
             <div class="kt-user-card-v2">
                 <div class="kt-user-card-v2__pic">
-                    <img alt="avatar" src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') | imagine_filter('thumb') : default_avatar }}">
+                    <img alt="{% trans %}avatar{% endtrans %}" src="{{ contribution.user.avatar ? vich_uploader_asset(contribution.user, 'avatarFile') | imagine_filter('thumb') : default_avatar }}">
                 </div>
                 <div class="kt-user-card-v2__details">
                     <a class="kt-user-card-v2__name" href="{{ path('contribution_show', { 'slug' : contribution.project.slug, 'contribution_id': contribution.id } ) }}">{{ contribution.user.fullname }}</a>
@@ -12,44 +12,44 @@
             </div>
         </span>
     </td>
-    <td data-field="Roles" class="kt-datatable__cell">
+    <td data-field="{% trans %}role{% endtrans %}" class="kt-datatable__cell">
         {% if is_granted('edit', contribution.project) %}
             <div class="form-group form-group-last" style="width: 120px;">
                 <div class="kt-checkbox-inline">
                     <label class="kt-checkbox">
-                        <input class="change-contribution-role" data-id="{{ contribution.id }}" type="checkbox" {{ contribution.admin ? 'checked=""' : '' }}> Admin
+                        <input class="change-contribution-role" data-id="{{ contribution.id }}" type="checkbox" {{ contribution.admin ? 'checked=""' : '' }}> {% trans %}admin{% endtrans %}
                         <span></span>
                     </label>
                 </div>
             </div>
         {% else %}
-            <span style="width: 120px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.admin?'danger':'success' }}">{{ contribution.admin?'Admin':'Contributeur' }}</span></span>
+            <span style="width: 120px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.admin?'danger':'success' }}">{{ contribution.admin ? 'admin' | trans : 'contributor' | trans }}</span></span>
         {% endif %}
     </td>
-    <td data-field="Date" class="kt-datatable__cell">
+    <td data-field="{% trans %}date{% endtrans %}" class="kt-datatable__cell">
         <span style="width: 100px;"><span class="kt-font-bold">{{ contribution.user.createdat|ago }}</span></span>
     </td>
-    <td data-field="Status" class="kt-datatable__cell">
+    <td data-field="{% trans %}status{% endtrans %}" class="kt-datatable__cell">
         {% if is_granted('accept', contribution) %}
             <div class="form-group form-group-last" style="width: 100px;">
                 <div class="kt-checkbox-inline">
                     <label class="kt-checkbox">
-                        <input class="change-contribution-status" data-id="{{ contribution.id }}" type="checkbox" {{ not contribution.pinged ? 'checked="checked"' : '' }}> Accepter
+                        <input class="change-contribution-status" data-id="{{ contribution.id }}" type="checkbox" {{ not contribution.pinged ? 'checked="checked"' : '' }}> {% trans %}button.accept{% endtrans %}
                         <span></span>
                     </label>
                 </div>
             </div>
         {% else %}
-            <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.statusClass }}">{{ contribution.pinged ? 'unaccepted' : 'accepted' }}</span></span>
+            <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-{{ contribution.statusClass }}">{{ contribution.pinged ? 'unaccepted' | trans : 'accepted' | trans }}</span></span>
         {% endif %}
     </td>
-    <td data-field="Data" class="kt-datatable__cell">
-        <span style="width: 100px;">{{ contribution.user.projectContributions.count }} contributions / {{ contribution.user.reports.count }} rapports </span>
+    <td data-field="{% trans %}data{% endtrans %}" class="kt-datatable__cell">
+        <span style="width: 100px;">{% transchoice contribution.user.projectContributions.count %}choice.contribution{% endtranschoice %} / {% transchoice contribution.user.reports.count %}choice.report{% endtranschoice %}</span>
     </td>
-    <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
+    <td data-field="{% trans %}action{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 50px;">
             {% if is_granted('edit', contribution.project) %}
-                <a title="Supprimer ce contributeur" data-id="{{ contribution.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove-contribution">
+                <a title="{% trans %}button.delete.contributor{% endtrans %}" data-id="{{ contribution.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove-contribution">
                     <i class="la la-trash"></i>
                 </a>
             {% else %}

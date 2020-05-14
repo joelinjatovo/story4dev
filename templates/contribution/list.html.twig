@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contributeurs - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}contributors{% endtrans %} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,13 +9,13 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Tous les contributeurs</h3>
+            <h3 class="kt-subheader__title">{% trans %}all.contributors{% endtrans %}</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__group" id="kt_subheader_search">
                 <span class="kt-subheader__desc" id="kt_subheader_total">{{ contributions.count }} Total</span>
                 <form class="kt-margin-l-20" id="kt_subheader_search_form">
                     <div class="kt-input-icon kt-input-icon--right kt-subheader__search" style="width: 256px;">
-                        <input type="text" class="form-control" data-project="{{ project.id }}" id="search-collaborator" placeholder="Ajouter un contributeur" id="generalSearch">
+                        <input type="text" class="form-control" data-project="{{ project.id }}" id="search-collaborator" placeholder="{% trans %}add.contributor{% endtrans %}" id="generalSearch">
                         <span class="kt-input-icon__icon kt-input-icon__icon--right">
                             <span>
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
@@ -25,7 +25,6 @@
                                         <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" id="Path" fill="#000000" fill-rule="nonzero"></path>
                                     </g>
                                 </svg>
-                                <!--<i class="flaticon2-search-1"></i>-->
                             </span>
                         </span>
                         <div id="search-collaborator-results" class="kt-notification-v2 search-results">
@@ -35,8 +34,8 @@
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
-            <a href="{{ path('project_edit', { slug : project.slug } ) }}" class="btn btn-label-brand btn-bold">Modifier le projet</a>
+            <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}button.back{% endtrans %}</a>
+            <a href="{{ path('project_edit', { slug : project.slug } ) }}" class="btn btn-label-brand btn-bold">{% trans %}button.edit.project{% endtrans %}</a>
         </div>
     </div>
 </div>
@@ -51,23 +50,23 @@
                     <table class="kt-datatable__table" style="display: block;">
                         <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="ShipName" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Utilisateurs</span>
+                                <th data-field="{% trans %}users{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">{% trans %}users{% endtrans %}</span>
                                 </th>
-                                <th data-field="Roles" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 120px;">Roles</span>
+                                <th data-field="{% trans %}roles{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 120px;">{% trans %}roles{% endtrans %}</span>
                                 </th>
-                                <th data-field="Date" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Date</span>
+                                <th data-field="{% trans %}date{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}date{% endtrans %}</span>
                                 </th>
-                                <th data-field="Status" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Status</span>
+                                <th data-field="{% trans %}status{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}status{% endtrans %}</span>
                                 </th>
-                                <th data-field="Datas" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Data</span>
+                                <th data-field="{% trans %}datas{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}datas{% endtrans %}</span>
                                 </th>
-                                <th data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 80px;">Actions</span>
+                                <th data-field="{% trans %}actions{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 80px;">{% trans %}actions{% endtrans %}</span>
                                 </th>
                             </tr>
                         </thead>

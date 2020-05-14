@@ -3,6 +3,8 @@
 return [
     'action' => 'Action',
     'actions' => 'Actions',
+    'accepted' => 'Accepté',
+    'unaccepted' => 'Non-accepté',
     'Your email account is not yet confirmed. Please, check your inbox!' => "Votre adresse email n'est pas encore confirmé. Veuillez vérifier votre boîte email!",
     '_search' => [
         'placeholder' => 'Rechercher...',
@@ -10,6 +12,7 @@ return [
     ],
     'admin' => 'Administrateur',
     'add' => [
+        'contributor' => 'Ajouter un contributeur',
         'indicator' => 'Ajouter un indicateur',
         'project' => 'Ajouter un projet',
         'report' => 'Ajouter un rapport',
@@ -21,6 +24,7 @@ return [
         ],
     ],
     'button' => [
+        'accept' => 'Accepter',
         'add' => 'Ajouter',
         'all1' => 'Tous',
         'all2' => 'Toutes',
@@ -40,6 +44,7 @@ return [
         'confirm.delete1' => 'Oui, supprimez le!',
         'confirm.delete2' => 'Oui, supprimez la!',
         'delete' => 'Supprimer',
+        'delete.contributor' => 'Supprimer ce contributeur',
         'delete.activity' => 'Supprimer cette activité',
         'delete.project' => 'Supprimer ce projet',
         'details' => 'Détails',
@@ -48,6 +53,7 @@ return [
         'export' => 'Exporter',
         'forgot.password' => 'Mot de passe oublié?',
         'edit' => 'Modifier',
+        'edit.project' => 'Modifier le projet',
         'go.to' => 'Aller dans',
         'list' => 'Lister',
         'logout' => 'Déconnexion',
@@ -98,6 +104,7 @@ return [
     'count.report' => 'Nombre de rapport',
     'count.project' => 'Nombre de projet',
     'count.activity.desc' => 'Nombre total d\'activité',
+    'count.contribution.desc' => 'Nombre de projet contribué',
     'count.document.desc' => 'Nombre total de document téléversé',
     'count.project.desc' => 'Nombre total de projet',
     'count.report.desc' => 'Nombre total de rapport effectué',
@@ -258,6 +265,9 @@ return [
         'indicator' => 'Il n\'y a pas encore des indicateurs.',
         'indicators' => 'Il n\'y a pas encore des indicateurs.',
         'reports.activity' => 'Il n\'y a pas encore des rapports sur cette activité.',
+        'reports.project' => 'Il n\'y a pas encore des rapports sur ce projet.',
+        'reports.contributor' => 'Il n\'y a pas encore des rapports de cet utilisateur.',
+        'user.found' => 'Aucun utilisateur trouvé.',
     ],
     'overlay' => [
         'left' => [
@@ -313,6 +323,7 @@ return [
         
     ],
     'all.activities' => 'Toutes les activités',
+    'all.contributors' => 'Tous les contributeurs',
     'all.periodicities' => 'Toutes les périodicités',
     'all.units' => 'Toutes les unités',
     'all.users' => 'Tous les utilisateurs',
