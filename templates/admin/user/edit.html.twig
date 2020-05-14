@@ -1,14 +1,27 @@
 {% extends 'admin/user/create.html.twig' %}
 
-{% block title %}Modification utilisateur #{{ user.id }}- {{ app.user.fullname }} {% endblock %}
+{% block title %}{% trans %}form.title.user.edit{% endtrans %} #{{ user.id }} - {% trans %}admin{% endtrans %} - {{ app.user.fullname }} {% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
 
 {% block subheader %}
-<br>
-{% endblock %}
-
-{% block headtitle %}
-   <h3 class="kt-portlet__head-title">Modification utilisateur <small>modifier les informations du compte puis enregistrer</small></h3>
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">{% trans %}form.title.user.edit{% endtrans %}</h3>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+               <a href="{{ url('admin_user_list') }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}all.users{% endtrans %}</span></a>
+                <div class="btn-group">
+                    <button type="submit" form="user" name="submit" value="save-default" class="btn btn-brand">
+                        <i class="la la-check"></i> 
+                        <span class="kt-hidden-mobile">{% trans %}button.update{% endtrans %}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

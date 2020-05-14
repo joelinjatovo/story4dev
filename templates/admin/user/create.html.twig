@@ -1,5 +1,8 @@
 {% extends 'admin/base.html.twig' %}
 
+{% block title %}{% trans %}form.title.user.create{% endtrans %} - {% trans %}admin{% endtrans %} - {{ app.user.fullname }}{% endblock %}
+
+
 {% block stylesheets %}
 {% endblock %}
 
@@ -7,17 +10,17 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Ajouter un utilisateur</h3>
+            <h3 class="kt-subheader__title">{% trans %}form.title.user.create{% endtrans %}</h3>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-               <a href="{{ url('admin_user_list') }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+               <a href="{{ url('admin_user_list') }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}all.users{% endtrans %}</span></a>
                 <div class="btn-group">
-                <button type="submit" form="user" name="submit" value="save-default" class="btn btn-brand">
-                    <i class="la la-check"></i> 
-                    <span class="kt-hidden-mobile">{% trans %}button.save{% endtrans %}</span>
-                </button>
-            </div>
+                    <button type="submit" form="user" name="submit" value="save-default" class="btn btn-brand">
+                        <i class="la la-check"></i> 
+                        <span class="kt-hidden-mobile">{% trans %}button.save{% endtrans %}</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -35,7 +38,7 @@
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Informations:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">{% trans %}informations{% endtrans %}:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -43,22 +46,22 @@
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="kt-checkbox-list">
                                         <label class="kt-checkbox kt-checkbox--bold kt-checkbox--danger label-danger">
-                                            {{ form_widget( form.isVerified ) }} Marquez comme vérifié
+                                            {{ form_widget( form.isVerified ) }} {% trans %}set.as.verified{% endtrans %}
                                             <span></span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Avatar</label>
+                                <label class="col-xl-3 col-lg-3 col-form-label">{% trans %}avatar{% endtrans %}</label>
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="kt-avatar kt-avatar--outline" id="kt_user_avatar">
                                         <div class="kt-avatar__holder" style="background-image: url('{{ user.avatar ? vich_uploader_asset(user, 'avatarFile') : default_avatar }}');"></div>
-                                        <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Change avatar">
+                                        <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="{% trans %}button.change.avatar{% endtrans %}">
                                             <i class="fa fa-pen"></i>
                                             <input type="file" id="user_avatarFile_file" name="user[avatarFile][file]" accept=".jpeg, .png, .jpg, .gif">
                                         </label>
-                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="{% trans %}button.remove.avatar{% endtrans %}">
                                             <i class="fa fa-times"></i>
                                         </span>
                                     </div>
@@ -82,13 +85,13 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.fullname, "Nom complet", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.fullname, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     {{ form_widget( form.fullname, { 'attr' : { 'class' : 'form-control' } } ) }}
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.status, "Statut", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.status, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         {{ form_widget( form.status, { 'attr' : { 'class' : 'form-control' } } ) }}
@@ -96,20 +99,20 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Rôle de l'utilisateur</label>
+                                <label class="col-xl-3 col-lg-3 col-form-label">{% trans %}role.user{% endtrans %}</label>
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="kt-checkbox-inline">
                                         <label class="kt-checkbox">
                                             <input type="hidden" name="user[roles][]" value="ROLE_USER" >
-                                            <input type="checkbox" id="user_roles_1" class="changed-input" checked disabled>Client
+                                            <input type="checkbox" id="user_roles_1" class="changed-input" checked disabled>{% trans %}role.customer{% endtrans %}
                                             <span></span>
                                         </label>
                                         <label class="kt-checkbox">
-                                            <input type="checkbox" id="user_roles_2" name="user[roles][]" value="ROLE_ADMIN" class="changed-input" {{ user.admin? 'checked' : '' }} >Admin
+                                            <input type="checkbox" id="user_roles_2" name="user[roles][]" value="ROLE_ADMIN" class="changed-input" {{ user.admin? 'checked' : '' }} >{% trans %}role.admin{% endtrans %}
                                             <span></span>
                                         </label>
                                         <label class="kt-checkbox">
-                                            <input type="checkbox" id="user_roles_3" name="user[roles][]" value="ROLE_SUPER_ADMIN" class="changed-input" {{ user.superadmin? 'checked' : '' }} >SuperAdmin
+                                            <input type="checkbox" id="user_roles_3" name="user[roles][]" value="ROLE_SUPER_ADMIN" class="changed-input" {{ user.superadmin? 'checked' : '' }} >{% trans %}role.superadmin{% endtrans %}
                                             <span></span>
                                         </label>
                                     </div>
@@ -118,18 +121,18 @@
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Contacts et autres:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">{% trans %}contacts.and.others{% endtrans %}:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.company, "Entreprise", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.company, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     {{ form_widget( form.company, { 'attr' : { 'class' : 'form-control' } } ) }}
                                     <span class="form-text text-muted"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label( form.phone, "Télephone", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.phone, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
@@ -139,7 +142,7 @@
                                 </div>
                             </div>
                             <div class="form-group form-group-last row">
-                                {{ form_label( form.website, "Site web" , { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                {{ form_label( form.website, null , { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="input-group">
                                         <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>

@@ -22,28 +22,28 @@ class UserType extends AbstractType
                 'required' => false,
                 'allow_delete' => true, 
             ])
-            ->add('username')
-            ->add('email')
-            ->add('fullname')
-            ->add('company')
-            ->add('phone')
-            ->add('website')
-            ->add('isVerified')
+            ->add('username', null, ['label' => 'form.label.username'])
+            ->add('email', null, ['label' => 'form.label.email'])
+            ->add('fullname', null, ['label' => 'form.label.fullname'])
+            ->add('company', null, ['label' => 'form.label.company'])
+            ->add('phone', null, ['label' => 'form.label.phone'])
+            ->add('website', null, ['label' => 'form.label.website'])
+            ->add('isVerified', null, ['label' => 'form.label.verified'])
             ->add('status', ChoiceType::class, [
                 'choices'  => [
-                    'En cours de validation' => User::STATUS_PING,
-                    'Active' => User::STATUS_ACTIVE,
-                    'Bloqué' => User::STATUS_BLOCKED,
-                    'Annulé' => User::STATUS_CANCELED,
+                     'form.label.status.ping' => User::STATUS_PING,
+                     'form.label.status.active' => User::STATUS_ACTIVE,
+                     'form.label.status.blocked' => User::STATUS_BLOCKED,
+                     'form.label.status.canceled' => User::STATUS_CANCELED,
                 ],
             ])
             ->add('roles', ChoiceType::class, [
                 'multiple' => true,
                 'expanded' => true, // render check-boxes
                 'choices'  => [
-                    'Client' => 'ROLE_USER',
-                    'Admin' => 'ROLE_ADMIN',
-                    'SuperAdmin' => 'ROLE_SUPER_ADMIN',
+                    'form.label.role.customer' => 'ROLE_USER',
+                    'form.label.role.admin' => 'ROLE_ADMIN',
+                    'form.label.role.superadmin' => 'ROLE_SUPER_ADMIN',
                 ],
             ])
         ;
