@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'action' => 'Action',
+    'actions' => 'Actions',
     'Your email account is not yet confirmed. Please, check your inbox!' => "Votre adresse email n'est pas encore confirmé. Veuillez vérifier votre boîte email!",
     '_search' => [
         'placeholder' => 'Rechercher...',
@@ -32,6 +34,7 @@ return [
         'confirm.delete2' => 'Oui, supprimez la',
         'delete' => 'Supprimer',
         'delete.activity' => 'Supprimer cette activité',
+        'delete.project' => 'Supprimer ce projet',
         'export' => 'Exporter',
         'forgot.password' => 'Mot de passe oublié?',
         'change.password' => 'Modifier mot de passe',
@@ -83,12 +86,17 @@ return [
         'project' => 'Nombre de projet',
     ],
     'choice' => [
+        'activity' => '{0} Aucun activité|{1} Une activité|]1,Inf[ %count% activités',
         'indicator' => '{0} Aucun indicateur|{1} Un indicateur|]1,Inf[ %count% indicateurs',
+        'day' => '{0} Aucun|{1} Un jour|]1,Inf[ %count% jours',
         'project' => '{0} Aucun project|{1} Un project|]1,Inf[ %count% projects',
         'report' => '{0} Aucun rapport|{1} Un rapport|]1,Inf[ %count% rapports',
     ],
     'date' => [
+        'started' => 'Date de début',
+        'ended' => 'Date de fin',
         'created' => 'Date de création',
+        'updated' => 'Date de modification',
         'report' => 'Date du rapport',
         'synced' => 'Date de synchronisation',
     ],
@@ -149,6 +157,10 @@ return [
                 'info' => 'Détails du compte <small>modifier les informations de votre compte</small>',
                 'password' => 'Modification de mot de passe<small> modifier ou réinitialiser votre mot de passe</small>',
                 'profil' => 'Information personnelle <small> modifier les informations basique du compte</small>',
+            ],
+            'periodicity' => [
+                'create' => 'Nouvelle périodicité',
+                'edit' => 'Modification périodicité',
             ],
         ],
     ],
@@ -276,6 +288,7 @@ return [
         
     ],
     'all.activities' => 'Toutes les activités',
+    'all.periodicities' => 'Toutes les périodicités',
     'about' => 'A-propos',
     'account' => 'Compte',
     'activity' => 'Activité',
@@ -296,6 +309,7 @@ return [
     'contributor' => 'Contributeur',
     'contributors' => 'Contributeurs',
     'dashboard' => 'Tableau de bord',
+    'delay' => 'Durée',
     'document' => 'Document',
     'documents' => 'Documents',
     'email' => 'Email',
@@ -316,6 +330,7 @@ return [
     'location' => 'Localisation',
     'locations' => 'Localisations',
     'periodicity' => 'Périodicité',
+    'periodicities' => 'Périodicités',
     'parents' => 'Main projects',
     'password' => 'Mot de passe',
     'phone' => 'Téléphone',

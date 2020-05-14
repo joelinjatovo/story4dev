@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Toutes les periodicités - Admin - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}all.periodicities{% endtrans %} - Admin - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,44 +9,10 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Liste de periodicité</h3>
+            <h3 class="kt-subheader__title">{% trans %}all.periodicities{% endtrans %}</h3>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ path( 'admin_periodicity_index' ) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
-            <div class="kt-subheader__wrapper">
-                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
-                    <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-                                <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
-                            </g>
-                        </svg>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
-                        <ul class="kt-nav">
-                            <li class="kt-nav__head">
-                                Nouveau:                                    
-                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
-                            </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__item">
-                                <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Projet</span>
-                                </a>
-                            </li>                        
-                            <li class="kt-nav__item">
-                                <a href="{{ path( 'admin_unit_index' ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Unité de mesure</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <a href="{{ path( 'admin_periodicity_index' ) }}" class="btn btn-label-brand btn-bold">{% trans %}button.add{% endtrans %}</a>
         </div>
     </div>
 </div>
@@ -62,38 +28,38 @@
                     <table class="kt-datatable__table" style="display: block;">
                         <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="Unit" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Periodicité</span>
+                                <th data-field="{% trans %}periodicities{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">{% trans %}periodicities{% endtrans %}</span>
                                 </th>
-                                <th data-field="Unit" class="kt-datatable__cell">
-                                    <span style="width: 80px;">Durée</span>
+                                <th data-field="{% trans %}delay{% endtrans %}" class="kt-datatable__cell">
+                                    <span style="width: 80px;">{% trans %}delay{% endtrans %}</span>
                                 </th>
-                                <th data-field="Projets" class="kt-datatable__cell">
-                                    <span style="width: 120px;">Projets</span>
+                                <th data-field="{% trans %}projects{% endtrans %}" class="kt-datatable__cell">
+                                    <span style="width: 120px;">{% trans %}projects{% endtrans %}</span>
                                 </th>
-                                <th data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 110px;">Actions</span>
+                                <th data-field="{% trans %}actions{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 110px;">{% trans %}actions{% endtrans %}</span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody class="kt-datatable__body">
                             {% for periodicity in periodicities %}
                              <tr data-row="0" class="kt-datatable__row periodicity-item" style="left: 0px;">
-                                <td data-field="Unit" class="kt-datatable__cell">
+                                <td data-field="{% trans %}periodicities{% endtrans %}" class="kt-datatable__cell">
                                     <span style="width: 222px;"><span class="kt-font-bold">{{ periodicity.title }}</span></span>
                                 </td>
-                                <td data-field="Date" class="kt-datatable__cell">
-                                    <span style="width: 80px;"><span class="kt-font-bold">{{ periodicity.delay }} jours</span></span>
+                                <td data-field="{% trans %}delay{% endtrans %}" class="kt-datatable__cell">
+                                    <span style="width: 80px;"><span class="kt-font-bold">{% transchoice periodicity.delay %}choice.day{% endtranschoice %}</span></span>
                                 </td>
-                                <td data-field="Projets" class="kt-datatable__cell">
-                                    <span style="width: 120px;"><span class="kt-font-bold">{{ periodicity.projects.count }} </span> projets</span>
+                                <td data-field="{% trans %}projects{% endtrans %}" class="kt-datatable__cell">
+                                    <span style="width: 120px;"><span class="kt-font-bold">{% transchoice periodicity.projects.count %}choice.project{% endtranschoice %}</span></span>
                                 </td>
-                                <td data-field="Status" class="kt-datatable__cell">
+                                <td data-field="{% trans %}actions{% endtrans %}" class="kt-datatable__cell">
                                     <span style="overflow: visible; position: relative; width: 110px;">
-                                        <a href="{{ path('admin_periodicity_edit', {id: periodicity.id} ) }}" title="Modifier détails" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                        <a href="{{ path('admin_periodicity_edit', {id: periodicity.id} ) }}" title="{% trans %}button.edit{% endtrans %}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                             <i class="la la-edit"></i>
                                         </a>
-                                        <a title="Supprimer" data-id="{{ periodicity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+                                        <a title="{% trans %}button.delete{% endtrans %}" data-id="{{ periodicity.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
                                             <i class="la la-trash"></i>
                                         </a>
                                     </span>
@@ -118,12 +84,12 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var $this = $(this);
             swal.fire({
-                title:"Vous êtes sûre?",
-                text:"Vous ne pourez pas revenir en arrière après!",
+                title:"{% trans %}swal.remove.title{% endtrans %}",
+                text:"{% trans %}swal.remove.content.activity{% endtrans %}",
                 type:"warning",
                 showCancelButton:!0,
-                confirmButtonText:"Oui, supprimez le!",
-                cancelButtonText:"Annuler"
+                confirmButtonText:"{% trans %}button.confirm.delete2{% endtrans %}",
+                cancelButtonText:"{% trans %}button.cancel{% endtrans %}"
             }).then(function(e){
                 if(e.value){
                     KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
@@ -139,7 +105,7 @@ jQuery(document).ready(function($){
                     })
                     .fail(function() {
                         KTApp.unblockPage();
-                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+                        toastr.error("{% trans %}swal.error{% endtrans %}");
                     });
                 }
             })

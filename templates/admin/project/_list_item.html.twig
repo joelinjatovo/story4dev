@@ -1,5 +1,5 @@
  <tr data-row="0" class="kt-datatable__row project-item" style="left: 0px;">
-    <td data-field="User" data-autohide-disabled="false" class="kt-datatable__cell">
+    <td data-field="{% trans %}project{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="width: 222px;">
             <div class="kt-user-card-v2">
                 <div class="kt-user-card-v2__pic">
@@ -16,22 +16,22 @@
             </div>
         </span>
     </td>
-    <td data-field="Responsable" class="kt-datatable__cell">
+    <td data-field="{% trans %}user{% endtrans %}" class="kt-datatable__cell">
         <span style="width: 100px;"><span class="kt-font-bold">{{ project.author.fullname }}</span></span>
     </td>
-    <td data-field="Début" class="kt-datatable__cell">
+    <td data-field="{% trans %}date.started{% endtrans %}" class="kt-datatable__cell">
         <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">{{ project.startat|date("Y-m-d") }}</span></span>
     </td>
-    <td data-field="Fin" class="kt-datatable__cell">
+    <td data-field="{% trans %}dqte.ended{% endtrans %}" class="kt-datatable__cell">
         <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">{{ project.endat|date("Y-m-d") }}</span></span>
     </td>
-    <td data-field="Data" class="kt-datatable__cell">
-        <span style="width: 100px;">{{ project.contributions.count }} contributeurs / {{ project.activities.count }} activités </span>
+    <td data-field="{% trans %}data{% endtrans %}" class="kt-datatable__cell">
+        <span style="width: 100px;">{{ project.contributions.count }} contributeurs / {% transchoice project.activities.count %}choice.activity{% endtranschoice %} </span>
     </td>
-    <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
+    <td data-field="{% trans %}action{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 100px;">
             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <a title="Supprimer ce projet" data-id="{{ project.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+                <a title="{% trans %}button.delete.project{% endtrans %}" data-id="{{ project.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
                     <i class="la la-trash"></i>
                 </a>
             {% endif %}

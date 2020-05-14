@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Activités - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}all.activities{% endtrans %} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -16,9 +16,9 @@
         </div>        
         <div class="kt-subheader__toolbar">
             {% if is_granted('view', project) %}
-                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> Liste</a>
-                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i> Grille</a>
-                <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'list' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> {% trans %}list{% endtrans %}</a>
+                <a href="{{ path('activity_list_type', { slug: project.slug, type: 'grid' }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i> {% trans %}grid{% endtrans %}</a>
+                <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}button.back{% endtrans %}</a>
             {% endif %}
         </div>
     </div>
@@ -34,23 +34,23 @@
                     <table class="kt-datatable__table" style="display: block;">
                         <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="Activités" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Activités</span>
+                                <th data-field="{% trans %}activities{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">{% trans %}activities{% endtrans %}</span>
                                 </th>
-                                <th data-field="Avancements" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Avancements</span>
+                                <th data-field="{% trans %}progressions{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">{% trans %}progressions{% endtrans %}</span>
                                 </th>
-                                <th data-field="Indicateurs" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Indicateurs</span>
+                                <th data-field="{% trans %}indicators{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}indicators{% endtrans %}</span>
                                 </th>
-                                <th data-field="Rapports" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Rapports</span>
+                                <th data-field="{% trans %}reports{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}reports{% endtrans %}</span>
                                 </th>
-                                <th data-field="Documents" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Documents</span>
+                                <th data-field="{% trans %}documents{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}documents{% endtrans %}</span>
                                 </th>
-                                <th data-field="Actions" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 150px;">Actions</span>
+                                <th data-field="{% trans %}actions{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 150px;">{% trans %}actions{% endtrans %}</span>
                                 </th>
                             </tr>
                         </thead>
@@ -88,12 +88,12 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var $this = $(this);
             swal.fire({
-                title:"Vous êtes sûre?",
-                text:"Vous ne pourez pas revenir en arrière après!\nToutes les rapports ainsi que les données rattachées à cette activité vont être supprimés aussi.",
+                title:"{% trans %}swal.remove.title{% endtrans %}",
+                text:"{% trans %}swal.remove.content.activity{% endtrans %}",
                 type:"warning",
                 showCancelButton:!0,
-                confirmButtonText:"Oui, supprimez la!",
-                cancelButtonText:"Annuler"
+                confirmButtonText:"{% trans %}button.confirm.delete2{% endtrans %}",
+                cancelButtonText:"{% trans %}button.cancel{% endtrans %}"
             }).then(function(e){
                 if(e.value){
                     KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
@@ -109,7 +109,7 @@ jQuery(document).ready(function($){
                     })
                     .fail(function() {
                         KTApp.unblockPage();
-                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+                        toastr.error("{% trans %}swal.error{% endtrans %}");
                     });
                 }
             })
@@ -124,11 +124,11 @@ jQuery(document).ready(function($){
             if(data.success){
                 if(data.star){
                     $this.find('i').removeClass('la-star-o').addClass('la-star');
-                    $this.attr('data-original-title', 'Supprimer des favoris');
+                    $this.attr('data-original-title', '{% trans %}button.unstar{% endtrans %}');
                     toastr.success(data.message);
                 }else{
                     $this.find('i').removeClass('la-star').addClass('la-star-o');
-                    $this.attr('data-original-title', 'Ajouter aux favoris');
+                    $this.attr('data-original-title', '{% trans %}button.star{% endtrans %}');
                     toastr.warning(data.message);
                 }
             }else{
@@ -137,7 +137,7 @@ jQuery(document).ready(function($){
         })
         .fail(function() {
             KTApp.unblockPage();
-            toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+            toastr.error("{% trans %}swal.error{% endtrans %}");
         });
     });
 });

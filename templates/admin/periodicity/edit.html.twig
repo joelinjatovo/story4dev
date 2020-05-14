@@ -1,6 +1,6 @@
 {% extends 'admin/periodicity/create.html.twig' %}
 
-{% block title %}Modification periodicité #{{ periodicity.id }}- {{ app.user.fullname }} {% endblock %}
+{% block title %}{% trans %}form.title.periodicity.edit{% endtrans %} #{{ periodicity.id }}- {{ app.user.fullname }} {% endblock %}
 
 {% block stylesheets %}{% endblock %}
 
@@ -8,12 +8,12 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Modification de periodicité</h3>
+            <h3 class="kt-subheader__title">{% trans %}form.title.periodicity.edit{% endtrans %}</h3>
         </div>        
         <div class="kt-subheader__toolbar">
             <div class="btn-group">
-                <a href="{{ path('admin_periodicity_list') }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
-                <button form="periodicity" type="submit" class="btn btn-brand btn-bold">Enregistrer</button>
+                <a href="{{ path('admin_periodicity_list') }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}button.back{% endtrans %}</a>
+                <button form="periodicity" type="submit" class="btn btn-brand btn-bold">{% trans %}button.update{% endtrans %}</button>
             </div>
         </div>
     </div>
