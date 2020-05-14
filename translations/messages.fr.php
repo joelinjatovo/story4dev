@@ -6,7 +6,9 @@ return [
     'Your email account is not yet confirmed. Please, check your inbox!' => "Votre adresse email n'est pas encore confirmé. Veuillez vérifier votre boîte email!",
     '_search' => [
         'placeholder' => 'Rechercher...',
+        'result' => 'Résultat de recherche',
     ],
+    'admin' => 'Administrateur',
     'add' => [
         'indicator' => 'Ajouter un indicateur',
         'project' => 'Ajouter un projet',
@@ -163,6 +165,7 @@ return [
                 'create' => 'Nouvelle périodicité',
                 'edit' => 'Modification périodicité',
             ],
+            'settings' => 'Paramètres <small>configurer le site web ici</small>',
         ],
     ],
     'forgot' => [
