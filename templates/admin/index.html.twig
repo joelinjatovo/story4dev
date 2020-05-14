@@ -1,21 +1,19 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Tableau de bord - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}dashboard{% endtrans %} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
-
 
 {% block subheader %}
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Tableau de bord</h3>
+            <h3 class="kt-subheader__title">{% trans %}dashboard{% endtrans %}</h3>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ path( 'admin_user_index' ) }}" class="btn btn-label-brand btn-bold">Ajouter un utilisateur</a>
             <div class="kt-subheader__wrapper">
-                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
+                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="{% trans %}actions{% endtrans %}" data-placement="left">
                     <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -24,32 +22,37 @@
                                 <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
                             </g>
                         </svg>
-                        <!--<i class="flaticon2-plus"></i>-->
                     </a>
                     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
                         <!--begin::Nav-->
                         <ul class="kt-nav">
                             <li class="kt-nav__head">
-                                Nouveau:                                    
-                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                {% trans %}button.new{% endtrans %}:                                    
+                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="{% trans %}button.new{% endtrans %}"></i>
                             </li>
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__item">
                                 <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Projet</span>
+                                    <span class="kt-nav__link-text">{% trans %}project{% endtrans %}</span>
+                                </a>
+                            </li>        
+                            <li class="kt-nav__item">
+                                <a href="{{ path( 'admin_user_index' ) }}" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
+                                    <span class="kt-nav__link-text">{% trans %}user{% endtrans %}</span>
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
-                                <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
+                                <a href="{{ path( 'admin_unit_index' ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Unité de mesure</span>
+                                    <span class="kt-nav__link-text">{% trans %}unit{% endtrans %}</span>
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
-                                <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
+                                <a href="{{ path( 'admin_periodicity_index' ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Périodicité</span>
+                                    <span class="kt-nav__link-text">{% trans %}periodicity{% endtrans %}</span>
                                 </a>
                             </li>
                         </ul>
@@ -71,13 +74,11 @@
                 <div class="kt-portlet__body">
                     <div class="kt-callout__body">
                         <div class="kt-callout__content">
-                            <h3 class="kt-callout__title">Nouvelle inscription</h3>
-                            <p class="kt-callout__desc">
-                                Il y a des nouveaux comptes qui attendent votre validation.
-                            </p>
+                            <h3 class="kt-callout__title">{% trans %}inscription.new{% endtrans %}</h3>
+                            <p class="kt-callout__desc">{% trans %}inscription.new.desc{% endtrans %}</p>
                         </div>
                         <div class="kt-callout__action">
-                            <a href="{{ path('admin_user_list_status', { status: 'ping'} ) }}" class="btn btn-custom btn-bold btn-upper btn-font-sm  btn-warning">Lister</a>
+                            <a href="{{ path('admin_user_list_status', { status: 'ping'} ) }}" class="btn btn-custom btn-bold btn-upper btn-font-sm  btn-warning">{% trans %}button.list{% endtrans %}</a>
                         </div>
                     </div>
                 </div>
@@ -93,7 +94,7 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title">
-                        Dernières inscriptions
+                        {% trans %}inscriptions.latest{% endtrans %}
                     </h3>
                 </div>
             </div>
@@ -127,7 +128,7 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                    <h3 class="kt-portlet__head-title">
-                        Nombres
+                        {% trans %}counts{% endtrans %}
                    </h3>
                 </div>
             </div>
@@ -136,12 +137,8 @@
                     <div class="kt-widget4__items kt-portlet__space-x kt-margin-t-10 kt-margin-b-20">
                         <div class="kt-widget4__item">
                             <div class="kt-widget4__info">
-                                <a href="#" class="kt-widget4__title">
-                                    Utilisateur  
-                                </a>	
-                                <span class="kt-widget4__sub">
-                                Nombre total d'utilisateur inscrit
-                                </span>		 
+                                <a href="#" class="kt-widget4__title">{% trans %}user{% endtrans %}</a>	
+                                <span class="kt-widget4__sub">{% trans %}count.user.desc{% endtrans %}</span>		 
                             </div>
                             <span class="kt-widget4__ext">
                                 <span class="kt-widget4__number kt-font-danger">{{ count.users }}</span>
@@ -149,12 +146,8 @@
                         </div>
                         <div class="kt-widget4__item">
                             <div class="kt-widget4__info">
-                                <a href="#" class="kt-widget4__title">
-                                    Projets  
-                                </a> 
-                                <span class="kt-widget4__sub">
-                                Nombre total de projet
-                                </span>		 
+                                <a href="#" class="kt-widget4__title">{% trans %}projects{% endtrans %}</a>	
+                                <span class="kt-widget4__sub">{% trans %}count.project.desc{% endtrans %}</span>	
                             </div>
                             <span class="kt-widget4__ext">
                                 <span class="kt-widget4__number kt-font-danger">{{ count.projects }}</span>
@@ -162,12 +155,8 @@
                         </div>
                         <div class="kt-widget4__item">
                             <div class="kt-widget4__info">
-                                <a href="#" class="kt-widget4__title">
-                                    Activités  
-                                </a> 
-                                <span class="kt-widget4__sub">
-                                Nombre total d'activité
-                                </span>		 
+                                <a href="#" class="kt-widget4__title">{% trans %}activities{% endtrans %}</a>	
+                                <span class="kt-widget4__sub">{% trans %}count.activity.desc{% endtrans %}</span> 
                             </div>
                             <span class="kt-widget4__ext">
                                 <span class="kt-widget4__number kt-font-danger">{{ count.activities }}</span>
@@ -175,12 +164,8 @@
                         </div>
                         <div class="kt-widget4__item">
                             <div class="kt-widget4__info">
-                                <a href="#" class="kt-widget4__title">
-                                    Rapports  
-                                </a> 
-                                <span class="kt-widget4__sub">
-                                Nombre total de rapport effectué
-                                </span>		 
+                                <a href="#" class="kt-widget4__title">{% trans %}reports{% endtrans %}</a>	
+                                <span class="kt-widget4__sub">{% trans %}count.report.desc{% endtrans %}</span>	 
                             </div>
                             <span class="kt-widget4__ext">
                                 <span class="kt-widget4__number kt-font-danger">{{ count.reports }}</span>
@@ -188,12 +173,8 @@
                         </div>
                         <div class="kt-widget4__item">
                             <div class="kt-widget4__info">
-                                <a href="#" class="kt-widget4__title">
-                                    Documents  
-                                </a> 
-                                <span class="kt-widget4__sub">
-                                Nombre total de document téléversé
-                                </span>		 
+                                <a href="#" class="kt-widget4__title">{% trans %}documents{% endtrans %}</a>	
+                                <span class="kt-widget4__sub">{% trans %}count.document.desc{% endtrans %}</span>		 
                             </div>
                             <span class="kt-widget4__ext">
                                 <span class="kt-widget4__number kt-font-danger">{{ count.files }}</span>
@@ -213,7 +194,7 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <a href="#">
-                        <h3 class="kt-portlet__head-title">Statistiques</h3>
+                        <h3 class="kt-portlet__head-title">{% trans %}statistics{% endtrans %}</h3>
                     </a>
                 </div>
             </div>
@@ -231,13 +212,11 @@
                 <div class="kt-portlet__body">
                     <div class="kt-callout__body">
                         <div class="kt-callout__content">
-                            <h3 class="kt-callout__title">Backup SQL</h3>
-                            <p class="kt-callout__desc">
-                                Télécharger le backup de la base de données.
-                            </p>
+                            <h3 class="kt-callout__title">{% trans %}button.backup.sql{% endtrans %}</h3>
+                            <p class="kt-callout__desc">{% trans %}backup.desc.sql{% endtrans %}</p>
                         </div>
                         <div class="kt-callout__action">
-                            <a href="{{ path('admin_backup_download', {type:'database'})}}" class="btn btn-custom btn-bold btn-upper btn-font-sm  btn-brand">Télécharger</a>
+                            <a href="{{ path('admin_backup_download', {type:'database'})}}" class="btn btn-custom btn-bold btn-upper btn-font-sm  btn-brand">{% trans %}button.download{% endtrans %}</a>
                         </div>
                     </div>
                 </div>
@@ -248,13 +227,11 @@
                 <div class="kt-portlet__body">
                     <div class="kt-callout__body">
                         <div class="kt-callout__content">
-                            <h3 class="kt-callout__title">Backup DOC</h3>
-                            <p class="kt-callout__desc">
-                                Télécharger le backup du dossier /uploads.
-                            </p>
+                            <h3 class="kt-callout__title">{% trans %}button.backup.file{% endtrans %}</h3>
+                            <p class="kt-callout__desc">{% trans %}backup.desc.sql{% endtrans %}</p>
                         </div>
                         <div class="kt-callout__action">
-                            <a href="{{ path('admin_backup_download', {type:'file'})}}" class="btn btn-custom btn-bold btn-upper btn-font-sm  btn-success">Télécharger</a>
+                            <a href="{{ path('admin_backup_download', {type:'file'})}}" class="btn btn-custom btn-bold btn-upper btn-font-sm  btn-success">{% trans %}button.download{% endtrans %}</a>
                         </div>
                     </div>
                 </div>
