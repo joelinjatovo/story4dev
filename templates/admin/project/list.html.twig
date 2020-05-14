@@ -48,23 +48,23 @@
                     <table class="kt-datatable__table" style="display: block;">
                         <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="Owner" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Projets</span>
+                                <th data-field="{% trans %}projects{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">{% trans %}projects{% endtrans %}</span>
                                 </th>
-                                <th data-field="Responsable" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Responsable</span>
+                                <th data-field="{% trans %}responsables{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}responsables{% endtrans %}</span>
                                 </th>
-                                <th data-field="Owner" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Début</span>
+                                <th data-field="{% trans %}start{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}start{% endtrans %}</span>
                                 </th>
-                                <th data-field="Owner" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Fin</span>
+                                <th data-field="{% trans %}end{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}end{% endtrans %}</span>
                                 </th>
-                                <th data-field="Datas" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Data</span>
+                                <th data-field="{% trans %}datas{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}datas{% endtrans %}</span>
                                 </th>
-                                <th data-field="Actions" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Actions</span>
+                                <th data-field="{% trans %}actions{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}actions{% endtrans %}</span>
                                 </th>
                             </tr>
                         </thead>
@@ -104,12 +104,12 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var $this = $(this);
             swal.fire({
-                title:"Vous êtes sûre?",
-                text:"Vous ne pourez pas revenir en arrière après!",
+                title:"{% trans %}swal.remove.title{% endtrans %}",
+                text:"{% trans %}swal.remove.content.project{% endtrans %}",
                 type:"warning",
                 showCancelButton:!0,
-                confirmButtonText:"Oui, supprimez le!",
-                cancelButtonText:"Annuler"
+                confirmButtonText:"{% trans %}button.confirm.delete1{% endtrans %}",
+                cancelButtonText:"{% trans %}button.cancel{% endtrans %}"
             }).then(function(e){
                 if(e.value){
                     KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
@@ -125,7 +125,7 @@ jQuery(document).ready(function($){
                     })
                     .fail(function() {
                         KTApp.unblockPage();
-                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+                        toastr.error("{% trans %}swal.error{% endtrans %}");
                     });
                 }
             })
