@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}{% trans %}trashed.indicators{% endtrans %} - {% trans %}admin{% endtrans %}  - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}trashed.indicators{% endtrans %} - {% trans %}admin{% endtrans %} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -34,7 +34,7 @@
         <div class="kt-subheader__toolbar">
             <a href="{{ path( 'admin_index' ) }}" class="btn btn-label-brand btn-bold">{% trans %}button.back{% endtrans %}</a>
             <div class="kt-subheader__wrapper">
-                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
+                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="{% trans %}actions{% endtrans %}" data-placement="left">
                     <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -49,7 +49,7 @@
                         <ul class="kt-nav">
                             <li class="kt-nav__head">
                                 {% trans %}button.new{% endtrans %}:                                    
-                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="{% trans %}button.new{% endtrans %}"></i>
                             </li>
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__item">
