@@ -8,9 +8,9 @@
                 {{ report.title }}
             </a>
             <div class="kt-widget5__info">
-                <span>Contributeur:</span>
+                <span>{% trans %}contributor{% endtrans %}:</span>
                 <span class="kt-font-info">{{ report.author.fullname }}</span>
-                <span>Date du rapport:</span>
+                <span>{% trans %}date.report{% endtrans %}:</span>
                 <span class="kt-font-info">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d H:i:s') }}</span>
             </div>
         </div>
@@ -18,11 +18,11 @@
     <div class="kt-widget5__content">
         <div class="kt-widget5__stats">
             <span class="kt-widget5__number">{{ report.results.count }}</span>
-            <span class="kt-widget5__sales">résultats</span>
+            <span class="kt-widget5__sales">{% trans %}results{% endtrans %}</span>
         </div>
         <div class="kt-widget5__stats">
             <span class="kt-widget5__number">{{ report.reportFiles.count }}</span>
-            <span class="kt-widget5__votes">documents</span>
+            <span class="kt-widget5__votes">{% trans %}documents{% endtrans %}</span>
         </div>
     </div>	
 </div>

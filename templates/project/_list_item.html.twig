@@ -37,7 +37,7 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('project_show', {slug: project.slug})}}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-line-chart"></i>
-                                        <span class="kt-nav__link-text">Détails</span>
+                                        <span class="kt-nav__link-text">{% trans %}button.details{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -45,7 +45,7 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('project_edit', {slug: project.slug })}}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-edit"></i>
-                                        <span class="kt-nav__link-text">Modifier</span>
+                                        <span class="kt-nav__link-text">{% trans %}button.edit{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -53,7 +53,7 @@
                                 <li class="kt-nav__item">
                                     <a data-id="{{ project.id }}" href="#" class="kt-nav__link btn-remove">
                                         <i class="kt-nav__link-icon flaticon-delete"></i>
-                                        <span class="kt-nav__link-text">Supprimer</span>
+                                        <span class="kt-nav__link-text">{% trans %}button.delete{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -66,7 +66,7 @@
                 <div class="kt-widget__stats">
                     <div class="kt-widget__item">
                         <span class="kt-widget__date">
-                            Date de début
+                            {% trans %}date.started{% endtrans %}
                         </span>
                         <div class="kt-widget__label">
                             <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ project.startat is empty ? "" : project.startat | date('Y-m-d') }}</span>
@@ -75,7 +75,7 @@
 
                     <div class="kt-widget__item">
                         <span class="kt-widget__date">
-                            Date de fin
+                            {% trans %}date.ended{% endtrans %}
                         </span>
                         <div class="kt-widget__label">
                             <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ project.endat is empty ? "" : project.endat | date('Y-m-d') }}</span>
@@ -83,7 +83,7 @@
                     </div>
 
                     <div class="kt-widget__item flex-fill">
-                        <span class="kt-widget__subtitel">Progression</span>
+                        <span class="kt-widget__subtitel">{% trans %}progression{% endtrans %}</span>
                         <div class="kt-widget__progress d-flex  align-items-center">
                             <div class="progress" style="height: 5px;width: 100%;">
                                 <div class="progress-bar kt-bg-{{ project|progressionClass }}" role="progressbar" style="width: {{ project|progression }}%;" aria-valuenow="{{ project|progression }}" aria-valuemin="0" aria-valuemax="100"></div>
@@ -102,13 +102,13 @@
                 <div class="kt-widget__content">
                     {% if project.budget > 0 %}
                     <div class="kt-widget__details">
-                        <span class="kt-widget__subtitle">Budget</span>
+                        <span class="kt-widget__subtitle">{% trans %}budget{% endtrans %}</span>
                         <span class="kt-widget__value">{{ project.budget }} <span>{{ project.currency }}</span></span>
                     </div>
                     {% endif %}
 
                     <div class="kt-widget__details">
-                        <span class="kt-widget__subtitle">Contributeurs</span>
+                        <span class="kt-widget__subtitle">{% trans %}contributors{% endtrans %}</span>
                         <div class="kt-media-group">
                             {% for contribution in project.contributions.slice(0, 7) %}
                             <a href="{{ path('contribution_show', { 'slug' : contribution.project.slug, 'contribution_id': contribution.id } ) }}" class="kt-media kt-media--sm kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="{{ contribution.user.fullname ?? contribution.user.email }}">
@@ -130,17 +130,17 @@
                     <div class="kt-widget__section">
                         <div class="kt-widget__blog">
                             <i class="flaticon2-list-1"></i>
-                            <a href="{{ path( 'activity_list', { 'slug': project.slug } ) }}" class="kt-widget__value kt-font-brand">{{ project.activities.count }}  Activities</a>
+                            <a href="{{ path( 'activity_list', { 'slug': project.slug } ) }}" class="kt-widget__value kt-font-brand">{% transchoice project.activities.count %}choice.activity{% endtranschoice %}</a>
                         </div>
 
                         <div class="kt-widget__blog kt-hidden">
                             <i class="flaticon2-talk"></i>
-                            <a href="{{ path( 'report_list', { 'slug': project.slug } ) }}" class="kt-widget__value kt-font-brand">--- Reports</a>
+                            <a href="{{ path( 'report_list', { 'slug': project.slug } ) }}" class="kt-widget__value kt-font-brand">--- {% trans %}reports{% endtrans %}</a>
                         </div>
                     </div>
 
                     <div class="kt-widget__section">
-                        <a href="{{ path('project_show', {slug: project.slug}) }}" class="btn btn-brand btn-sm btn-upper btn-bold">détails</a>                                 
+                        <a href="{{ path('project_show', {slug: project.slug}) }}" class="btn btn-brand btn-sm btn-upper btn-bold">{% trans %}button.detail{% endtrans %}</a>                                 
                     </div>
                 </div>
             </div>

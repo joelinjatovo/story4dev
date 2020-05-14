@@ -41,9 +41,9 @@
 						<div class="col-xl-8">
 							<div class="kt-section kt-section--first">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Info:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">{% trans %}info{% endtrans %}:</h3>
                                     <div class="form-group row">
-                                        <label class="col-xl-3 col-lg-3 col-form-label">Logo du projet</label>
+                                        <label class="col-xl-3 col-lg-3 col-form-label">{% trans %}logo{% endtrans %}</label>
                                         <div class="col-lg-9 col-xl-6">
                                             <div class="kt-avatar kt-avatar--outline" id="kt_project_piture">
                                                 <div class="kt-avatar__holder" style="background-image: url('{{ project.picture ? vich_uploader_asset(project, 'pictureFile') : default_picture }}');"></div>
@@ -200,7 +200,7 @@
                                                             <div class="col-lg-3">
                                                                 <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold">
                                                                     <i class="la la-trash-o"></i>
-                                                                    Supprimer
+                                                                    {% trans %}button.delete{% endtrans %}
                                                                 </a>
                                                             </div>
                                                         </div>

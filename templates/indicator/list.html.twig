@@ -164,9 +164,9 @@
 
 {% block javascripts %}
 <script type="text/javascript">
-jQuery(document).ready(function($){jQuery(document).ready(function($){
+jQuery(document).ready(function($){
     $('#kt_select2').select2({
-        placeholder: "Selectionner une activité",
+        placeholder: "{% trans %}select.activity{% endtrans %}",
     });
     $(document).on('click', '.btn-remove', function(e){
         e.preventDefault();
@@ -208,11 +208,11 @@ jQuery(document).ready(function($){jQuery(document).ready(function($){
             if(data.success){
                 if(data.star){
                     $this.find('i').removeClass('la-star-o').addClass('la-star');
-                    $this.attr('data-original-title', '{% trans %}button.unstar{% endtrans %}');
+                    $this.attr('data-original-title', "{% trans %}button.unstar{% endtrans %}");
                     toastr.success(data.message);
                 }else{
                     $this.find('i').removeClass('la-star').addClass('la-star-o');
-                    $this.attr('data-original-title', '{% trans %}button.star{% endtrans %}');
+                    $this.attr('data-original-title', "{% trans %}button.star{% endtrans %}");
                     toastr.warning(data.message);
                 }
             }else{

@@ -12,10 +12,12 @@
     </div>						
     <div class="kt-widget5__content">
         <div class="kt-widget5__stats">
-            <span class="kt-widget5__sales"><span class="kt-widget5__number">{{ activity.indicators.count }}</span> Indicateurs</span>
+            <span class="kt-widget5__sales"><span class="kt-widget5__number">
+                {{ activity.indicators.count }}</span> {% trans %}indicators{% endtrans %}</span>
         </div>
         <div class="kt-widget5__stats">
-            <span class="kt-widget5__sales"><span class="kt-widget5__number">{{ activity.reports.count }}</span> Rapports</span>
+            <span class="kt-widget5__sales"><span class="kt-widget5__number">
+                {{ activity.reports.count }}</span> {% trans %}reports{% endtrans %}</span>
             
         </div>
     </div>	

@@ -15,7 +15,7 @@
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a href="{{ url('indicator_list', { slug: project.slug, activity : indicator.activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}button.bqck{% endtrans %}</span></a>
+                <a href="{{ url('indicator_list', { slug: project.slug, activity_id: indicator.activity.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}button.back{% endtrans %}</span></a>
                 {% if is_granted('edit', indicator) %}
                     <a href="{{ path('indicator_edit', { indicator_id: indicator.id, slug : project.slug } ) }}" class="btn kt-subheader__btn-primary">
                         {% trans %}button.edit{% endtrans %}
