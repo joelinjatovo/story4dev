@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Toutes les unités - Admin - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}all.units{% endtrans %} - {% trans %}admin{% endtrans %} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,12 +9,12 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Liste d'unité</h3>
+            <h3 class="kt-subheader__title">{% trans %}all.units{% endtrans %}</h3>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ path( 'admin_unit_index' ) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
+            <a href="{{ path( 'admin_unit_index' ) }}" class="btn btn-label-brand btn-bold">{% trans %}button.add{% endtrans %}</a>
             <div class="kt-subheader__wrapper">
-                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
+                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="{% trans %}actions{% endtrans %}" data-placement="left">
                     <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -25,25 +25,39 @@
                         </svg>
                     </a>
                     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
+                        <!--begin::Nav-->
                         <ul class="kt-nav">
                             <li class="kt-nav__head">
-                                Nouveau:                                    
-                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                {% trans %}button.new{% endtrans %}:                                    
+                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="{% trans %}button.new{% endtrans %}"></i>
                             </li>
                             <li class="kt-nav__separator"></li>
                             <li class="kt-nav__item">
                                 <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Projet</span>
+                                    <span class="kt-nav__link-text">{% trans %}project{% endtrans %}</span>
+                                </a>
+                            </li>        
+                            <li class="kt-nav__item">
+                                <a href="{{ path( 'admin_user_index' ) }}" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
+                                    <span class="kt-nav__link-text">{% trans %}user{% endtrans %}</span>
                                 </a>
                             </li>                        
                             <li class="kt-nav__item">
                                 <a href="{{ path( 'admin_unit_index' ) }}" class="kt-nav__link">
                                     <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Unité de mesure</span>
+                                    <span class="kt-nav__link-text">{% trans %}unit{% endtrans %}</span>
+                                </a>
+                            </li>                        
+                            <li class="kt-nav__item">
+                                <a href="{{ path( 'admin_periodicity_index' ) }}" class="kt-nav__link">
+                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
+                                    <span class="kt-nav__link-text">{% trans %}periodicity{% endtrans %}</span>
                                 </a>
                             </li>
                         </ul>
+                        <!--end::Nav-->
                     </div>
                 </div>
             </div>
@@ -62,38 +76,38 @@
                     <table class="kt-datatable__table" style="display: block;">
                         <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="Unit" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Unité</span>
+                                <th data-field="{% trans %}units{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">{% trans %}units{% endtrans %}</span>
                                 </th>
-                                <th data-field="Label" class="kt-datatable__cell">
-                                    <span style="width: 80px;">Libellé</span>
+                                <th data-field="{% trans %}labels{% endtrans %}" class="kt-datatable__cell">
+                                    <span style="width: 80px;">{% trans %}labels{% endtrans %}</span>
                                 </th>
-                                <th data-field="Indicateurs" class="kt-datatable__cell">
-                                    <span style="width: 120px;">Indicateurs</span>
+                                <th data-field="{% trans %}indicators{% endtrans %}" class="kt-datatable__cell">
+                                    <span style="width: 120px;">{% trans %}indicators{% endtrans %}</span>
                                 </th>
-                                <th data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 110px;">Actions</span>
+                                <th data-field="{% trans %}actions{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 110px;">{% trans %}actions{% endtrans %}</span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody class="kt-datatable__body">
                             {% for unit in units %}
                              <tr data-row="0" class="kt-datatable__row unit-item" style="left: 0px;">
-                                <td data-field="Unit" class="kt-datatable__cell">
+                                <td data-field="{% trans %}unit{% endtrans %}" class="kt-datatable__cell">
                                     <span style="width: 222px;"><span class="kt-font-bold">{{ unit.title }}</span></span>
                                 </td>
-                                <td data-field="Label" class="kt-datatable__cell">
+                                <td data-field="{% trans %}label{% endtrans %}" class="kt-datatable__cell">
                                     <span style="width: 80px;"><span class="kt-font-bold">{{ unit.label }}</span></span>
                                 </td>
-                                <td data-field="Indicateurs" class="kt-datatable__cell">
-                                    <span style="width: 120px;"><span class="kt-font-bold">{{ unit.indicators.count }}</span> indicateurs</span>
+                                <td data-field="{% trans %}indicator{% endtrans %}" class="kt-datatable__cell">
+                                    <span style="width: 120px;"><span class="kt-font-bold">{% transchoice unit.indicators.count %}choice.indicator{% endtranschoice %}</span></span>
                                 </td>
-                                <td data-field="Actions" class="kt-datatable__cell">
+                                <td data-field="{% trans %}action{% endtrans %}" class="kt-datatable__cell">
                                     <span style="overflow: visible; position: relative; width: 110px;">
-                                        <a href="{{ path('admin_unit_edit', {id: unit.id} ) }}" title="Modifier détails" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                        <a href="{{ path('admin_unit_edit', {id: unit.id} ) }}" title="{% trans %}button.edit{% endtrans %}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                             <i class="la la-edit"></i>
                                         </a>
-                                        <a title="Supprimer" data-id="{{ unit.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+                                        <a title="{% trans %}button.delete{% endtrans %}" data-id="{{ unit.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
                                             <i class="la la-trash"></i>
                                         </a>
                                     </span>
@@ -117,12 +131,12 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var $this = $(this);
             swal.fire({
-                title:"Vous êtes sûre?",
-                text:"Vous ne pourez pas revenir en arrière après!",
+                title:"{% trans %}swal.remove.title{% endtrans %}",
+                text:"{% trans %}swal.remove.content.report{% endtrans %}",
                 type:"warning",
                 showCancelButton:!0,
-                confirmButtonText:"Oui, supprimez le!",
-                cancelButtonText:"Annuler"
+                confirmButtonText:"{% trans %}button.confirm.delete2{% endtrans %}",
+                cancelButtonText:"{% trans %}button.cancel{% endtrans %}"
             }).then(function(e){
                 if(e.value){
                     KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
@@ -138,7 +152,7 @@ jQuery(document).ready(function($){
                     })
                     .fail(function() {
                         KTApp.unblockPage();
-                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+                        toastr.error("{% trans %}swal.error{% endtrans %}");
                     });
                 }
             })

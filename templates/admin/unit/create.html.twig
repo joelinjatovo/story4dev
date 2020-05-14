@@ -3,18 +3,18 @@
 {% block stylesheets %}
 {% endblock %}
 
-{% block title %}Nouvelle unité - {{ app.user.fullname }} {% endblock %}
+{% block title %}{% trans %}form.title.unit.create{% endtrans %} - {% trans %}admin{% endtrans %} - {{ app.user.fullname }} {% endblock %}
 
 {% block subheader %}
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Nouvelle unité de mesure</h3>
+            <h3 class="kt-subheader__title">{% trans %}form.title.unit.create{% endtrans %}</h3>
         </div>        
         <div class="kt-subheader__toolbar">
             <div class="btn-group">
-                <a href="{{ path('admin_unit_list') }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
-                <button form="unit" type="submit" class="btn btn-brand btn-bold">Enregistrer</button>
+                <a href="{{ path('admin_unit_list') }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}all.units{% endtrans %}</a>
+                <button form="unit" type="submit" class="btn btn-brand btn-bold">{% trans %}button.save{% endtrans %}</button>
             </div>
         </div>
     </div>
@@ -32,17 +32,17 @@
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Unité de mesure:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">{% trans %}unit{% endtrans %}:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Titre</label>
+                                <label class="col-xl-3 col-lg-3 col-form-label">{% trans %}title{% endtrans %}</label>
                                 <div class="col-lg-9 col-xl-6">
                                     {{ form_widget( form.title, { 'attr' : { 'class' : 'form-control'} } ) }}
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Libellé</label>
+                                <label class="col-xl-3 col-lg-3 col-form-label">{% trans %}label{% endtrans %}</label>
                                 <div class="col-lg-9 col-xl-6">
                                     {{ form_widget( form.label, { 'attr' : { 'class' : 'form-control'} } ) }}
                                 </div>
@@ -57,8 +57,8 @@
                     <div class="row">
                         <div class="col-xl-3"></div>
                         <div class="col-lg-9 col-xl-6">
-                            <button type="submit" class="btn btn-success">Enregistrer</button>&nbsp;
-                            <button type="reset" class="btn btn-secondary">Annuler</button>
+                            <button type="submit" class="btn btn-success">{% trans %}button.save{% endtrans %}</button>&nbsp;
+                            <button type="reset" class="btn btn-secondary">{% trans %}button.cancel{% endtrans %}</button>
                         </div>
                     </div>
                 </div>

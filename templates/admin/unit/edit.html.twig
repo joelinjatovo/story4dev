@@ -1,6 +1,6 @@
 {% extends 'admin/unit/create.html.twig' %}
 
-{% block title %}Modification unité #{{ unit.id }}- {{ app.user.fullname }} {% endblock %}
+{% block title %}{% trans %}form.title.unit.edit{% endtrans %} - {% trans %}admin{% endtrans %} - {{ app.user.fullname }} {% endblock %}
 
 {% block stylesheets %}{% endblock %}
 
@@ -8,12 +8,12 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Modification de l'unité de mesure</h3>
+            <h3 class="kt-subheader__title">{% trans %}form.title.unit.edit{% endtrans %}</h3>
         </div>        
         <div class="kt-subheader__toolbar">
             <div class="btn-group">
-                <a href="{{ path('admin_unit_list') }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
-                <button form="unit" type="submit" class="btn btn-brand btn-bold">Enregistrer</button>
+                <a href="{{ path('admin_unit_list') }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}all.units{% endtrans %}</a>
+                <button form="unit" type="submit" class="btn btn-brand btn-bold">{% trans %}button.update{% endtrans %}</button>
             </div>
         </div>
     </div>
