@@ -348,6 +348,7 @@ return [
     'delay' => 'Durée',
     'document' => 'Document',
     'documents' => 'Documents',
+    'download.app' => 'Télécharger l\'application',
     'email' => 'Email',
     'general' => 'Général',
     'graph' => 'Graphe',
