@@ -26,7 +26,7 @@
         <span style="width: 100px;"><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">{{ project.endat|date("Y-m-d") }}</span></span>
     </td>
     <td data-field="{% trans %}data{% endtrans %}" class="kt-datatable__cell">
-        <span style="width: 100px;">{{ project.contributions.count }} contributeurs / {{ project.activities.count }} activités </span>
+        <span style="width: 100px;">{% transchoice project.contributions.count %}choice.contributor{% endtranschoice %} / {% transchoice project.activities.count %}choice.activity{% endtranschoice %}</span>
     </td>
     <td data-field="{% trans %}action{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 100px;">

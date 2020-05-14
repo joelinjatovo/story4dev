@@ -102,8 +102,8 @@
                                 <th data-field="{% trans %}responsables{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
                                     <span style="width: 100px;">{% trans %}responsables{% endtrans %}</span>
                                 </th>
-                                <th data-field="{% trans %}star{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">{% trans %}star{% endtrans %}</span>
+                                <th data-field="{% trans %}start{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}start{% endtrans %}</span>
                                 </th>
                                 <th data-field="{% trans %}end{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
                                     <span style="width: 100px;">{% trans %}end{% endtrans %}</span>
@@ -156,7 +156,7 @@ jQuery(document).ready(function($){
                 text:"{% trans %}swal.remove.content.project{% endtrans %}",
                 type:"warning",
                 showCancelButton:!0,
-                confirmButtonText:"{% trans %}button.confirm.delete2{% endtrans %}",
+                confirmButtonText:"{% trans %}button.confirm.delete1{% endtrans %}",
                 cancelButtonText:"{% trans %}button.cancel{% endtrans %}"
             }).then(function(e){
                 if(e.value){
