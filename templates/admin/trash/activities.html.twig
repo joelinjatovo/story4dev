@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Activités au corbeille - Admin - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}trashed.activities{% endtrans %} - {% trans %}admin{% endtrans %} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,13 +9,13 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">{% if search is not empty %} Résultat de recherche : {{ search }} {% else %}Liste d'activité au corbeille{% endif %}</h3>
+            <h3 class="kt-subheader__title">{% if search is not empty %} {% trans %}_search.result{% endtrans %} : {{ search }} {% else %}{% trans %}trashed.activities{% endtrans %}{% endif %}</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__group" id="kt_subheader_search">
                 <span class="kt-subheader__desc" id="kt_subheader_total">{{ activities.count }} Total</span>
                 <form class="kt-margin-l-20" id="kt_subheader_search_form" method="GET">
                     <div class="kt-input-icon kt-input-icon--right kt-subheader__search">
-                        <input type="text" name="s" value="{{ search }}" maxlength="20" class="form-control" placeholder="Rechercher..." id="generalSearch">
+                        <input type="text" name="s" value="{{ search }}" maxlength="20" class="form-control" placeholder="{% trans %}_search.placeholder{% endtrans %}" id="generalSearch">
                         <span class="kt-input-icon__icon kt-input-icon__icon--right">
                             <span>
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
@@ -32,56 +32,7 @@
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ path( 'admin_index' ) }}" class="btn btn-label-brand btn-bold">Retour</a>
-            <div class="kt-subheader__wrapper">
-                <div class="dropdown dropdown-inline" data-toggle="kt-tooltip-" title="Quick actions" data-placement="left">
-                    <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-                                <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" id="Combined-Shape" fill="#000000"></path>
-                            </g>
-                        </svg>
-                        <!--<i class="flaticon2-plus"></i>-->
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
-                        <!--begin::Nav-->
-                        <ul class="kt-nav">
-                            <li class="kt-nav__head">
-                                Nouveau:                                    
-                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
-                            </li>
-                            <li class="kt-nav__separator"></li>
-                            <li class="kt-nav__item">
-                                <a href="{{ path( 'admin_project_index' ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Projet</span>
-                                </a>
-                            </li>        
-                            <li class="kt-nav__item">
-                                <a href="{{ path( 'admin_user_index' ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-drop"></i>
-                                    <span class="kt-nav__link-text">Utilisateur</span>
-                                </a>
-                            </li>                        
-                            <li class="kt-nav__item">
-                                <a href="{{ path( 'admin_unit_index' ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Unité de mesure</span>
-                                </a>
-                            </li>                        
-                            <li class="kt-nav__item">
-                                <a href="{{ path( 'admin_periodicity_index' ) }}" class="kt-nav__link">
-                                    <i class="kt-nav__link-icon flaticon2-new-email"></i>
-                                    <span class="kt-nav__link-text">Périodicité</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <!--end::Nav-->
-                    </div>
-                </div>
-            </div>
+            <a href="{{ path( 'admin_index' ) }}" class="btn btn-label-brand btn-bold">{% trans %}button.back{% endtrans %}</a>
         </div>
     </div>
 </div>
@@ -97,20 +48,20 @@
                     <table class="kt-datatable__table" style="display: block;">
                         <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="Activités" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 222px;">Activités</span>
+                                <th data-field="{% trans %}activities{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 222px;">{% trans %}activities{% endtrans %}</span>
                                 </th>
-                                <th data-field="Projet" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Projet</span>
+                                <th data-field="{% trans %}projects{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}projects{% endtrans %}</span>
                                 </th>
-                                <th data-field="Indicateurs" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Indicateurs</span>
+                                <th data-field="{% trans %}indicators{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}indicators{% endtrans %}</span>
                                 </th>
-                                <th data-field="Rapports" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Rapports</span>
+                                <th data-field="{% trans %}reports{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}reports{% endtrans %}</span>
                                 </th>
-                                <th data-field="Actions" class="kt-datatable__cell kt-datatable__cell--sort">
-                                    <span style="width: 100px;">Actions</span>
+                                <th data-field="{% trans %}actions{% endtrans %}" class="kt-datatable__cell kt-datatable__cell--sort">
+                                    <span style="width: 100px;">{% trans %}actions{% endtrans %}</span>
                                 </th>
                             </tr>
                         </thead>
@@ -150,12 +101,12 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var $this = $(this);
             swal.fire({
-                title:"Vous êtes sûre?",
-                text:"Vous ne pourez pas revenir en arrière après!",
+                title:"{% trans %}swal.remove.title{% endtrans %}",
+                text:"{% trans %}swal.remove.content.activity{% endtrans %}",
                 type:"warning",
                 showCancelButton:!0,
-                confirmButtonText:"Oui, supprimez le!",
-                cancelButtonText:"Annuler"
+                confirmButtonText:"{% trans %}button.confirm.delete2{% endtrans %}",
+                cancelButtonText:"{% trans %}button.cancel{% endtrans %}"                
             }).then(function(e){
                 if(e.value){
                     KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
@@ -171,7 +122,7 @@ jQuery(document).ready(function($){
                     })
                     .fail(function() {
                         KTApp.unblockPage();
-                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+                        toastr.error("{% trans %}swal.error{% endtrans %}");
                     });
                 }
             })
@@ -192,7 +143,7 @@ jQuery(document).ready(function($){
         })
         .fail(function() {
             KTApp.unblockPage();
-            toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+            toastr.error("{% trans %}swal.error{% endtrans %}");
         });
     });
 });
