@@ -14,13 +14,14 @@ use App\Entity\Activity;
 use App\Entity\Report;
 use App\Entity\Indicator;
 use App\Service\PaginatorService;
+use App\Controller\Web\BaseController;
 
 /** 
  * @Route(name="admin_trash_")
  *
  * @IsGranted("ROLE_SUPER_ADMIN") 
  */
-class TrashController extends AbstractController
+class TrashController extends BaseController
 {
     
     /**

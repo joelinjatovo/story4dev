@@ -10,12 +10,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\Option;
 use App\Form\GeneralSettingType;
 use App\Helper\OptionHelper;
+use App\Controller\Web\BaseController;
+
 /** 
  * @Route(name="admin_settings_")
  *
  * @IsGranted("ROLE_ADMIN") 
  */
-class SettingsController extends AbstractController
+class SettingsController extends BaseController
 {
     /**
      * @Route("/admin/settings", name="index")
@@ -41,7 +43,7 @@ class SettingsController extends AbstractController
         
                 $this->addFlash('success', "Les paramètres sont bien enregistrés.");
             }else{
-                $this->addFlash('error', 'Votre demande est invalide! Veuillez réessayer! ' . $form->getErrors() );
+                $this->addFlash('error', $this->trans('controller.error.occured') . ' ' . $form->getErrors() );
             }
         }
         

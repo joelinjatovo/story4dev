@@ -23,13 +23,14 @@ use App\Service\FormError;
 use App\Service\OptionService;
 use App\Service\PaginatorService;
 use App\Service\TokenGenerator;
+use App\Controller\Web\BaseController;
 
 /**
  * @Route("/admin", name="admin_user_")
  *
  * @IsGranted("ROLE_ADMIN")
  */
-class UserController extends AbstractController
+class UserController extends BaseController
 {
     /**
      * @Route("/user", name="index", methods="GET")
@@ -165,7 +166,7 @@ class UserController extends AbstractController
                 ]);
                 
             }else{
-                $this->addFlash('error', 'Invalid request. Try again!' . $form->getErrors() );
+                $this->addFlash('error', $this->trans('controller.error.occured') . ' ' . $form->getErrors() );
             }
         }
         
@@ -261,8 +262,8 @@ class UserController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -297,8 +298,8 @@ class UserController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -334,8 +335,8 @@ class UserController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }

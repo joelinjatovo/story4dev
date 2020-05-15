@@ -12,13 +12,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use App\Entity\Unit;
 use App\Form\UnitType;
 use App\Service\FormError;
+use App\Controller\Web\BaseController;
 
 /** 
  * @Route(name="admin_unit_")
  *
  * @IsGranted("ROLE_ADMIN") 
  */
-class UnitController extends AbstractController
+class UnitController extends BaseController
 {
     /**
      * @Route("/admin/unit", name="index", methods="GET")
@@ -62,7 +63,7 @@ class UnitController extends AbstractController
             ]);
         }
         
-        $this->addFlash('error', 'Something went wrong.');
+        $this->addFlash('error', $this->trans('controller.error.occured'));
 
         return $this->redirectToRoute('admin_unit_create');
     }
@@ -103,7 +104,7 @@ class UnitController extends AbstractController
                     'id' => $unit->getId()
                 ]);
             }else{
-                $this->addFlash('error', 'Votre demande est invalide! Veuillez réessayer! ' . $form->getErrors() );
+                $this->addFlash('error', $this->trans('controller.error.occured') . ' ' . $form->getErrors() );
             }
         }
         
@@ -141,8 +142,8 @@ class UnitController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
