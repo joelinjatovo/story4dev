@@ -124,6 +124,8 @@ return [
         'indicator' => [
             'created' => 'L\'indicateur a été bien sauvegardé avec succès.',
             'deleted' => 'L\'indicateur a été bien supprimé avec succès.',
+            'stared' => 'L\'indicateur a été ajouté dans votre favoris avec succès',
+            'unstared' => 'L\'indicateur a été supprimé de votre favoris avec succès',
             'updated' => 'L\'indicateur a été bien modifié avec succès.',
         ],
         'success' => [

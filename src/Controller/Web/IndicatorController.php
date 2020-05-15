@@ -188,7 +188,7 @@ class IndicatorController extends BaseController
                 $entityManager->persist($indicator);
                 $entityManager->flush();
 
-                $this->addFlash('success', $this->trans('controller.inidcator.occured'));
+                $this->addFlash('success', $this->trans('controller.indicator.updated'));
             }else{
                 $this->addFlash('error', $this->trans('controller.error.occured'));
             }
@@ -217,7 +217,7 @@ class IndicatorController extends BaseController
         $activity = $entityManager->getRepository(Activity::class)->find($activity_id);
         if($activity){
             if($activity->getProject() != $project ){
-                throw $this->createNotFoundException('The project does not match');
+                throw $this->createNotFoundException($this->trans('controller.error.not.matched.project'));
             }
             
             $this->denyAccessUnlessGranted('view', $activity);
@@ -285,15 +285,15 @@ class IndicatorController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'L\'indicateur a été supprimé avec succès',
+                        'message' => $this->trans('controller.indicator.deleted'),
                     ]);
                 }
             }
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -320,14 +320,14 @@ class IndicatorController extends BaseController
                         ]);
                     if($item){
                         $entityManager->remove($item);
-                        $message = 'L\'indicateur a été supprimé de votre favoris avec succès';
+                        $message = $this->trans('controller.indicator.unstared');
                         $star = false;
                     }else{
                         $item = new IndicatorFavorite();
                         $item->setUser($this->getUser());
                         $item->setIndicator($indicator);
                         $entityManager->persist($item);
-                        $message = 'L\'indicateur a été ajouté dans votre favoris avec succès';
+                        $message = $this->trans('controller.indicator.stared');
                         $star = true;
                     }
                     $entityManager->flush();
@@ -342,8 +342,8 @@ class IndicatorController extends BaseController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
