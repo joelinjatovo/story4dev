@@ -20,7 +20,7 @@ use App\Service\FileUploader;
 /**
  * @IsGranted("ROLE_USER") 
  */
-class UploadController extends AbstractController
+class UploadController extends BaseController
 {
 
     /**
@@ -61,6 +61,6 @@ class UploadController extends AbstractController
             ], 200, [], ['groups' => ['file']]);
         }
         
-        return $this->json(['status' => 0,'errors' => "Form not submitted"], JsonResponse::HTTP_BAD_REQUEST);
+        return $this->json(['status' => 0,'errors' => $this->trans('controller.error.occured')], JsonResponse::HTTP_BAD_REQUEST);
     }
 }
