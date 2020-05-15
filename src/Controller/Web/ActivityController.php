@@ -80,10 +80,10 @@ class ActivityController extends AbstractController
                 $entityManager->persist($activity);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Activité créée avec succès.');
+                $this->addFlash('success', $this->trans('controller.activity.success'));
 
             }else{
-                $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
+                $this->addFlash('error', $this->trans('controller.error.occured'));
             }
         }
         
@@ -102,7 +102,7 @@ class ActivityController extends AbstractController
         $this->denyAccessUnlessGranted('view', $activity);
         
         if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
+            throw $this->createNotFoundException($this->trans('controller.error.not.matched.project'));
         }
         
         $user = $project->getAuthor();
@@ -179,7 +179,7 @@ class ActivityController extends AbstractController
         $this->denyAccessUnlessGranted('edit', $activity);
         
         if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
+            throw $this->createNotFoundException($this->trans('controller.error.not.matched.project'));
         }
         
         $user = $project->getAuthor();
@@ -204,7 +204,7 @@ class ActivityController extends AbstractController
         $this->denyAccessUnlessGranted('edit', $activity);
         
         if($activity->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
+            throw $this->createNotFoundException($this->trans('controller.error.not.matched.project'));
         }
         
         $user = $project->getAuthor();
@@ -218,9 +218,9 @@ class ActivityController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($activity);
                 $entityManager->flush();
-                $this->addFlash('success', 'Votre modification a été bien sauvegardé.');
+                $this->addFlash('success', $this->trans('controller.activity.updated'));
             }else{
-                $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
+                $this->addFlash('error', $this->trans('controller.error.occured'));
             }
         }
 
@@ -249,15 +249,15 @@ class ActivityController extends AbstractController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Activité supprimé avec succès',
+                        'message' => $this->trans('controller.activity.deleted'),
                     ]);
                 }
             }
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -284,14 +284,14 @@ class ActivityController extends AbstractController
                         ]);
                     if($item){
                         $entityManager->remove($item);
-                        $message = 'Activité supprimée de votre favoris avec succès';
+                        $message = $this->trans('controller.activity.unstared');
                         $star = false;
                     }else{
                         $item = new ActivityFavorite();
                         $item->setUser($this->getUser());
                         $item->setActivity($activity);
                         $entityManager->persist($item);
-                        $message = 'Activité ajoutée dans votre favoris avec succès';
+                        $message = $this->trans('controller.activity.stared');
                         $star = true;
                     }
                     $entityManager->flush();
@@ -306,8 +306,8 @@ class ActivityController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }

@@ -90,12 +90,22 @@ return [
         'view.more.detail' => 'Voir plus de détail',
     ],
     'controller' => [
+        'bad.request' => 'Bad Request',
         'account' => [
             'success' => 'Votre compte a été bien mis à jour.',
         ],
+        'activity' => [
+            'created' => 'Activité créée avec succès.',
+            'deleted' => 'Activité supprimé avec succès',
+            'stared' => 'Activité ajoutée dans votre favoris avec succès',
+            'unstared' => 'Activité supprimée de votre favoris avec succès',
+            'updated' => 'Votre modification a été bien sauvegardé.',
+        ],
         'error' => [
+            'occured' => 'Une erreur s\'est produite. Veuillez réessayer!',
             'password.old' => 'Votre ancien mot de passe incorrect.',
             'request' => 'Votre demande est invalide! %error%',
+            'not.matched.project' => 'Le project ne correspond pas',
         ],
         'success' => [
             'request' => 'Votre ',
