@@ -32,7 +32,7 @@ use App\Service\PaginatorService;
  *
  * @IsGranted("ROLE_USER") 
  */
-class ReportController extends AbstractController
+class ReportController extends BaseController
 {
     /**
      * @Route("/p/{slug}/report", name="activities", methods="GET")
@@ -101,9 +101,9 @@ class ReportController extends AbstractController
                 $entityManager->persist($report);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Votre rapport a été bien enregistré.');
+                $this->addFlash('success', $this->trans('controller.report.created'));
             }else{
-                $this->addFlash('error', "Votre rapport n'a pas été enregistré. Veuillez réessayer!");
+                $this->addFlash('error', $this->trans('controller.error.occured'));
             }
         }
         
@@ -219,9 +219,9 @@ class ReportController extends AbstractController
                 
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Votre rapport a été bien modifié avec succès.');
+                $this->addFlash('success', $this->trans('controller.report.updated'));
             }else{
-                $this->addFlash('error', "Votre rapport n'a pas été modifié. Une erreur s'est produite.");
+                $this->addFlash('error', $this->trans('controller.error.occured'));
             }
         }
         
@@ -260,14 +260,14 @@ class ReportController extends AbstractController
                     'success' => true,
                     'status'  => $report->getStatusLabel(),
                     'class'   => $report->getStatusClass(),
-                    'message' => 'Le statut du rapport a été bien changé.',
+                    'message' => $this->trans('controller.report.status.updated'),
                 ]);
             }
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -291,15 +291,15 @@ class ReportController extends AbstractController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Rapport supprimé avec succès',
+                        'message' => $this->trans('controller.report.deleted'),
                     ]);
                 }
             }
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -327,11 +327,11 @@ class ReportController extends AbstractController
             $activity = $entityManager->getRepository(Activity::class)->find($activity_id);
 
             if( ! $activity ){
-                throw $this->createNotFoundException('The activity not found');
+                throw $this->createNotFoundException($this->trans('controller.not.found.activity'));
             }
             
             if($activity->getProject() != $project ){
-                throw $this->createNotFoundException('The project does not match');
+                throw $this->createNotFoundException($this->trans('controller.error.not.matched.project'));
             }
             
             $this->denyAccessUnlessGranted('view', $activity);

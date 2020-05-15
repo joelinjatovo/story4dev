@@ -91,6 +91,7 @@ return [
     ],
     'controller' => [
         'bad.request' => 'Bad Request',
+        'not.found.activity' => 'Activité non trouvé',
         'account' => [
             'success' => 'Votre compte a été bien mis à jour.',
         ],
@@ -133,6 +134,12 @@ return [
             'deleted' => 'Le projet a été bien supprimé avec succès.',
             'updated' => 'Le projet a été bien modifié avec succès.',
             'iteration.not.deleted' => 'L\'itération ne peut pas être supprimé',
+        ],
+        'report' => [
+            'created' => 'Le rapport a été bien sauvegardé avec succès.',
+            'deleted' => 'Le rapport a été bien supprimé avec succès.',
+            'updated' => 'Le rapport a été bien modifié avec succès.',
+            'status.updated' => 'Le status du rapport a été bien modifié avec succès.',
         ],
         'success' => [
             'request' => 'Votre ',
