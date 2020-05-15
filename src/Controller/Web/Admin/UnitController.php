@@ -56,7 +56,7 @@ class UnitController extends BaseController
             $entityManager->persist($unit);
             $entityManager->flush();
         
-            $this->addFlash('success', 'Une nouvelle unité de mesure a été créée.');
+            $this->addFlash('success', $this->trans('controller.unit.created') );
 
             return $this->redirectToRoute('admin_unit_edit', [
                 'id'   => $unit->getId()
@@ -98,7 +98,7 @@ class UnitController extends BaseController
                 $entityManager->persist($unit);
                 $entityManager->flush();
         
-                $this->addFlash('success', "L'unité de mesure a été bien modifiée avec succès.");
+                $this->addFlash('success', $this->trans('controller.unit.updated') );
 
                 return $this->redirectToRoute('admin_unit_edit', [
                     'id' => $unit->getId()
@@ -135,7 +135,7 @@ class UnitController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Unité supprimé complètement avec succès',
+                        'message' => $this->trans('controller.unit.deleted'),
                     ]);
                 }
             }

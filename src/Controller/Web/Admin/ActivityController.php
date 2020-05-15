@@ -42,7 +42,7 @@ class ActivityController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Activité supprimé complètement avec succès',
+                        'message' => $this->trans('controller.activity.deleted.completely'),
                     ]);
                 }
             }
@@ -79,7 +79,7 @@ class ActivityController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Activité restauré avec succès',
+                        'message' => $this->trans('controller.activity.restored'),
                     ]);
                 }
             }

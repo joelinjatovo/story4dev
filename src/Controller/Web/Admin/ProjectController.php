@@ -70,10 +70,10 @@ class ProjectController extends BaseController
 
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Projet créé avec succès.');
+                $this->addFlash('success', $this->trans('controller.project.created'));
 
             }else{
-                $this->addFlash('error', 'Une erreur s\'est produite.');
+                $this->addFlash('error', $this->trans('controller.error.occured'));
             }
         }
         
@@ -125,7 +125,7 @@ class ProjectController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Projet supprimé avec succès',
+                        'message' => $this->trans('controller.project.deleted'),
                     ]);
                 }
             }
@@ -161,7 +161,7 @@ class ProjectController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Projet supprimé complètement avec succès',
+                        'message' => $this->trans('controller.project.deleted.completely'),
                     ]);
                 }
             }
@@ -198,7 +198,7 @@ class ProjectController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Projet restauré avec succès',
+                        'message' => $this->trans('controller.project.restored'),
                     ]);
                 }
             }

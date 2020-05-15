@@ -41,7 +41,7 @@ class SettingsController extends BaseController
                 }
                 $em->flush();
         
-                $this->addFlash('success', "Les paramètres sont bien enregistrés.");
+                $this->addFlash('success', $this->trans('controller.settings.success') );
             }else{
                 $this->addFlash('error', $this->trans('controller.error.occured') . ' ' . $form->getErrors() );
             }

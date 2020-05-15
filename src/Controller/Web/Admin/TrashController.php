@@ -80,7 +80,7 @@ class TrashController extends BaseController
                 ]);
             break;
             default:
-                throw $this->createNotFoundException('Not found');
+                throw $this->createNotFoundException('not.found');
             break;
         }
     }

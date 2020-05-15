@@ -98,6 +98,8 @@ return [
         'activity' => [
             'created' => 'Activité créée avec succès.',
             'deleted' => 'Activité supprimée avec succès',
+            'deleted.completely' => 'Activité supprimée complètement avec succès',
+            'restored' => 'Activité restaurée avec succès',
             'stared' => 'Activité ajoutée dans votre favoris avec succès',
             'unstared' => 'Activité supprimée de votre favoris avec succès',
             'updated' => 'Votre modification a été bien sauvegardée.',
@@ -125,13 +127,22 @@ return [
         'indicator' => [
             'created' => 'L\'indicateur a été bien sauvegardé avec succès.',
             'deleted' => 'L\'indicateur a été bien supprimé avec succès.',
+            'deleted.completely' => 'Indicateur supprimé complètement avec succès',
+            'restored' => 'Indicateur restauré avec succès',
             'stared' => 'L\'indicateur a été ajouté dans votre favoris avec succès',
             'unstared' => 'L\'indicateur a été supprimé de votre favoris avec succès',
             'updated' => 'L\'indicateur a été bien modifié avec succès.',
         ],
+        'periodicity' => [
+            'created' => 'La périodicité a été bien sauvegardée avec succès.',
+            'deleted' => 'La périodicité a été bien supprimée avec succès.',
+            'updated' => 'La périodicité a été bien modifiée avec succès.',
+        ],
         'project' => [
             'created' => 'Le projet a été bien sauvegardé avec succès.',
             'deleted' => 'Le projet a été bien supprimé avec succès.',
+            'deleted.completely' => 'Projet supprimé complètement avec succès',
+            'restored' => 'Projet restauré avec succès',
             'updated' => 'Le projet a été bien modifié avec succès.',
             'iteration.not.deleted' => 'L\'itération ne peut pas être supprimé',
         ],
@@ -143,6 +154,14 @@ return [
         ],
         'success' => [
             'request' => 'Votre ',
+        ],
+        'settings' => [
+            'success' => 'Les paramètres sont bien enregistrés.',
+        ],
+        'unit' => [
+            'created' => 'L\'unité a été bien sauvegardée avec succès.',
+            'deleted' => 'L\'unité a été bien supprimée avec succès.',
+            'updated' => 'L\'unité a été bien modifiée avec succès.',
         ],
     ],
     'count' => 'Nombre',

@@ -58,14 +58,14 @@ class PeriodicityController extends BaseController
             $entityManager->persist($periodicity);
             $entityManager->flush();
         
-            $this->addFlash('success', 'Une nouvelle périodicité a été bien créée avec succès.');
+            $this->addFlash('success', $this->trans('controller.periodicity.created') );
 
             return $this->redirectToRoute('admin_periodicity_edit', [
                 'id'   => $periodicity->getId()
             ]);
         }
         
-        $this->addFlash('error', 'Votre demande est invalide! Veuillez réessayer!');
+        $this->addFlash('error', $this->trans('controller.error.occured') . ' ' . $form->getErrors() );
 
         return $this->redirectToRoute('admin_periodicity_create');
     }
@@ -100,13 +100,13 @@ class PeriodicityController extends BaseController
                 $entityManager->persist($periodicity);
                 $entityManager->flush();
         
-                $this->addFlash('success', "La périodicité a été bien modifiée avec succès.");
+                $this->addFlash('success', $this->trans('controller.periodicity.updated') );
 
                 return $this->redirectToRoute('admin_periodicity_edit', [
                     'id' => $periodicity->getId()
                 ]);
             }else{
-                $this->addFlash('error', 'Votre demande est invalide! Veuillez réessayer! ' . $form->getErrors() );
+                $this->addFlash('error', $this->trans('controller.error.occured') . ' ' . $form->getErrors() );
             }
         }
         
@@ -137,7 +137,7 @@ class PeriodicityController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Périodicité supprimée complètement avec succès',
+                        'message' => $this->trans('controller.periodicity.deleted.completely'),
                     ]);
                 }
             }

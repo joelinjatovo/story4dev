@@ -86,14 +86,14 @@ class UserController extends BaseController
                 $event = new UserCreatedEvent($user);
                 $dispatcher->dispatch($event, UserCreatedEvent::NAME);
         
-                $this->addFlash('success', 'Nouvel utilisateur créé avec succès.' );
+                $this->addFlash('success', $this->trans('controller.user.created') );
 
                 return $this->redirectToRoute('user_show', [
                     'slug' => $user->getSlug()
                 ]);
                 
             }else{
-                $this->addFlash('error', 'Invalid request. Try again!' . $form->getErrors() );
+                $this->addFlash('error', $this->trans('controller.error.occured') . ' ' . $form->getErrors() );
             }
         }
         
@@ -159,7 +159,7 @@ class UserController extends BaseController
                 $entityManager->persist($user);
                 $entityManager->flush();
         
-                $this->addFlash('success', 'Les informations sur l\'utilisateur a été bien enregistré.');
+                $this->addFlash('success', $this->trans('controller.user.updated') );
 
                 return $this->redirectToRoute('admin_user_edit', [
                     'id' => $user->getId()
@@ -255,7 +255,7 @@ class UserController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'L\'utilisateur a été supprimé avec succès.',
+                        'message' => $this->trans('controller.user.deleted'),
                     ]);
                 }
             }
@@ -291,7 +291,7 @@ class UserController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'L\'utilisateur a été supprimé avec succès.',
+                        'message' => $this->trans('controller.user.deleted.completely'),
                     ]);
                 }
             }
@@ -328,7 +328,7 @@ class UserController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'L\'utilisateur a été restauré avec succès',
+                        'message' => $this->trans('controller.user.restored'),
                     ]);
                 }
             }

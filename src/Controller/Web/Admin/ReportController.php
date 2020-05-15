@@ -43,7 +43,7 @@ class ReportController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Rapport supprimé complètement avec succès',
+                        'message' => $this->trans('controller.report.deleted.completely'),
                     ]);
                 }
             }
@@ -80,7 +80,7 @@ class ReportController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Rapport restauré avec succès',
+                        'message' => $this->trans('controller.report.restored'),
                     ]);
                 }
             }

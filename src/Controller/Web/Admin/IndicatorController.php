@@ -42,7 +42,7 @@ class IndicatorController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Indicateur supprimé complètement avec succès',
+                        'message' => $this->trans('controller.indicator.deleted.completely'),
                     ]);
                 }
             }
@@ -79,7 +79,7 @@ class IndicatorController extends BaseController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Indicator restauré avec succès',
+                        'message' => $this->trans('controller.indicator.restored'),
                     ]);
                 }
             }
