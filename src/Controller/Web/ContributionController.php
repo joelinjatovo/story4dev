@@ -246,6 +246,7 @@ class ContributionController extends BaseController
                     return $this->json([
                         'success' => true,
                         'status'  => 'success',
+                        'message' => $this->trans('controller.contribution.success'),
                         'html'    => '',
                     ]);
                 }
@@ -265,6 +266,7 @@ class ContributionController extends BaseController
                     return $this->json([
                         'success' => true,
                         'status'  => 'success',
+                        'message' => $this->trans('controller.contribution.success'),
                         'html'    => $this->renderView('project/_contribution.html.twig', [ 'contribution' => $contribution]),
                         'table'   => $this->renderView('contribution/_list_item.html.twig', [ 'contribution' => $contribution]),
                     ]);

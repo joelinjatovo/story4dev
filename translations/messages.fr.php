@@ -108,7 +108,7 @@ return [
             'pinged' => 'Cet utilisateur n\'a pas accepté sa contribution sur ce projet.',
             'accepted' => 'Cet utilisateur est devenu contributeur de ce projet.',
             'changed.role' => 'Rôle modifié avec succès.',
-            'changed.status' => 'Statut modifié avec succès.',
+            'success' => 'Opération réalisée avec succès.',
         ],
         'error' => [
             'occured' => 'Une erreur s\'est produite. Veuillez réessayer!',
