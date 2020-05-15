@@ -116,10 +116,15 @@ return [
             'request' => 'Votre demande est invalide! %error%',
             'not.matched.project' => 'Le project ne correspond pas',
         ],
-        'activity' => [
+        'graph' => [
             'created' => 'Graphe créé avec succès.',
             'deleted' => 'Graphe supprimé avec succès',
             'updated' => 'Votre modification a été bien sauvegardée.',
+        ],
+        'indicator' => [
+            'created' => 'L\'indicateur a été bien sauvegardé avec succès.',
+            'deleted' => 'L\'indicateur a été bien supprimé avec succès.',
+            'updated' => 'L\'indicateur a été bien modifié avec succès.',
         ],
         'success' => [
             'request' => 'Votre ',

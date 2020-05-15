@@ -29,7 +29,7 @@ use App\Service\PaginatorService;
  *
  * @IsGranted("ROLE_USER") 
  */
-class IndicatorController extends AbstractController
+class IndicatorController extends BaseController
 {
     
     /**
@@ -88,9 +88,9 @@ class IndicatorController extends AbstractController
 
                 $entityManager->flush();
 
-                $this->addFlash('success', 'L\'indicateur a été bien sauvegardé avec succès.');
+                $this->addFlash('success', $this->trans('controller.indicator.created'));
             }else{
-                $this->addFlash('error', "L'indicateur n'a pas été sauvegardé. Une erreur s'est produite.");
+                $this->addFlash('error', $this->trans('controller.error.occured'));
             }
         }
 
@@ -188,9 +188,9 @@ class IndicatorController extends AbstractController
                 $entityManager->persist($indicator);
                 $entityManager->flush();
 
-                $this->addFlash('success', "l'indicateur a été bien modifié avec succès.");
+                $this->addFlash('success', $this->trans('controller.inidcator.occured'));
             }else{
-                $this->addFlash('error', "Les modifications n'ont pas été sauvegardée. Une erreur s'est produite. Veuillez réessayer!");
+                $this->addFlash('error', $this->trans('controller.error.occured'));
             }
         }
 
