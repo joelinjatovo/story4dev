@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Utilisateur #{{ user.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}user{% endtrans %} #{{ user.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -70,15 +70,15 @@
                 <div class="kt-widget1 kt-widget1--fit">
                     <div class="kt-widget1__item">
                         <div class="kt-widget1__info">
-                            <h3 class="kt-widget1__title">Rapports</h3>
-                            <span class="kt-widget1__desc">Nombre total de rapport effectué</span>
+                            <h3 class="kt-widget1__title">{% trans %}reports{% endtrans %}</h3>
+                            <span class="kt-widget1__desc">{% trans %}count.report.desc{% endtrans %}</span>
                         </div> 
                         <span class="kt-widget1__number kt-font-brand">{{ user.reports.count }}</span>
                     </div>
                     <div class="kt-widget1__item">
                         <div class="kt-widget1__info">
-                            <h3 class="kt-widget1__title">Contributions</h3>
-                            <span class="kt-widget1__desc">Nombre de projet contribué</span>
+                            <h3 class="kt-widget1__title">{% trans %}contributions{% endtrans %}</h3>
+                            <span class="kt-widget1__desc">{% trans %}count.contribution.desc{% endtrans %}</span>
                         </div>			
                         <span class="kt-widget1__number kt-font-danger">{{ user.projectContributions.count }}</span>
                     </div>
@@ -97,18 +97,18 @@
                         <div class="kt-portlet__head-label">
                             {% if is_granted('list_reports', user) %}
                                 <a href="{{ path('account_reports', { 'slug': user.slug } ) }}">
-                                    <h3 class="kt-portlet__head-title">Rapports</h3>
+                                    <h3 class="kt-portlet__head-title">{% trans %}reports{% endtrans %}</h3>
                                 </a>
                             {% else %}
                                 <a href="#">
-                                    <h3 class="kt-portlet__head-title">Rapports</h3>
+                                    <h3 class="kt-portlet__head-title">{% trans %}reports{% endtrans %}</h3>
                                 </a>
                             {% endif %}
                         </div>
                         <div class="kt-portlet__head-toolbar">
                             {% if is_granted('list_reports', user) %}
                                 <a href="{{ path('account_reports', { 'slug': user.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
-                                    Tous
+                                    {% trans %}button.all1{% endtrans %}
                                 </a>
                             {% endif %}
                         </div>
@@ -118,7 +118,7 @@
                             {% for report in reports %}
                                 {{ include('user/_report.html.twig', { 'report' : report } ) }}
                             {% else %}
-                                Il n'a pas encore effectué de rapport.
+                                {% trans %}no.report.user{% endtrans %}
                             {% endfor %}
                         </div>
                     </div>
