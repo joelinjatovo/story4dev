@@ -22,7 +22,7 @@ use App\Service\OptionService;
  * @IsGranted("ROLE_USER") 
  *
  */
-class AppController extends AbstractController
+class AppController extends BaseController
 {
     const TYPE_ANDROID = 'android';
     const TYPE_IOS = 'ios';
