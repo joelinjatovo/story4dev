@@ -101,6 +101,10 @@ return [
             'unstared' => 'Activité supprimée de votre favoris avec succès',
             'updated' => 'Votre modification a été bien sauvegardé.',
         ],
+        'contribution' => [
+            'changed.role' => 'Rôle modifié avec succès.',
+            'changed.status' => 'Statut modifié avec succès.',
+        ],
         'error' => [
             'occured' => 'Une erreur s\'est produite. Veuillez réessayer!',
             'password.old' => 'Votre ancien mot de passe incorrect.',

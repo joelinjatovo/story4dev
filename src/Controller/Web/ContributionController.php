@@ -19,7 +19,7 @@ use App\Service\PaginatorService;
 /** 
  * @Route(name="contribution_") 
  */
-class ContributionController extends AbstractController
+class ContributionController extends BaseController
 {
     
     /**
@@ -59,7 +59,7 @@ class ContributionController extends AbstractController
         $this->denyAccessUnlessGranted('view', $project);
         
         if($contribution->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
+            throw $this->createNotFoundException($this->trans('controller.error.not.matched.project'));
         }
         
         $user = $project->getAuthor();
@@ -105,7 +105,7 @@ class ContributionController extends AbstractController
                         return $this->json([
                             'success' => true,
                             'admin'   => $contribution->isAdmin(),
-                            'message' => 'Role changed',
+                            'message' => $this->trans('controller.contribution.changed.role'),
                         ]);
                     }
                 }
@@ -113,8 +113,8 @@ class ContributionController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -146,7 +146,7 @@ class ContributionController extends AbstractController
             return $this->json([
                 'success' => false,
                 'status'  => 'error',
-                'message' => 'An error was occured. :)',
+                'message' => $this->trans('controller.error.occured'),
                 'html'    => '',
                 'search'    => $search,
             ]);
@@ -180,15 +180,15 @@ class ContributionController extends AbstractController
                     return $this->json([
                         'success' => true,
                         'accept'  => ! $contribution->isPinged(),
-                        'message' => 'Role changed',
+                        'message' => $this->trans('controller.contribution.changed.status'),
                     ]);
                 }
             }
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -221,7 +221,7 @@ class ContributionController extends AbstractController
             return $this->json([
                 'success' => false,
                 'status'  => 'error',
-                'message' => 'An error was occured. :)',
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -273,7 +273,7 @@ class ContributionController extends AbstractController
             return $this->json([
                 'success' => false,
                 'status'  => 'error',
-                'message' => 'An error was occured. :)',
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
