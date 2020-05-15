@@ -32,7 +32,7 @@ use App\Helper\ProjectHelper;
  *
  * @IsGranted("ROLE_USER") 
  */
-class GraphController extends AbstractController
+class GraphController extends BaseController
 {
     /**
      * @Route("/p/{slug}/graph", name="index", methods="GET")
@@ -81,7 +81,7 @@ class GraphController extends AbstractController
             $entityManager->persist($graph);
             $entityManager->flush();
         
-            $this->addFlash('success', 'Graphe créé avec succès.');
+            $this->addFlash('success', $this->trans('controller.graph.created'));
 
             $action = strtolower( $request->request->get('submit') );
             switch($action){
@@ -109,7 +109,7 @@ class GraphController extends AbstractController
 
         }
         
-        $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
+        $this->addFlash('error', $this->trans('controller.error.occured'));
 
         return $this->render('graph/create.html.twig', [
             'user'    => $user, 
@@ -129,7 +129,7 @@ class GraphController extends AbstractController
         $this->denyAccessUnlessGranted('view', $graph);
         
         if($graph->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
+            throw $this->createNotFoundException($this->trans('controller.error.not.matched.project'));
         }
         
         $user = $project->getAuthor();
@@ -201,7 +201,7 @@ class GraphController extends AbstractController
         $this->denyAccessUnlessGranted('edit', $graph);
         
         if($graph->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
+            throw $this->createNotFoundException($this->trans('controller.error.not.matched.project'));
         }
         
         $user = $project->getAuthor();
@@ -226,7 +226,7 @@ class GraphController extends AbstractController
         $this->denyAccessUnlessGranted('edit', $graph);
         
         if($graph->getProject() != $project ){
-            throw $this->createNotFoundException('The project does not match');
+            throw $this->createNotFoundException($this->trans('controller.error.not.matched.project'));
         }
 
         $originalAxes = new ArrayCollection();
@@ -269,7 +269,7 @@ class GraphController extends AbstractController
             $entityManager->persist($graph);
             $entityManager->flush();
         
-            $this->addFlash('success', 'Votre modification a été bien sauvegardé.');
+            $this->addFlash('success', $this->trans('controller.graph.updated'));
 
             $action = strtolower( $request->request->get('submit') );
             switch($action){
@@ -302,7 +302,7 @@ class GraphController extends AbstractController
             ]);
         }
 
-        $this->addFlash('error', 'Une erreur s\'est produite. Veuillez réessayer!');
+        $this->addFlash('error', $this->trans('controller.error.occured'));
 
         return $this->redirectToRoute('graph_edit', [
             'slug'     => $project->getSlug(), 
@@ -329,15 +329,15 @@ class GraphController extends AbstractController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Graphe supprimé avec succès',
+                        'message' => $this->trans('controller.graph.deleted'),
                     ]);
                 }
             }
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }

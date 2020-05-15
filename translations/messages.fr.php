@@ -96,10 +96,10 @@ return [
         ],
         'activity' => [
             'created' => 'Activité créée avec succès.',
-            'deleted' => 'Activité supprimé avec succès',
+            'deleted' => 'Activité supprimée avec succès',
             'stared' => 'Activité ajoutée dans votre favoris avec succès',
             'unstared' => 'Activité supprimée de votre favoris avec succès',
-            'updated' => 'Votre modification a été bien sauvegardé.',
+            'updated' => 'Votre modification a été bien sauvegardée.',
         ],
         'contribution' => [
             'deleted' => 'Contributeur supprimé de ce projet avec succès.',
@@ -115,6 +115,11 @@ return [
             'password.old' => 'Votre ancien mot de passe incorrect.',
             'request' => 'Votre demande est invalide! %error%',
             'not.matched.project' => 'Le project ne correspond pas',
+        ],
+        'activity' => [
+            'created' => 'Graphe créé avec succès.',
+            'deleted' => 'Graphe supprimé avec succès',
+            'updated' => 'Votre modification a été bien sauvegardée.',
         ],
         'success' => [
             'request' => 'Votre ',
