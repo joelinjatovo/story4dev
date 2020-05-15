@@ -217,7 +217,7 @@ class ProjectController extends AbstractController
                             $entityManager->remove($iteration);
                         }else{
                             $project->addIteration($iteration);
-                            $this->addFlash('error', 'On ne peut pas supprimer l\'itération suivante: '.$iteration->getTitle());
+                            $this->addFlash('error', $this->trans('controller.project.iteration.not.deleted') . ' ' . $iteration->getTitle());
                         }
                     }
                 }
@@ -254,10 +254,10 @@ class ProjectController extends AbstractController
                 $entityManager->persist($project);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Votre modification a été bien sauvegardé.');
+                $this->addFlash('success', $this->trans('controller.project.updated'));
 
             }else{
-                $this->addFlash('error', 'Votre modification n\'a pas été sauvegardé. Une erreur s\'est produite. ' . $form->getErrors());
+                $this->addFlash('error', $this->trans('controller.error.occured'));
             }
         }
 
@@ -285,7 +285,7 @@ class ProjectController extends AbstractController
                     
                     return $this->json([
                         'success' => true,
-                        'message' => 'Projet supprimé avec succès',
+                        'message' => $this->trans('controller.project.deleted'),
                     ]);
                 }
             }
@@ -293,8 +293,8 @@ class ProjectController extends AbstractController
             
         return $this->json([
             'success' => false,
-            'title'   => 'Invalid Request',
-            'message' => 'An error was occured. :)',
+            'title'   => $this->trans('controller.bad.request'),
+            'message' => $this->trans('controller.error.occured'),
         ]);
     }
     
@@ -365,8 +365,8 @@ class ProjectController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }

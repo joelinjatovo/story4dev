@@ -128,6 +128,12 @@ return [
             'unstared' => 'L\'indicateur a été supprimé de votre favoris avec succès',
             'updated' => 'L\'indicateur a été bien modifié avec succès.',
         ],
+        'project' => [
+            'created' => 'Le projet a été bien sauvegardé avec succès.',
+            'deleted' => 'Le projet a été bien supprimé avec succès.',
+            'updated' => 'Le projet a été bien modifié avec succès.',
+            'iteration.not.deleted' => 'L\'itération ne peut pas être supprimé',
+        ],
         'success' => [
             'request' => 'Votre ',
         ],
