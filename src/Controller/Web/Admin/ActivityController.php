@@ -9,13 +9,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Activity;
+use App\Controller\Web\BaseController;
 
 /** 
  * @Route(name="admin_activity_")
  *
  * @IsGranted("ROLE_ADMIN") 
  */
-class ActivityController extends AbstractController
+class ActivityController extends BaseController
 {
     
     /**
@@ -48,8 +49,8 @@ class ActivityController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -85,8 +86,8 @@ class ActivityController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }

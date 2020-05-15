@@ -12,13 +12,14 @@ use App\Entity\Project;
 use App\Form\ProjectType;
 use App\Service\PaginatorService;
 use App\Entity\ProjectContribution;
+use App\Controller\Web\BaseController;
 
 /** 
  * @Route(name="admin_project_")
  *
  * @IsGranted("ROLE_ADMIN") 
  */
-class ProjectController extends AbstractController
+class ProjectController extends BaseController
 {
     /**
      * @Route("/admin/project", name="index", methods="GET")
@@ -131,8 +132,8 @@ class ProjectController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -167,8 +168,8 @@ class ProjectController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -204,8 +205,8 @@ class ProjectController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }

@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use App\Entity\Periodicity;
 use App\Form\PeriodicityType;
 use App\Service\FormError;
+use App\Controller\Web\BaseController;
 
 
 /** 
@@ -20,7 +21,7 @@ use App\Service\FormError;
  *
  * @IsGranted("ROLE_ADMIN") 
  */
-class PeriodicityController extends AbstractController
+class PeriodicityController extends BaseController
 {
     /**
      * @Route("/admin/periodicity", name="index", methods="GET")
@@ -143,8 +144,8 @@ class PeriodicityController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }

@@ -10,13 +10,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Report;
 use App\Service\PaginatorService;
+use App\Controller\Web\BaseController;
 
 /** 
  * @Route(name="admin_report_")
  *
  * @IsGranted("ROLE_ADMIN") 
  */
-class ReportController extends AbstractController
+class ReportController extends BaseController
 {
     
     /**
@@ -49,8 +50,8 @@ class ReportController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -86,8 +87,8 @@ class ReportController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }

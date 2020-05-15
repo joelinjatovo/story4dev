@@ -9,13 +9,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Indicator;
+use App\Controller\Web\BaseController;
 
 /** 
  * @Route(name="admin_indicator_")
  *
  * @IsGranted("ROLE_ADMIN") 
  */
-class IndicatorController extends AbstractController
+class IndicatorController extends BaseController
 {
     
     /**
@@ -48,8 +49,8 @@ class IndicatorController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
@@ -85,8 +86,8 @@ class IndicatorController extends AbstractController
             
             return $this->json([
                 'success' => false,
-                'title'   => 'Invalid Request',
-                'message' => 'An error was occured. :)',
+                'title'   => $this->trans('controller.bad.request'),
+                'message' => $this->trans('controller.error.occured'),
             ]);
         }
     }
