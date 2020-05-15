@@ -102,6 +102,11 @@ return [
             'updated' => 'Votre modification a été bien sauvegardé.',
         ],
         'contribution' => [
+            'deleted' => 'Contributeur supprimé de ce projet avec succès.',
+            'admin' => 'Ce contributeur est maintenant Admin de ce projet.',
+            'customer' => 'Ce contributeur n\'est plus Admin de ce projet.',
+            'pinged' => 'Cet utilisateur n\'a pas accepté sa contribution sur ce projet.',
+            'accepted' => 'Cet utilisateur est devenu contributeur de ce projet.',
             'changed.role' => 'Rôle modifié avec succès.',
             'changed.status' => 'Statut modifié avec succès.',
         ],

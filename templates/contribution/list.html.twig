@@ -107,10 +107,14 @@ jQuery(document).ready(function($){
             KTApp.unblock($this.closest('tr'));
             if(data.success){
                 $this.prop('checked', data.admin);
+                toastr.success(data.message);
+            }else{
+                toastr.warning(data.message);
             }
         })
         .fail(function() {
             KTApp.unblock($this.closest('tr'));
+            toastr.error("{% trans %}swal.error{% endtrans %}");
         });
     });
     $(document).on('click', '.change-contribution-status', function(e){
@@ -122,10 +126,14 @@ jQuery(document).ready(function($){
             KTApp.unblock($this.closest('tr'));
             if(data.success){
                 $this.prop('checked', data.accept);
+                toastr.success(data.message);
+            }else{
+                toastr.warning(data.message);
             }
         })
         .fail(function() {
             KTApp.unblock($this.closest('tr'));
+            toastr.error("{% trans %}swal.error{% endtrans %}");
         });
     });
     $(document).on('click', '.btn-remove-contribution', function(e){
@@ -137,10 +145,14 @@ jQuery(document).ready(function($){
             KTApp.unblockPage();
             if(data.success){
                 $this.closest('tr').remove();
+                toastr.success(data.message);
+            }else{
+                toastr.warning(data.message);
             }
         })
         .fail(function() {
             KTApp.unblockPage();
+            toastr.error("{% trans %}swal.error{% endtrans %}");
         });
     });
     
@@ -184,12 +196,15 @@ jQuery(document).ready(function($){
             if(data.success){
                 $this.remove();
                 $("#project-contributions").append(data.table);
+                toastr.success(data.message);
             }else{
                 $this.show();
+                toastr.warning(data.message);
             }
         })
         .fail(function() {
             KTApp.unblockPage();
+            toastr.error("{% trans %}swal.error{% endtrans %}");
         });
     });
 });

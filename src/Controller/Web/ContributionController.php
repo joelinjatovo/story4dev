@@ -105,7 +105,7 @@ class ContributionController extends BaseController
                         return $this->json([
                             'success' => true,
                             'admin'   => $contribution->isAdmin(),
-                            'message' => $this->trans('controller.contribution.changed.role'),
+                            'message' => $contribution->isAdmin() ? $this->trans('controller.contribution.admin') : $this->trans('controller.contribution.customer'),
                         ]);
                     }
                 }
@@ -180,7 +180,7 @@ class ContributionController extends BaseController
                     return $this->json([
                         'success' => true,
                         'accept'  => ! $contribution->isPinged(),
-                        'message' => $this->trans('controller.contribution.changed.status'),
+                        'message' => $contribution->isPinged() ? $this->trans('controller.contribution.pinged') : $this->trans('controller.contribution.accepted'),
                     ]);
                 }
             }
@@ -214,6 +214,7 @@ class ContributionController extends BaseController
                     return $this->json([
                         'success' => true,
                         'status'  => 'success',
+                        'message' => $this->trans('controller.contribution.deleted'),
                     ]);
                 }
             }
