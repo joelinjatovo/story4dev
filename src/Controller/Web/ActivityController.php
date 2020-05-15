@@ -31,7 +31,7 @@ use App\Twig\AppExtension;
  *
  * @IsGranted("ROLE_USER") 
  */
-class ActivityController extends AbstractController
+class ActivityController extends BaseController
 {
     /**
      * @Route("/p/{slug}/activity", name="index", methods="GET")
