@@ -29,8 +29,9 @@ class ReportType extends AbstractType
         $favorites = isset($options['favorites'])?$options['favorites']:[];
         
         $builder
-            ->add('title')
+            ->add('title', null, ['label' => 'form.label.report.title'])
             ->add('description', CKEditorType::class, [
+                'label' => 'form.label.report.description',
                 'config' => array(
                     'uiColor' => '#ffffff',
                 ),
@@ -39,6 +40,7 @@ class ReportType extends AbstractType
             ->add('latitude', HiddenType::class)
             ->add('altitude', HiddenType::class)
             ->add('results', CollectionType::class, [
+                'label' => 'form.label.report.results',
                 'entry_type' => ResultType::class,
                 'entry_options' => [
                     'activity' => $activity,
@@ -60,12 +62,14 @@ class ReportType extends AbstractType
                 'by_reference' => false,
             ])
             ->add('activity', EntityType::class, [
+                'label' => 'form.label.report.activity',
                 'class' => Activity::class,
                 'choice_label' => function ($activity) {
                     return $activity->getTitle();
                 }
             ])
             ->add('createdAt', DateTimeType::class, [
+                'label' => 'form.label.report.createdAt',
                 'widget'     => 'single_text',
                 'html5'      => false,
             ])
@@ -73,10 +77,11 @@ class ReportType extends AbstractType
                 'required' => false,
             ])
             ->add('status', ChoiceType::class, [
+                'label' => 'form.label.report.status',
                 'choices'  => [
-                    'Editable' => Report::STATUS_OPENED,
-                    'Clôturé'  => Report::STATUS_CLOSED,
-                    'Términé'  => Report::STATUS_TERMINATED,
+                    'status.opened' => Report::STATUS_OPENED,
+                    'status.closed'  => Report::STATUS_CLOSED,
+                    'status.terminated'  => Report::STATUS_TERMINATED,
                 ],
             ])
         ;

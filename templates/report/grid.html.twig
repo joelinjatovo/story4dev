@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Rapports - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}all.reports{% endtrans %} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,17 +9,17 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Tous les rapports</h3>
+            <h3 class="kt-subheader__title">{% trans %}all.reports{% endtrans %}</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__group" id="kt_subheader_search">
-                <span class="kt-subheader__desc" id="kt_subheader_total">{{ reports.count }} Rapports </span>
+                <span class="kt-subheader__desc" id="kt_subheader_total">{{ reports.count }} {% trans %}reports{% endtrans %} </span>
             </div>
             <a href="{{ path('report_activities', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold"><i class="la la-plus"></i> {% trans %}button.add{% endtrans %}</a>
         </div>
         <div class="kt-subheader__toolbar">
-            <a href="{{ path('report_list_type', { slug: project.slug, type: 'list', s: search, status: status }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> Liste </a>
-            <a href="{{ path('report_list_type', { slug: project.slug, type: 'grid', s: search, status: status }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i> Grille</a>
-            <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+            <a href="{{ path('report_list_type', { slug: project.slug, type: 'list', s: search, status: status }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-list"></i> {% trans %}list{% endtrans %} </a>
+            <a href="{{ path('report_list_type', { slug: project.slug, type: 'grid', s: search, status: status }) }}" class="btn btn-label-success btn-bold btn-sm btn-icon-h"><i class="la la-th-large"></i> {% trans %}grid{% endtrans %}</a>
+            <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}button.back{% endtrans %}</a>
         </div>
     </div>
 </div>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6">
                     <select class="form-control select2" id="kt_select2_activity" name="activity_id">
-                        <option>Toutes</option>
+                        <option>{% trans %}all2{% endtrans %}</option>
                         {% for _activity in activities %}
                             <option value="{{ _activity.id }}" {{ activity != null and activity.id == _activity.id ? 'selected="selected"' : '' }}>{{ _activity.title }}</option>
                         {% endfor %}
@@ -44,14 +44,14 @@
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6">
                     <select class="form-control select2" id="kt_select2_status" name="status">
-                        <option>Tous</option>
-                        <option value="opened">Editable</option>
-                        <option value="closed">Clôturé</option>
-                        <option value="terminated">Términé</option>
+                        <option>{% trans %}status.all{% endtrans %}</option>
+                        <option value="opened">{% trans %}status.opened{% endtrans %}</option>
+                        <option value="closed">{% trans %}status.closed{% endtrans %}</option>
+                        <option value="terminated">{% trans %}status.terminated{% endtrans %}</option>
                     </select>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6">
-                    <button type="submit" class="btn btn-label-primary font-weight-bold"><i class="la la-filter"></i> Filtrer</button>
+                    <button type="submit" class="btn btn-label-primary font-weight-bold"><i class="la la-filter"></i> {% trans %}button.filter{% endtrans %}</button>
                 </div>
             </div>
         </form>
@@ -87,10 +87,10 @@
 <script type="text/javascript">
 jQuery(document).ready(function($){
     $('#kt_select2_activity').select2({
-        placeholder: "Selectionner une activité",
+        placeholder: "{% trans %}select.activity{% endtrans %}",
     });
     $('#kt_select2_status').select2({
-        placeholder: "Selectionner un status",
+        placeholder: "{% trans %}select.status{% endtrans %}",
     });
     toastr.options = {
         "closeButton": false,
@@ -113,12 +113,12 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var $this = $(this);
             swal.fire({
-                title:"Vous êtes sûre?",
-                text:"Vous ne pourez pas revenir en arrière après!",
+                title:"{% trans %}swal.remove.title{% endtrans %}",
+                text:"{% trans %}swal.remove.content.report{% endtrans %}",
                 type:"warning",
                 showCancelButton:!0,
-                confirmButtonText:"Oui, supprimez le!",
-                cancelButtonText:"Annuler"
+                confirmButtonText:"{% trans %}button.confirm.delete1{% endtrans %}",
+                cancelButtonText:"{% trans %}button.cancel{% endtrans %}"
             }).then(function(e){
                 if(e.value){
                     KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
@@ -134,7 +134,7 @@ jQuery(document).ready(function($){
                     })
                     .fail(function() {
                         KTApp.unblockPage();
-                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+                        toastr.error("{% trans %}swal.error{% endtrans %}");
                     });
                 }
             })

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau rapport - Projet #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
+{% block title %}{% trans %}new.report{% endtrans %} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
 
 {% block stylesheets %}{% endblock %}
 
@@ -8,15 +8,15 @@
 <div class="kt-subheader kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Nouveau rapport</h3>
+            <h3 class="kt-subheader__title">{% trans %}new.report{% endtrans %}</h3>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+                <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}button.back{% endtrans %}</a>
                 <div class="btn-group">
                     <button type="submit" form="report" name="submit" value="save-default" class="btn btn-brand">
                         <i class="la la-check"></i> 
-                        <span class="kt-hidden-mobile">Enregistrer</span>
+                        <span class="kt-hidden-mobile">{% trans %}button.save{% endtrans %}</span>
                     </button>
                 </div>
             </div>
@@ -37,22 +37,22 @@
 						<div class="col-xl-8">
 							<div class="kt-section kt-section--first">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Info:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">{% trans %}info{% endtrans %}:</h3>
 									<div class="form-group row">
-                    					{{ form_label( form.title, "Titre du rapport", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.title, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
                                             {{ form_widget( form.title, { 'attr' : { 'class' : 'form-control' } } ) }}
 										</div>
 									</div>
 									<div class="form-group row">
-                    					{{ form_label( form.description, "Description du rapport", { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
+                    					{{ form_label( form.description, null, { 'label_attr': { 'class': 'col-3 col-form-label' } } ) }}
 										<div class="col-9">
                                             {{ form_widget( form.description, { 'attr' : { 'class' : 'form-control' } } ) }}
 										</div>
 									</div>
 									{% if is_granted('edit', project) %}
 										<div class="form-group row">
-											{{ form_label( form.createdAt, "Date du rapport", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+											{{ form_label( form.createdAt, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
 											<div class="col-9 col-lg-9 col-xl-6">
 												<div class="input-group date">
 													{{ form_widget( form.createdAt, { 'attr' : { 'class' : 'form-control js-datepicker', 'autocomplete':'off' } } ) }}
@@ -69,7 +69,7 @@
 									{% endif %}
                                     
                                     <div class="form-group row">
-                                        {{ form_label( form.status, "Statut", { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
+                                        {{ form_label( form.status, null, { 'label_attr': { 'class': 'col-xl-3 col-lg-3 col-form-label' } } ) }}
                                         <div class="col-lg-9 col-xl-6">
                                             <div class="input-group">
                                                 {{ form_widget( form.status, { 'attr' : { 'class' : 'form-control' } } ) }}
@@ -79,11 +79,11 @@
                                     
 									{% if is_granted('edit', project) %}
                                         <div class="form-group row">
-                                            <label class="col-3 col-form-label">Flux Externe</label>
+                                            <label class="col-3 col-form-label">{% trans %}extern.flow{% endtrans %}</label>
                                             <div class="col-9">
                                                 <div class="kt-checkbox-inline">
                                                     <label class="kt-checkbox">
-                                                        {{ form_widget( form.publishExternally ) }} Publiez le rapport sur le blog 
+                                                        {{ form_widget( form.publishExternally ) }} {% trans %}publish.report.externally{% endtrans %}
                                                     <span></span>
                                                     </label>
                                                 </div>
@@ -97,14 +97,13 @@
 							<div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
 							<div class="kt-section">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Suivi des résultats avec indicateur:</h3>
+									<h3 class="kt-section__title kt-section__title-lg">{% trans %}result.with.indicator{% endtrans %}:</h3>
 									<div class="form-group row">
-										<label class="col-3 col-form-label">Résultat</label>
+										<label class="col-3 col-form-label">{% trans %}result{% endtrans %}</label>
 										<div class="col-9">
                                             <div id="kt_repeater">
                                                 <div class="form-group row">
                                                     <div data-repeater-list="report[results]" class="col-lg-12">
-                                                        
                                                         {% if form.results is empty %}
                                                             <div data-repeater-item="" class="kt-margin-b-10">
                                                                 <div class="input-group">
@@ -124,7 +123,7 @@
                                                                 <div class="input-group">
                                                                     {{ form_widget( result.id ) }}
                                                                     {{ form_widget( result.indicator, { 'attr' : { 'form' : 'report', 'class' : 'form-control' } } ) }}
-                                                                    {{ form_widget( result.value, { 'attr' : { placeholder: 'Saisissez la valeur ici', 'form' : 'report', 'class' : 'form-control' } } ) }}
+                                                                    {{ form_widget( result.value, { 'attr' : {'placeholder' : 'form.placeholder.result.value','form' : 'report', 'class' : 'form-control' } } ) }}
                                                                     <div class="input-group-append">
                                                                         <a href="javascript:;" data-repeater-delete class="btn btn-danger btn-icon">
                                                                             <i class="la la-close"></i>
@@ -140,7 +139,7 @@
                                                         <div data-repeater-create="" class="btn btn btn-warning">
                                                             <span>
                                                                 <i class="la la-plus"></i>
-                                                                <span>Ajouter un résultat</span>
+                                                                <span>{% trans %}button.add.result{% endtrans %}</span>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -153,8 +152,8 @@
                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                             <div class="kt-section kt-section--last">
 								<div class="kt-section__body">
-									<h3 class="kt-section__title kt-section__title-lg">Attacher des fichiers:</h3>
-                                    <button class="btn btn-label-success btn-bold btn-sm btn-upload">Téléverser un fichier</button>
+									<h3 class="kt-section__title kt-section__title-lg">{% trans %}button.attach.files{% endtrans %}:</h3>
+                                    <button class="btn btn-label-success btn-bold btn-sm btn-upload">{% trans %}button.upload.file{% endtrans %}</button>
 									<div class="kt-widget4" id="file-list" data-name="report[reportFiles]" data-count="{{ report.reportFiles.count }}">
                                         {% set i = 0 %}
                                         {% for reportFile in report.reportFiles %}
@@ -195,8 +194,8 @@ jQuery(document).ready(function($){
             jQuery('#report_longitude').val(e.coords.longitude);
             jQuery('#report_altitude').val(e.coords.altitude);
         },
-        error:function(t){toastr.error("Erreur de géolocalisation<br>"+t.message);},
-        not_supported:function(){toastr.error("Votre navigateur ne supporte pas la géolocalisation.")},
+        error:function(t){toastr.error("{% trans %}error.geolocation{% endtrans %}"+t.message);},
+        not_supported:function(){toastr.error("{% trans %}browser.not.support.geolocation{% endtrans %}")},
         always:function(){}
     })
 });

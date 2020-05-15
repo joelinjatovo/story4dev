@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Rapport #{{ report.id }} - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}report{% endtrans %} #{{ report.id }} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
     <link href="{{ asset('css/gallery.css') }}" rel="stylesheet" type="text/css"/>
@@ -10,14 +10,14 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Détail du rapport</h3>
+            <h3 class="kt-subheader__title">{% trans %}detail.report{% endtrans %}</h3>
             <a href="{{ path('report_activities', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold"><i class="la la-plus"></i> {% trans %}button.add{% endtrans %}</a>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ url('report_list', { slug: project.slug, activity: report.activity.id }) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+            <a href="{{ url('report_list', { slug: project.slug, activity: report.activity.id }) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}button.back{% endtrans %}</a>
             <a href="{{ path('report_pdf', { slug: project.slug, report_id: report.id}) }}" class="btn btn-label-warning btn-bold"><i class="la la-download"></i> PDF</a>
             {% if is_granted('edit', report) %}
-                <a href="{{ path('report_edit', { slug: project.slug, report_id: report.id}) }}" class="btn btn-label-brand btn-bold"><i class="la la-edit"></i> Modifier</a>
+                <a href="{{ path('report_edit', { slug: project.slug, report_id: report.id}) }}" class="btn btn-label-brand btn-bold"><i class="la la-edit"></i> {% trans %}button.edit{% endtrans %}</a>
             {% endif %}
         </div>
     </div>
@@ -42,24 +42,24 @@
                                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-fit dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-227px, 33px, 0px);">
                                         <ul class="kt-nav">
                                             <li class="kt-nav__head">
-                                                Changer le statut:
-                                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Cliquer pour changer le statut..."></i>
+                                                {% trans %}button.change.status{% endtrans %}:
+                                                <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="{% trans %}button.clic.to.change.status{% endtrans %}"></i>
                                             </li>
                                             <li class="kt-nav__separator">
                                             </li>
                                             <li class="kt-nav__item">
                                                 <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="opened">
-                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-success kt-badge--inline kt-badge--lg kt-badge--bold">Editable</span></span>
+                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-success kt-badge--inline kt-badge--lg kt-badge--bold">{% trans %}status.opened{% endtrans %}</span></span>
                                                 </a>
                                             </li>
                                             <li class="kt-nav__item">
                                                 <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="closed">
-                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-warning kt-badge--inline kt-badge--lg kt-badge--bold">Clôturé</span></span>
+                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-warning kt-badge--inline kt-badge--lg kt-badge--bold">{% trans %}status.closed{% endtrans %}</span></span>
                                                 </a>
                                             </li>
                                             <li class="kt-nav__item">
                                                 <a href="#" class="kt-nav__link" data-toggle="status-change" data-id="{{ report.id }}" data-status="terminated">
-                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-danger kt-badge--inline kt-badge--lg kt-badge--bold">Términé</span></span>
+                                                    <span class="kt-nav__link-text"><span class="kt-badge kt-badge--unified-danger kt-badge--inline kt-badge--lg kt-badge--bold">{% trans %}status.terminated{% endtrans %}</span></span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -76,7 +76,7 @@
                         <div class="kt-widget__stats d-flex align-items-center flex-fill">
                             <div class="kt-widget__item">
                                 <span class="kt-widget__date">
-                                    Date de création
+                                    {% trans %}date.created{% endtrans %}
                                 </span>
                                 <div class="kt-widget__label">
                                     <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d H:i:s') }}</span>
@@ -85,7 +85,7 @@
 
                             <div class="kt-widget__item">
                                 <span class="kt-widget__date">
-                                    Date de synchronisation
+                                    {% trans %}date.synced{% endtrans %}
                                 </span>
                                 <div class="kt-widget__label">
                                     <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ report.syncedat is empty ? "" : report.syncedat | date('Y-m-d H:i:s') }}</span>
@@ -106,7 +106,7 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title">
-                        Indicateurs
+                        {% trans %}indicators{% endtrans %}
                     </h3>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                     {% for result in report.results %}
                         {{ include('report/_result.html.twig', { 'result' : result } ) }}
                     {% else %}
-                        Ce rapport n'a pas encore de résultat.
+                        {% trans %}no.result.report{% endtrans %}
                     {% endfor %}
                 </div>
             </div>
@@ -126,7 +126,7 @@
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Documents</h3>
+                    <h3 class="kt-portlet__head-title">{% trans %}documents{% endtrans %}</h3>
                 </div>
             </div>
             <div class="kt-portlet__body">
@@ -136,7 +136,7 @@
                             {{ include('report/_document.html.twig', { 'reportFile' : reportFile } ) }}
                         {% endif %}
                     {% else %}
-                        Aucun fichier attaché à ce rapport.
+                        {% trans %}no.document.report{% endtrans %}
                     {% endfor %}
                 </div>
             </div>
@@ -148,7 +148,7 @@
         <div class="kt-portlet kt-portlet--height-fluid">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Photos</h3>
+                    <h3 class="kt-portlet__head-title">{% trans %}photos{% endtrans %}</h3>
                 </div>
             </div>
             <div class="kt-portlet__body">
@@ -160,7 +160,7 @@
                             data-description="{{ report.title }}">
                         {% endif %}
                     {% else %}
-                        Aucun fichier attaché à ce rapport.
+                        {% trans %}no.file.report{% endtrans %}
                     {% endfor %}
                 </div>
             </div>
@@ -173,7 +173,7 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title">
-                        Localisation
+                        {% trans %}location{% endtrans %}
                     </h3>
                 </div>
             </div>
@@ -183,9 +183,7 @@
         </div>
     </div>
 </div>
-    
 {% endblock %}
-
 
 {% block javascripts %}
 <script src="{{ asset('js/gallery.min.js') }}" type="text/javascript" ></script>

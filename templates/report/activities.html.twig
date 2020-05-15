@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau rapport - Projet #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
+{% block title %}{% trans %}new.report{% endtrans %} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
 
 {% block stylesheets %}
     <link href="{{ asset('css/style-3.bundle.css') }}" rel="stylesheet" type="text/css"/>
@@ -10,11 +10,11 @@
 <div class="kt-subheader kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Nouveau rapport</h3>
+            <h3 class="kt-subheader__title">{% trans %}new.report{% endtrans %}</h3>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>Retour</a>
+                <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean btn-icon-sm"><i class="la la-long-arrow-left"></i>{% trans %}button.back{% endtrans %}</a>
             </div>
         </div>
     </div>
@@ -31,7 +31,7 @@
                       <div class="col-xl-12">
                           <div class="kt-section kt-section--first">
                               <div class="kt-section__body">
-                                  <h3 class="kt-section__title kt-section__title-lg">Choisissez une activité:</h3>
+                                  <h3 class="kt-section__title kt-section__title-lg">{% trans %}choose.activity{% endtrans %}:</h3>
                                   <div class="form-group row">
                                       <div class="col-9">
                                       </div>

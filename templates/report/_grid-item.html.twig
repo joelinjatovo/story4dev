@@ -35,7 +35,7 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('report_show', { slug: report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-line-chart"></i>
-                                        <span class="kt-nav__link-text">Détails</span>
+                                        <span class="kt-nav__link-text">{% trans %}button.details{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -43,7 +43,7 @@
                                 <li class="kt-nav__item">
                                     <a href="{{ path('report_edit', { slug: report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id}) }}" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-settings"></i>
-                                        <span class="kt-nav__link-text">Modifier</span>
+                                        <span class="kt-nav__link-text">{% trans %}button.edit{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -51,7 +51,7 @@
                                 <li class="kt-nav__item">
                                     <a href="#" data-id="{{ report.id }}" class="kt-nav__link btn-remove">
                                         <i class="kt-nav__link-icon flaticon-delete"></i>
-                                        <span class="kt-nav__link-text">Supprimer</span>
+                                        <span class="kt-nav__link-text">{% trans %}button.delete{% endtrans %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -64,7 +64,7 @@
                 <div class="kt-widget__stats">
                     <div class="kt-widget__item">
                         <span class="kt-widget__date">
-                            Date de création
+                            {% trans %}date.created{% endtrans %}
                         </span>
                         <div class="kt-widget__label">
                             <span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ report.createdat is empty ? "" : report.createdat | date('Y-m-d H:i:s') }}</span>
@@ -73,7 +73,7 @@
 
                     <div class="kt-widget__item">
                         <span class="kt-widget__date">
-                            Date de synchronisation
+                            {% trans %}date.synced{% endtrans %}
                         </span>
                         <div class="kt-widget__label">
                             <span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ report.syncedat is empty ? "" : report.syncedat | date('Y-m-d H:i:s') }}</span>
@@ -87,11 +87,11 @@
 
                 <div class="kt-widget__content">
                     <div class="kt-widget__details">
-                        <span class="kt-widget__subtitle">Résultats</span>
+                        <span class="kt-widget__subtitle">{% trans %}results{% endtrans %}</span>
                         <span class="kt-widget__value">{{ report.results.count }}</span>
                     </div>
                     <div class="kt-widget__details">
-                        <span class="kt-widget__subtitle">Documents</span>
+                        <span class="kt-widget__subtitle">{% trans %}documents{% endtrans %}</span>
                         <div class="kt-media-group">
                             {% for reportFile in report.reportFiles %}
                                 {% if reportFile.file %}
@@ -106,7 +106,7 @@
                                     {% endif %}
                                 {% endif %}
                             {% else %}
-                                Aucun fichier attaché à ce rapport.
+                                {% trans %}no.file.report{% endtrans %}
                             {% endfor %}
                         </div>                                 
                     </div>

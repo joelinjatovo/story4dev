@@ -1,5 +1,5 @@
 <tr data-row="0" class="kt-datatable__row report-item" style="left: 0px;">
-    <td data-field="Rapports" class="kt-datatable__cell">
+    <td data-field="{% trans %}report{% endtrans %}" class="kt-datatable__cell">
         <span style="width: 250px;">
             <div class="kt-user-card-v2">
                 <div class="kt-user-card-v2__details">
@@ -9,11 +9,11 @@
             </div>
         </span>
     </td>
-    <td data-field="Auteurs" class="kt-datatable__cell">
+    <td data-field="{% trans %}user{% endtrans %}" class="kt-datatable__cell">
         <span style="width: 222px;">
             <div class="kt-user-card-v2">
                 <div class="kt-user-card-v2__pic">
-                    <img alt="avatar" src="{{ report.author.avatar ? vich_uploader_asset(report.author, 'avatarFile') | imagine_filter('thumb') : default_avatar }}">
+                    <img alt="{% trans %}avatar{% endtrans %}" src="{{ report.author.avatar ? vich_uploader_asset(report.author, 'avatarFile') | imagine_filter('thumb') : default_avatar }}">
                 </div>
                 <div class="kt-user-card-v2__details">
                     <a class="kt-user-card-v2__name" href="{{ path('user_show', {'slug': report.author.slug}) }}">{{ report.author.fullname }}</a>
@@ -25,13 +25,13 @@
             </div>
         </span>
     </td>
-    <td data-field="Date" class="kt-datatable__cell">
+    <td data-field="{% trans %}date{% endtrans %}" class="kt-datatable__cell">
         <span style="width: 100px;" class="kt-font-bold">{{ report.createdat | date('Y-m-d H:i:s') }}</span>
     </td>
-    <td data-field="Statut" class="kt-datatable__cell">
+    <td data-field="{% trans %}status{% endtrans %}" class="kt-datatable__cell">
         <span style="width: 100px;" class="kt-font-{{ report.statusClass }} kt-font-bold">{{ report.statusLabel }}</span>
     </td>
-    <td data-field="Documents" class="kt-datatable__cell">
+    <td data-field="{% trans %}document{% endtrans %}" class="kt-datatable__cell">
         <div style="width: 200px;">
             <div class="kt-media-group">
                 {% for reportFile in report.reportFiles.slice(0, 5) %}
@@ -47,12 +47,12 @@
                         {% endif %}
                     {% endif %}
                 {% else %}
-                    Aucun fichier
+                    {% trans %}no.file.report{% endtrans %}
                 {% endfor %}
             </div>       
         </div>
     </td>
-    <td data-field="Actions" data-autohide-disabled="false" class="kt-datatable__cell">
+    <td data-field="{% trans %}action{% endtrans %}" data-autohide-disabled="false" class="kt-datatable__cell">
         <span style="overflow: visible; position: relative; width: 150px;">
             {% if is_granted('edit', report) %}
                 <a href="{{ path('report_edit', { 'slug': report.activity.project.slug, 'activity_id': report.activity.id, 'report_id': report.id }) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md">
@@ -65,7 +65,7 @@
                 </a>
             {% endif %}
             {% if is_granted('remove', report) %}
-                <a title="Supprimer ce rapport" data-id="{{ report.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
+                <a title="{% trans %}button.delete{% endtrans %}" data-id="{{ report.id }}" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-remove">
                     <i class="la la-trash"></i>
                 </a>
             {% endif %}

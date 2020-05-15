@@ -2,28 +2,28 @@
     <div class="btn-toolbar kt-margin-l-20">
         <div class="dropdown" id="kt_subheader_group_actions_status_change">
             <button type="button" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                Filtrer par statut
+                {% trans %}filter.per.status{% endtrans %}
             </button>
             <div class="dropdown-menu" style="">
                 <ul class="kt-nav">
                     <li class="kt-nav__item">
                         <a href="{% if activity is defined and activity is not null %}{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: type}) }}{% else %}{{ path('report_list_type', { slug: project.slug, type: type}) }}{% endif %}" class="kt-nav__link">
-                            <span class="kt-nav__link-text">Tous</span>
+                            <span class="kt-nav__link-text">{% trans %}status.all{% endtrans %}</span>
                         </a>
                     </li> 
                     <li class="kt-nav__item">
                         <a href="{% if activity is defined and activity is not null %}{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: type, s: search, status: 'opened'}) }}{% else %}{{ path('report_list_type', { slug: project.slug, type: type, s: search, status: 'opened'}) }}{% endif %}" class="kt-nav__link">
-                            <span class="kt-nav__link-text">Editable</span>
+                            <span class="kt-nav__link-text">{% trans %}status.opened{% endtrans %}</span>
                         </a>
                     </li>                        
                     <li class="kt-nav__item">
                         <a href="{% if activity is defined and activity is not null %}{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: type, s: search, status: 'closed'}) }}{% else %}{{ path('report_list_type', { slug: project.slug, type: type, s: search, status: 'closed'}) }}{% endif %}" class="kt-nav__link">
-                            <span class="kt-nav__link-text">Clôturé</span>
+                            <span class="kt-nav__link-text">{% trans %}status.closed{% endtrans %}</span>
                         </a>
                     </li>
                     <li class="kt-nav__item">
                         <a href="{% if activity is defined and activity is not null %}{{ path('report_list2_type', { activity_id: activity.id, slug: activity.project.slug, type: type, s: search, status: 'terminated'}) }}{% else %}{{ path('report_list_type', { slug: project.slug, type: type, s: search, status: 'terminated'}) }}{% endif %}" class="kt-nav__link">
-                            <span class="kt-nav__link-text">Términé</span>
+                            <span class="kt-nav__link-text">{% trans %}status.terminated{% endtrans %}</span>
                         </a>
                     </li>
                 </ul>

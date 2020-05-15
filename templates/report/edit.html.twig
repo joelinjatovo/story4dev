@@ -1,6 +1,6 @@
 {% extends 'report/create.html.twig' %}
 
-{% block title %}Modification Rapport #{{ report.id }} - Projet #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
+{% block title %}{% trans %}editing.report{% endtrans %} #{{ report.id }} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }} {% endblock %}
 
 {% block stylesheets %}{% endblock %}
 
@@ -8,16 +8,16 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Modification Rapport</h3>
+            <h3 class="kt-subheader__title">{% trans %}editing.report{% endtrans %}</h3>
             <a href="{{ path('report_activities', { slug: project.slug }) }}" class="btn btn-label-brand btn-bold">{% trans %}button.add{% endtrans %}</a>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a href="{{ url('report_show', { slug: project.slug, report_id: report.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+                <a href="{{ url('report_show', { slug: project.slug, report_id: report.id }) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}button.back{% endtrans %}</span></a>
                 <div class="btn-group">
                     <button type="submit" form="report" name="submit" value="save-default" class="btn btn-brand">
                         <i class="la la-check"></i> 
-                        <span class="kt-hidden-mobile">Enregistrer</span>
+                        <span class="kt-hidden-mobile">{% trans %}button.update{% endtrans %}</span>
                     </button>
                 </div>
             </div>
