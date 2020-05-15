@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes Projects - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}projects{% endtrans %} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,21 +9,15 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            {% if project is defined and project is not null and ( project.id > 0 ) %}
-                <h3 class="kt-subheader__title">Sous projects</h3>
-            {% else %}
-                <h3 class="kt-subheader__title">Mes projects</h3>
-            {% endif %}
+            <h3 class="kt-subheader__title">{% trans %}my.projects{% endtrans %}</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__group" id="kt_subheader_search">
                 <span class="kt-subheader__desc" id="kt_subheader_total">{{ projects.count }} Total</span>
             </div>
         </div>        
         <div class="kt-subheader__toolbar">
-            {% if project is defined and project is not null and ( project.id > 0 ) %}
-                <a href="{{ path('project_index', {slug: project.slug}) }}" class="btn btn-label-brand btn-bold">Ajouter</a>
-            {% elseif is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('admin_project_index') }}" class="btn btn-label-brand btn-bold">Ajouter</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin_project_index') }}" class="btn btn-label-brand btn-bold">{% trans %}button.add{% endtrans %}</a>
             {% endif %}
         </div>
     </div>
@@ -52,7 +46,6 @@
 </div>
 {% endblock %}
 
-
 {% block javascripts %}
 <script type="text/javascript">
 jQuery(document).ready(function($){
@@ -60,12 +53,12 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var $this = $(this);
             swal.fire({
-                title:"Vous êtes sûre?",
-                text:"Vous ne pourez pas revenir en arrière après!",
+                title:"{% trans %}swal.remove.title{% endtrans %}",
+                text:"{% trans %}swal.remove.content.indicator{% endtrans %}",
                 type:"warning",
                 showCancelButton:!0,
-                confirmButtonText:"Oui, supprimez le!",
-                cancelButtonText:"Annuler"
+                confirmButtonText:"{% trans %}button.confirm.delete1{% endtrans %}",
+                cancelButtonText:"{% trans %}button.cancel{% endtrans %}"
             }).then(function(e){
                 if(e.value){
                     KTApp.blockPage({overlayColor: '#000000',type: 'v2',state: 'success',size: 'xl'});
@@ -81,12 +74,11 @@ jQuery(document).ready(function($){
                     })
                     .fail(function() {
                         KTApp.unblockPage();
-                        toastr.error("Une erreur s'est produite. Veuillez réesayer plus tard!");
+                        toastr.error("{% trans %}swal.error{% endtrans %}");
                     });
                 }
             })
     });
-    
 });
 </script>
 {% endblock %}

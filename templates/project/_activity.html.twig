@@ -5,7 +5,7 @@
                 {{ activity.title }}
             </a>
             <div class="kt-widget5__info">
-                <span>Date:</span>
+                <span>{% trans %}date{% endtrans %}:</span>
                 <span class="kt-font-info">{{ activity.createdat is empty ? "" : activity.createdat | date('Y-m-d') }}</span>
             </div>
         </div>

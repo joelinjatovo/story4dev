@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tableau de bord - Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}dashboard{% endtrans %} - {% trans %}project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 {% endblock %}
@@ -9,12 +9,12 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Tableau de bord: {{ project.title }}</h3>
+            <h3 class="kt-subheader__title">{% trans %}dashboard{% endtrans %}: {{ project.title }}</h3>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ url('project_show', { slug: project.slug}) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">Retour</span></a>
+            <a href="{{ url('project_show', { slug: project.slug}) }}" class="btn btn-clean kt-margin-r-10"><i class="la la-arrow-left"></i><span class="kt-hidden-mobile">{% trans %}button.detail{% endtrans %}</span></a>
             {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('admin_project_index') }}" class="btn btn-label-brand btn-bold">Ajouter</a>
+                <a href="{{ path('admin_project_index') }}" class="btn btn-label-brand btn-bold">{% trans %}button.add{% endtrans %}</a>
             {% endif %}
         </div>
     </div>
@@ -43,7 +43,7 @@
 							<a class="kt-link" href="#">{{ count.activities }}</a>
 						</h3>
 						<div class="kt-iconbox__content">
-                            Activités
+                            {% trans %}activities{% endtrans %}
 						</div>
 					</div>
 				</div>
@@ -69,7 +69,7 @@
 							<a class="kt-link" href="#">{{ count.reports }}</a>
 						</h3>
 						<div class="kt-iconbox__content">
-							Rapports
+							{% trans %}reports{% endtrans %}
 						</div>
 					</div>
 				</div>
@@ -94,7 +94,7 @@
 							<a class="kt-link" href="#">{{ count.indicators }}</a>
 						</h3>
 						<div class="kt-iconbox__content">
-							Indicateurs
+							{% trans %}indicators{% endtrans %}
 						</div>
 					</div>
 				</div>
@@ -119,7 +119,7 @@
 							<a class="kt-link" href="#">{{ count.files }}</a>
 						</h3>
 						<div class="kt-iconbox__content">
-							Documents
+							{% trans %}documents{% endtrans %}
 						</div>
 					</div>
 				</div>
@@ -140,7 +140,7 @@
 					<div class="kt-portlet__head-actions">
 						<div class="dropdown dropdown-inline">
 							<a href="#" class="btn btn-default btn-pill btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="flaticon2-settings"></i> Exporter 
+								<i class="flaticon2-settings"></i> {% trans %}button.export{% endtrans %} 
 							</a>
 							<div class="dropdown-menu dropdown-menu-right" x-placement="top-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(32px, 0px, 0px);">
 								<ul class="kt-nav" id="chart-selector">
@@ -159,7 +159,7 @@
                                     <li class="kt-nav__item" data-click="PRINT">
                                         <a href="#" class="kt-nav__link">
                                             <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
-                                            <span class="kt-nav__link-text">Impression</span>
+                                            <span class="kt-nav__link-text">{% trans %}button.print{% endtrans %}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -192,7 +192,7 @@
                     <div class="kt-widget__body">
                         <div class="kt-widget__stats">
                             <div class="kt-widget__item flex-fill">
-                                <span class="kt-widget__subtitel">Situation d’avancement</span>
+                                <span class="kt-widget__subtitel">{% trans %}situation.progression{% endtrans %}</span>
                                 <div class="kt-widget__progress d-flex  align-items-center">
                                     <div class="progress" style="height: 5px;width: 100%;">
                                         <div class="progress-bar kt-bg-{{ project|progressionClass }}" role="progressbar" style="width: {{ project|progression }}%;" aria-valuenow="{{ project|progression }}" aria-valuemin="0" aria-valuemax="100"></div>
@@ -209,80 +209,6 @@
         </div>
     </div>
 </div>
-    
-<!-- begin: Modal -->
-<div class="modal fade" id="kt_modal_activities_report" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Choisissez une activité pour créer un rapport</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="kt-notification-v2">
-                    {% for activity in project.activities %}
-                        {% if is_granted('create_report', activity) %}
-                            <a href="{{ path('report_index', { 'activity_id' : activity.id, slug: project.slug } ) }}" class="kt-notification-v2__item">
-                                <div class="kt-notification-v2__itek-wrapper">
-                                    <div class="kt-notification-v2__item-title">
-                                        {{ activity.title }}
-                                    </div>
-                                    <div class="kt-notification-v2__item-desc">
-                                        {{ activity.author.fullname }}
-                                    </div>
-                                </div>	
-                            </a>
-                        {% endif %}
-                    {% else %}
-                        Aucunes activités trouvées sur ce projet.
-                    {% endfor %}
-                </div>  
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end: Modal -->
-    
-<!-- begin: Modal -->
-<div class="modal fade" id="kt_modal_activities_indicator" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Choisissez une activité pour créer un indicateur</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="kt-notification-v2">
-                    {% for activity in project.activities %}
-                        {% if is_granted('create_indicator', activity) %}
-                            <a href="{{ path('indicator_index', { 'activity_id' : activity.id, slug: project.slug } ) }}" class="kt-notification-v2__item">
-                                <div class="kt-notification-v2__itek-wrapper">
-                                    <div class="kt-notification-v2__item-title">
-                                        {{ activity.title }}
-                                    </div>
-                                    <div class="kt-notification-v2__item-desc">
-                                        {{ activity.author.fullname }}
-                                    </div>
-                                </div>	
-                            </a>
-                        {% endif %}
-                    {% else %}
-                        Aucunes activités trouvées sur ce projet.
-                    {% endfor %}
-                </div>  
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end: Modal -->
 {% endblock %}
 
 {% block javascripts %}
@@ -293,9 +219,8 @@
 
 <!-- Chart code -->
 <script>
-var KTAppMessages = {"waiting": "Veuillez patientez s'il vous plaît..."};
+var KTAppMessages = {"waiting": "{% trans %}please_wait{% endtrans %}"};
 am4core.ready(function() {
-    
     function drawIndicatorSerie(chart, value, yAxis){
         var serie = chart.series.push(new am4charts.ColumnSeries());
         serie.dataFields.valueY = value.id;
@@ -323,14 +248,14 @@ am4core.ready(function() {
     categoryAxis.dataFields.category = "iteration";
     
     var valueAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis1.title.text = "Valeur par unité";
+    valueAxis1.title.text = "{% trans %}value.per.unity{% endtrans %}";
 
     // Create series
     var series4 = chart.series.push(new am4charts.LineSeries());
         series4.dataFields.valueY = "value";
         series4.dataFields.categoryX = "iteration";
         series4.yAxis = valueAxis1;
-        series4.name = "Evolution";
+        series4.name = "{% trans %}evolution{% endtrans %}";
         series4.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/] unités";
         series4.fill = chart.colors.getIndex(0).lighten(0.5);
         series4.strokeWidth = 2;
@@ -357,7 +282,7 @@ am4core.ready(function() {
     });
     
     // Selector
-    jQuery("#select_indicator").select2({placeholder:"Séléctionnez les indicateurs à afficher sur le graphe."});
+    jQuery("#select_indicator").select2({placeholder:"{% trans %}select.indicators.to.show.graph{% endtrans %}"});
     jQuery('#select_indicator').on('change', function (evt) {
         if (jQuery('#select_indicator').select2('val') != null){
             var container = jQuery("#statistic");
@@ -414,104 +339,5 @@ am4core.ready(function() {
     });
 
 }); // end am4core.ready()
-    
-// Sales Stats.
-// Based on Chartjs plugin - http://www.chartjs.org/
-var salesStats = function() {
-    if (!KTUtil.getByID('kt_chart_sales_stats')) {
-        return;
-    }
-
-    var config = {
-        type: 'line',
-        data: {
-            labels: [
-                "January", 
-                "February", 
-                "March", 
-                "April", 
-                "May", 
-                "June", "July", "August", "September", "October", "November", "December",
-                "January", "February", "March", "April"
-            ],
-            datasets: [{
-                label: "Sales Stats",
-                borderColor: KTApp.getStateColor('brand'),
-                borderWidth: 2,
-                //pointBackgroundColor: KTApp.getStateColor('brand'),
-                backgroundColor: KTApp.getStateColor('brand'),                    
-                pointBackgroundColor: Chart.helpers.color('#ffffff').alpha(0).rgbString(),
-                pointBorderColor: Chart.helpers.color('#ffffff').alpha(0).rgbString(),
-                pointHoverBackgroundColor: KTApp.getStateColor('danger'),
-                pointHoverBorderColor: Chart.helpers.color(KTApp.getStateColor('danger')).alpha(0.2).rgbString(),
-                data: [
-                    10, 20, 16,
-                    18, 12, 40,
-                    35, 30, 33,
-                    34, 45, 40,
-                    60, 55, 70,
-                    65, 75, 62
-                ]
-            }]
-        },
-        options: {
-            title: {
-                display: false,
-            },
-            tooltips: {
-                intersect: false,
-                mode: 'nearest',
-                xPadding: 10,
-                yPadding: 10,
-                caretPadding: 10
-            },
-            legend: {
-                display: false,
-                labels: {
-                    usePointStyle: false
-                }
-            },
-            responsive: true,
-            maintainAspectRatio: false,
-            hover: {
-                mode: 'index'
-            },
-            scales: {
-                xAxes: [{
-                    display: false,
-                    gridLines: false,
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Month'
-                    }
-                }],
-                yAxes: [{
-                    display: false,
-                    gridLines: false,
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Value'
-                    }
-                }]
-            },
-
-            elements: {
-                point: {
-                    radius: 3,
-                    borderWidth: 0,
-
-                    hoverRadius: 8,
-                    hoverBorderWidth: 2
-                }
-            }
-        }
-    };
-
-    var chart = new Chart(KTUtil.getByID('kt_chart_sales_stats'), config);
-}
-// Class initialization on page load
-jQuery(document).ready(function() {
-    salesStats();
-});
 </script>
 {% endblock %}

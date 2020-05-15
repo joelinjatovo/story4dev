@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Projet #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
+{% block title %}{% trans %}detail.project{% endtrans %} #{{ project.id }} - {{ app.user.fullname }}{% endblock %}
 
 {% block stylesheets %}
 <link href="{{ asset('css/bootstrap-colorpicker.min.css') }}" rel="stylesheet" type="text/css"/>
@@ -10,7 +10,7 @@
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Détail du projet</h3>
+            <h3 class="kt-subheader__title">{% trans %}detail.project{% endtrans %}</h3>
         </div>        
         <div class="kt-subheader__toolbar">
             {% if is_granted('edit', project) %}
@@ -61,7 +61,7 @@
                         <i class="flaticon-event-calendar-symbol"></i>
                     </div>
                     <div class="kt-widget__details">
-                        <span class="kt-widget__title">Date de début</span>
+                        <span class="kt-widget__title">{% trans %}date.started{% endtrans %}</span>
                         <span class="kt-widget__value"><span class="btn btn-label-brand btn-sm btn-bold btn-upper">{{ project.startat is empty ? "" : project.startat | date('Y-m-d') }}</span></span>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                         <i class="flaticon-event-calendar-symbol"></i>
                     </div>
                     <div class="kt-widget__details">
-                        <span class="kt-widget__title">Date de fin</span>
+                        <span class="kt-widget__title">{% trans %}date.ended{% endtrans %}</span>
                         <span class="kt-widget__value"><span class="btn btn-label-danger btn-sm btn-bold btn-upper">{{ project.endat is empty ? "" : project.endat | date('Y-m-d') }}</span></span>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                             <i class="flaticon-piggy-bank"></i>
                         </div>
                         <div class="kt-widget__details">
-                            <span class="kt-widget__title">Budget</span>
+                            <span class="kt-widget__title">{% trans %}budget{% endtrans %}</span>
                             <span class="kt-widget__value">{{ project.budget }} <span>{{ project.currency }}</span></span>
                         </div>
                     </div>
@@ -93,8 +93,8 @@
                         <i class="flaticon-map"></i>
                     </div>
                     <div class="kt-widget__details">
-                        <span class="kt-widget__title">{{ project.activities.count }} Activités</span>
-                        <a href="#activities" class="kt-widget__value kt-font-brand">Voir la liste</a>
+                        <span class="kt-widget__title">{% transchoice project.activities.count %}choice.activity{% endtranschoice %}</span>
+                        <a href="#activities" class="kt-widget__value kt-font-brand">{% trans %}button.view.list{% endtrans %}</a>
                     </div>
                 </div>
 
@@ -103,8 +103,8 @@
                         <i class="flaticon-chat-1"></i>
                     </div>
                     <div class="kt-widget__details">
-                        <span class="kt-widget__title">{{ reports_count }} Rapports</span>
-                        <a href="#reports" class="kt-widget__value kt-font-brand">Voir la liste</a>
+                        <span class="kt-widget__title">{% transchoice reports_count %}choice.report{% endtranschoice %}</span>
+                        <a href="#reports" class="kt-widget__value kt-font-brand">{% trans %}button.view.list{% endtrans %}</a>
                     </div>
                 </div>
             </div>
@@ -135,12 +135,12 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <a href="{{ path('activity_list', { slug: project.slug } ) }}">
-                        <h3 class="kt-portlet__head-title">Activités</h3>
+                        <h3 class="kt-portlet__head-title">{% trans %}activities{% endtrans %}</h3>
                     </a>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <a href="{{ path('activity_list', { slug: project.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
-                        Toutes
+                        {% trans %}button.all2{% endtrans %}
                     </a>
                     {% if is_granted('edit', project) %}
                         <a href="{{ path('activity_index', { slug: project.slug } ) }}" class="btn btn-icon">
@@ -160,7 +160,7 @@
                     {% for activity in recent.activities %}
                         {{ include('project/_activity.html.twig', { 'activity' : activity } ) }}
                     {% else %}
-                        Il n'y a pas encore des activités dans ce projet.
+                        {% trans %}no.activities.project{% endtrans %}
                     {% endfor %}
                 </div>
             </div>
@@ -171,12 +171,12 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <a href="{{ path('report_list', { slug: project.slug } ) }}">
-                        <h3 class="kt-portlet__head-title">Rapports</h3>
+                        <h3 class="kt-portlet__head-title">{% trans %}reports{% endtrans %}</h3>
                     </a>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <a href="{{ path('report_list', { slug: project.slug } ) }}" class="btn btn-label-primary btn-bold btn-sm">
-                        Tous
+                        {% trans %}button.all1{% endtrans %}
                     </a>
                     <a href="{{ path('report_activities', {slug : project.slug } ) }}" class="btn btn-icon" data-toggle="modal" data-target="#kt_modal_activities">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--success kt-svg-icon--md">
@@ -194,7 +194,7 @@
                     {% for report in recent.reports %}
                         {{ include('project/_report.html.twig', { 'report' : report } ) }}
                     {% else %}
-                        Il n'y a pas encore de rapports dans ce projet.
+                        {% trans %}no.reports.project{% endtrans %}
                     {% endfor %}
                 </div>
             </div>
@@ -208,12 +208,12 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <a href="{{ path('contribution_list', { slug: project.slug } ) }}">
-                        <h3 class="kt-portlet__head-title">Equipe projet</h3>
+                        <h3 class="kt-portlet__head-title">{% trans %}project.team{% endtrans %}</h3>
                     </a>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <a href="{{ path('contribution_list', { slug: project.slug } ) }}" class="btn btn-label-brand btn-bold btn-sm">
-                        Tous
+                        {% trans %}button.all1{% endtrans %}
                     </a>
                 </div>
             </div>
@@ -224,7 +224,7 @@
                             {% for contribution in recent.contributions %}
                                 {{ include('project/_contribution.html.twig', { 'contribution' : contribution } ) }}
                             {% else %}
-                                Il n'y a pas encore des contributeurs dans ce projet.
+                                {% trans %}no.contributors.project{% endtrans %}
                             {% endfor %}
                         </div>
                     </div>
