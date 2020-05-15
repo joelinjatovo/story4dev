@@ -30,9 +30,9 @@ class ActivityType extends AbstractType
                     'uiColor' => '#ffffff',
                 ),
             ])
-            ->add('contactemail', null, ['label' => 'form.label.email.contact'])
-            ->add('contactphone', null, ['label' => 'form.label.phone.contact'])
-            ->add('contactaddress', null, ['label' => 'form.label.address.contact'])
+            ->add('contactemail', null, ['label' => 'form.label.contact.email'])
+            ->add('contactphone', null, ['label' => 'form.label.contact.phone'])
+            ->add('contactaddress', null, ['label' => 'form.label.contact.address'])
             ->add('project', EntityType::class, [
                 'class' => Project::class,
                 'choice_label' => function ($project) {

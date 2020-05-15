@@ -12,14 +12,14 @@
             <h3 class="kt-subheader__title">{% trans %}editing.project{% endtrans %}</h3>
         </div>        
         <div class="kt-subheader__toolbar">
-            <a href="{{ path('project_show', { slug : _project.slug } ) }}" class="btn btn-clean kt-margin-r-10">
+            <a href="{{ path('project_show', { slug : project.slug } ) }}" class="btn btn-clean kt-margin-r-10">
                 <i class="la la-arrow-left"></i>
                 <span class="kt-hidden-mobile">{% trans %}button.back{% endtrans %}</span>
             </a>
             <div class="btn-group">
                 <button type="submit" form="project" name="submit" value="save-default" class="btn btn-brand">
                     <i class="la la-check"></i> 
-                    <span class="kt-hidden-mobile">{% trans %}button.save{% endtrans %}</span>
+                    <span class="kt-hidden-mobile">{% trans %}button.update{% endtrans %}</span>
                 </button>
             </div>
         </div>

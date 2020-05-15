@@ -26,42 +26,49 @@ class ProjectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('slug')
-            ->add('title')
+            ->add('slug', null, ['label' => 'form.label.project.slug'])
+            ->add('title', null, ['label' => 'form.label.project.title'])
             ->add('pictureFile', VichImageType::class, [
                 'required' => false,
                 'allow_delete' => true, 
             ])
             ->add('description', CKEditorType::class, [
+                'label' => 'form.label.project.description',
                 'config' => array(
                     'uiColor' => '#ffffff',
                 ),
             ])
             ->add('budget', NumberType::class, [
+                'label' => 'form.label.project.budget',
                 'required'   => false,
             ])
             ->add('currency', CurrencyType::class, [
+                'label' => 'form.label.project.currency',
                 'required'   => false,
             ])
             ->add('start_at', DateType::class, [
+                'label' => 'form.label.project.start_at',
                 'widget'     => 'single_text',
                 'html5'      => false,
             ])
             ->add('end_at', DateType::class, [
+                'label' => 'form.label.project.end_at',
                 'widget'     => 'single_text',
                 'html5'      => false,
             ])
-            ->add('contactemail')
-            ->add('contactphone')
-            ->add('contactaddress')
+            ->add('contactemail', null, ['label' => 'form.label.contact.email'])
+            ->add('contactphone', null, ['label' => 'form.label.contact.phone'])
+            ->add('contactaddress', null, ['label' => 'form.label.contact.address'])
             //->add('address', AddressType::class)
             ->add('periodicity', EntityType::class, [
+                'label' => 'form.label.project.periodicity',
                 'class' => Periodicity::class,
                 'choice_label' => function ($periodicty) {
                     return $periodicty->getTitle();
                 }
             ])
             ->add('iterations', CollectionType::class, [
+                'label' => 'form.label.project.iterations',
                 'entry_type' => IterationType::class,
                 'entry_options' => [
                     'label' => false
@@ -71,13 +78,14 @@ class ProjectType extends AbstractType
                 'by_reference' => false,
             ])
             ->add('author', EntityType::class, [
+                'label' => 'form.label.project.author',
                 'class' => User::class,
                 'choice_label' => function ($user) {
                     return $user->getFullName();
                 }
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Save project'
+                'label' => 'button.save'
             ])
         ;
         
