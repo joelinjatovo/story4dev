@@ -562,6 +562,7 @@ return [
     'start' => 'Début',
     'statistics' => 'Statistiques',
     'status' => 'Status',
+    'status.all' => 'Tous',
     'status.active' => 'Activé',
     'status.actives' => 'Activés',
     'status.block' => 'Bloqué',
