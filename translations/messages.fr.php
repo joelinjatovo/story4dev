@@ -513,7 +513,7 @@ return [
     'photos' => 'Photos',
     'phone' => 'Téléphone',
     'please_wait' => 'Veuillez patienter s\'il vous plaît...',
-    'profil' => 'Profile',
+    'profil' => 'Profil',
     'progression' => 'Avancement',
     'progressions' => 'Avancements',
     'progression.general' => 'Progression générale',
