@@ -419,7 +419,7 @@ return [
     'all.users' => 'All users',
     'about' => 'About',
     'account' => 'Account',
-    'activity' => 'Account',
+    'activity' => 'Activity',
     'activity.child' => 'Child activity',
     'activity.detail' => 'Detail of the activity',
     'activities' => 'Activities',
