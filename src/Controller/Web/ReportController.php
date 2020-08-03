@@ -210,6 +210,9 @@ class ReportController extends BaseController
             
                 // set author for new iteration
                 foreach($report->getResults() as $updated_result){
+                    if($updated_result->getValue()==null){
+                        $updated_result->setValue(0);
+                    }
                     if($updated_result->getAuthor()==null){
                         $updated_result->setAuthor($this->getUser());
                     }
