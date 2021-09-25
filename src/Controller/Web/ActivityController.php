@@ -80,7 +80,7 @@ class ActivityController extends BaseController
                 $entityManager->persist($activity);
                 $entityManager->flush();
 
-                $this->addFlash('success', $this->trans('controller.activity.success'));
+                $this->addFlash('success', $this->trans('controller.activity.created'));
 
             }else{
                 $this->addFlash('error', $this->trans('controller.error.occured'));
