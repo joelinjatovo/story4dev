@@ -7,6 +7,7 @@
         "ankitpokhrel/tus-php": "^1.0",
         "doctrine/annotations": "^1.6",
         "doctrine/doctrine-bundle": "^1.11",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.6",
         "friendsofsymfony/ckeditor-bundle": "^2.1",
         "friendsofsymfony/rest-bundle": "^2.5",
@@ -15,7 +16,6 @@
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "h4cc/wkhtmltopdf-i386": "0.12.x",
         "jms/serializer-bundle": "^3.4",
-        "khanzadimahdi/uploadmanager": "^1.0",
         "knplabs/knp-gaufrette-bundle": "^0.6.1",
         "knplabs/knp-snappy-bundle": "^1.7",
         "knplabs/knp-time-bundle": "^1.9",
@@ -27,6 +27,7 @@
         "lexik/jwt-authentication-bundle": "^2.6",
         "liip/imagine-bundle": "^2.2",
         "nesbot/carbon": "^2.24",
+        "phpdocumentor/reflection-docblock": "^5.3",
         "sensio/framework-extra-bundle": "^5.4",
         "stof/doctrine-extensions-bundle": "^1.3",
         "symfony/asset": "4.4.*",
@@ -39,10 +40,11 @@
         "symfony/http-client": "4.4.*",
         "symfony/intl": "4.4.*",
         "symfony/monolog-bundle": "^3.1",
-        "symfony/orm-pack": "*",
         "symfony/process": "4.4.*",
+        "symfony/property-access": "4.4.*",
+        "symfony/property-info": "4.4.*",
         "symfony/security-bundle": "4.4.*",
-        "symfony/serializer-pack": "*",
+        "symfony/serializer": "4.4.*",
         "symfony/swiftmailer-bundle": "^3.1",
         "symfony/translation": "4.4.*",
         "symfony/twig-bundle": "4.4.*",
@@ -56,10 +58,14 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.2",
-        "symfony/debug-pack": "*",
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "4.4.*",
+        "symfony/css-selector": "4.4.*",
+        "symfony/debug-bundle": "4.4.*",
         "symfony/maker-bundle": "^1.0",
-        "symfony/profiler-pack": "^1.0",
-        "symfony/test-pack": "*",
+        "symfony/phpunit-bridge": "^7.3",
+        "symfony/stopwatch": "4.4.*",
+        "symfony/web-profiler-bundle": "4.4.*",
         "symfony/web-server-bundle": "4.4.*"
     },
     "config": {
@@ -69,7 +75,10 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": true
+        }
     },
     "autoload": {
         "psr-4": {
